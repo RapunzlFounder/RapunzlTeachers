@@ -1,0 +1,38 @@
+.settings-header {
+    max-width: 500px;
+    margin: auto;
+    display: block;
+}
+.settings-instructions {
+    font-size: 16px;
+    font-weight: 200;
+    width: 95%;
+    margin: auto;
+    max-width: 500px;
+}
+.settings-flex {
+    flex-direction: 'row';
+    justify-content: 'space-between';
+}
+
+.css-1scsv5t-MuiInputBase-root-MuiFilledInput-root {
+    height: 55px;
+}
+.css-10botns-MuiInputBase-input-MuiFilledInput-input {
+    padding-top: 33px !important;
+}
+
+.settings-version-text {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 200;
+    margin-bottom: 45px;
+    margin-top: 10px;
+}
+
+@media only screen and (max-width: 550px) {
+    .settings-container {
+        width: 120%;
+        margin-left: -10%;
+    }
+}

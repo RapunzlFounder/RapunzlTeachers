@@ -1,0 +1,85 @@
+/* FOOTER */
+.footer-divider {
+	border-color: #1a5343;
+}
+.footer-header {
+	padding-top: 25px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 700;
+	padding-bottom: 12px;
+}
+.footer-text {
+	width: 90%;
+	min-width: 300px;
+	margin: auto;
+	font-size: 11px;
+	padding-bottom: 25px;
+	color: #1a5343;
+}
+.footer-flex {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 320px;
+    margin: auto;
+}
+.footer-app-button {
+	background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: inherit;
+}
+.appstore-image {
+	width: 150px;
+	margin-right: 10px;
+}
+.google-play-image {
+	width: 150px;
+	margin-left: 10px;
+}
+.website-button {
+	display: block;
+    width: 320px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+    margin: auto;
+    margin-top: 10px;
+    align-self: center;
+    text-align: center;
+	border-width: 1px;
+	border-radius: 4px;
+	background: none;
+    color: #00ad85;
+    border: 1px solid;
+	border-color: #00ad85;
+    cursor: pointer;
+    outline: inherit;
+	font-size: 12px;
+	font-weight: 500;
+	transition: 0.3s;
+}
+.website-button:hover {
+	background-color: #00ad85;
+	color: white;
+}
+.copyright-text {
+	font-size: 11px;
+	font-weight: 300;
+	text-align: center;
+	padding-top: 20px;
+	color: #1a5343;
+}
+/* Media Size Updates 500px */
+@media only screen and (max-width: 350px) {
+	.footer-flex {
+		flex-direction: column;
+		width: auto;
+	}
+	.website-button {
+		display: none;
+	}
+}

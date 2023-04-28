@@ -1,0 +1,86 @@
+.select-school-graphic {
+    display: block;
+    margin: auto;
+    width: 160px;
+}
+.select-school-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    padding-bottom: 3px;
+}
+.select-school-text {
+    width: 90%;
+    margin: auto;
+    max-width: 700px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 200;
+    padding-bottom: 25px;
+}
+.school-search-container {
+    height: 400px;
+    max-width: 500px;
+    width: 85%;
+    margin: auto;
+    overflow-y: scroll;
+    margin-top: -20px;
+}
+.school-search-loading-container {
+    height: 400px;
+    max-width: 500px;
+    width: 85%;
+    margin: auto;
+    margin-top: -20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.school-search-result {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    border-bottom: 1px solid #aeffd9;
+    margin-right: 15px;
+    cursor: pointer;
+}
+.school-search-name {
+    font-size: 15px;
+    font-weight: 300;
+}
+.select-school-button {
+    width: 200px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 45px;
+    background: #01936e;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+    border-radius: 6px;
+}
+.select-school-button:hover {
+    background: #0fb389;
+}
+.school-error-icon {
+    font-size: 110px !important;
+    fill: #ff7320 !important;
+    text-align: center !important;
+    display: block !important;
+    margin: auto !important;
+    margin-top: 65px !important;
+}
+.empty-search-icon {
+    font-size: 75px !important;
+    margin-bottom: -15px !important;
+    margin-top: -85px !important;
+    fill: #b2ffeb !important;
+}

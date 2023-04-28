@@ -1,0 +1,70 @@
+export const OTHER_USER_DETAILS = (username) => `query{
+  otheruserDetails(username: ${JSON.stringify(username)}) {
+    dateJoined
+    stockPortfolios {
+      id
+      name
+      description
+      isActive
+      isSavedPortfolio
+      startValue
+      cashValue
+      currentValue
+      publicView
+      friendsView
+      longOnlyPositions
+      positions {
+        id
+        isOpen
+        symbol
+        symbolName
+        symbolType
+        exchange
+        quantity
+        aveEntryPrice
+        aveExitPrice
+        side
+        costBasis
+        publicView
+        friendsView
+        openedAt
+        commission
+        fees
+        profitLoss
+      }
+    }
+    cryptoPortfolios {
+      id
+      name
+      description
+      isActive
+      isSavedPortfolio
+      startValue
+      cashValue
+      currentValue
+      publicView
+      friendsView
+      longOnlyPositions
+      positions {
+        id
+        isOpen
+        symbol
+        symbolName
+        symbolType
+        exchange
+        quantity
+        aveEntryPrice
+        aveExitPrice
+        side
+        costBasis
+        publicView
+        friendsView
+        openedAt
+        commission
+        fees
+        profitLoss
+      }
+    }
+  }
+}
+`;

@@ -1,0 +1,142 @@
+.recover-image {
+    width: 120px;
+    display: block;
+    margin: auto;
+    margin-top: 45px;
+    margin-bottom: 15px;
+}
+
+.recover-account-title {
+    padding-bottom: 5px;
+	color: #00ffbd;
+	font-weight: 600;
+    font-size: 22px;
+	text-align: center;
+}
+
+.recover-account-text {
+	font-size: 16px;
+	font-weight: 400;
+    width: 90%;
+    margin: auto;
+    text-align: center;
+	color: #fff;
+}
+.recover-container {
+	width: 90%;
+    max-width: 500px;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+.recover-options-container {
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 25px;
+	margin-bottom: 45px;
+}
+
+.recover-option-button {
+	width: 280px;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #007154;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 15px;
+    font-weight: 300;
+    background-color: #98b3ac;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 50px;
+}
+.recover-option-button:hover {
+	background-color: #528376;
+}
+
+.recover-input-container {
+	margin-top: 25px;
+}
+
+.recover-flex-buttons {
+	width: 240px;
+	margin: auto;
+}
+
+.recover-button {
+	width: 50%;
+    border: none;
+    background: none;
+	border: 2px solid #007154;
+	cursor: pointer;
+	transition: 0.3s;
+	background-color: #91c1b4;
+	margin-top: 10px;
+	padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 13px;
+    font-weight: 300;
+}
+
+.recover-email-button {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+	border-right: none;
+}
+
+.recover-phone-button {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.recover-buttons-container {
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.recover-account-button {
+	width: 280px;
+    margin: auto;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    background-color: #297763;
+	cursor: pointer;
+	transition: 0.3s;
+}
+.recover-account-button:hover {
+	background-color: #3db799;
+}
+
+.dismiss-recover-button {
+	width: 280px;
+    margin: auto;
+	margin-top: 10px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+	cursor: pointer;
+	transition: 0.3s;
+	color: #003628;
+	background-color: #b6ddd3;
+}
+.dismiss-recover-button:hover {
+	background-color: #92c0b4;
+}

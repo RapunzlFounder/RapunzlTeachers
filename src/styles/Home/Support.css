@@ -1,0 +1,163 @@
+* {
+	color: white;
+}
+body {
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	background-color: rgb(0, 43, 33);
+}
+path {
+	color: white;
+}
+.support-go-back {
+    margin-left: 10px;
+    padding-top: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: 0.2s all;
+    cursor: pointer;
+    width: fit-content;
+}
+.support-go-back:hover {
+    text-decoration: underline;
+}
+.support-tile {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.support-container {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 40px;
+}
+.support-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 3px;
+}
+.support-issue-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 7px;
+}
+.support-issue-text {
+    font-size: 14px;
+    font-weight: 200;
+    padding-left: 5px;
+}
+.support-upload-button {
+    padding-left: 17px;
+    padding-right: 17px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    font-size: 11px;
+    font-weight: 400;
+    border-radius: 5px;
+    border: 1px solid #33dcb1;
+    width: fit-content;
+    margin-top: 10px;
+    color: #33dcb1;
+    transition: 0.2s all;
+    cursor: pointer;
+}
+.support-upload-button:hover {
+    background-color: #0ba981;
+    border-color: #0ba981;
+    color: white;
+}
+.support-submit-button {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-top: 50px;
+    display: flex;
+    width: fit-content;
+    background-color: #2a9579;
+    font-size: 12px;
+    font-weight: 400;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+.support-submit-button:hover {
+    background-color: #00644a;
+}
+.support-line-input {
+    width: 100%;
+    height: 35px;
+    background: none;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid white;
+}
+.support-message-input {
+    background-color: #00402f;
+    outline: none;
+    border: none;
+    width: 96%;
+    margin-top: 10px;
+    height: 160px;
+    border-radius: 7px;
+    overflow-y: scroll;
+    resize: none;
+    padding: 15px;
+}
+.support-issues-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.support-issue-column {
+    width: 290px
+}
+.support-screen-header {
+	padding-top: 16px;
+}
+.menu-container {
+	width: 95%;
+	margin: auto;
+	margin-top: 40px;
+	margin-bottom: 50px;
+}
+.menu-header {
+	font-size: 18px;
+    font-weight: 700;
+    color: #00ffbe;
+    margin-left: 10px;
+}
+.menu-answer {
+	margin-bottom: 25px;
+    margin-top: -12px;
+	font-size: 15px;
+    font-weight: 300;
+}
+.support-message-image {
+    display: block;
+    margin: auto;
+    width: 170px;
+    height: 170px;
+    margin-top: 45px;
+}
+.support-message-result-title {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: -10px;
+    margin-bottom: 5px;
+}
+.support-message-result-message {
+    width: 300px;
+    font-size: 15px;
+    font-weight: 200;
+    text-align: center;
+    margin: auto;
+    padding-bottom: 150px;
+}

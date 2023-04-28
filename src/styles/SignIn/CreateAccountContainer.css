@@ -1,0 +1,107 @@
+.css-1aquho2-MuiTabs-indicator {
+	background-color: #007154 !important;
+}
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+    color: #007154 !important;
+	font-weight: 700;
+}
+.css-19mk8g1-MuiInputBase-root-MuiFilledInput-root:after {
+	border-bottom: 2px solid #007154 !important;
+}
+.css-o943dk-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+	color: #007154 !important;
+}
+.css-1ptx2yq-MuiInputBase-root-MuiInput-root:after {
+	border-bottom: 2px solid #007154 !important;
+}
+.css-1c2i806-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+	color: #007154 !important;
+}
+.css-gjbq6i-MuiInputBase-root-MuiFilledInput-root:after {
+	border-bottom: 2px solid #007154 !important;
+}
+.sign-up-graphic {
+	display: block;
+	width: 45%;
+	margin: auto;
+	margin-bottom: 0px;
+	margin-top: 40px;
+}
+.sign-up-title {
+	text-align: center;
+	padding-bottom: 17px;
+	font-size: 22px;
+	color: #b0ffea;
+	font-weight: 600;
+}
+.sign-up-label-container {
+	width: 90%;
+	margin: auto;
+	margin-bottom: 15px;
+}
+.sign-up-label-tag {
+	font-size: 16px;
+	font-weight: 600;
+	color: #005a44;
+	text-align: left;
+}
+input {
+	width: 100%;
+	border: 0px;
+	border-bottom: 1px solid;
+	font-size: 18px;
+	font-weight: 200;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	outline: none;
+	border-color: #007154;
+}
+.signUpMessageContainer {
+	border-radius: 5px;
+	margin: auto;
+	background-color: #e65129;
+	margin-bottom: 0px;
+	margin-top: 5px;
+	font-weight: 600;
+	color: #ffeaca;
+	width: 90%;
+}
+.signUpMessage {
+	margin: auto;
+	font-size: 12px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.signUpErrorText {
+	font-size: 12px;
+	padding-top: 4px;
+	color: #e65129;
+}
+.signUpButton {
+	width: 90%;
+	display: block;
+	margin: auto;
+	margin-top: 20px;
+	font-weight: 600;
+	font-size: 13px;
+	padding-bottom: 17px;
+	padding-top: 17px;
+	border: 2px solid #00b083;
+	border-radius: 5px;
+	background-color: #00b083;
+	color: white;
+	cursor: pointer;
+}
+.signUpButton:hover {
+	background-color: white;
+	color: #00b083;
+}
+
+/* Media Size Updates 720px */
+@media only screen and (max-width: 820px) {
+	.sign-in-container {
+		width: 100%;
+	}
+}

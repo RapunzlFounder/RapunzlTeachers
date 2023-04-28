@@ -1,0 +1,126 @@
+.app-logo {
+	height: 20vmin;
+	pointer-events: none;
+	min-height: 190px;
+	max-height: 280px;
+}
+.background {
+	width: 100vw;
+	height: 100vh;
+	background-color: #013024;
+}
+.sign-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+}
+.sign-in-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+	width: 100%;
+}
+.text-container {
+	background-color: #002c1e;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
+	color: black;
+	width: 40%;
+}
+.login-contanier {
+	justify-content: flex-start;
+}
+.app-logo {
+	height: 40vmin;
+	pointer-events: none;
+}
+.loading-text {
+	font-size: 25px;
+    font-weight: 700;
+	text-align: center;
+	margin-top: 15px;
+}
+.loading-subtext {
+	font-size: 15px;
+    padding-top: 3px;
+    font-weight: 300;
+	text-align: center;
+}
+.leftImage {
+	width: 30%;
+    height: 100vh;
+    object-fit: cover;
+}
+.rightImage {
+	width: 30%;
+    height: 100vh;
+    object-fit: cover;
+}
+.header {
+	padding-top: 10px;
+	padding-bottom: 8px;
+	font-size: 28px;
+	text-align: center;
+}
+.header-bar {
+	background-color: #ffb300;
+	width: 140px;
+	height: 10px;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+.text {
+	color: #007154;
+	font-size: 22px;
+	text-align: center;
+}
+.time-text {
+	padding-top: 12px;
+	font-size: 26px;
+	font-weight: 800;
+}
+.date-text {
+	padding-bottom: 12px;
+	padding-top: 1.5px;
+	font-size: 17px;
+	font-weight: 300;
+}
+.p-subtext {
+	padding-top: 13px;
+	font-size: 15px;
+	font-weight: 300;
+	font-style: italic;
+}
+
+/* Media Size Updates 1200px */
+@media only screen and (max-width: 1200px) {
+	.rightImage {
+	  	display: none;
+	}
+	.leftImage {
+	  	width: 50%;
+	}
+	.text-container {
+		width: 50%;
+	}
+}
+  
+/* Media Size Updates 820px */
+@media only screen and (max-width: 820px) {
+	.rightImage {
+	  	display: none;
+	}
+	.leftImage {
+	  	display: none;
+	}
+	.text-container {
+		width: 100%;
+	}
+}

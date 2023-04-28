@@ -1,0 +1,294 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { ContactSupport } from '../../ActionTypes/settingsAction';
+import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBox from '@mui/icons-material/CheckBox';
+import MessageSuccessIcon from '../../assets/images/Support/MessageSuccess.png';
+import MessageFailedIcon from '../../assets/images/Support/MessageFailure.png';
+import '../../styles/Home/Support.css';
+import Alert from '../Admin/Alert';
+
+class Support extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      emailInput: '',
+      subjectInput: '',
+      messageInput: '',
+      uploadModalVisible: false,
+      messageStatus: 'sending',
+      issueSelected: null,
+      alertVisible: false,
+      alertTitle: '',
+      alertMessage: ''
+    }
+  }
+
+  editEmailInput() {
+
+  }
+
+  editSubjectInput() {
+
+  }
+
+  editMessageInput() {
+
+  }
+
+  // Allows User To Toggle Which Issue The Support Message Is Related To & Includes It In The Message
+  selectSupportIssue(int) {
+    if (this.state.issueSelected === int) {
+      this.setState({ issueSelected: null });
+    } else {
+      this.setState({ issueSelected: int });
+    }
+  }
+
+  toggleUploadModal() {
+
+  }
+
+  // Handles Creating Support Message From Various Inputs, Validates Inputs, Then Returns Message To Dispatch With GraphQL
+  createSupportMessage() {
+    // Checks Email To Make Sure It Is Valid To Ensure That Support Can Respond To The Teacher
+    // Handles When Email Is Not Valid.      
+    // eslint-disable-next-line
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(this.state.emailInput)) {
+      this.setState({
+        alertVisible: true,
+        alertTitle: 'Problem With Email...',
+        alertMessage: 'Sorry, but we do not recognize the format of your email address. You probably made a typo while inputting your email address. Please try again.'
+      });
+    }
+    // Handles When Email Is Valid
+    else {
+      let supportMessage = '';
+      // Matches The Correct Issue With State To Construct Support Message
+      let issueText = 'No Subject - ';
+      if (this.state.issuedSelected === 1) {
+        issueText = 'Class Upload - ';
+      } else if (this.state.issueSelected === 2) {
+        issueText = 'Technical Issue - ';
+      } else if (this.state.issueSelected === 3) {
+        issueText = 'Course Issue - ';
+      } else if (this.state.issueSelected === 4) {
+        issueText = 'Curriculum Questions - ';
+      } else if (this.state.issueSelected === 5) {
+        issueText = 'Missing Resources - ';
+      }
+      supportMessage = issueText;
+      return supportMessage;
+    }
+  }
+
+  contactSupport() {
+    let handledText = this.handleText(this.state.message)
+    if (handledText.length > 5) {
+      let platformDetails = `Developer Info: Web`;
+      handledText = handledText + ' // ' + platformDetails + ' // ' + this.props.email + ' // ' + this.props.firstName.toString() + ' ' + this.props.lastName.toString();
+      this.props.contactSupport(this.props.jwtToken, handledText).then((res) => {
+        // Handles Error With Dispatch & Displays Alert To User
+        if (!(res && !('errors' in res))) {
+          this.setState({
+            alertVisible: true,
+            alertMessage: 'We had trouble sending your message to our support team. Please try again or reach out directly to support@rapunzl.org.',
+            alertTitle: 'Something Went Wrong',
+          });
+        }
+        // Handles Success And Displays Alert To User
+        else {
+          this.setState({
+            alertVisible: true,
+            alertMessage: 'Your support request has been sent. Someone will get back to you within 24 hours to help resolve your issue. Thanks for your patience.',
+            alertTitle: 'Success!',
+          });
+        }
+      })
+    }
+    // Handles If Support Message Is Less Than 5 Characters
+    else {
+      this.setState({
+        alertVisible: true,
+        alertMessage: 'Please describe your issue in a little more detail and someone will respond within 24 hours to help resolve your issue. Thanks for your patience.',
+        alertTitle: 'Wait A Second...',
+      });
+    }
+  }
+
+  // Toggles Visibility Of Alert Dialog To Display Success Of Failure Message For ContactSupport GraphQL Dispatch
+  toggleAlert = () => {
+    this.setState({ alertVisible: !this.state.alertVisible });
+  }
+
+  render() {
+    if (this.props.visible) {
+      return (
+          <div className='tile support-tile'>
+            <Alert
+              visible={this.state.alertVisible}
+              dismiss={this.toggleAlert}
+              title={this.state.alertTitle}
+              message={this.state.alertMessage}
+            />
+            <div onClick={() => this.props.setMenuTab(this.props.previousTab)} className='support-go-back'>
+              Go Back
+            </div>
+            <div className='classroom-title' style={{ paddingTop: 20, paddingBottom: 15, paddingLeft: 10 }}>
+              Contact Support
+            </div>
+            {this.state.messageStatus === 'sending' && (
+              <div className='support-container'>
+                <div className='support-subtitle'>
+                  Type Of Issue
+                </div>
+                <div className='support-issues-container'>
+                  <div className='support-issue-column'>
+                    <div onClick={() => this.selectSupportIssue(1)} className='support-issue-flex'>
+                      {this.state.issueSelected !== 1 ? (
+                        <CheckBoxOutlineBlank fontSize="small" />
+                      ) : (
+                        <CheckBox fontSize="small" />
+                      )}
+                      <div className='support-issue-text' style={{ fontWeight: this.state.issueSelected !== 1 ? '200' : '600'}}>
+                        Class Upload
+                      </div>
+                    </div>
+                    <div onClick={() => this.selectSupportIssue(2)} className='support-issue-flex'>
+                      {this.state.issueSelected !== 2 ? (
+                        <CheckBoxOutlineBlank fontSize="small" />
+                      ) : (
+                        <CheckBox fontSize="small" />
+                      )}
+                      <div className='support-issue-text' style={{ fontWeight: this.state.issueSelected !== 2 ? '200' : '600'}}>
+                        Technical Issue
+                      </div>
+                    </div>
+                    <div onClick={() => this.selectSupportIssue(3)} className='support-issue-flex'>
+                      {this.state.issueSelected !== 3 ? (
+                        <CheckBoxOutlineBlank fontSize="small" />
+                      ) : (
+                        <CheckBox fontSize="small" />
+                      )}
+                      <div className='support-issue-text' style={{ fontWeight: this.state.issueSelected !== 3 ? '200' : '600'}}>
+                        Course Issue
+                      </div>
+                    </div>
+                  </div>
+                  <div className='support-issue-column'>
+                    <div onClick={() => this.selectSupportIssue(4)} className='support-issue-flex'>
+                      {this.state.issueSelected !== 4 ? (
+                        <CheckBoxOutlineBlank fontSize="small" />
+                      ) : (
+                        <CheckBox fontSize="small" />
+                      )}
+                      <div className='support-issue-text' style={{ fontWeight: this.state.issueSelected !== 4 ? '200' : '600'}}>
+                        Curriculum Question
+                      </div>
+                    </div>
+                    <div onClick={() => this.selectSupportIssue(5)} className='support-issue-flex'>
+                      {this.state.issueSelected !== 5 ? (
+                        <CheckBoxOutlineBlank fontSize="small" />
+                      ) : (
+                        <CheckBox fontSize="small" />
+                      )}
+                      <div className='support-issue-text' style={{ fontWeight: this.state.issueSelected !== 5 ? '200' : '600'}}>
+                        Missing Resources
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className='support-subtitle' style={{ paddingTop: 18 }}>
+                  Contact Email
+                </div>
+                <input
+                  placeholder={this.props.email}
+                  value={this.state.emailInput}
+                  className='support-line-input'
+                />
+                <div className='support-subtitle' style={{ paddingTop: 10 }}>
+                  Subject
+                </div>
+                <input
+                  placeholder={'Rapunzl Teacher Portal Support'}
+                  value={this.state.subjectInput}
+                  className='support-line-input'
+                />
+                <div className='support-subtitle' style={{ paddingTop: 10 }}>
+                  Message
+                </div>
+                <textarea
+                  placeholder={'Describe your support request with as much detail as possible...'}
+                  value={this.state.messageInput}
+                  className='support-message-input'
+                />
+                <div className='support-subtitle' style={{ paddingTop: 12 }}>
+                  Attachments
+                </div>
+                <div className='support-upload-button'>
+                  Upload File
+                </div>
+                <div className='support-submit-button'>
+                  Submit Message
+                </div>
+              </div>
+            )}
+            {this.state.messageStatus === 'success' && (
+              <div className='support-container'>
+                <img alt='' className='support-message-image' src={MessageSuccessIcon} />
+                <div className='support-message-result-title'>
+                  Your Message Was Sent!
+                </div>
+                <div className='support-message-result-message'>
+                  We have shared your message with our developers and support staff so that we can help track down any issue you were describing. Please allow 2-3 business days for our support team to contact you at the email address you provided.
+                </div>
+              </div>
+            )}
+            {this.state.messageStatus === 'failed' && (
+              <div className='support-container'>
+                <img alt='' className='support-message-image' src={MessageFailedIcon} />
+                <div className='support-message-result-title'>
+                  We Experienced A Problem...
+                </div>
+                <div className='support-message-result-message'>
+                  For some reason, we were unable to submit your support message and share it with our team. Please try again and if the problem continues, you can email us at support@rapunzl.org and someone will get back to you in the next 2-3 business days.
+                </div>
+              </div>
+            )}
+          </div>
+      );
+    } else {
+      return (
+        <div />
+      );
+    }
+  }
+}
+
+// Map State To Props (Redux Store Passes State To Component)
+const mapStateToProps = (state) => {
+  // Redux Store --> Component
+  return {
+    // Handles Colors Which Are Updated Throughout When MarketOpen Changes
+    colors: state.userDetails.appColors,
+    // Handles email address linked to current user to prefill response email for support message
+    email: state.userDetails.email,
+    // Used to authenticate contactSupport dispatch to graphQL
+    jwtToken: state.userDetails.jwtToken,
+    loading: state.support.loading,
+    firstName: state.userDetails.firstName,
+    lastName: state.userDetails.lastName,
+  };
+};
+
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+  return {
+    // Handles sending message to Database to email to support email address
+    contactSupport: (token, text) => dispatch(ContactSupport(token, text)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Support);

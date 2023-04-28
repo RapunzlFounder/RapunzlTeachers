@@ -1,0 +1,18 @@
+.login-loading-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 55px;
+}
+.login-loading-icon {
+    width: 60px !important;
+    height: 60px !important;
+}
+.login-loading-text {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 17px;
+    color: #b4ffec;
+    text-align: center;
+}

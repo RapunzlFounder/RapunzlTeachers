@@ -1,0 +1,216 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+import PublishedWithChanges from '@mui/icons-material/PublishedWithChanges';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import StandardsPopup from '../../Admin/StandardsPopup';
+import ProgressBar from './ProgressBar';
+import AssignCourseDialog from './AssignCourseDialog';
+
+class ViewCourseTile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      standardsVisible: false,
+      assigningCourse: false,
+      currentSection: 1,
+    }
+  }
+
+  // Toggles The Visibility Of The StandardsPopup Dialog Component Which Shows The Standards That Align With The Course
+  toggleStandardsDialog = () => {
+    this.setState({ standardsVisible: !this.state.standardsVisible });
+  }
+
+  // Handles Retrieving Correct Course Object Depending Upon Which Course The User Selects
+  _getCurrentCourse() {
+    for (var i in this.props.teacherCourses) {
+      if (this.props.teacherCourses[i].id === this.props.selectedCourse) {
+        return this.props.teacherCourses[i];
+      }
+    }
+  }
+
+  // Increase/Decreases Section Number To Next Section. Will Not Go Below 1 Or Greater Than Length Of Modules In Course
+  nextSection = (courseLength) => {
+    if (this.state.currentSection < courseLength) { 
+      this.setState({ currentSection: this.state.currentSection + 1 });
+    }
+  }
+  backSection = () => {
+    if (this.state.currentSection > 1) {
+      this.setState({ currentSection: this.state.currentSection - 1 });
+    }
+  }
+
+  // Pass Through Arrow Function Which Handles Toggling Visibilty Of Alert To Assign A Selected Course To A Classroom
+  toggleAssignCourse = () => {
+    this.setState({ assigningCourse: !this.state.assigningCourse });
+  }
+
+  render() {
+    const selectedCourse = this._getCurrentCourse();
+    return (
+      <div className='tile current-course' style={{ paddingBottom: 20 }}>
+        <AssignCourseDialog
+          course={selectedCourse}
+          visible={this.state.assigningCourse}
+          dismiss={this.toggleAssignCourse}
+          toggleCreateClassroom={this.props.toggleCreateClassroom}
+        />
+        <StandardsPopup
+          visible={this.state.standardsVisible}
+          dismiss={this.toggleStandardsDialog}
+          standardsArray={[0,1,2,3,4,5,6]}
+          type='Section'
+          module={2}
+        />
+        <div onClick={() => this.props.selectCourse()} className='back-to-all-courses-button'>
+          Back To All Courses
+        </div>
+        <div className='home-header-flex' style={{ justifyContent: 'center', padding: 0 }}>
+          <PublishedWithChanges />
+          <div className='home-header'>
+            {selectedCourse.courseName}
+          </div>
+        </div>
+        <ProgressBar
+          numberOfModules={selectedCourse.modules.length}
+          currentSection={this.state.currentSection}
+          nextSection={this.nextSection}
+          backSection={this.backSection}
+        />
+        <div className='this-week-flex-module' style={{ marginTop: 15 }}>
+          <img alt='' src={selectedCourse.modules[this.state.currentSection - 1].imageUrl} className='this-week-icon' />
+          <div style={{ width: '52%', paddingLeft: 12 }}>
+            <div className='this-week-module-title'>
+              {selectedCourse.modules[this.state.currentSection - 1].name}
+            </div>
+            <div className='this-week-module-text'>
+              {selectedCourse.modules[this.state.currentSection - 1].description}
+            </div>
+            <div>
+              <div className='this-week-standards-button'>
+                View Assessment
+              </div>
+              <div onClick={() => this.toggleStandardsDialog()} className='this-week-standards-button'>
+                View Standards Covered
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='this-week-flex-buttons' style={{ marginTop: 0 }}>
+          <div className='this-week-flex-buttons' style={{ marginLeft: 0 }}>
+            <div className='this-week-button module-button' style={{ marginRight: 10 }}>
+              View Module
+            </div>
+            <div onClick={() => this.toggleAssignCourse()} className='this-week-button teacher-guide-button'>
+              Teacher Guide
+            </div>
+          </div>
+        </div>
+        <div className='current-course-flex' style={{ justifyContent: 'flex-start' }}>
+          <div className='current-course-articles'>
+            {selectedCourse.modules[this.state.currentSection - 1].articles.length === 0 ? (
+              <div className='current-course-empty-articles'>
+                <div className='current-course-articles-flex'>
+                  <ArticleOutlinedIcon className='current-course-flex-icon' />
+                  <div className='current-course-flex-h1'>
+                    Articles
+                  </div>
+                </div>
+                <HighlightOffIcon className='current-course-empty-icon' />
+                <div className='current-course-empty-h1'>
+                  No Articles<br/>To Display
+                </div>
+              </div>
+            ) : (
+              <div className='current-course-not-empty'>
+                <div className='current-course-articles-flex'>
+                  <ArticleOutlinedIcon className='current-course-flex-icon' />
+                  <div className='current-course-flex-h1'>
+                    Articles
+                  </div>
+                </div>
+                {selectedCourse.modules[this.state.currentSection - 1].articles.map((item) => {
+                  return (
+                    <div key={item.id} className='current-course-item'>
+                      <div className='current-course-item-title'>
+                        {item.articleName}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+          <div className='current-course-activities'>
+            {selectedCourse.modules[this.state.currentSection - 1].activities.length === 0 ? (
+                <div className='current-course-empty-articles'>
+                  <div className='current-course-articles-flex'>
+                    <ConstructionOutlinedIcon className='current-course-flex-icon' />
+                    <div className='current-course-flex-h1'>
+                      Activities
+                    </div>
+                  </div>
+                  <HighlightOffIcon className='current-course-empty-icon' />
+                  <div className='current-course-empty-h1'>
+                    No Activities<br/>To Display
+                  </div>
+                </div>
+              ) : (
+                <div className='current-course-not-empty'>
+                  <div className='current-course-articles-flex'>
+                    <ConstructionOutlinedIcon className='current-course-flex-icon' />
+                    <div className='current-course-flex-h1'>
+                      Activities
+                    </div>
+                  </div>
+                  {selectedCourse.modules[this.state.currentSection - 1].activities.map((item) => {
+                    return (
+                      <div key={item.id} className='current-course-item'>
+                        <div className='current-course-item-title'>
+                          {item.activityName}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+          </div>
+        </div>
+        <div className='current-course-assigned-container'>
+          <div className='current-course-assigned-flex'>
+            <div className='assigned-flex-divider' />
+            <div className='assigned-flex-title'>
+              Classes Taking This Course
+            </div>
+            <div className='assigned-flex-divider' />
+          </div>
+          <div className='assigned-text-empty'>
+            This course is not assigned to any classrooms. Assign this course to a class so they can begin accessing course material.
+          </div>
+          <div onClick={() => this.toggleAssignCourse()} className='assign-class-to-course-button'>
+            Assign To Classroom
+          </div>
+        </div>
+        
+      </div>
+    )
+  }
+}
+
+// Map State To Props (Redux Store Passes State To Component)
+const mapStateToProps = (state) => {
+  // Redux Store --> Component
+  return {
+    // Handles Colors Which Are Updated Throughout When MarketOpen Changes
+    colors: state.userDetails.appColors,
+    // Selector Which Handles All Teacher Courses
+    teacherCourses: getAllTeacherCourses(state),
+  };
+};
+
+export default connect(mapStateToProps)(ViewCourseTile);

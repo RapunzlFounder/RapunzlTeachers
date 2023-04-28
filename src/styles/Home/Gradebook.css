@@ -1,0 +1,111 @@
+* {
+	color: white;
+}
+body {
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	background-color: rgb(0, 43, 33);
+}
+.gradebook-class-flex {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+.gradebook-header-text {
+    font-size: 13px;
+    font-weight: 600;
+}
+.gradebook-flex-header-item {
+    width: 60px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border: 1px solid #007154;
+    background-color: #0c5140;
+}
+.quiz-flex-item {
+    width: 33px;
+    text-align: center;
+}
+.gradebook-class-dropdown {
+    background: none;
+    outline: none;
+    border: 1px solid white;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-top: 10px;
+    width:fit-content;
+}
+.gradebook-description-text {
+    font-size: 14px;
+    font-weight: 300;
+}
+.gradebook-header-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.gradebook-export-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 13px;
+    padding-right: 13px;
+    color: #41d0ac;
+    border-color: #41d0ac;
+    transition: 0.2s all;
+    cursor: pointer;
+}
+.gradebook-export-button:hover {
+    color: white;
+    background-color: #41d0ac;
+}
+.gradebook-export-icon {
+    font-size: 18px !important;
+    margin-right: 7px;
+    fill: #41d0ac !important;
+    transition: 0.2s all;
+}
+.gradebook-export-button:hover .gradebook-export-icon {
+    fill: white !important;
+}
+.export-button-text {
+    color: #41d0ac;
+}
+.gradebook-export-button:hover .export-button-text {
+    color: white;
+}
+.gradebook-empty-image {
+    width: 170px;
+    height: 170px;
+    margin: auto;
+    display: block;
+    margin-top: 65px;
+    margin-bottom: 15px;
+}
+.gradebook-empty-header {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1ce0af;
+    padding-bottom: 5px;
+}
+.gradebook-empty-text {
+    width: 300px;
+    margin: auto;
+    font-size: 18px;
+    font-weight: 200;
+    padding-bottom: 220px;
+    text-align: center;
+}

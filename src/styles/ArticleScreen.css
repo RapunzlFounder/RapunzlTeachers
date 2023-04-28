@@ -1,0 +1,117 @@
+.article-back-button {
+	width: fit-content;
+    font-size: 12px;
+    font-weight: 500;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border: 1px solid white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.2s all;
+	margin-bottom: 20px;
+}
+.article-back-button:hover {
+	background-color: #007154;
+    border: 1px solid #007154;
+}
+h1 {
+    padding-bottom: 7px;
+	padding-top: 7px;
+    color: #00ffbe;
+}
+h2 {
+    padding-top: 15px;
+    color: #aeffea;
+}
+h3 {
+    padding-top: 10px;
+    font-weight: 600;
+    margin-bottom: -5px;
+    color: #00ffbe;
+}
+h4 {
+    padding-bottom: 7px;
+	padding-top: 7px;
+}
+b {
+	padding-bottom: 7px;
+	padding-top: 7px;
+	font-weight: 800;
+	color: #00dca4;
+}
+p {
+    font-size: 18px;
+    font-weight: 200;
+    padding-bottom: 7px;
+	padding-top: 7px;
+    line-height: 1.25;
+}
+.article-list-item {
+	padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 15px;
+    font-weight: 500;
+}
+.article-footer-flex {
+    border-top: 4px solid #042a21;
+    margin-top: 30px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.article-footer-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+	cursor: pointer;
+}
+.article-footer-header {
+    font-size: 14px;
+    font-weight: 200;
+	color: #0f8c6c;
+	transition: 0.2s all;
+}
+.article-footer-item-flex {
+
+}
+.article-footer-item-text {
+    width: 150px;
+    font-size: 20px;
+    font-weight: 600;
+	color: #0f8c6c;
+	transition: 0.2s all;
+}
+.article-footer-arrow {
+	font-size: 80px !important;
+	fill: #0f8c6c !important;
+	transition: 0.2s all;
+}
+
+.article-footer-item:hover .article-footer-header {
+	color: white;
+}
+.article-footer-item:hover .article-footer-item-text {
+	color: #00ffbe;
+}
+.article-footer-item:hover .article-footer-arrow {
+	fill: #ffcb00 !important;
+}
+/* Media Size Updates 650px */
+@media only screen and (max-width: 650px) {
+	.article-footer-arrow {
+		font-size: 60px !important;
+	}
+	.article-footer-item-text {
+		font-size: 16px;
+	}
+}
+/* Media Size Updates 500px */
+@media only screen and (max-width: 500px) {
+	.article-width-restriction {
+		display: none;
+	}
+}
