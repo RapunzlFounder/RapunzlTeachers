@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+// import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import Bookmarks from '@mui/icons-material/Bookmarks';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
@@ -98,7 +98,7 @@ const mapStateToProps = (state) => {
   // Redux Store --> Component
   return {
     // Selector Which Handles All Teacher Courses
-    teacherCourses: getAllTeacherCourses(state),
+    // teacherCourses: getAllTeacherCourses(state),
   };
 };
 

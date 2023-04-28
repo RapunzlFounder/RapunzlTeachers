@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+// import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import PublishedWithChanges from '@mui/icons-material/PublishedWithChanges';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
@@ -209,7 +209,7 @@ const mapStateToProps = (state) => {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
     // Selector Which Handles All Teacher Courses
-    teacherCourses: getAllTeacherCourses(state),
+    // teacherCourses: getAllTeacherCourses(state),
   };
 };
 
