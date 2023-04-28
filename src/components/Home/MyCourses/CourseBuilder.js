@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createTeacherCourse } from '../../../ActionTypes/coursemoduleActions';
-import { getAllPublicModules, getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+// import { getAllPublicModules, getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import TextField from '@mui/material/TextField';
@@ -268,7 +269,7 @@ const mapStateToProps = (state) => {
     // Selector Which Handles All Public Modules 
     publicModules: getAllPublicModules(state),
     // Selector Which Handles All Teacher Courses
-    teacherCourses: getAllTeacherCourses(state),
+    // teacherCourses: getAllTeacherCourses(state),
   };
 };
 

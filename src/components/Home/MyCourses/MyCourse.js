@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import YourCourses from './YourCourses';
 import PreparedCourses from './PreparedCourses';
 import '../../../styles/Home/HomeScreen.css';
@@ -64,8 +63,6 @@ const mapStateToProps = (state) => {
   return {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
-    // Selector To Retrieve Teacher Created Courses
-    teacherCourses: getAllTeacherCourses(state),
   };
 };
 

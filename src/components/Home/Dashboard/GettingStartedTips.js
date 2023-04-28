@@ -13,7 +13,7 @@ import ExportCourseBW from '../../../assets/images/ChecklistTips/ExportCourse_BW
 import ExportCourseColor from '../../../assets/images/ChecklistTips/ExportCourse_Color.png';
 import '../../../styles/Home/Dashboard.css';
 import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
-import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+// import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 
 class GettingStartedTips extends Component {
   constructor(props) {
@@ -180,7 +180,7 @@ const mapStateToProps = (state) => {
     colors: state.userDetails.appColors,
     // Selector To Get All Teacher Classrooms To Check if They Have Created A Class Yet
     allClassrooms: getAllTeacherClassrooms(state),
-    allCourses: getAllTeacherCoursesSummary(state),
+    // allCourses: getAllTeacherCoursesSummary(state),
   };
 };
 
