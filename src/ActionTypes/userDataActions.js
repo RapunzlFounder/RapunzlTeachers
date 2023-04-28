@@ -5,7 +5,7 @@ import { USER_DETAILS } from '../graphql/queries/UserDetails';
 import { GET_SCHOOL_LIST } from '../graphql/queries/GetSchoolList';
 import { COMPLETE_QUIZ } from '../graphql/mutations/CompleteQuiz';
 // import the action to update all of the courses and modules
-import { updateAllCoursesModules } from './coursemoduleActions';
+import { updateAllCourses, updateAllPublicModules, updateAllTeacherModules } from './coursemoduleActions';
 // import the action to update all of the classroom students
 import { updateAllClassrooms, updateMiniClassrooms } from './classroomActions';
 // import the action to update the notification state
@@ -168,10 +168,14 @@ export function fetchBigQuery(token) {
               const coursesObject = arrayToObjectID(mainReturnedObj.teacherUserDetails.courses);
               mainReturnedObj.teacherUserDetails.courses = coursesObject;
               for (var property1 in mainReturnedObj.teacherUserDetails.courses){
+                let courseModules = {};
                 // convert the course modules array of objects into an objects of objects
-                const courseModules = arrayToObjectID(mainReturnedObj.teacherUserDetails.courses[property1].modules);
-                mainReturnedObj.teacherUserDetails.courses[property1].modules = courseModules;
+                if (mainReturnedObj.teacherUserDetails.courses[property1].courseModules.length > 0){
+                  courseModules = arrayToObjectID(mainReturnedObj.teacherUserDetails.courses[property1].courseModules);
+                }
+                mainReturnedObj.teacherUserDetails.courses[property1].courseModules = courseModules;
               }
+              dispatch(updateAllCourses(mainReturnedObj.teacherUserDetails.courses));
               // convert the available public modules array of objects into an objects of objects
               const publicModules = arrayToObjectID(mainReturnedObj.teacherUserDetails.availablePublicModules);
               mainReturnedObj.teacherUserDetails.availablePublicModules = publicModules;
@@ -192,7 +196,7 @@ export function fetchBigQuery(token) {
                 const publicModuleVideos = arrayToObjectID(mainReturnedObj.teacherUserDetails.availablePublicModules[property2].videos);
                 mainReturnedObj.teacherUserDetails.availablePublicModules[property2].videos = publicModuleVideos;
               }
-              
+              dispatch(updateAllPublicModules(mainReturnedObj.teacherUserDetails.availablePublicModules));
               // convert the teacher created modules array of objects into an objects of objects
               const teacherModules = arrayToObjectID(mainReturnedObj.teacherUserDetails.teacherCreatedModules);
               mainReturnedObj.teacherUserDetails.teacherCreatedModules = teacherModules;
@@ -213,7 +217,7 @@ export function fetchBigQuery(token) {
                 const teacherModuleVideos = arrayToObjectID(mainReturnedObj.teacherUserDetails.teacherCreatedModules[property3].videos);
                 mainReturnedObj.teacherUserDetails.teacherCreatedModules[property3].videos = teacherModuleVideos;
               }              
-
+              dispatch(updateAllTeacherModules(mainReturnedObj.teacherUserDetails.teacherCreatedModules));
               // convert the classrooms array of classrooms into an object of objects
               const classroomsObject = arrayToObjectID(mainReturnedObj.teacherUserDetails.classrooms);
               mainReturnedObj.teacherUserDetails.classrooms = classroomsObject; 
@@ -242,7 +246,6 @@ export function fetchBigQuery(token) {
               const classroomCoursesObject = arrayToObjectID(mainReturnedObj.teacherUserDetails.classroomCourses);
               mainReturnedObj.teacherUserDetails.classroomCourses = classroomCoursesObject; 
               // add all of the courses and modules to the redux state
-              dispatch(updateAllCoursesModules(mainReturnedObj.teacherUserDetails.courses, mainReturnedObj.teacherUserDetails.availablePublicModules, mainReturnedObj.teacherUserDetails.teacherCreatedModules));
               dispatch(updateAllClassrooms(mainReturnedObj.teacherUserDetails.classrooms, mainReturnedObj.teacherUserDetails.classroomCourses));
               dispatch(updateAllNotifications(mainReturnedObj.teacherUserDetails.allowNotifications, mainReturnedObj.teacherUserDetails.unreadNotifications));
               // update the teacher userDetails state

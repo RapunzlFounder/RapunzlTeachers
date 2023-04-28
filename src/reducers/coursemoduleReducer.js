@@ -1,8 +1,9 @@
 import storage from 'redux-persist/lib/storage';
 import {
-  UPDATE_ALL_MODULES,
-  CREATE_TEACHER_NO_COURSES_MODULES,
+  UPDATE_ALL_COURSES,
   UPDATE_PUBLIC_MODULES,
+  UPDATE_TEACHER_MODULES,
+  CREATE_TEACHER_NO_COURSES_MODULES,
   // RESET_COURSEMODULE_STATE,
   CREATE_COURSE_BEGIN,
   CREATE_COURSE_SUCCESS,
@@ -32,164 +33,9 @@ const initialState = {
   error: null,
   graphqlError: null,
   errorTitle: null,
-  availablePublicModules: {
-    0:{
-      id: 0,
-      name: '',
-      description: '',
-      imageUrl: '',
-      presentationUrl: '',
-      moduleLevel: 1,
-      vocabUrl: '',
-      isPrivate: false,
-      isRapunzlModule: true,
-      teacherId: 0,
-      teacherGuides: {
-        0: {
-          id: 0,
-				  guideName: '',
-				  description: '',
-				  imageUrl: '',
-				  pdfUrl: '',
-        }
-      },
-      articles: {
-        0: {
-          id: 0,
-				  articleName: '',
-				  description: '',
-				  imageUrl: '',
-				  pdfUrl: '',
-        }
-      },
-      activities: {
-        0: {
-          id: 0,
-				  activityName: '',
-				  description: '',
-				  imageUrl: '',
-				  pdfUrl: '',
-        }
-			},
-      assessments: {
-        0: {
-          id: 0,
-				  assessmentName: '',
-				  description: '',
-				  imageUrl: '',
-				  questions: {
-            0:{
-              id: 0,
-              questionNumber: 0,
-              question: '',
-              answer: '',
-              questionOptions: '',
-              explanation: '',
-              attemptsAllowed: 0,
-              isRapunzlQuestion: true,
-            }
-          },  
-        }
-      },
-      Videos: {
-        0: {
-          id: 0,
-				  videoName: '',
-				  description: '',
-				  imageUrl: '',
-				  videoUrl: '',
-        }
-      }
-    }
-  },
-  teacherCreatedModules: {
-    0:{
-      id: 0,
-      name: '',
-      description: '',
-      imageUrl: '',
-      presentationUrl: '',
-      moduleLevel: 1,
-      vocabUrl: '',
-      isPrivate: false,
-      isRapunzlModule: true,
-      teacherId: 0,
-      teacherGuides: {
-        0: {
-          id: 0,
-				  guideName: '',
-				  description: '',
-				  imageUrl: '',
-				  pdfUrl: '',
-        }
-      },
-      articles: {
-        0: {
-          id: 0,
-				  articleName: '',
-				  description: '',
-				  imageUrl: '',
-				  pdfUrl: '',
-        }
-      },
-      activities: {
-        0: {
-          id: 0,
-				  activityName: '',
-				  description: '',
-				  imageUrl: '',
-				  pdfUrl: '',
-        }
-			},
-      assessments: {
-        0: {
-          id: 0,
-				  assessmentName: '',
-				  description: '',
-				  imageUrl: '',
-				  questions: {
-            0:{
-              id: 0,
-              questionNumber: 0,
-              question: '',
-              answer: '',
-              questionOptions: '',
-              explanation: '',
-              attemptsAllowed: 0,
-              isRapunzlQuestion: true,
-            }
-          },  
-        }
-      },
-      Videos: {
-        0: {
-          id: 0,
-				  videoName: '',
-				  description: '',
-				  imageUrl: '',
-				  videoUrl: '',
-        }
-      }
-    }
-  },
-  teacherCourses: {
-    0: {
-      id: 0,
-			courseName: '',
-			createdAt: null,
-      modules: {
-        0:{
-          id: 0,
-          name: '',
-          isPrivate: false,
-          isRapunzlModule: true,
-          teacherId: 0,
-        }
-      }
-    }
-  }
-
-  
+  availablePublicModules: {},
+  teacherCreatedModules: {},
+  teacherCourses: {},
 };
 
 const coursemoduleReducer = (state = initialState, action) => {
@@ -208,8 +54,8 @@ const coursemoduleReducer = (state = initialState, action) => {
           teacherCreatedModules: {},
           teacherCourses: {},
         };
-    // this updates all of the coursesmodules state and is only called if a user logs out of the app or creates a new account
-    case UPDATE_ALL_MODULES:
+    // this updates all of the teacherCourses state and is only called if a user logs out of the app
+    case UPDATE_ALL_COURSES:
       // Mark the state as "loading" so we can show a spinner or something
       // Also, reset any errors.
       // eslint-disable-next-line
@@ -219,9 +65,20 @@ const coursemoduleReducer = (state = initialState, action) => {
           error: null,
           graphqlError: null,
           errorTitle: null,
-          availablePublicModules: action.payload.publicModulesObject, 
-          teacherCreatedModules:action.payload.teacherModulesObject,
           teacherCourses: action.payload.coursesObject,
+        };
+    // this updates all of the coursesmodules state and is only called if a user logs out of the app or creates a new account
+    case UPDATE_TEACHER_MODULES:
+      // Mark the state as "loading" so we can show a spinner or something
+      // Also, reset any errors.
+      // eslint-disable-next-line
+        return {
+          ...state,
+          loading: false,
+          error: null,
+          graphqlError: null,
+          errorTitle: null,
+          teacherCreatedModules:action.payload.teacherModulesObject,
         };
     // HANDLES CREATING A TEACHER COURSE
     case CREATE_COURSE_BEGIN:

@@ -8,7 +8,7 @@ export const CREATE_TEACHER_COURSE = (courseName, isPrivate, modulesList) => `mu
 		createdAt
 		lastModifiedAt
 		isPrivate
-		modules {
+		courseModules {
 			id
 			name
 			isPrivate

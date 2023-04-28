@@ -180,7 +180,7 @@ const mapStateToProps = (state) => {
     colors: state.userDetails.appColors,
     // Selector To Get All Teacher Classrooms To Check if They Have Created A Class Yet
     allClassrooms: getAllTeacherClassrooms(state),
-    allCourses: getAllTeacherCoursesSummary(state),
+    allCourses: getAllTeacherCourses(state),
   };
 };
 

@@ -14,16 +14,21 @@ const rapunzlPublicModuleSelector = (state, props) => (props.moduleId in state.c
 const teacherCreatedModuleSelector = (state, props) => (props.moduleId in state.coursesmodules.teacherCreatedModules) ? state.coursesmodules.teacherCreatedModules[props.moduleId] : {};
 
 // selector to return a summary of all the Teacher Created Courses.  The id, name and number of modules is returned for each course
-export const getAllTeacherCoursesSummary = createSelector(
+export const getAllTeacherCourses = createSelector(
   [teacherCoursesArraySelector],
   (teacherCourseArray) => {
     if (teacherCourseArray && teacherCourseArray.length > 0) {
+        let courseArrayCopy = JSON.parse(JSON.stringify(teacherCourseArray));
         let returnArray = [];
-        for (var i in teacherCourseArray){
-            teacherCourseArray[i].modules = objectToArray(teacherCourseArray[i].modules);
-            let newCourseObject = {id: teacherCourseArray[i].id, courseName: teacherCourseArray[i].courseName, numberModules: teacherCourseArray[i].modules.length};
+        for (var i in courseArrayCopy){
+            courseArrayCopy[i].courseModules = objectToArray(courseArrayCopy[i].courseModules);
+            const newCourseObject = {id: courseArrayCopy[i].id, courseName: courseArrayCopy[i].courseName, numberModules: courseArrayCopy[i].courseModules.length};
             returnArray.push(newCourseObject);
         }
+        // these next 3 lines are for debugging purposes only
+        console.log(returnArray); 
+        const strDate = (new Date()).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
+        console.log(strDate);
         return returnArray;
     }
     else{
@@ -37,6 +42,8 @@ export const getTeacherCourse = createSelector(
     [teacherCourseSelector, rapunzlPublicModulesObjectSelector, teacherCreatedModulesObjectSelector],
     (teacherCourse, rapunzlModules, teacherModules) => {
       if (teacherCourse && teacherCourse != null) {
+        let rapunzlModulesCopy = JSON.parse(JSON.stringify(rapunzlModules));
+        let teacherModulesCopy = JSON.parse(JSON.stringify(teacherModules));
           // create a new object for the teacher course that will be returned
           let newCourseObject = {
             id: teacherCourse.id,
@@ -44,17 +51,17 @@ export const getTeacherCourse = createSelector(
             createdAt: teacherCourse.createdAt,
             lastModifiedAt: teacherCourse.lastModifiedAt,
             isPrivate: teacherCourse.isPrivate,
-            modules: []
+            courseModules: []
           };
-          for (var id in teacherCourse.modules){
+          for (var id in teacherCourse.courseModules){
             // first check if the module id is a rapunzl public module
-            if (id in rapunzlModules){
-              let newModuleObject = populateTeacherModule(rapunzlModules[id]);
-              newCourseObject['modules'].push(newModuleObject);
+            if (id in rapunzlModulesCopy){
+              let newModuleObject = populateTeacherModule(rapunzlModulesCopy[id]);
+              newCourseObject.courseModules.push(newModuleObject);
             }
-            else if (id in teacherModules){
-              let newModuleObject = populateTeacherModule(teacherModules[id]);
-              newCourseObject['modules'].push(newModuleObject);
+            else if (id in teacherModulesCopy){
+              let newModuleObject = populateTeacherModule(teacherModulesCopy[id]);
+              newCourseObject.courseModules.push(newModuleObject);
             }
           }
           return newCourseObject;
@@ -92,14 +99,15 @@ export const getAllPublicModules = createSelector(
     [rapunzlPublicModulesArraySelector],
     (publicModulesArray) => {
       if (publicModulesArray && publicModulesArray.length > 0) {
-        for (var i in publicModulesArray){
-            publicModulesArray[i].teacherGuides = objectToArray(publicModulesArray[i].teacherGuides);
-            publicModulesArray[i].articles = objectToArray(publicModulesArray[i].articles);
-            publicModulesArray[i].activities = objectToArray(publicModulesArray[i].activities);
-            publicModulesArray[i].assessments.questions = objectToArray(publicModulesArray[i].assessments.questions);
-            publicModulesArray[i].videos = objectToArray(publicModulesArray[i].videos);           
+        let publicModulesArrayCopy = JSON.parse(JSON.stringify(publicModulesArray));
+        for (var i in publicModulesArrayCopy){
+            publicModulesArrayCopy[i].teacherGuides = objectToArray(publicModulesArrayCopy[i].teacherGuides);
+            publicModulesArrayCopy[i].articles = objectToArray(publicModulesArrayCopy[i].articles);
+            publicModulesArrayCopy[i].activities = objectToArray(publicModulesArrayCopy[i].activities);
+            publicModulesArrayCopy[i].assessments.questions = objectToArray(publicModulesArrayCopy[i].assessments.questions);
+            publicModulesArrayCopy[i].videos = objectToArray(publicModulesArrayCopy[i].videos);           
           }
-          return publicModulesArray;
+          return publicModulesArrayCopy;
       }
       else{
         return [];
@@ -110,15 +118,16 @@ export const getAllPublicModules = createSelector(
 // selector to return a specific Public Module created by Rapunzl
 export const getPublicModule = createSelector(
     [rapunzlPublicModuleSelector],
-    (publicModuleArray) => {
-      if (publicModuleArray && publicModuleArray != null) {
-            publicModuleArray.teacherGuides = objectToArray(publicModuleArray.teacherGuides);
-            publicModuleArray.articles = objectToArray(publicModuleArray.articles);
-            publicModuleArray.activities = objectToArray(publicModuleArray.activities);
-            publicModuleArray.assessments.questions = objectToArray(publicModuleArray.assessments.questions);
-            publicModuleArray.videos = objectToArray(publicModuleArray.videos);  
+    (publicModule) => {
+      if (publicModule && publicModule != null) {
+        let publicModuleCopy = JSON.parse(JSON.stringify(publicModule));
+        publicModuleCopy.teacherGuides = objectToArray(publicModuleCopy.teacherGuides);
+        publicModuleCopy.articles = objectToArray(publicModuleCopy.articles);
+        publicModuleCopy.activities = objectToArray(publicModuleCopy.activities);
+        publicModuleCopy.assessments.questions = objectToArray(publicModuleCopy.assessments.questions);
+        publicModuleCopy.videos = objectToArray(publicModuleCopy.videos);  
 
-            return publicModuleArray;
+        return publicModuleCopy;
       }
       else{
         return [];
@@ -131,14 +140,15 @@ export const getAllTeacherCreatedModules = createSelector(
     [teacherCreatedModulesArraySelector],
     (teacherModulesArray) => {
       if (teacherModulesArray && teacherModulesArray.length > 0) {
-        for (var i in teacherModulesArray){
-            teacherModulesArray[i].teacherGuides = objectToArray(teacherModulesArray[i].teacherGuides);
-            teacherModulesArray[i].articles = objectToArray(teacherModulesArray[i].articles);
-            teacherModulesArray[i].activities = objectToArray(teacherModulesArray[i].activities);
-            teacherModulesArray[i].assessments.questions = objectToArray(teacherModulesArray[i].assessments.questions);
-            teacherModulesArray[i].videos = objectToArray(teacherModulesArray[i].videos);           
+        let teacherModulesArrayCopy = JSON.parse(JSON.stringify(teacherModulesArray));
+        for (var i in teacherModulesArrayCopy){
+            teacherModulesArrayCopy[i].teacherGuides = objectToArray(teacherModulesArrayCopy[i].teacherGuides);
+            teacherModulesArrayCopy[i].articles = objectToArray(teacherModulesArrayCopy[i].articles);
+            teacherModulesArrayCopy[i].activities = objectToArray(teacherModulesArrayCopy[i].activities);
+            teacherModulesArrayCopy[i].assessments.questions = objectToArray(teacherModulesArrayCopy[i].assessments.questions);
+            teacherModulesArrayCopy[i].videos = objectToArray(teacherModulesArrayCopy[i].videos);           
           }
-          return teacherModulesArray;
+          return teacherModulesArrayCopy;
       }
       else{
         return [];
@@ -149,15 +159,16 @@ export const getAllTeacherCreatedModules = createSelector(
 // selector to return a specific Module created by Teacher 
 export const getTeacherCreatedModule = createSelector(
     [teacherCreatedModuleSelector],
-    (teacherModuleArray) => {
-      if (teacherModuleArray && teacherModuleArray.length > 0) {
-            teacherModuleArray.teacherGuides = objectToArray(teacherModuleArray.teacherGuides);
-            teacherModuleArray.articles = objectToArray(teacherModuleArray.articles);
-            teacherModuleArray.activities = objectToArray(teacherModuleArray.activities);
-            teacherModuleArray.assessments.questions = objectToArray(teacherModuleArray.assessments.questions);
-            teacherModuleArray.videos = objectToArray(teacherModuleArray.videos);           
+    (teacherModule) => {
+      if (teacherModule && teacherModule != null) {
+        let teacherModuleCopy = JSON.parse(JSON.stringify(teacherModule));
+        teacherModuleCopy.teacherGuides = objectToArray(teacherModuleCopy.teacherGuides);
+        teacherModuleCopy.articles = objectToArray(teacherModuleCopy.articles);
+        teacherModuleCopy.activities = objectToArray(teacherModuleCopy.activities);
+        teacherModuleCopy.assessments.questions = objectToArray(teacherModuleCopy.assessments.questions);
+        teacherModuleCopy.videos = objectToArray(teacherModuleCopy.videos);           
           
-            return teacherModuleArray;
+        return teacherModuleCopy;
       }
       else{
         return [];

@@ -5,8 +5,9 @@ import { ADD_COURSE_MODULES } from '../graphql/mutations/AddCourseModules';
 import { REMOVE_COURSE_MODULES } from '../graphql/mutations/RemoveCourseModules';
 import { arrayToObjectID, stringifyIntArray } from '../helper_functions/utilities';
 
-export const UPDATE_ALL_MODULES = 'UPDATE_ALL_MODULES';
+export const UPDATE_ALL_COURSES = 'UPDATE_ALL_COURSES';
 export const UPDATE_PUBLIC_MODULES = 'UPDATE_PUBLIC_MODULES';
+export const UPDATE_TEACHER_MODULES = 'UPDATE_TEACHER_MODULES';
 export const CREATE_MODULE_BEGIN = 'CREATE_MODULE_BEGIN';
 export const CREATE_MODULE_SUCCESS = 'CREATE_MODULE_SUCCESS';
 export const CREATE_MODULE_FAILURE = 'CREATE_MODULE_FAILURE';
@@ -78,11 +79,16 @@ export const createTeacherEmptyCoursesModules = () => ({
   type: CREATE_TEACHER_NO_COURSES_MODULES,
 });
 // this updates all of the courses and modules retrieved by the big query 
-export const updateAllCoursesModules = (coursesObject, publicModulesObject, teacherModulesObject) => ({
-  type: UPDATE_ALL_MODULES,
-  payload: { coursesObject, publicModulesObject, teacherModulesObject },
+export const updateAllCourses = (coursesObject) => ({
+  type: UPDATE_ALL_COURSES,
+  payload: { coursesObject },
 });
-// this updates all of the available public modules retrieved when a teacher user account is created
+// this updates all of the teacher created modules retrieved by the big query 
+export const updateAllTeacherModules = (teacherModulesObject) => ({
+  type: UPDATE_TEACHER_MODULES,
+  payload: { teacherModulesObject },
+});
+// this updates all of the available public modules retrieved when a teacher user account is created or when the teacher logs in and the big query runs
 export const updateAllPublicModules = (publicModulesObject) => ({
   type: UPDATE_PUBLIC_MODULES,
   payload: { publicModulesObject },
@@ -170,8 +176,11 @@ export function createTeacherCourse(token, courseName, isPrivate, modulesList) {
           // Transform arrays in the Teacher course object to objects that further contain objects.
           // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
           var mainReturnedObj = json.data.data.createTeachercourse.newCourse;
-          const courseModules = arrayToObjectID(mainReturnedObj.modules);
-          mainReturnedObj.modules = courseModules;
+          let courseModules = {};
+          if (mainReturnedObj.courseModules.length > 0){
+            courseModules = arrayToObjectID(mainReturnedObj.courseModules);
+          }
+          mainReturnedObj.courseModules = courseModules;
           dispatch(createCourseSuccess(mainReturnedObj.id, mainReturnedObj));
           return json.data.data;
         }
@@ -203,8 +212,11 @@ export function addModuletoCourse(token, courseId, modulesList) {
           // Transform arrays in the Teacher course object to objects that further contain objects.
           // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
           var mainReturnedObj = json.data.data.addCoursemodules.updatedCourse;
-          const courseModules = arrayToObjectID(mainReturnedObj.modules);
-          mainReturnedObj.modules = courseModules;
+          let courseModules = {};
+          if (mainReturnedObj.courseModules.length > 0){
+            courseModules = arrayToObjectID(mainReturnedObj.courseModules);
+          }
+          mainReturnedObj.courseModules = courseModules;
           dispatch(addCourseModulesSuccess(mainReturnedObj.id, mainReturnedObj));
           return json.data.data;
         }
@@ -236,8 +248,11 @@ export function removeCourseModules(token, courseId, modulesList) {
           // Transform arrays in the Teacher course object to objects that further contain objects.
           // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
           var mainReturnedObj = json.data.data.removeCoursemodules.updatedCourse;
-          const courseModules = arrayToObjectID(mainReturnedObj.modules);
-          mainReturnedObj.modules = courseModules;
+          let courseModules = {};
+          if (mainReturnedObj.courseModules.length > 0){
+            courseModules = arrayToObjectID(mainReturnedObj.courseModules);
+          }
+          mainReturnedObj.courseModules = courseModules;
           dispatch(removeCourseModulesSuccess(mainReturnedObj.id, mainReturnedObj));
           return json.data.data;
         }

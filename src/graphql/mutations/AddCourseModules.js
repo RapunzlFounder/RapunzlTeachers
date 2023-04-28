@@ -6,7 +6,7 @@ export const ADD_COURSE_MODULES = (courseId, modulesToAddList) => `mutation {
 		createdAt
 		lastModifiedAt
 		isPrivate
-		modules {
+		courseModules {
 			id
 			name
 			isPrivate

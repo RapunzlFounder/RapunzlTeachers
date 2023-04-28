@@ -6,7 +6,7 @@ export const REMOVE_COURSE_MODULES = (courseId, modulesToRemoveList) => `mutatio
 		createdAt
 		lastModifiedAt
 		isPrivate
-		modules {
+		courseModules {
 			id
 			name
 			isPrivate

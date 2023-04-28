@@ -29,7 +29,7 @@ query{
 			createdAt
 			lastModifiedAt
 			isPrivate
-			modules {
+			courseModules {
 				id
 				name
 				isPrivate
