@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import {  objectToArray } from '../helper_functions/utilities';
+import {  objectToArray, arrayToObjectModuleID, arrayToObjectQuizQuestionID } from '../helper_functions/utilities';
 
 const teacherClassroomsArraySelector = (state) => objectToArray(state.classroom.classrooms);
 
@@ -14,14 +14,21 @@ export const getAllTeacherClassrooms = createSelector(
   [teacherClassroomsArraySelector],
   (teacherClassroomsArray) => {
     if (teacherClassroomsArray && teacherClassroomsArray.length > 0) {
-        for (var i in teacherClassroomsArray){
-            teacherClassroomsArray[i].studentList = objectToArray(teacherClassroomsArray[i].studentList);
-            for (var a in teacherClassroomsArray[i].studentList){
-                teacherClassroomsArray[i].studentList[a].stockCompetitionsEntered = objectToArray(teacherClassroomsArray[i].studentList[a].stockCompetitionsEntered);
-                teacherClassroomsArray[i].studentList[a].cryptoCompetitionsEntered  = objectToArray(teacherClassroomsArray[i].studentList[a].cryptoCompetitionsEntered);
-            }
+      let teacherClassroomsArrayCopy = JSON.parse(JSON.stringify(teacherClassroomsArray));
+      for (var i in teacherClassroomsArrayCopy){
+        teacherClassroomsArrayCopy[i].studentList = objectToArray(teacherClassroomsArrayCopy[i].studentList);
+        for (var a in teacherClassroomsArrayCopy[i].studentList){
+          teacherClassroomsArrayCopy[i].studentList[a].stockCompetitionsEntered = objectToArray(teacherClassroomsArrayCopy[i].studentList[a].stockCompetitionsEntered);
+          teacherClassroomsArrayCopy[i].studentList[a].cryptoCompetitionsEntered  = objectToArray(teacherClassroomsArrayCopy[i].studentList[a].cryptoCompetitionsEntered);
+          // convert the classroom object of student Module Assessment or Quiz Scores into an array of objects
+          teacherClassroomsArrayCopy[i].studentList[a].moduleAssessmentScores = objectToArray(teacherClassroomsArrayCopy[i].studentList[a].moduleAssessmentScores);
+          // convert the student list module assessment score question results into an array of objects
+          for (var b in teacherClassroomsArrayCopy[i].studentList[a].moduleAssessmentScores){
+            teacherClassroomsArrayCopy[i].studentList[a].moduleAssessmentScores[b].questionResults = objectToArray(teacherClassroomsArrayCopy[i].studentList[a].moduleAssessmentScores[b].questionResults);
+          }
         }
-        return teacherClassroomsArray;
+      }
+        return teacherClassroomsArrayCopy;
     }
     else{
       return [];
@@ -34,13 +41,20 @@ export const getTeacherClassroom = createSelector(
     [teacherClassroomSelector],
     (teacherClassroom) => {
       if (teacherClassroom && teacherClassroom != null) {
-        teacherClassroom.studentList = objectToArray(teacherClassroom.studentList);
-        for (var a in teacherClassroom.studentList){
-            teacherClassroom.studentList[a].stockCompetitionsEntered = objectToArray(teacherClassroom.studentList[a].stockCompetitionsEntered);
-            teacherClassroom.studentList[a].cryptoCompetitionsEntered  = objectToArray(teacherClassroom.studentList[a].cryptoCompetitionsEntered);
+        let teacherClassroomCopy = JSON.parse(JSON.stringify(teacherClassroom));
+        teacherClassroomCopy.studentList = objectToArray(teacherClassroomCopy.studentList);
+        for (var a in teacherClassroomCopy.studentList){
+          teacherClassroomCopy.studentList[a].stockCompetitionsEntered = objectToArray(teacherClassroomCopy.studentList[a].stockCompetitionsEntered);
+          teacherClassroomCopy.studentList[a].cryptoCompetitionsEntered  = objectToArray(teacherClassroomCopy.studentList[a].cryptoCompetitionsEntered);
+          // convert the classroom object of student Module Assessment or Quiz Scores into an array of objects
+          teacherClassroomCopy.studentList[a].moduleAssessmentScores = objectToArray(teacherClassroomCopy.studentList[a].moduleAssessmentScores);
+          // convert the student list module assessment score question results into an array of objects
+          for (var b in teacherClassroomCopy.studentList[a].moduleAssessmentScores){
+            teacherClassroomCopy.studentList[a].moduleAssessmentScores[b].questionResults = objectToArray(teacherClassroomCopy.studentList[a].moduleAssessmentScores[b].questionResults);
+          }
         }
             
-        return teacherClassroom;
+        return teacherClassroomCopy;
       }
       else{
         return [];

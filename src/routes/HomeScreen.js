@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Outlet, Navigate } from "react-router-dom";
 import { connect } from 'react-redux';
-import { fetchBigQuery } from '../ActionTypes/userDataActions';
+import { fetchBigQuery, fetchMiniQuery } from '../ActionTypes/userDataActions';
 import { resetNotificationErrors } from '../ActionTypes/notificationActions';
 import Container from '@mui/material/Container';
 import Header from '../components/Admin/Header';
@@ -47,7 +47,7 @@ class HomeScreen extends Component {
     // if the data from the big query has previously been loaded then retrieve the following mini updates
     if (this.props.bigQueryLoaded) {
       // call the mini query
-      // this._getUpdatedUserDetails();
+      this._getUpdatedUserDetails();
     }
     // Checks if current redux store is in alignment with latest release, otherwise calls the big query
     this._handleUpdate();
@@ -104,16 +104,13 @@ class HomeScreen extends Component {
   _getUpdatedUserDetails = () => {
     const localTime = new Date();
     const currentTime = moment(localTime); 
-    // calculate the time difference in seconds between the current time and the last time that the portfolio details were retrieved from the server
-    const portfolioRetrievedTime= moment(this.props.stockPortfolioRetrievedTime);
-    const secondsDiff = currentTime.diff(portfolioRetrievedTime, 'seconds');
-    // if it has been 10 minutes or more since the last time that the user retrieved the mini query data, retreive it sgsin.  DO NOT CHANGE THIS NUMBER 300!  
-    if (secondsDiff >= 600){      
+    // calculate the time difference in seconds between the current time and the last time that the teacher's classrooms details were retrieved from the server
+    const classroomRetrievedTime= moment(this.props.classroomLastRetrievedTime);
+    const secondsDiff = currentTime.diff(classroomRetrievedTime, 'seconds');
+    // if it has been 30 minutes or more since the last time that the user retrieved the mini query data, retreive it sgsin.  DO NOT CHANGE THIS NUMBER 300!  
+    if (secondsDiff >= 1800){      
       this.setState({ gettingMiniQuery: true });
-      this.props.FetchMiniQuery(this.props.jwtToken, true, this.props.lastFriendID, this.props.lastNotificationID, this.props.defaultStockPortfolioID, this.props.lastFilledStockOrderID, this.props.lastStockTransactionID, 
-        this.props.lastClosedStockPositionID, this.props.defaultCryptoPortfolioID, this.props.lastFilledCryptoOrderID, this.props.lastCryptoTransactionID, this.props.lastClosedCryptoPositionID, this.props.stockDailyPickPortID,
-        this.props.stockDailyPickLastFilledOrderID, this.props.stockDailyPickLastTransactionID, this.props.stockDailyPickLastClosedPositionID, this.props.cryptoDailyPickPortID, this.props.cryptoDailyPickLastFilledOrderID,
-        this.props.cryptoDailyPickLastTransactionID, this.props.cryptoDailyPickLastClosedPositionID);
+      this.props.FetchMiniQuery(this.props.jwtToken);
     }
   }
 
@@ -289,6 +286,8 @@ const mapStateToProps = (state) => {
     appVisible: state.gamesettings.appVisible,
     // Handles if we should call big query because there has been a breaking change to the data structure
     logoutRequired: state.userDetails.logoutRequired,
+    // gets the timestamp for when the teacher's classrooms were last retrieved from the server, ie mini query
+    classroomLastRetrievedTime: state.classroom.classroomLastRetrievedTime,
   };
 };
 
@@ -300,6 +299,8 @@ const mapDispatchToProps = (dispatch) => {
       resetNotificationErrors: () => dispatch(resetNotificationErrors()),
       // Get all of the user data
       fetchBigQuery: (token) => dispatch(fetchBigQuery(token)),
+      // executes the Mini Query
+      FetchMiniQuery: (token) => dispatch(fetchMiniQuery(token)),
    };
 };
 

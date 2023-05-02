@@ -2,6 +2,7 @@ import axios from 'axios';
 import { GRAPHQL_URL } from "../constants";
 // import the GraphQL query text needed to retrieve the user big query data
 import { USER_DETAILS } from '../graphql/queries/UserDetails';
+import { MINI_USER_DETAILS } from '../graphql/queries/MiniUserDetails';
 import { GET_SCHOOL_LIST } from '../graphql/queries/GetSchoolList';
 import { COMPLETE_QUIZ } from '../graphql/mutations/CompleteQuiz';
 // import the action to update all of the courses and modules
@@ -263,7 +264,7 @@ export function fetchBigQuery(token) {
 export function fetchMiniQuery(token) {
   return function (dispatch) {
     dispatch(fetchMiniQueryBegin());
-    return axios.post(GRAPHQL_URL, { query: USER_DETAILS }, {
+    return axios.post(GRAPHQL_URL, { query: MINI_USER_DETAILS }, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,

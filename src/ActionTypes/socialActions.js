@@ -1,6 +1,6 @@
 // import the GraphQL query text for user details & interactions
 import axios from 'axios';
-import { APP_ENV, GRAPHQL_URL, GRAPHQL_URL_STAGING } from "../constants";
+import { GRAPHQL_URL } from "../constants";
 import { OTHER_USER_DETAILS } from '../graphql/queries/OtherUserDetails';
 import { GET_CLOSED_POSITIONS } from '../graphql/queries/GetClosedPositions'
 import { arrayToObjectID } from '../helper_functions/utilities';
@@ -16,8 +16,6 @@ export const OTHER_USER_CLSPOSNS_ERROR = 'OTHER_USER_CLSPOSNS_ERROR';
 export const RESET_SOCIAL_STATE = 'RESET_SOCIAL_STATE';
 export const RESET_SOCIAL_ERRORS = 'RESET_SOCIAL_ERRORS';
 export const LOGOUT_USER_SOCIAL = 'LOGOUT_USER_SOCIAL';
-
-const graphqlURL = APP_ENV === 'Production' ? GRAPHQL_URL : GRAPHQL_URL_STAGING;
 
 export const fetchOtherUserDetailsBegin = () => ({
   type: OTHER_USER_DETAILS_BEGIN,
@@ -67,7 +65,7 @@ export const logoutUserSocial = () => ({
 export function FetchOtherUserDetails(token, userName) {
   return function(dispatch){
     dispatch(fetchOtherUserDetailsBegin());
-    return axios.post(graphqlURL, { query: OTHER_USER_DETAILS(userName) }, {
+    return axios.post(GRAPHQL_URL, { query: OTHER_USER_DETAILS(userName) }, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: token
@@ -141,7 +139,7 @@ export function FetchOtherUserDetails(token, userName) {
 export function FetchOtherUserClosedPositions(token, portfolioID, portfolioType, skip, first) {
   return function(dispatch){
     dispatch(fetchOtherUserClsPosnsBegin());
-    return axios.post(graphqlURL, { query: GET_CLOSED_POSITIONS(portfolioID, portfolioType, skip, first) }, {
+    return axios.post(GRAPHQL_URL, { query: GET_CLOSED_POSITIONS(portfolioID, portfolioType, skip, first) }, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,

@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { store, persistor} from './store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import ReactDOM from 'react-dom/client';
+import { SocketManager } from './components/Websocket/socketmanager';
 import PageVisibility from 'react-page-visibility';
 
 import App from './App';
@@ -18,7 +19,9 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <PageVisibility>
+        { isVisible => <SocketManager visible={isVisible}> 
           <App />
+          </SocketManager>  }
         </PageVisibility>
       </PersistGate>
     </Provider>

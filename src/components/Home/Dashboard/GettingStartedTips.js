@@ -13,7 +13,7 @@ import ExportCourseBW from '../../../assets/images/ChecklistTips/ExportCourse_BW
 import ExportCourseColor from '../../../assets/images/ChecklistTips/ExportCourse_Color.png';
 import '../../../styles/Home/Dashboard.css';
 import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
-// import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 
 class GettingStartedTips extends Component {
   constructor(props) {

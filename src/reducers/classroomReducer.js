@@ -40,6 +40,7 @@ const initialState = {
   error: null,
   graphqlError: null,
   errorTitle: null,
+  classroomLastRetrievedTime: new Date(),
   classrooms: {
     0: {
         id: 0,
@@ -142,7 +143,7 @@ const classroomReducer = (state = initialState, action) => {
           classrooms: {},
           classroomCourses: {},
         };
-    // this updates all of the classrooms and students in the classrooms state and is only called if a user logs out of the app or creates a new account
+    // this updates all of the classrooms and students in the classrooms state and is only called if a user logs out of the app 
     case UPDATE_ALL_CLASSROOMS:
       // Mark the state as "loading" so we can show a spinner or something
       // Also, reset any errors.
@@ -153,6 +154,7 @@ const classroomReducer = (state = initialState, action) => {
           error: null,
           graphqlError: null,
           errorTitle: null,
+          classroomLastRetrievedTime: new Date(),
           classrooms: action.payload.classrooms, 
           classroomCourses: action.payload.classroomCourses,
         };
@@ -167,6 +169,7 @@ const classroomReducer = (state = initialState, action) => {
           error: null,
           graphqlError: null,
           errorTitle: null,
+          classroomLastRetrievedTime: new Date(),
           classrooms: action.payload.classrooms, 
         };
     // HANDLES CREATING A TEACHER CLASSROOM
