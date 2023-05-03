@@ -20,6 +20,14 @@ import {
   UPDATE_COURSEMODULE_DATA_STATE,
   RESET_COURSEMODULE_ERRORS,
   LOGOUT_USER_COURSEMODULE,
+  GET_FINLITSTANDARDS_BEGIN,
+  GET_FINLITSTANDARDS_SUCCESS,
+  GET_FINLITSTANDARDS_FAILURE,
+  GET_FINLITSTANDARDS_ERROR,
+  GET_MODULES_BEGIN,
+  GET_MODULES_SUCCESS,
+  GET_MODULES_FAILURE,
+  GET_MODULES_ERROR
 } from '../ActionTypes/coursemoduleActions';
 import {
   SEARCH_PORTAL_ASSETS_ERROR,
@@ -36,6 +44,7 @@ const initialState = {
   availablePublicModules: {},
   teacherCreatedModules: {},
   teacherCourses: {},
+  financialLiteracyStandards: {},
 };
 
 const coursemoduleReducer = (state = initialState, action) => {
@@ -200,6 +209,87 @@ const coursemoduleReducer = (state = initialState, action) => {
         // graphqlError: 'There was an error connecting to our servers to remove a module from your Course. Please contact support.'
         errorTitle: 'Error Removing Module From Course',
       };
+    // HANDLES GETTING THE FINANCIAL LITERACY STANDARDS
+    case GET_FINLITSTANDARDS_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null
+      }
+    case GET_FINLITSTANDARDS_SUCCESS:     
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+        financialLiteracyStandards: action.payload.standardsObject
+      } 
+    case GET_FINLITSTANDARDS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        // graphqlError: 'There was a failure connecting to our servers to retrieve the Financial Literacy Standards. Please contact support.'
+        errorTitle: 'Failure Retrieving Financial Literacy Standards',
+      };
+    case GET_FINLITSTANDARDS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        graphqlError: action.payload.error,
+        // graphqlError: 'There was an error connecting to our servers to retrieve the Financial Literacy Standards. Please contact support.'
+        errorTitle: 'Error Retrieving Financial Literacy Standards',
+      }; 
+    // HANDLES GETTING THE TEACHER PORTAL MODULES
+    case GET_MODULES_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null
+      }
+    case GET_MODULES_SUCCESS:    
+      let originaPublicModulesObject = JSON.parse(JSON.stringify(state.availablePublicModules));
+      let originaTeacherModulesObject = JSON.parse(JSON.stringify(state.teacherCreatedModules));
+      // iterate over the module id keys in the modulesObject
+      for (var key in action.modulesObject) {
+        // if the module is a Rapunzl created module add it  to the originaPublicModulesObject
+        if (action.modulesObject[key].isRapunzlModule){
+          originaPublicModulesObject[key] = action.modulesObject[key];
+        }
+        else{
+          originaTeacherModulesObject[key] = action.modulesObject[key];
+        }
+      }
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+        availablePublicModules: originaPublicModulesObject,
+        teacherCreatedModules: originaTeacherModulesObject,
+      } 
+    case GET_MODULES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        // graphqlError: 'There was a failure connecting to our servers to retrieve the Teacher Portal Modules. Please contact support.'
+        errorTitle: 'Failure Retrieving Teacher Portal Modules',
+      };
+    case GET_FINLITSTANDARDS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        graphqlError: action.payload.error,
+        // graphqlError: 'There was an error connecting to our servers to retrieve the Teacher Portal Modules. Please contact support.'
+        errorTitle: 'Error Retrieving Teacher Portal Modules',
+      }; 
     // this updates availablePublicModules portion of the coursesmodules state and is called when a user creates a new account
     case UPDATE_PUBLIC_MODULES:
       // Mark the state as "loading" so we can show a spinner or something

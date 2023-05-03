@@ -1,7 +1,7 @@
 // NOTE:  make sure that the input parameter 'studentsToRemoveList' is an array of Student user Id's
 
 export const REMOVE_CLASSROOM_STUDENTS = (classroomId, studentsToRemoveList) => `mutation {
-	removeClassroomstudents(classroomId: ${classroomId}, studentList: [${studentsToRemoveList.toString()} ]) {
+	removeClassroomstudents(classroomId: ${classroomId}, studentList: ${studentsToRemoveList}) {
 		classroom {
 			id
 			className

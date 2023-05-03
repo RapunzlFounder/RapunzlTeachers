@@ -3,7 +3,9 @@ import { GRAPHQL_URL } from "../constants";
 import { CREATE_TEACHER_COURSE } from '../graphql/mutations/CreateTeacherCourse';
 import { ADD_COURSE_MODULES } from '../graphql/mutations/AddCourseModules';
 import { REMOVE_COURSE_MODULES } from '../graphql/mutations/RemoveCourseModules';
-import { arrayToObjectID, stringifyIntArray } from '../helper_functions/utilities';
+import { GET_FIN_LITERACY_STANDARDS } from '../graphql/queries/GetFinancialLiteracyStandards';
+import { GET_MODULES } from '../graphql/queries/GetModules';
+import { arrayToObjectID, arrayToObjectStandardID, stringifyIntArray } from '../helper_functions/utilities';
 
 export const UPDATE_ALL_COURSES = 'UPDATE_ALL_COURSES';
 export const UPDATE_PUBLIC_MODULES = 'UPDATE_PUBLIC_MODULES';
@@ -73,7 +75,14 @@ export const RESET_COURSEMODULE_ERRORS = 'RESET_COURSEMODULE_ERRORS'
 export const LOGOUT_USER_COURSEMODULE = 'LOGOUT_USER_COURSEMODULE';
 export const UPDATE_COURSEMODULE_DATA_STATE = 'UPDATE_COURSEMODULE_DATA_STATE';
 export const CREATE_TEACHER_NO_COURSES_MODULES = 'CREATE_TEACHER_NO_COURSES_MODULES';
-
+export const GET_FINLITSTANDARDS_BEGIN = 'GET_FINLITSTANDARDS_BEGIN';
+export const GET_FINLITSTANDARDS_SUCCESS = 'GET_FINLITSTANDARDS_SUCCESS';
+export const GET_FINLITSTANDARDS_FAILURE = 'GET_FINLITSTANDARDS_FAILURE';
+export const GET_FINLITSTANDARDS_ERROR = 'GET_FINLITSTANDARDS_ERROR';
+export const GET_MODULES_BEGIN = 'GET_MODULES_BEGIN';
+export const GET_MODULES_SUCCESS = 'GET_MODULES_SUCCESS';
+export const GET_MODULES_FAILURE = 'GET_MODULES_FAILURE';
+export const GET_MODULES_ERROR = 'GET_MODULES_ERROR';
 // this creates an empty teacher courses object and an teacher created modules object and is only called when the Teacher user is first created 
 export const createTeacherEmptyCoursesModules = () => ({
   type: CREATE_TEACHER_NO_COURSES_MODULES,
@@ -145,6 +154,38 @@ export const removeCourseModulesFailure = error => ({
 });
 export const removeCourseModulesError = error => ({
   type: REMOVE_COURSE_MODULE_ERROR,
+  payload: { error },
+});
+// Actions to retrieve the Financial Literacy Standards
+export const getFinLitStandardsBegin = () => ({
+  type: GET_FINLITSTANDARDS_BEGIN,
+});
+export const getFinLitStandardsSuccess = (standardsObject) => ({
+  type: GET_FINLITSTANDARDS_SUCCESS,
+  payload: { standardsObject },
+});
+export const getFinLitStandardsFailure = error => ({
+  type: GET_FINLITSTANDARDS_FAILURE,
+  payload: { error },
+});
+export const getFinLitStandardsError = error => ({
+  type: GET_FINLITSTANDARDS_ERROR,
+  payload: { error },
+});
+// Actions to retrieve Teacher Portal Modules
+export const getModulesBegin = () => ({
+  type: GET_MODULES_BEGIN,
+});
+export const getModulesSuccess = (modulesObject) => ({
+  type: GET_MODULES_SUCCESS,
+  payload: { modulesObject },
+});
+export const getModulesFailure = error => ({
+  type: GET_MODULES_FAILURE,
+  payload: { error },
+});
+export const getModulesError = error => ({
+  type: GET_MODULES_ERROR,
   payload: { error },
 });
 export const logoutUserCourseModule = () => ({
@@ -258,6 +299,80 @@ export function removeCourseModules(token, courseId, modulesList) {
         }
       })
       .catch(error => dispatch(removeCourseModulesFailure(error.message)));
+  };
+}
+
+export function getFinancialLiteracyStandards(token) {
+  return function(dispatch){
+    dispatch(getFinLitStandardsBegin());
+    return axios.post(GRAPHQL_URL, { query: GET_FIN_LITERACY_STANDARDS }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(getFinLitStandardsError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else{
+          let finStandardsObject = arrayToObjectStandardID(json.data.data.getFinancialLiteracyStandards);
+          dispatch(getFinLitStandardsSuccess(finStandardsObject));
+          return json.data.data.getFinancialLiteracyStandards;
+        }
+      })
+      .catch(error => dispatch(getFinLitStandardsFailure(error.message)));
+  };
+}
+
+// action to get Teacher Portal Modules depending on the input parameter(s) provided
+// input parameter 'getPublicModules' - true = retrieve all the public Rapunzl provided Modules, false = do not retrieve the public Rapunzl provided Modules,
+// input parameter 'getTeacherModules' - true = retrieve all the Teacher created Modules, false = do not retrieve the Teacher Created Modules,
+// input parameter 'modulesList' - Array of Teacher Portal Module Id's to retrieve.  Only these Teacher Portal Modules will be retrieved.
+export function getModules(token, getPublicModules, getTeacherModules, modulesList) {
+  return function(dispatch){
+    const stringifyModulesList = stringifyIntArray(modulesList)
+    const mutationText = GET_MODULES(getPublicModules, getTeacherModules, stringifyModulesList)
+    dispatch(getModulesBegin());
+    return axios.post(GRAPHQL_URL, { query: mutationText }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(getModulesError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else{
+          var mainReturnedObj = json.data.data;
+          const returnedModules = arrayToObjectID(mainReturnedObj.getTeacherModules);
+          mainReturnedObj.getTeacherModules = returnedModules;
+          for (var property1 in mainReturnedObj.getTeacherModules){
+              // convert the teacher guides array of objects into an objects of objects
+              const moduleGuides = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].teacherGuides);
+              mainReturnedObj.getTeacherModules[property1].teacherGuides = moduleGuides;
+              // convert the module articles array of objects into an objects of objects
+              const moduleArticles = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].articles);
+              mainReturnedObj.getTeacherModules[property1].articles = moduleArticles;
+              // convert the module activities array of objects into an objects of objects
+              const moduleActivities = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].activities);
+              mainReturnedObj.getTeacherModules[property1].activities = moduleActivities;
+              // convert the module assessment questions into an object of objects
+              const moduleAssessmentQuestions = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].assessments.questions);
+              mainReturnedObj.getTeacherModules[property1].assessments.questions = moduleAssessmentQuestions;
+              // convert the module videos array of objects into an objects of objects
+              const moduleVideos = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].videos);
+              mainReturnedObj.getTeacherModules[property1].videos = moduleVideos;
+              }
+          
+          dispatch(getModulesSuccess(mainReturnedObj.getTeacherModules));
+          return json.data.data.getTeacherModules;
+        }
+      })
+      .catch(error => dispatch(getModulesFailure(error.message)));
   };
 }
 
