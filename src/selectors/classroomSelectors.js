@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import {  objectToArray, arrayToObjectModuleID, arrayToObjectQuizQuestionID } from '../helper_functions/utilities';
+import {  objectToArray } from '../helper_functions/utilities';
 
 const teacherClassroomsArraySelector = (state) => objectToArray(state.classroom.classrooms);
 
