@@ -42,12 +42,11 @@ class ViewCourseTile extends Component {
   }
 
   render() {
-    const selectedCourse = this.props.currentCourse;
-    console.log('selected', selectedCourse);
+    console.log(this.props.currentCourse.courseModules[this.state.currentSection - 1].imageUrl);
     return (
       <div className='tile current-course' style={{ paddingBottom: 20 }}>
         <AssignCourseDialog
-          course={selectedCourse}
+          course={this.props.currentCourse}
           visible={this.state.assigningCourse}
           dismiss={this.toggleAssignCourse}
           toggleCreateClassroom={this.props.toggleCreateClassroom}
@@ -65,23 +64,23 @@ class ViewCourseTile extends Component {
         <div className='home-header-flex' style={{ justifyContent: 'center', padding: 0 }}>
           <PublishedWithChanges />
           <div className='home-header'>
-            {selectedCourse.courseName}
+            {this.props.currentCourse.courseName}
           </div>
         </div>
         <ProgressBar
-          numberOfModules={selectedCourse.modules.length}
+          numberOfModules={this.props.currentCourse.courseModules.length}
           currentSection={this.state.currentSection}
           nextSection={this.nextSection}
           backSection={this.backSection}
         />
         <div className='this-week-flex-module' style={{ marginTop: 15 }}>
-          <img alt='' src={selectedCourse.modules[this.state.currentSection - 1].imageUrl} className='this-week-icon' />
+          <img alt='' src={this.props.currentCourse.courseModules[this.state.currentSection - 1].imageUrl} className='this-week-icon' />
           <div style={{ width: '52%', paddingLeft: 12 }}>
             <div className='this-week-module-title'>
-              {selectedCourse.modules[this.state.currentSection - 1].name}
+              {this.props.currentCourse.courseModules[this.state.currentSection - 1].name}
             </div>
             <div className='this-week-module-text'>
-              {selectedCourse.modules[this.state.currentSection - 1].description}
+              {this.props.currentCourse.courseModules[this.state.currentSection - 1].description}
             </div>
             <div>
               <div className='this-week-standards-button'>
@@ -105,7 +104,7 @@ class ViewCourseTile extends Component {
         </div>
         <div className='current-course-flex' style={{ justifyContent: 'flex-start' }}>
           <div className='current-course-articles'>
-            {selectedCourse.modules[this.state.currentSection - 1].articles.length === 0 ? (
+            {this.props.currentCourse.courseModules[this.state.currentSection - 1].articles.length === 0 ? (
               <div className='current-course-empty-articles'>
                 <div className='current-course-articles-flex'>
                   <ArticleOutlinedIcon className='current-course-flex-icon' />
@@ -126,7 +125,7 @@ class ViewCourseTile extends Component {
                     Articles
                   </div>
                 </div>
-                {selectedCourse.modules[this.state.currentSection - 1].articles.map((item) => {
+                {this.props.currentCourse.courseModules[this.state.currentSection - 1].articles.map((item) => {
                   return (
                     <div key={item.id} className='current-course-item'>
                       <div className='current-course-item-title'>
@@ -139,7 +138,7 @@ class ViewCourseTile extends Component {
             )}
           </div>
           <div className='current-course-activities'>
-            {selectedCourse.modules[this.state.currentSection - 1].activities.length === 0 ? (
+            {this.props.currentCourse.courseModules[this.state.currentSection - 1].activities.length === 0 ? (
                 <div className='current-course-empty-articles'>
                   <div className='current-course-articles-flex'>
                     <ConstructionOutlinedIcon className='current-course-flex-icon' />
@@ -160,7 +159,7 @@ class ViewCourseTile extends Component {
                       Activities
                     </div>
                   </div>
-                  {selectedCourse.modules[this.state.currentSection - 1].activities.map((item) => {
+                  {this.props.currentCourse.courseModules[this.state.currentSection - 1].activities.map((item) => {
                     return (
                       <div key={item.id} className='current-course-item'>
                         <div className='current-course-item-title'>
@@ -201,7 +200,7 @@ const mapStateToProps = (state, ownProps) => {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
     // Selector Which Handles Currently Selected Teacher Course
-    currentCourse: getTeacherCourse(state, ownProps.selectedCourse),
+    currentCourse: getTeacherCourse(state, ownProps),
   };
 };
 

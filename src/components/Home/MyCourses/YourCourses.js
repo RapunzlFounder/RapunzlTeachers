@@ -84,7 +84,7 @@ class YourCourses extends Component {
     } else {
       return (
         <ViewCourseTile
-          selectedCourse={this.props.selectedCourse}
+          courseId={this.props.selectedCourse}
           selectCourse={this.props.selectCourse}
           toggleCreateClassroom={this.props.toggleCreateClassroom}
         />
