@@ -26,9 +26,7 @@ export const getAllTeacherCourses = createSelector(
             returnArray.push(newCourseObject);
         }
         // these next 3 lines are for debugging purposes only
-        console.log(returnArray); 
-        const strDate = (new Date()).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
-        console.log(strDate);
+        // const strDate = (new Date()).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
         return returnArray;
     }
     else{

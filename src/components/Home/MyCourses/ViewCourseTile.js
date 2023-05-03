@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+import { getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
 import PublishedWithChanges from '@mui/icons-material/PublishedWithChanges';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
@@ -24,15 +24,6 @@ class ViewCourseTile extends Component {
     this.setState({ standardsVisible: !this.state.standardsVisible });
   }
 
-  // Handles Retrieving Correct Course Object Depending Upon Which Course The User Selects
-  _getCurrentCourse() {
-    for (var i in this.props.teacherCourses) {
-      if (this.props.teacherCourses[i].id === this.props.selectedCourse) {
-        return this.props.teacherCourses[i];
-      }
-    }
-  }
-
   // Increase/Decreases Section Number To Next Section. Will Not Go Below 1 Or Greater Than Length Of Modules In Course
   nextSection = (courseLength) => {
     if (this.state.currentSection < courseLength) { 
@@ -51,7 +42,8 @@ class ViewCourseTile extends Component {
   }
 
   render() {
-    const selectedCourse = this._getCurrentCourse();
+    const selectedCourse = this.props.currentCourse;
+    console.log('selected', selectedCourse);
     return (
       <div className='tile current-course' style={{ paddingBottom: 20 }}>
         <AssignCourseDialog
@@ -203,13 +195,13 @@ class ViewCourseTile extends Component {
 }
 
 // Map State To Props (Redux Store Passes State To Component)
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   // Redux Store --> Component
   return {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
-    // Selector Which Handles All Teacher Courses
-    // teacherCourses: getAllTeacherCourses(state),
+    // Selector Which Handles Currently Selected Teacher Course
+    currentCourse: getTeacherCourse(state, ownProps.selectedCourse),
   };
 };
 

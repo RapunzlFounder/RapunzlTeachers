@@ -73,8 +73,8 @@ class GettingStartedTips extends Component {
 
   render() {
     let progressArray = this.getProgressArray();
-    // let progress = this.getProgress();
-    let progress = 1;
+    let progress = this.getProgress();
+    // let progress = 1;
     return (
       <div className='tile classroom-overview' style={{ paddingBottom: 25 }}>
         <div className='home-header-flex'>
@@ -181,7 +181,6 @@ const mapStateToProps = (state) => {
     // Selector To Get All Teacher Classrooms To Check if They Have Created A Class Yet
     allClassrooms: getAllTeacherClassrooms(state),
     allCourses: getAllTeacherCourses(state),
-    // allCourses: getAllTeacherCoursesSummary(state),
   };
 };
 

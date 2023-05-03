@@ -86,14 +86,8 @@ export function FetchOtherUserDetails(token, userName) {
           mainReturnedObj.otheruserDetails.stockPortfolios = stockPortfoliosObject;
           const cryptoPortfoliosObject = arrayToObjectID(mainReturnedObj.otheruserDetails.cryptoPortfolios);
           mainReturnedObj.otheruserDetails.cryptoPortfolios = cryptoPortfoliosObject;
-          // iterate over each object in the US Stock portfolio object
-          let defaultStockPortfolioID = null;
           // eslint-disable-next-line
           for (var property in mainReturnedObj.otheruserDetails.stockPortfolios){
-            // eslint-disable-next-line
-            if (mainReturnedObj.otheruserDetails.stockPortfolios[property].name == "Default"){
-              defaultStockPortfolioID = property
-            }
             // convert the array of open position objects into an object of open position objects
             let stockPositionsObject = arrayToObjectID(mainReturnedObj.otheruserDetails.stockPortfolios[property].positions);
             mainReturnedObj.otheruserDetails.stockPortfolios[property].positions = stockPositionsObject;
@@ -106,14 +100,8 @@ export function FetchOtherUserDetails(token, userName) {
             //mainReturnedObj.otheruserDetails.stockPortfolios[property].closedPositions = stockClosedpositionsObject;
             mainReturnedObj.otheruserDetails.stockPortfolios[property].closedPositions = {};
           }
-           // iterate over each object in the Crypto portfolio object
-          let defaultCryptoPortfolioID = null;
           // eslint-disable-next-line
           for (var property in mainReturnedObj.otheruserDetails.cryptoPortfolios){
-            // eslint-disable-next-line
-            if (mainReturnedObj.otheruserDetails.cryptoPortfolios[property].name == "Default Crypto"){
-              defaultCryptoPortfolioID = property
-            }
             // convert the array of open position objects into an object of open position objects
             let cryptoPositionsObject = arrayToObjectID(mainReturnedObj.otheruserDetails.cryptoPortfolios[property].positions);
             mainReturnedObj.otheruserDetails.cryptoPortfolios[property].positions = cryptoPositionsObject;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import Bookmarks from '@mui/icons-material/Bookmarks';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
@@ -47,7 +47,7 @@ class YourCourses extends Component {
                   return (
                     <div key={course.id} onClick={() => this.props.selectCourse(course.id)} className='prepared-course'>
                       <div className='prepared-course-time'>
-                        {course.modules.length === 1 ? '1 Section' : `${course.modules.length} Sections`}
+                        {course.numberModules === 1 ? '1 Section' : `${course.numberModules} Sections`}
                       </div>
                       <div className='prepared-course-title'>
                         {course.courseName}
@@ -98,7 +98,7 @@ const mapStateToProps = (state) => {
   // Redux Store --> Component
   return {
     // Selector Which Handles All Teacher Courses
-    // teacherCourses: getAllTeacherCourses(state),
+    teacherCourses: getAllTeacherCourses(state),
   };
 };
 
