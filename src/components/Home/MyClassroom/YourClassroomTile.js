@@ -151,7 +151,7 @@ class YourClassroomTile extends Component {
     // Handles If User Has Multiple Classrooms By Prompting Them To Selected One
     else if (!this.props.selectedClass) {
       return (
-        <div className='tile create-class-name-container' style={{ paddingBottom: 260 }}>
+        <div className='tile create-class-name-container' style={{ paddingBottom: this.props.allClassrooms.length > 3 ? 110 : 260 }}>
           <div className='create-class-name-subtext'>
             Select Your Classroom
           </div>
@@ -216,7 +216,7 @@ class YourClassroomTile extends Component {
                 <div className='classroom-header-flex' style={{ paddingLeft: 12, paddingBottom: 5, paddingTop: this.state.removeStudents ? 12 : 0 }}>
                   <OtherHouses />
                   <div className='classroom-title' style={{ paddingLeft: 10 }}>
-                    Your Classroom
+                    {classInfo.className}
                   </div>
                 </div>
                 {!this.state.removeStudents && (

@@ -703,6 +703,26 @@ path {
 .submit-class-details-button:hover {
     background-color: #1eaa84;
 }
+.add-students-dropzone-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 95px;
+    padding-bottom: 135px;
+}
+.add-students-loading-text {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 400;
+    margin-top: 15px;
+}
+.add-students-disclosure {
+    font-size: 13px;
+    font-weight: 200;
+    color: #ffffff8f;
+    margin-top: 8px;
+}
 .classroom-upload-button {
     font-size: 11px;
     font-weight: 500;
@@ -1077,7 +1097,7 @@ path {
     padding-bottom: 14px;
     background-color: #007154;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     transition: 0.2s all;
     cursor: pointer;

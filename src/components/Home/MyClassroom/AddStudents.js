@@ -14,6 +14,7 @@ import ManualEntry from './ManualEntry';
 import SearchStudents from './SearchStudents';
 import SuccessImage from '../../../assets/images/AddStudents/SuccessAddStudents.png';
 import ErrorImage from '../../../assets/images/AddStudents/ErrorAddStudents.png';
+import { CircularProgress } from '@mui/material';
 
 class AddStudents extends Component {
   constructor(props) {
@@ -59,7 +60,7 @@ class AddStudents extends Component {
   }
 
   // Handles Updating Files In State To Contain The Files Which The User Uploaded
-  onChangeFiles = (files) => {
+  onChangeFiles = async (files) => {
     let filesArray = Array.from(files);
     // Checks If User Attempted To Upload Multiple Files And Displays Alert Dialog
     // We Still Save The First File That The User Uploaded, But We Do Not Save The Rest
@@ -74,65 +75,11 @@ class AddStudents extends Component {
       id: nanoid(),
       file,
     }));
-    this.setState({
-      files: filesArray[0],
-    });
-    this.setProgress(0);
-    this.toggleUpload(false);
-  }
-
-  // Pass Through Arrow Function To Focus & Click Dropzone Button In Order To Display Native File Dialog
-  handleDropzoneClick = () =>  {
-    // Input File Selector Component Is Hidden Once File Is Uploaded, So We Must Check It Is Visible Or Else It Will Produce An Error
-    if (this.dropzoneButton.current !== null) {
-      this.dropzoneButton.current.click();
-    }
-  }
-
-  // Whenever The Dropzone Upload Input Component Changes, We Want To Save The Files To State By Calling onChangeFiles
-  handleDropZoneChange = (ev) => {
-    this.onChangeFiles(ev.target.files)
-  }
-
-  // Pass Through Arrow Function To Handle When User Hovers Over Dropzone With File Selected To Upload
-  handleDropzoneDragOver = (ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    ev.dataTransfer.dropEffect = "copy";
-  }
-
-  // Pass Through Arrow Function To Handle When User Drops A File To Upload Into The Dropzone
-  handleDropzoneDrop = (ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    this.onChangeFiles(ev.dataTransfer.files);
-  }
-
-  // Updates Upload Progress During GraphQL & Axios Upload Dispatch To Provide Upload Progress Bar For User
-  setProgress = (int) => {
-    this.setState({ uploadProgress: int });
-  }
-
-  // Toggles UploadStarted State Between True & False When User Uploads A File & Upload Is Complete
-  toggleUpload(value) {
-    this.setState({ uploadStarted: value });
-  }
-
-  // Function To Remove Files That Have Been Selected By User And Reset Component To Original State
-  removeFile = () => {
-    this.setState({
-      files: [],
-      uploadStarted: false,
-      uploadProgress: 0,
-      uploadComplete: false,
-    })
-  }
-
-  // Handles Creating State Variable To Hold Values User Needs To Create Accounts From File They Uploaded
-  async handleUploadPreview() {
+    this.setState({ files: filesArray[0] });
+    // Processes File For Upload
     var XLSX = require("xlsx");
     // Takes The File Which User Has Selected And Creates Array Buffer
-    const data = await this.state.files.file.arrayBuffer();
+    const data = await filesArray[0].file.arrayBuffer();
     // Reads Data From Array Buffer And Creates An Object From The Selected File
     const workbook = XLSX.read(data);
     // Parse First Sheet In Selected File,
@@ -281,8 +228,9 @@ class AddStudents extends Component {
       // Check There Is An Upload Array To Save In Order To Display Preview, Otherwise Show An Error
       if (uploadArray.length > 0) {
         this.setState({
-          uploadPreview: true,
           uploadArray,
+          uploadProgress: 0,
+          uploadStarted: false,
         });
       }
       // Handles If There Was An Error Creating The Upload Array
@@ -302,6 +250,53 @@ class AddStudents extends Component {
         alertMessage: errorMessage + ' Please ensure that the file you select to upload matches the format of the template that we have provided and resubmit. If you continue having problems, please email us your spreadsheet at hello@rapunzl.org'
       });
     }
+  }
+
+  // Pass Through Arrow Function To Focus & Click Dropzone Button In Order To Display Native File Dialog
+  handleDropzoneClick = () =>  {
+    // Input File Selector Component Is Hidden Once File Is Uploaded, So We Must Check It Is Visible Or Else It Will Produce An Error
+    if (this.dropzoneButton.current !== null) {
+      this.dropzoneButton.current.click();
+    }
+  }
+
+  // Whenever The Dropzone Upload Input Component Changes, We Want To Save The Files To State By Calling onChangeFiles
+  handleDropZoneChange = (ev) => {
+    this.onChangeFiles(ev.target.files)
+  }
+
+  // Pass Through Arrow Function To Handle When User Hovers Over Dropzone With File Selected To Upload
+  handleDropzoneDragOver = (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    ev.dataTransfer.dropEffect = "copy";
+  }
+
+  // Pass Through Arrow Function To Handle When User Drops A File To Upload Into The Dropzone
+  handleDropzoneDrop = (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    this.onChangeFiles(ev.dataTransfer.files);
+  }
+
+  // Updates Upload Progress During GraphQL & Axios Upload Dispatch To Provide Upload Progress Bar For User
+  setProgress = (int) => {
+    this.setState({ uploadProgress: int });
+  }
+
+  // Toggles UploadStarted State Between True & False When User Uploads A File & Upload Is Complete
+  toggleUpload(value) {
+    this.setState({ uploadStarted: value });
+  }
+
+  // Function To Remove Files That Have Been Selected By User And Reset Component To Original State
+  removeFile = () => {
+    this.setState({
+      files: [],
+      uploadStarted: false,
+      uploadProgress: 0,
+      uploadComplete: false,
+    })
   }
 
   // Updates The Value For Birthday Read From Excel, Which Is A Serial Number Representing The Number Of Days Since January 1, 1900
@@ -535,6 +530,7 @@ class AddStudents extends Component {
             handleCreateClassroomClick={this.handleCreateClassroomClick}
             dismiss={this.toggleUploadPreview}
             visible={this.state.uploadPreview}
+            loading={this.state.loading}
             data={this.state.uploadArray}
           />
           <div className='classroom-header-flex' style={{ paddingLeft: 22 }}>
@@ -561,53 +557,66 @@ class AddStudents extends Component {
               {this.props.creatingClass ? 'Back To Name' : 'Back To Classroom'}
             </div>
           </div>
-          <div
-            className={`class-upload-container ${this.state.files.length === 0 ? 'class-upload-container-no-file' : ''}`}
-            onClick={this.handleDropzoneClick}
-            onDragOver={this.handleDropzoneDragOver}
-            onDrop={this.handleDropzoneDrop}
-          >
-            <img alt='' className='class-upload-image' src={UploadGraphic} />
-            <div className='class-upload-title'>
-              Drag, Drop Or Click<br/>To Upload Your Class
-            </div>
-            <div className='class-upload-text'>
-              Upload your classroom with an excel or CSV file and get them started on Rapunzl!
-            </div>
-            {this.state.files.length === 0 && (
-              <input
-                type="file"
-                aria-label="Add File"
-                className="dropzone-file-picker-button"
-                ref={this.dropzoneButton}
-                onChange={this.handleDropZoneChange}
-                accept={[".xls",".xlsx",".csv"]}
-              />
-            )}
-            {this.state.files.length !== 0 && (
-              <div className='dropzone-uploaded-file-container'>
-                <div className='dropzone-uploaded-file-flex'>
-                  <img alt='' src={ExcelIcon} className='upload-excel-icon' />
-                  <div className='upload-file-title'>
-                    {this.state.files.file.name}
-                  </div>
-                </div>
-                <div className='dropzone-uploaded-file-flex'>
-                  <div className='dropzone-file-remove-button' onClick={this.removeFile}>
-                    Remove File
-                  </div>
-                  <div className='dropzone-file-upload-button' onClick={() => this.handleUploadPreview()}>
-                    Preview Upload
-                  </div>
-                </div>
+          {!this.state.loading && (
+            <div
+              className={`class-upload-container ${this.state.files.length === 0 ? 'class-upload-container-no-file' : ''}`}
+              onClick={this.handleDropzoneClick}
+              onDragOver={this.handleDropzoneDragOver}
+              onDrop={this.handleDropzoneDrop}
+            >
+              <img alt='' className='class-upload-image' src={UploadGraphic} />
+              <div className='class-upload-title'>
+                Drag, Drop Or Click<br/>To Upload Your Class
               </div>
-            )}
-          </div>
-          {!!this.props.newClassName && (
-            <div onClick={() => this.handleCreateClassroomClick(this.state.studentsList)} className='submit-class-details-button'>
+              <div className='class-upload-text'>
+                Upload your classroom with an excel or CSV file and get them started on Rapunzl!
+              </div>
+              {this.state.files.length === 0 && (
+                <input
+                  type="file"
+                  aria-label="Add File"
+                  className="dropzone-file-picker-button"
+                  ref={this.dropzoneButton}
+                  onChange={this.handleDropZoneChange}
+                  accept={[".xls",".xlsx",".csv"]}
+                />
+              )}
+              {this.state.files.length !== 0 && (
+                <div className='dropzone-uploaded-file-container'>
+                  <div className='dropzone-uploaded-file-flex'>
+                    <img alt='' src={ExcelIcon} className='upload-excel-icon' />
+                    <div className='upload-file-title'>
+                      {this.state.files.file.name}
+                    </div>
+                  </div>
+                  <div className='dropzone-uploaded-file-flex'>
+                    <div className='dropzone-file-remove-button' onClick={this.removeFile}>
+                      Remove File
+                    </div>
+                    <div className='dropzone-file-upload-button' onClick={() => this.toggleUploadPreview()}>
+                      Preview Upload
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          {!!this.props.newClassName && !this.state.loading && (
+            <div onClick={() => this.handleCreateClassroomClick(this.state.uploadArray)} className='submit-class-details-button'>
               Create Classroom
             </div>
-          )}      
+          )}
+          {this.state.loading && (
+            <div className='add-students-dropzone-loading'>
+              <CircularProgress />
+              <div className='add-students-loading-text'>
+                Adding Students<br/>To Classroom...
+              </div>
+              <div className='add-students-disclosure'>
+                This may take up to 2 minutes
+              </div>
+            </div>
+          )}    
         </div>
       );
     }

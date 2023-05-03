@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Dialog from '@mui/material/Dialog';
 import '../../../styles/Admin/Admin.css';
+import CircularProgress from '@mui/material/CircularProgress';
 
 class UploadPreview extends React.PureComponent {
   // eslint-disable-next-line
@@ -29,52 +30,62 @@ class UploadPreview extends React.PureComponent {
         aria-describedby="alert-dialog-description"
         maxWidth="md"
       >
-        <div className='container'>
-          <div className='alert-title' style={{ fontWeight: '800' }}>
-            Upload Preview
-          </div>
-          <div className='upload-template-instructions'>
-            These are the students we were succesfully able to identify. There were {this._getErrorStudentsNumber()} rows that we are unable to match and they will be highlighted in red.
-          </div>
-          <div className='upload-template-flex' style={{ width: '90%', margin: 'auto' }}>
-            <div className='upload-column-header' style={{ width: '20%' }}>Username</div>
-            <div className='upload-column-header' style={{ width: '20%' }}>First Name</div>
-            <div className='upload-column-header' style={{ width: '20%' }}>Last Name</div>
-            <div className='upload-column-header' style={{ width: '20%' }}>Email</div>
-            <div className='upload-column-header' style={{ width: '20%' }}>Birthday</div>
-          </div>
-          <div className='upload-preview-restrict-height'>
-            {this.props.data.map((item) => {
-              return (
-                <div key={item.username} className='upload-template-flex' style={{ width: '90%', margin: 'auto', backgroundColor: item.isError ? '#ffb3b3' : '' }}>
-                  <div className='upload-column-cell'>
-                    {item.username.length > 15 ? item.username.slice(0,14) + '...' : item.username}
-                  </div>
-                  <div className='upload-column-cell'>
-                    {item.firstName.length > 15 ? item.firstName.slice(0,14) + '...' : item.firstName}
-                  </div>
-                  <div className='upload-column-cell'>
-                    {item.lastName.length > 15 ? item.lastName.slice(0,14) + '...' : item.lastName}
-                  </div>
-                  <div className='upload-column-cell'>
-                    {item.email.length > 15 ? item.email.slice(0,14) + '...' : item.email}
-                  </div>
-                  <div className='upload-column-cell'>
-                    {item.birthday}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className='dropzone-uploaded-file-flex'>
-            <div className='dropzone-file-remove-button' onClick={this.props.dismiss}>
-              Cancel
+        {!this.props.loading && (
+          <div className='container'>
+            <div className='alert-title' style={{ fontWeight: '800' }}>
+              Upload Preview
             </div>
-            <div className='dropzone-file-upload-button' onClick={() => this.props.handleCreateClassroomClick(this.props.data)}>
-              Upload Students
+            <div className='upload-template-instructions'>
+              These are the students we were succesfully able to identify. There were {this._getErrorStudentsNumber()} rows that we are unable to match and they will be highlighted in red.
+            </div>
+            <div className='upload-template-flex' style={{ width: '90%', margin: 'auto' }}>
+              <div className='upload-column-header' style={{ width: '20%' }}>Username</div>
+              <div className='upload-column-header' style={{ width: '20%' }}>First Name</div>
+              <div className='upload-column-header' style={{ width: '20%' }}>Last Name</div>
+              <div className='upload-column-header' style={{ width: '20%' }}>Email</div>
+              <div className='upload-column-header' style={{ width: '20%' }}>Birthday</div>
+            </div>
+            <div className='upload-preview-restrict-height'>
+              {this.props.data.map((item) => {
+                return (
+                  <div key={item.username} className='upload-template-flex' style={{ width: '90%', margin: 'auto', backgroundColor: item.isError ? '#ffb3b3' : '' }}>
+                    <div className='upload-column-cell'>
+                      {item.username.length > 15 ? item.username.slice(0,14) + '...' : item.username}
+                    </div>
+                    <div className='upload-column-cell'>
+                      {item.firstName.length > 15 ? item.firstName.slice(0,14) + '...' : item.firstName}
+                    </div>
+                    <div className='upload-column-cell'>
+                      {item.lastName.length > 15 ? item.lastName.slice(0,14) + '...' : item.lastName}
+                    </div>
+                    <div className='upload-column-cell'>
+                      {item.email.length > 15 ? item.email.slice(0,14) + '...' : item.email}
+                    </div>
+                    <div className='upload-column-cell'>
+                      {item.birthday}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className='dropzone-uploaded-file-flex'>
+              <div className='dropzone-file-remove-button' onClick={this.props.dismiss}>
+                Cancel
+              </div>
+              <div className='dropzone-file-upload-button' onClick={() => this.props.handleCreateClassroomClick(this.props.data)}>
+                Upload Students
+              </div>
             </div>
           </div>
-        </div>
+        )}
+        {this.props.loading && (
+          <div className='container upload-preview-loading-container'>
+            <CircularProgress />
+            <div className='upload-preview-loading-text'>
+              Adding Students...
+            </div>
+          </div>
+        )}
       </Dialog>
     );
    }
