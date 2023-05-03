@@ -11,6 +11,7 @@ import ClassroomOverview from '../Dashboard/ClassroomOverview';
 import PortfolioPreview from './PortfolioPreview';
 import EmptyGrades from '../Gradebook/EmptyGrades';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import Alert from '../../Admin/Alert';
 
 class YourClassroomTile extends Component {
   constructor(props) {
@@ -133,6 +134,11 @@ class YourClassroomTile extends Component {
     }
   }
 
+  // Pass through arrow function to dismiss Alert Dialog after it is presented to the user
+  toggleAlert = () => {
+    this.setState({ alertVisible: false });
+  }
+
   render() {
     // Handles If The Teacher User Has Not Created Any Classrooms Yet
     if (this.props.allClassrooms.length === 0) {
@@ -184,6 +190,12 @@ class YourClassroomTile extends Component {
       const classInfo = this._getClassroomInfo();
       return (
         <div>
+          <Alert
+            title={this.state.alertTitle}
+            message={this.state.alertMessage}
+            visible={this.state.alertVisible}
+            dismiss={this.toggleAlert}
+          />
           {/* Handles If Portfolio Preview Is Selected From Classroom Item To View Student Portfolio */}
           <PortfolioPreview
             dismissPortfolio={this.togglePortfolio}

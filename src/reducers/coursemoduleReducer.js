@@ -279,17 +279,15 @@ const coursemoduleReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.payload.error,
-        // graphqlError: 'There was a failure connecting to our servers to retrieve the Teacher Portal Modules. Please contact support.'
         errorTitle: 'Failure Retrieving Teacher Portal Modules',
       };
-    case GET_FINLITSTANDARDS_ERROR:
+    case GET_MODULES_ERROR:
       return {
         ...state,
         loading: false,
-        graphqlError: action.payload.error,
-        // graphqlError: 'There was an error connecting to our servers to retrieve the Teacher Portal Modules. Please contact support.'
-        errorTitle: 'Error Retrieving Teacher Portal Modules',
-      }; 
+        error: action.payload.error,
+        errorTitle: 'Error Retrieving Teacher Portal Modules'
+      }
     // this updates availablePublicModules portion of the coursesmodules state and is called when a user creates a new account
     case UPDATE_PUBLIC_MODULES:
       // Mark the state as "loading" so we can show a spinner or something

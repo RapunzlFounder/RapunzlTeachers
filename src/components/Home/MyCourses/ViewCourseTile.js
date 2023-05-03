@@ -42,7 +42,6 @@ class ViewCourseTile extends Component {
   }
 
   render() {
-    console.log(this.props.currentCourse.courseModules[this.state.currentSection - 1].imageUrl);
     return (
       <div className='tile current-course' style={{ paddingBottom: 20 }}>
         <AssignCourseDialog

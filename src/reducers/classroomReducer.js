@@ -330,15 +330,15 @@ const classroomReducer = (state = initialState, action) => {
         errorTitle: null
       }
     case ADD_STUDENTS_SUCCESS:
-      originalClassroomsObject = JSON.parse(JSON.stringify(state.classrooms));
-      originalClassroomsObject[action.payload.classroomObject.id] = action.payload.classroomObject;
+      let originalClassroomsObject2 = JSON.parse(JSON.stringify(state.classrooms));
+      originalClassroomsObject2[action.payload.classroomObject.id] = action.payload.classroomObject;
       return {
         ...state,
         loading: false,
         error: null,
         graphqlError: null,
         errorTitle: null,
-        classrooms: originalClassroomsObject,
+        classrooms: originalClassroomsObject2,
       }
     case ADD_STUDENTS_FAILURE:
       return {
@@ -366,15 +366,15 @@ const classroomReducer = (state = initialState, action) => {
         errorTitle: null
       }
     case REMOVE_STUDENTS_SUCCESS:
-      originalClassroomsObject = JSON.parse(JSON.stringify(state.classrooms));
-      originalClassroomsObject[action.payload.classroomObject.id] = action.payload.classroomObject;
+      let originalClassroomsObject3 = JSON.parse(JSON.stringify(state.classrooms));
+      originalClassroomsObject3[action.payload.classroomObject.id] = action.payload.classroomObject;
       return {
         ...state,
         loading: false,
         error: null,
         graphqlError: null,
         errorTitle: null,
-        classrooms: originalClassroomsObject,
+        classrooms: originalClassroomsObject3,
       }
     case REMOVE_STUDENTS_FAILURE:
       return {
