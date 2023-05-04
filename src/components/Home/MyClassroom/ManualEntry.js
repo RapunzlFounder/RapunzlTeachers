@@ -36,7 +36,6 @@ class ManualEntry extends Component {
       userArray: [],
       // Handles Loading Of validateInputs
       loading: false,
-      creatingClassroom: false,
     }
   }
 
@@ -370,6 +369,7 @@ class ManualEntry extends Component {
   }
 
   render() {
+    console.log(this.props.newClassName);
     return (
       <div className='tile' style={{ paddingBottom: 55, paddingTop: 25, paddingLeft: 10, paddingRight: 10 }}>
         <Alert
@@ -392,7 +392,7 @@ class ManualEntry extends Component {
             Go Back
           </div>
         </div>
-        {!this.state.creatingClassroom && (
+        {!this.state.loading && !this.props.loading && (
           <div className='manual-container'>
             <div className='manual-input-container'>
               <TextField
@@ -534,7 +534,7 @@ class ManualEntry extends Component {
             </div>
           </div>
         )}
-        {this.state.creatingClassroom && (
+        {this.props.loading && (
           <div className='manual-entry-loading-container' style={{ paddingBottom: '150px' }}>
             <CircularProgress className='login-loading'/>
             {!!this.props.newClassName ? (

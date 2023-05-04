@@ -86,7 +86,7 @@ class ClassroomItem extends Component {
 
   render() {
     return (
-      <div key={this.props.item} className='classroom-student-item'>
+      <div key={this.props.item.userId} className='classroom-student-item'>
         <Alert
           title={this.state.alertTitle}
           message={this.state.alertMessage}

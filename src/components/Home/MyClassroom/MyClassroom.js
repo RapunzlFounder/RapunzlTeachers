@@ -38,7 +38,7 @@ class MyClassroom extends Component {
 
   // Handles Selecting A Classroom When The User Has Multiple Classrooms, Which Allows Them To See Students
   selectClassroom = (classID) => {
-    this.setState({ selectedClass: classID });
+    this.setState({ selectedClass: classID, className: '' });
   }
 
   render() {

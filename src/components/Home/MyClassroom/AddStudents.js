@@ -429,6 +429,7 @@ class AddStudents extends Component {
           toggleManualEntry={this.props.toggleManualEntry}
           handleCreateClassroomClick={this.handleCreateClassroomClick}
           newClassName={this.props.className}
+          loading={this.state.loading}
         />
       )
     }
@@ -549,10 +550,11 @@ class AddStudents extends Component {
             <div onClick={() => this.toggleSearch()} className='classroom-upload-button manual-upload' style={{ backgroundColor: '#1c9c6c' }}>
               Look Up Students
             </div>
-            <div onClick={() => this.props.toggleManualEntry()} className='classroom-upload-button manual-upload'>
-              Enter Students Manually  
-            </div>
-            
+            {!this.props.creatingClass && (
+              <div onClick={() => this.props.toggleManualEntry()} className='classroom-upload-button manual-upload'>
+                Enter Students Manually  
+              </div>
+            )}
             <div onClick={() => this.handleBackButton()} className='classroom-upload-button classroom-upload-back'>
               {this.props.creatingClass ? 'Back To Name' : 'Back To Classroom'}
             </div>
