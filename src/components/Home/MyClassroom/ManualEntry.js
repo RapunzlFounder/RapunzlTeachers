@@ -369,7 +369,6 @@ class ManualEntry extends Component {
   }
 
   render() {
-    console.log(this.props.newClassName);
     return (
       <div className='tile' style={{ paddingBottom: 55, paddingTop: 25, paddingLeft: 10, paddingRight: 10 }}>
         <Alert
