@@ -1,19 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../../../styles/Home/Resources.css';
+import PDFViewer from '../../Admin/PDFViewer';
 
 class ResourceItem extends Component {
-  // eslint-disable-next-line
   constructor(props) {
     super(props);
     this.state = {
+      pdfVisible: false,
     }
+  }
+
+  // Pass Through Arrow Function To Dismiss PDF Viewer
+  dismissPDFViewer = () => {
+    this.setState({ pdfVisible: false });
+  }
+
+  // Handles When User Clicks Resource Item By Displaying PDFViewer With URL Of This Item For User To View
+  _handleSelectItem() {
+    this.setState({ pdfVisible: true });
   }
 
   render() {
     return (
       <div key={this.props.item.assetId}>
-        <div className='library-result-flex-item'>
+        <PDFViewer
+          visible={this.state.pdfVisible}
+          dismiss={this.dismissPDFViewer}
+          pdfURL={this.props.item.documentUrl}
+          orientation={this.props.item.assetType === 'MODULE' ? 'landscape' : 'portrait'}
+        />
+        <div onClick={() => this._handleSelectItem()} className='library-result-flex-item'>
           <div className='library-result-title'>
             {this.props.item.assetName}
           </div>

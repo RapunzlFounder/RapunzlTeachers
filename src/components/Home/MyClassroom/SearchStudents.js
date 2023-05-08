@@ -109,8 +109,8 @@ class SearchStudents extends Component {
             <input 
               placeholder="search by student username"
               className='student-search-input'
-              autoCapitalize='false'
-              autoComplete='false'
+              autoCapitalize={false}
+              autoComplete={false}
               autoFocus={true}
               error={false}
               multiline={false}

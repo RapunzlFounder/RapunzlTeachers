@@ -73,8 +73,8 @@ class GettingStartedTips extends Component {
 
   render() {
     let progressArray = this.getProgressArray();
-    let progress = this.getProgress();
-    // let progress = 1;
+    //let progress = this.getProgress();
+    let progress = 1;
     return (
       <div className='tile classroom-overview' style={{ paddingBottom: 25 }}>
         <div className='home-header-flex'>

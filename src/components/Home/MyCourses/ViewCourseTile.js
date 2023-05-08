@@ -8,6 +8,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import StandardsPopup from '../../Admin/StandardsPopup';
 import ProgressBar from './ProgressBar';
 import AssignCourseDialog from './AssignCourseDialog';
+import PDFViewer from '../../Admin/PDFViewer';
 
 class ViewCourseTile extends Component {
   constructor(props) {
@@ -16,6 +17,9 @@ class ViewCourseTile extends Component {
       standardsVisible: false,
       assigningCourse: false,
       currentSection: 1,
+      pdfURL: 'images/M1/M1_Presentation.pdf',
+      PDFVisible: false,
+      pdfOrientation: 'landscape',
     }
   }
 
@@ -36,9 +40,41 @@ class ViewCourseTile extends Component {
     }
   }
 
+  // Select View Module Updates PDF URL, Orientation & Sets To Visible
+  viewModule() {
+    this.setState({
+      PDFVisible: true,
+      pdfOrientation: 'landscape',
+      pdfURL: this.props.currentCourse.courseModules[this.state.currentSection - 1].presentationURL,
+    });
+  }
+
+  // View Teacher Guide Updates PDF URL, Orientation & Sets To Visible
+  viewTeacherGuide() {
+    this.setState({
+      PDFVisible: true,
+      pdfOrientation: 'portrait',
+      pdfURL: this.props.currentCourse.courseModules[this.state.currentSection - 1].teacherGuides[0].pdfUrl,
+    })
+  }
+
+  // View Resource Is Called When Clicking An Article Or Activity & Displays The Correct URL Passed As A Parameter
+  viewResource(url) {
+    this.setState({
+      PDFVisible: true,
+      pdfOrientation: 'portrait',
+      pdfURL: url
+    });
+  }
+
   // Pass Through Arrow Function Which Handles Toggling Visibilty Of Alert To Assign A Selected Course To A Classroom
   toggleAssignCourse = () => {
     this.setState({ assigningCourse: !this.state.assigningCourse });
+  }
+
+  // Pass Through Arrow Function To Dismiss PDF Viewer
+  dismissPDFViewer = () => {
+    this.setState({ PDFVisible: false });
   }
 
   render() {
@@ -56,6 +92,12 @@ class ViewCourseTile extends Component {
           standardsArray={[0,1,2,3,4,5,6]}
           type='Section'
           module={2}
+        />
+        <PDFViewer
+          visible={this.state.PDFVisible}
+          dismiss={this.dismissPDFViewer}
+          pdfURL={this.state.pdfURL}
+          orientation={this.state.pdfOrientation}
         />
         <div onClick={() => this.props.selectCourse()} className='back-to-all-courses-button'>
           Back To All Courses
@@ -93,10 +135,10 @@ class ViewCourseTile extends Component {
         </div>
         <div className='this-week-flex-buttons' style={{ marginTop: 0 }}>
           <div className='this-week-flex-buttons' style={{ marginLeft: 0 }}>
-            <div className='this-week-button module-button' style={{ marginRight: 10 }}>
+            <div onClick={() => this.viewModule()} className='this-week-button module-button' style={{ marginRight: 10 }}>
               View Module
             </div>
-            <div onClick={() => this.toggleAssignCourse()} className='this-week-button teacher-guide-button'>
+            <div onClick={() => this.viewTeacherGuide()} className='this-week-button teacher-guide-button'>
               Teacher Guide
             </div>
           </div>
@@ -126,7 +168,7 @@ class ViewCourseTile extends Component {
                 </div>
                 {this.props.currentCourse.courseModules[this.state.currentSection - 1].articles.map((item) => {
                   return (
-                    <div key={item.id} className='current-course-item'>
+                    <div onClick={() => this.viewResource(item.pdfUrl)} key={item.id} className='current-course-item'>
                       <div className='current-course-item-title'>
                         {item.articleName}
                       </div>
@@ -160,7 +202,7 @@ class ViewCourseTile extends Component {
                   </div>
                   {this.props.currentCourse.courseModules[this.state.currentSection - 1].activities.map((item) => {
                     return (
-                      <div key={item.id} className='current-course-item'>
+                      <div onClick={() => this.viewResource(item.pdfUrl)} key={item.id} className='current-course-item'>
                         <div className='current-course-item-title'>
                           {item.activityName}
                         </div>

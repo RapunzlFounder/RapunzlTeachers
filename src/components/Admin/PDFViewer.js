@@ -1,27 +1,104 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import { Document, Page, pdfjs } from "react-pdf";
 import '../../styles/Admin/PDF.css';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import CircularProgress from '@mui/material/CircularProgress';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const PDFViewer = (pdfURL, visible, dismiss) => (
-  <Dialog
-    open={visible}
-    onClose={dismiss}
-    aria-labelledby="alert-dialog-title"
-    aria-describedby="alert-dialog-description"
-  >
-    <div className='container'>
-      <Document
-        file={pdfURL}
-        onContextMenu={(e) => e.preventDefault()}
-        className="pdf-container"
-      >
-        <Page pageNumber={1} />
-      </Document>
-    </div>
-  </Dialog>
-); 
+const PDFViewer = (props) => {
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+
+  function _nextPDFPage() {
+    if (pageNumber + 1 <= numPages) {
+      setPageNumber(pageNumber + 1);
+    }
+  }
+
+  function _previousPDFPage() {
+    if (pageNumber - 1 > 0) {
+      setPageNumber(pageNumber - 1)
+    }
+  }
+
+  function errorPDFComponent() {
+    return (
+      <div>
+  
+      </div>
+    )
+  }
+  
+  function loadingPDFComponent() {
+    return (
+      <div className='pdf-loading-page-container'>
+        <CircularProgress />
+      </div>
+    )
+  }
+
+  return (
+    <Dialog
+      open={props.visible}
+      onClose={props.dismiss}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      maxWidth={false}
+    >
+      <div className='pdf-container'>
+        <div onClick={props.dismiss} className='pdf-close-flex'>
+          <HighlightOffIcon className='pdf-close-icon' />
+          <div className='pdf-close-text'>
+            close
+          </div>
+        </div>
+        <Document
+          file={props.pdfURL}
+          onContextMenu={(e) => e.preventDefault()}
+          className="pdf-document"
+          pageLayout='singlePage'
+          pageMode='fullScreen'
+          onLoadSuccess={onDocumentLoadSuccess}
+        >
+          <Page
+            pageNumber={pageNumber}
+            orientation={props.orientation}
+            wrap={false}
+            renderAnnotationLayer={false}
+            renderTextLayer={false}
+            renderForms={false}
+            className='pdf-page'
+            error={errorPDFComponent}
+            noData={errorPDFComponent}
+            loading={loadingPDFComponent}
+          />
+        </Document>
+        <div className='pdf-page-number-text'>
+          Page {pageNumber} of {numPages}
+        </div>
+        <div className='pdf-button-flex'>
+          {pageNumber !== 1 && (
+            <div onClick={() => _previousPDFPage()} className='pdf-button'>
+              <KeyboardDoubleArrowLeftIcon className='pdf-button-icon' />
+            </div>
+          )}
+          {pageNumber !== numPages && (
+            <div onClick={() => _nextPDFPage()} className='pdf-button'>
+              <KeyboardDoubleArrowRightIcon className='pdf-button-icon' />
+            </div>
+          )}
+        </div>
+      </div>
+    </Dialog>
+  )
+}
 
 export default PDFViewer;

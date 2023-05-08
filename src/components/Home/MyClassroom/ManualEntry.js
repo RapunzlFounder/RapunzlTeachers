@@ -368,6 +368,12 @@ class ManualEntry extends Component {
     this.setState({ alertVisible: !this.state.alertVisible });
   }
 
+  // Hides Manual Entry On Submit To Show Loading & Success State in Add Students Since Create Classroom Click Is Pass Through Function
+  _handleAddToClassroom() {
+    this.props.toggleManualEntry();
+    this.props.handleCreateClassroomClick(this.state.userArray);
+  }
+
   render() {
     return (
       <div className='tile' style={{ paddingBottom: 55, paddingTop: 25, paddingLeft: 10, paddingRight: 10 }}>
@@ -391,162 +397,146 @@ class ManualEntry extends Component {
             Go Back
           </div>
         </div>
-        {!this.state.loading && !this.props.loading && (
-          <div className='manual-container'>
-            <div className='manual-input-container'>
-              <TextField
-                id="firstName"
-                label="First Name"
-                placeholder="First Name"
-                type="text"
-                variant="filled"
-                error={this.state.onErrorFirstName}
-                value={this.state.firstName}
-                onChange={(event) => this.changeFirstName(event.target.value)}
-                sx={{ marginBottom: '7px', width: '49%', marginRight: '1%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
-              />
-              <TextField
-                id="lastName"
-                label="Last Name"
-                placeholder="Last Name"
-                type="text"
-                variant="filled"
-                error={this.state.onErrorLastName}
-                value={this.state.lastName}
-                onChange={(event) => this.changeLastName(event.target.value)}
-                sx={{ marginBottom: '7px', width: '49%', marginLeft: '1%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
-              />
-              <TextField
-                id="email"
-                label="Email"
-                placeholder="Email"
-                type="text"
-                fullWidth
-                variant="filled"
-                error={this.state.onErrorEmail}
-                value={this.state.email}
-                onChange={(event) => this.changeEmail(event.target.value)}
-                sx={{ marginBottom: '7px', width: '49%', marginRight: '1%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
-              />
-              <TextField
-                id="birthday"
-                label="Birthday"
-                placeholder="Birthday"
-                InputLabelProps={{ shrink: true }}
-                type="date"
-                fullWidth
-                variant="filled"
-                error={this.state.onErrorBirthday}
-                value={this.state.birthdate}
-                onChange={(event) => this.changeBirthdate(event.target.value)}
-                sx={{ marginBottom: '7px', width: '49%', marginLeft: '1%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
-              />
-              <TextField
-                label="Username"
-                placeholder="Username"
-                type="text"
-                fullWidth
-                variant="filled"
-                error={this.state.onErrorUsername}
-                value={this.state.username}
-                onChange={(event) => this.changeUsername(event.target.value)}
-                sx={{ marginBottom: '7px', width: '49%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
-              />
-            </div>
-            <div className='manual-button-flex'>
-              <div onClick={() => this.validateInputs()} className='manual-add-another'>
-                Add {this.state.userArray.length === 0 ? '' : 'Another'} Student
-              </div>
-              {this.state.userArray.length !== 0 && (
-                <div onClick={() => this.props.handleCreateClassroomClick(this.state.userArray)} className='manual-submit'>
-                  Add All To Classroom
-                </div>
-              )}
-            </div>
-            <div className='manual-students-container'>
-              {this.state.userArray.length !== 0 && (
-                <div className='manual-students-flex'>
-                  <div className='manual-student-line' />
-                  <div className='manual-student-title'>
-                    {this.state.userArray.length} Student{this.state.userArray.length === 1 ? '' : 's'} To Add
-                  </div>
-                  <div className='manual-student-line' />
-                </div>
-              )}
-              <div className='manual-student-columns'>
-                <div className='manual-student-header' style={{ width: '140px' }}>
-                  Name
-                </div>
-                <div className='manual-student-header' style={{ width: '175px' }}>
-                  Email
-                </div>
-                <div className='manual-student-header' style={{ width: '130px' }}>
-                  Birthday
-                </div>
-                <div className='manual-student-header'>
-                  Username
-                </div>
-              </div>
-              {this.state.userArray.length !==0 && (
-                <div className='manual-student-item-container'>
-                  {this.state.userArray.map((item) => {
-                    return (
-                      <div key={item.id} className='manual-student-item'>
-                        <div className='manual-student-text' style={{ width: '140px' }}>
-                          {item.firstName} {item.lastName}
-                        </div>
-                        <div className='manual-student-text' style={{ width: '175px' }}>
-                          {item.email.length > 17 ? item.email.slice(0,16) + '...' : item.email}
-                        </div>
-                        <div className='manual-student-text' style={{ width: '130px' }}>
-                          {item.birthdate}
-                        </div>
-                        <div className='manual-student-text manual-student-flex'>
-                          <div>
-                            @{item.username}
-                          </div>
-                          <HighlightOff onClick={() => this.removeStudent(item.id)} className='manual-student-delete'/>
-                        </div>
-                      </div>
-                  )})}
-                </div>
-              )}
-              {this.state.userArray.length === 0 && !this.state.loading && (
-                <div className='manual-student-empty-container'>
-                  <img alt='' className='manual-student-empty-image' src={EmptyIcon} />
-                  <div className='manual-student-empty-title'>
-                    No Students To Add
-                  </div>
-                  <div className='manual-student-empty-text'>
-                    Create student accounts using the form above and get started adding students to your classroom!
-                  </div>
-                </div>
-              )}
-              {this.state.loading && (
-                <div className='manual-entry-loading-container'>
-                  <CircularProgress className='login-loading'/>
-                  <div className='login-loading-text' style={{ fontSize: 13, paddingTop: 7, textAlign: 'center' }}>
-                    Validating<br/>Inputs
-                  </div>
-                </div>
-              )}
-            </div>
+        <div className='manual-container'>
+          <div className='manual-input-container'>
+            <TextField
+              id="firstName"
+              label="First Name"
+              placeholder="First Name"
+              type="text"
+              variant="filled"
+              error={this.state.onErrorFirstName}
+              value={this.state.firstName}
+              onChange={(event) => this.changeFirstName(event.target.value)}
+              sx={{ marginBottom: '7px', width: '49%', marginRight: '1%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
+            />
+            <TextField
+              id="lastName"
+              label="Last Name"
+              placeholder="Last Name"
+              type="text"
+              variant="filled"
+              error={this.state.onErrorLastName}
+              value={this.state.lastName}
+              onChange={(event) => this.changeLastName(event.target.value)}
+              sx={{ marginBottom: '7px', width: '49%', marginLeft: '1%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
+            />
+            <TextField
+              id="email"
+              label="Email"
+              placeholder="Email"
+              type="text"
+              fullWidth
+              variant="filled"
+              error={this.state.onErrorEmail}
+              value={this.state.email}
+              onChange={(event) => this.changeEmail(event.target.value)}
+              sx={{ marginBottom: '7px', width: '49%', marginRight: '1%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
+            />
+            <TextField
+              id="birthday"
+              label="Birthday"
+              placeholder="Birthday"
+              InputLabelProps={{ shrink: true }}
+              type="date"
+              fullWidth
+              variant="filled"
+              error={this.state.onErrorBirthday}
+              value={this.state.birthdate}
+              onChange={(event) => this.changeBirthdate(event.target.value)}
+              sx={{ marginBottom: '7px', width: '49%', marginLeft: '1%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
+            />
+            <TextField
+              label="Username"
+              placeholder="Username"
+              type="text"
+              fullWidth
+              variant="filled"
+              error={this.state.onErrorUsername}
+              value={this.state.username}
+              onChange={(event) => this.changeUsername(event.target.value)}
+              sx={{ marginBottom: '7px', width: '49%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
+            />
           </div>
-        )}
-        {this.props.loading && (
-          <div className='manual-entry-loading-container' style={{ paddingBottom: '150px' }}>
-            <CircularProgress className='login-loading'/>
-            {!!this.props.newClassName ? (
-              <div className='login-loading-text' style={{ fontSize: 13, paddingTop: 7, textAlign: 'center' }}>
-                Creating<br/>Classroom...
-              </div>
-            )  :  (
-              <div className='login-loading-text' style={{ fontSize: 13, paddingTop: 7, textAlign: 'center' }}>
-                Adding<br/>Students...
+          <div className='manual-button-flex'>
+            <div onClick={() => this.validateInputs()} className='manual-add-another'>
+              Add {this.state.userArray.length === 0 ? '' : 'Another'} Student
+            </div>
+            {this.state.userArray.length !== 0 && (
+              <div onClick={() => this._handleAddToClassroom()} className='manual-submit'>
+                Add All To Classroom
               </div>
             )}
           </div>
-        )}
+          <div className='manual-students-container'>
+            {this.state.userArray.length !== 0 && (
+              <div className='manual-students-flex'>
+                <div className='manual-student-line' />
+                <div className='manual-student-title'>
+                  {this.state.userArray.length} Student{this.state.userArray.length === 1 ? '' : 's'} To Add
+                </div>
+                <div className='manual-student-line' />
+              </div>
+            )}
+            <div className='manual-student-columns'>
+              <div className='manual-student-header' style={{ width: '140px' }}>
+                Name
+              </div>
+              <div className='manual-student-header' style={{ width: '175px' }}>
+                Email
+              </div>
+              <div className='manual-student-header' style={{ width: '130px' }}>
+                Birthday
+              </div>
+              <div className='manual-student-header'>
+                Username
+              </div>
+            </div>
+            {this.state.userArray.length !==0 && (
+              <div className='manual-student-item-container'>
+                {this.state.userArray.map((item) => {
+                  return (
+                    <div key={item.id} className='manual-student-item'>
+                      <div className='manual-student-text' style={{ width: '140px' }}>
+                        {item.firstName} {item.lastName}
+                      </div>
+                      <div className='manual-student-text' style={{ width: '175px' }}>
+                        {item.email.length > 17 ? item.email.slice(0,16) + '...' : item.email}
+                      </div>
+                      <div className='manual-student-text' style={{ width: '130px' }}>
+                        {item.birthdate}
+                      </div>
+                      <div className='manual-student-text manual-student-flex'>
+                        <div>
+                          @{item.username}
+                        </div>
+                        <HighlightOff onClick={() => this.removeStudent(item.id)} className='manual-student-delete'/>
+                      </div>
+                    </div>
+                )})}
+              </div>
+            )}
+            {this.state.userArray.length === 0 && !this.state.loading && (
+              <div className='manual-student-empty-container'>
+                <img alt='' className='manual-student-empty-image' src={EmptyIcon} />
+                <div className='manual-student-empty-title'>
+                  No Students To Add
+                </div>
+                <div className='manual-student-empty-text'>
+                  Create student accounts using the form above and get started adding students to your classroom!
+                </div>
+              </div>
+            )}
+            {this.state.loading && (
+              <div className='manual-entry-loading-container'>
+                <CircularProgress className='login-loading'/>
+                <div className='login-loading-text' style={{ fontSize: 13, paddingTop: 7, textAlign: 'center' }}>
+                  Validating<br/>Inputs
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     );
   }

@@ -84,7 +84,7 @@ class Support extends Component {
   }
 
   contactSupport() {
-    let handledText = this.handleText(this.state.message)
+    let handledText = this.state.message;
     if (handledText.length > 5) {
       let platformDetails = `Developer Info: Web`;
       handledText = handledText + ' // ' + platformDetails + ' // ' + this.props.email + ' // ' + this.props.firstName.toString() + ' ' + this.props.lastName.toString();
