@@ -45,7 +45,7 @@ class ViewCourseTile extends Component {
     this.setState({
       PDFVisible: true,
       pdfOrientation: 'landscape',
-      pdfURL: this.props.currentCourse.courseModules[this.state.currentSection - 1].presentationURL,
+      pdfURL: this.props.currentCourse.courseModules[this.state.currentSection - 1].presentationUrl,
     });
   }
 
