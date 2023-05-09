@@ -45,6 +45,7 @@ const initialState = {
   teacherCreatedModules: {},
   teacherCourses: {},
   financialLiteracyStandards: {},
+  standardsLastRetrieved: new Date(),
 };
 
 const coursemoduleReducer = (state = initialState, action) => {
@@ -225,7 +226,8 @@ const coursemoduleReducer = (state = initialState, action) => {
         error: null,
         graphqlError: null,
         errorTitle: null,
-        financialLiteracyStandards: action.payload.standardsObject
+        financialLiteracyStandards: action.payload.standardsObject,
+        standardsLastRetrieved: new Date(),
       } 
     case GET_FINLITSTANDARDS_FAILURE:
       return {
