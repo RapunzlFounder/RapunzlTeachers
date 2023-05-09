@@ -10,6 +10,7 @@ export const GET_MODULES = (getPublicModules, getTeacherModules, moduleIds) => `
       description
       imageUrl
       presentationUrl
+      presentationStandards
       moduleLevel
       vocabUrl
       isPrivate
@@ -28,6 +29,7 @@ export const GET_MODULES = (getPublicModules, getTeacherModules, moduleIds) => `
         description
         imageUrl
         pdfUrl
+        standards
       }
       activities {
         id
@@ -35,6 +37,7 @@ export const GET_MODULES = (getPublicModules, getTeacherModules, moduleIds) => `
         description
         imageUrl
         pdfUrl
+        standards
       }
       assessments {
         id

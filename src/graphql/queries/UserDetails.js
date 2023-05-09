@@ -43,6 +43,7 @@ query{
 			description
 			imageUrl
 			presentationUrl
+			presentationStandards
 			moduleLevel
 			vocabUrl
 			isPrivate
@@ -61,6 +62,7 @@ query{
 				description
 				imageUrl
 				pdfUrl
+				standards
 			}
 			activities {
 				id
@@ -68,6 +70,7 @@ query{
 				description
 				imageUrl
 				pdfUrl
+				standards
 			}
 			assessments {
 				id
@@ -99,6 +102,7 @@ query{
 			description
 			imageUrl
 			presentationUrl
+			presentationStandards
 			moduleLevel
 			vocabUrl
 			isPrivate
@@ -117,6 +121,7 @@ query{
 				description
 				imageUrl
 				pdfUrl
+				standards
 			}
 			activities {
 				id
@@ -124,6 +129,7 @@ query{
 				description
 				imageUrl
 				pdfUrl
+				standards
 			}
 			assessments {
 				id
