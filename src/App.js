@@ -63,16 +63,35 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <ErrorBoundary FallbackComponent={<ErrorFallback />}>
             <Routes>
-              <Route path="/" element={<AuthLoadingScreen />} />
-              <Route path="article/:articleID" element={<ArticleScreenWrapper />} />
-              <Route path="login" element={<Suspense fallback={<LoadingPage />}><NotSignedInScreen /></Suspense>}/>
-              <Route path="dashboard" element={<Suspense fallback={<LoadingPage />}><HomeScreen /></Suspense>} />
-              <Route path="*" element={<NotFoundPage />} />
+              <Route
+                path="/"
+                element={<AuthLoadingScreen />}
+                errorElement={<ErrorFallback />}
+              />
+              <Route
+                path="article/:articleID"
+                element={<ArticleScreenWrapper />}
+                errorElement={<ErrorFallback />}
+              />
+              <Route
+                path="login"
+                element={<Suspense fallback={<LoadingPage />}><NotSignedInScreen /></Suspense>}
+                errorElement={<ErrorFallback />}
+              />
+              <Route
+                path="dashboard"
+                element={<Suspense fallback={<LoadingPage />}><HomeScreen /></Suspense>}
+                errorElement={<ErrorFallback />}
+              />
+              <Route
+                path="*"
+                element={<NotFoundPage />}
+                errorElement={<ErrorFallback />}
+              />
             </Routes>
-            <ErrorFallback />
           </ErrorBoundary>
         </ThemeProvider>
-    </BrowserRouter>
+      </BrowserRouter>
     );
   }
 }

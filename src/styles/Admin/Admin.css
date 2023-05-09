@@ -275,12 +275,18 @@
     padding-bottom: 15px;
 }
 .selected-education-confirm-text {
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 13px;
+    font-weight: 500;
     color: #0a7358;
     padding-top: 4px;
     padding-bottom: 6px;
     line-height: 0.95;
+}
+.selected-education-total-count {
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 6px;
+    color: #009a72;
 }
 .confirm-section-title {
     font-size: 15px;
@@ -495,4 +501,70 @@
 .assign-course-no-classroom-back:hover {
     font-weight: 600;
     color: #32b593;
+}
+.notify-student-input-container {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 450px;
+    height: 250px;
+    margin-top: 10px;
+    margin-bottom: 35px;
+    border: none;
+    outline: none;
+    background-color: #8ebaaf;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 300;
+    padding: 15px;
+}
+.notify-student-button-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 25px;
+    width: fit-content;
+    background-color: #007154;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 7px;
+    transition: 0.2s all;
+    cursor: pointer;
+}
+.notify-student-button-flex:hover {
+    background-color: #14a581;
+}
+.notify-student-button-text {
+    margin-left: 5px;
+}
+.notify-student-button-icon {
+    font-size: 17px;
+}
+.notify-student-alert-close-icon {
+    fill: #01452f !important;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+.notify-student-alert-close-icon:hover {
+    fill: rgb(255, 58, 58) !important;
+}
+.notify-student-alert-loading {
+
+}
+.notify-student-alert-loading-text {
+
+}
+.notify-student-alert-image {
+    
+}
+.notify-student-alert-h1 {
+
+}
+.notify-student-alert-p {
+    
 }

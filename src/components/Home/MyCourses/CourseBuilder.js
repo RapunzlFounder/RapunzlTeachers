@@ -22,6 +22,7 @@ class CourseBuilder extends Component {
       courseNameError: false,
       courseLength: 0,
       courseSections: [],
+      courseSectionsError: false,
       selectedSection: 0,
       sectionBuilderVisible: false,
       // Handles Native Alert Modal
@@ -79,32 +80,49 @@ class CourseBuilder extends Component {
   createCourse() {
     // Sets Loading State To True To Show User We Are Attempting To Create Course
     this.setState({ loading: true });
-    if (this.state.courseName.length > 0) {
+    // Checks That There Is A Course Name That Is 2 Characters Or Greater
+    if (this.state.courseName.length > 1) {
       const modulesArray = this._handleModuleArray(this.state.courseSections);
-      this.props.createTeacherCourse(this.props.jwtToken, this.state.courseName, true, modulesArray).then((res) => {
-        // Handles Error With Creating Teacher Course By Displaying Alert Error To Use
-        if (!(res && !('errors' in res))) {
-          this.setState({
-            loading: false,
-            alertVisible: true,
-            alertTitle: 'Unable To Create Course',
-            alertMessage: res.errors[0].message,
-          });
+      let error = false;
+      // Checks If Any Of The Modules In The Array Are Null And Displays Error To The User
+      for (var i in modulesArray) {
+        if (modulesArray[i] === null) {
+          error = true;
         }
-        // Handles Successful Dispatch By Updating State To Display Success & Prompt User To Navigate Back To Main Course Tab
-        else {
-          this.setState({ loading: false });
-          this.props.toggleCourseBuilder();
-        }
-      });
-    } else {
+      }
+      // If There Is No Error, Proceed With Creating Teacher Course
+      if (!error) {
+        this.props.createTeacherCourse(this.props.jwtToken, this.state.courseName, true, modulesArray).then((res) => {
+          // Handles Error With Creating Teacher Course By Displaying Alert Error To Use
+          if (!(res && !('errors' in res))) {
+            this.setState({
+              loading: false,
+              alertVisible: true,
+              alertTitle: 'Unable To Create Course',
+              alertMessage: res.errors[0].message,
+            });
+          }
+          // Handles Successful Dispatch By Updating State To Display Success & Prompt User To Navigate Back To Main Course Tab
+          else {
+            this.setState({ loading: false });
+            this.props.toggleCourseBuilder();
+          }
+        });
+      }
+      // Handles If There Is An Error And Any Of The Sections Are Not Assigned And Have A Null Value
+      else {
+        this.setState({ loading: false, courseSectionsError: true });
+      }
+    }
+    // Handles If The Name Of The Course Is Less Than 2 Characters
+    else {
       this.setState({ courseNameError: true, loading: false });
     }
   }
 
   // Makes SectionBuilderDialog Visible And Updates Selected Section To Save Correctly When User Is Finished
   showSectionBuilder(section) {
-    this.setState({ sectionBuilderVisible: true, selectedSection: section });
+    this.setState({ sectionBuilderVisible: true, selectedSection: section, courseSectionsError: false });
   }
 
   // Pass Through Arrow Function Which Toggles sectionBuilderVisible State
@@ -204,7 +222,7 @@ class CourseBuilder extends Component {
               if (section.module === null) {
                 return (
                   <div key={section.id} onClick={() => this.showSectionBuilder(section.id - 1)} className='empty-course-section-item'>
-                    <div className='empty-course-section-title'>
+                    <div className='empty-course-section-title' style={{ color: this.state.courseSectionsError ? '#ed2121' : '#ffffff' }}>
                       New Section
                     </div>
                     <AddCircleIcon fontSize='small' className='empty-course-icon' />

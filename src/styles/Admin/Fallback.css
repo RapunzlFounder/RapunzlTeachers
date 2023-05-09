@@ -52,3 +52,99 @@
     font-size: 14px;
     font-weight: 400;
 }
+.fallback-contact-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 185px;
+    width: 90%;
+    margin: auto;
+    max-width: 500px;
+}
+.fallback-contact-back-button-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+    transition: 0.2s all;
+    cursor: pointer;
+}
+.fallback-back-button-icon {
+    font-size: 18px !important;
+    transition: 0.2s all;
+}
+.fallback-back-button-text {
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 7px;
+    transition: 0.2s all;
+}
+.fallback-contact-back-button-flex:hover .fallback-back-button-icon {
+    fill: #01e6ad;
+}
+.fallback-contact-back-button-flex:hover .fallback-back-button-text {
+    color: #01e6ad;
+}
+.fallback-contact-h1 {
+    width: 100%;
+    font-size: 13px;
+    font-weight: 500;
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+.fallback-contact-input {
+    width: 94% !important;
+    font-size: 15px;
+    font-weight: 200;
+    padding: 15px;
+    outline: none;
+    border: none;
+    background-color: #0e5845;
+    border-radius: 10px;
+}
+.fallback-contact-textarea {
+    height: 200px;
+    margin-bottom: 55px;
+    resize: none;
+}
+.fallback-contact-button-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 5px;
+    background-color: #12614d;
+    transition: 0.2s all;
+    cursor: pointer
+}
+.fallback-contact-button-flex:hover {
+    background-color: #30987e;
+}
+.fallback-contact-button-icon {
+    font-size: 17px !important;
+}
+.fallback-contact-button-text {
+    font-size: 13px;
+    font-weight: 500;
+    margin-left: 9px;
+}
+.fallback-loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.fallback-contact-loading-text {
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 8px;
+}

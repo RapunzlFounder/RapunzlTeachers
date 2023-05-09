@@ -46,6 +46,7 @@ const initialState = {
   teacherCourses: {},
   financialLiteracyStandards: {},
   standardsLastRetrieved: new Date(),
+  lastRetrievedModules: null,
 };
 
 const coursemoduleReducer = (state = initialState, action) => {
@@ -275,6 +276,7 @@ const coursemoduleReducer = (state = initialState, action) => {
         errorTitle: null,
         availablePublicModules: originaPublicModulesObject,
         teacherCreatedModules: originaTeacherModulesObject,
+        lastRetrievedModules: new Date(),
       } 
     case GET_MODULES_FAILURE:
       return {

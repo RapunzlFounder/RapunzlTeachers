@@ -1,34 +1,46 @@
 import React, { Component } from 'react';
 import { APP_VERSION } from "../../constants";
+import moment from 'moment';
+// Redux Actions
 import { connect } from 'react-redux';
+import { getModules } from '../../ActionTypes/coursemoduleActions';
 import { updateUser } from '../../ActionTypes/updateUserDataActions';
 import { isEmailUnique, changePassword } from '../../ActionTypes/loginActions';
+// Material UI Components & Icons
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
+import CircularProgress from '@mui/material/CircularProgress';
+// Rapunzl Components
+import Alert from '../Admin/Alert';
+// Stylesheets
 import '../../styles/SettingsScreen.css';
 import '../../styles/NotSignedInScreen.css';
-import Alert from '../Admin/Alert';
 
 
 class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // Handles If Native Alert Is Visible
+      // Handles If Native Alert Dialog Is Visible
       alertVisible: false,
       alertTitle: '',
       alertMessage: '',
+      // Gets Information From Redux, But If Information Is Not Present, We Display An Empty String
       firstName: this.props.firstName || '',
       lastName: this.props.lastName || '',
       email: this.props.email || '',
       school: this.props.school || '',
       phoneNumber: this.props.phoneNumber || '',
+      birthdate: this.props.birthDate || '',
+      // Used When Changing Password To Ensure That New Password Matches When User Inputs It Twice
       oldPassword: '',
       password: '',
       confirmPassword: '',
-      birthdate: this.props.birthDate || '',
+      // Handles Errors For Settings Inputs
       onErrorFirstName: false,
       onErrorLastName: false,
       onErrorEmail: false,
@@ -36,7 +48,12 @@ class Settings extends Component {
       onErrorPassword: false,
       onErrorBirthday: false,
       changingPassword: false,
+      // If JWTToken becomes null, we navigate the user to the login screen to login again
       handleLogout: false,
+      // Handles If We Are Saving Values
+      loading: false,
+      // Handles If Content Is Refreshed By Disabling Button To Refresh Content
+      refreshedContent: false,
     };
   }
 
@@ -47,6 +64,7 @@ class Settings extends Component {
     }
   }
 
+  // Handles Displaying Alert Dialog Instructng User To Contact Support If They Would Like To Add Their School
   selectSchool = () => {
     this.setState({
       alertTitle: `Hey ${this.props.firstName}!`,
@@ -55,6 +73,7 @@ class Settings extends Component {
     });
   }
 
+  // Handles Displaying Alert Dialog To User If They Attempt To Change Their Username, Which Is Not Currently Allowed
   selectUsername = () => {
     this.setState({
       alertTitle: 'Action Blocked',
@@ -63,13 +82,14 @@ class Settings extends Component {
     });
   }
 
+  // Handles Creating Arrays Of Values To Update In UserDetails & Checks For Errors Before Initiating GraphQL Mutation Dispatch
   saveProfile = () => {
     let updateName = [];
     let updateValue = [];
     let alert = false;
-    // eslint-disable-next-line
-    if (this.state.firstName != this.props.firstName) {
-      // Handles If User Attempts To Delete Last Name
+    // Checks If Name That User Has Entered Is Different Than Current Name Stored In Redux
+    if (this.state.firstName !== this.props.firstName) {
+      // Handles If User Attempts To Delete First Name Name By Providing Error To The User
       if (this.state.firstName.length < 1) {
         alert = true;
         this.setState({
@@ -77,16 +97,18 @@ class Settings extends Component {
           alertMessage: 'Try a first name with at least one letter... Be adventurous!',
           alertVisible: true,
           onErrorFirstName: true,
+          loading: false,
         });
       }
+      // If There Is No Error And First Name Has Been Changed, Add This To The Array Of Values To Change
       else {
         updateName.push('firstName');
         updateValue.push(this.state.firstName);
       }    
     }
-    // eslint-disable-next-line
-    if (this.state.lastName != this.props.lastName) {
-      // Handles If User Attempts To Delete Last Name
+    // Checks If Last Name Entered Has Changed From Value Saved In Redux
+    if (this.state.lastName !== this.props.lastName) {
+      // Handles If User Attempts To Delete Last Name By Providing Error To The User
       if (this.state.lastName.length < 1) {
         alert = true;
         this.setState({
@@ -94,15 +116,17 @@ class Settings extends Component {
           alertMessage: 'Your last name must be at least one letter.',
           alertVisible: true,
           onErrorLastName: true,
+          loading: false,
         });
       }
+      // If There Is No Error And Last Name Has Been Changed, Add This To The Array Of Values To Change
       else {
         updateName.push('lastName');
         updateValue.push(this.state.lastName);
       }
     }
-    // eslint-disable-next-line
-    if (this.state.birthdate != this.props.birthDate) {
+    // Checks If Birthday Is Different From The Value Saved In Redux
+    if (this.state.birthdate !== this.props.birthDate) {
       // Handles If New Birthdate Is Less Than 13
       var today = new Date();
       // Age Limit Of 13
@@ -123,6 +147,7 @@ class Settings extends Component {
           alertMessage: 'You must be at least 13 years old to use Rapunzl. Please try again.',
           alertVisible: true,
           onErrorBirthday: true,
+          loading: false,
         });
       }
       else {
@@ -151,6 +176,7 @@ class Settings extends Component {
               alertMessage: 'It appears like an account has already been created with this email address. Try logging out and recovering your password if you think that you may already have an account.',
               alertVisible: true,
               onErrorEmail: true,
+              loading: false,
             });
           }
         })
@@ -161,6 +187,7 @@ class Settings extends Component {
           alertMessage: 'You probably made a typo while inputting your email address. Give it another try!',
           alertVisible: true,
           onErrorEmail: true,
+          loading: false,
         });
       }
     } else if (!alert && updateName.length > 0) {
@@ -172,12 +199,14 @@ class Settings extends Component {
         alertVisible: true,
         alertMessage: 'We are not quite sure and your information may have saved. Please contact support if the problem continues.',
         alertTitle: 'Something Went Wrong',
+        loading: false,
       });
     } else {
       this.setState({
         alertVisible: true,
         alertMessage: 'All of your account information is currently up to date. Just tap on a section to edit your preferences. Unfortunately you cannot edit your username at this time.',
         alertTitle: 'No Changes To Save!',
+        loading: false,
       });
     }
   }
@@ -204,6 +233,7 @@ class Settings extends Component {
     });
   }
 
+  // Handles Changing User's Phone Number & Presenting It In Standard Phone Number Format
   changePhoneNumber(value) {
     let returnValue;
     // First ten digits of input only, Preventing Too Long Of Phone Numbers
@@ -233,39 +263,26 @@ class Settings extends Component {
     this.setState({ phoneNumber: returnValue });
   }
 
-  changeFirstName(text) {
-    this.setState({ firstName: text.replace(/\s/g, '').replace(/[^A-Za-z]+-+'/g, ''), onErrorFirstName: false });
-  }
+  // These Functions Handle Updating Various Parts Of Settings Form & Update State With Value / Reset Any Associated Errors
+  changeFirstName(text) { this.setState({ firstName: text.replace(/\s/g, '').replace(/[^A-Za-z]+-+'/g, ''), onErrorFirstName: false }); }
+  changeLastName(text) { this.setState({ lastName: text.replace(/\s/g, '').replace(/[^A-Za-z]+-+'/g, ''), onErrorLastName: false }); }
+  changeEmail(text) { this.setState({ email: text.replace(/\s/g, ''), onErrorEmail: false }); }
+  changeBirthdate(text) { this.setState({ birthdate: text, onErrorBirthday: false }); }
+  changePassword(text) { this.setState({ password: text, onErrorPassword: false }); }
+  changeOldPassword(text) { this.setState({ oldPassword: text }); }
+  changeConfirm(text) { this.setState({ confirmPassword: text, onErrorPassword: false }); }
 
-  changeLastName(text) {
-    this.setState({ lastName: text.replace(/\s/g, '').replace(/[^A-Za-z]+-+'/g, ''), onErrorLastName: false });
-  }
-
-  changeEmail(text) {
-    this.setState({ email: text.replace(/\s/g, ''), onErrorEmail: false });
-  }
-
-  changeBirthdate(text) {
-    this.setState({ birthdate: text, onErrorBirthday: false });
-  }
-  
-  changePassword(text) {
-    this.setState({ password: text, onErrorPassword: false });
-  }
-
-  changeOldPassword(text) {
-    this.setState({ oldPassword: text });
-  }
-
-  changeConfirm(text) {
-    this.setState({ confirmPassword: text, onErrorPassword: false });
-  }
-
+  // When User Selects Save Button, We Want To Determine Which Is The Appropriate Mutation To Call Since Change Password Is Different
   handleSaveButton(e) {
+    // Sets State To Loading, Which Is Used In Both Password & General User Details State
+    this.setState({ loading: true });
+    // Avoids default behavior of button which will refresh page and may cause a crash
     e.preventDefault();
     if (this.state.changingPassword) {
+      // Updates user password if they have selected to change password
       this.updatePassword();
     } else {
+      // Otherwise, figures out values that have changed in main settings form and updates
       this.saveProfile();
     }    
   }
@@ -279,6 +296,7 @@ class Settings extends Component {
         alertMessage: 'Your new password and the confirmation password do not seem to match. Please try again.',
         alertVisible: true,
         onErrorPassword: true,
+        loading: false,
       });
     } else if (this.state.password < 8) {
       this.setState({
@@ -286,6 +304,7 @@ class Settings extends Component {
         alertMessage: 'Your new password must be 8 characters or longer. Please try again.',
         alertVisible: true,
         onErrorPassword: true,
+        loading: false,
       });
     } else {
       this.props.changePassword(this.props.jwtToken, this.state.oldPassword, this.state.password, this.state.confirmPassword).then((res) => {
@@ -294,6 +313,7 @@ class Settings extends Component {
           alertMessage: 'Your new password has been securely updated.',
           alertVisible: true,
           changingPassword: false,
+          loading: false,
         });
       });
     }
@@ -304,9 +324,54 @@ class Settings extends Component {
     this.setState({ alertVisible: !this.state.alertVisible });
   }
 
+  // Handles Switching State To Display Changing Password Inputs Or Main Settings Page
   toggleChangePassword = (e) => {
     e.preventDefault();
     this.setState({ changingPassword: !this.state.changingPassword });
+  }
+
+  // Handles Refreshing Rapunzl Curriculum Content & Modules. Checks If User Has Refreshed At All Today & Only Allows Once Every 24 Hours
+  _handleRefreshContent() {
+    // Check Current Time Vs. Time Modules Were Last Retrieved
+    if (this.props.lastRetrievedModules !== null) {
+      const localTime = new Date();
+      const currentTime = moment(localTime);
+      const modulesRefreshedTime = moment(this.props.lastRetrievedModules);
+      const secondsDiff = currentTime.diff(modulesRefreshedTime, 'seconds');
+      if (secondsDiff > 86400) {
+        this._refresh();
+      }
+      else {
+        this.setState({ refreshedContent: true });
+      }
+    } else {
+      this._refresh();
+    }
+  }
+
+  _refresh() {
+    this.setState({ loading: true });
+    this.props.refreshModules(this.props.jwtToken, true, true, []).then((res) => {
+      // Handles If There Is An Error Refreshing The Modules & Instructs User To Logout To Rehydrate State
+      if (!(res && !('errors' in res))) {
+        this.setState({
+          alertVisible: true,
+          alertTitle: 'Unable To Refresh Content...',
+          alertMessage: 'We were unable to retrieve the latest Rapunzl resources from our server. This could be a result of too much network traffic. Please try again and contact support if the problem continues.',
+          loading: false,
+        });
+      }
+      // Handles If Modules Are Refreshed Correctly By Updating State & Disabling Button
+      else {
+        this.setState({
+          alertVisible: false,
+          alertTitle: '',
+          alertMessage: '',
+          refreshedContent: true,
+          loading: false,
+        });
+      }
+    })
   }
 
   render() {
@@ -461,12 +526,40 @@ class Settings extends Component {
                     </div>
                   </div>
                 )}
-                <button onClick={(e) => this.toggleChangePassword(e)}className="change-password-button">
-                  {this.state.changingPassword ? 'Go Back' : 'Change Password'}
-                </button>
-                <button className='main-button login-button' style={{ marginTop: '40px', marginBottom: '25px', width: '260px' }} onClick={(e) => this.handleSaveButton(e)}>
-                  {this.state.changingPassword ? 'Update Password' : 'Save Changes'}
-                </button>
+                {!this.state.loading && (
+                  <div>
+                    {!this.state.refreshedContent && (
+                      <div onClick={() => this._handleRefreshContent()} className='refresh-modules-button-flex'>
+                        <RefreshIcon className='refresh-modules-icon' />
+                        <div className='refresh-modules-text'>
+                          Refresh Rapunzl Resources
+                        </div>
+                      </div>
+                    )}
+                    {this.state.refreshedContent && (
+                      <div className='refresh-modules-button-flex refresh-modules-no-hover'>
+                        <CheckCircleOutlineIcon className='refresh-modules-icon' style={{ fill: '#1bcfa1' }} />
+                        <div className='refresh-modules-text' style={{ color: '#1bcfa1' }}>
+                          Resources Up To Date
+                        </div>
+                      </div>
+                    )}
+                    <button onClick={(e) => this.toggleChangePassword(e)} className="change-password-button" style={{ width: '100%' }}>
+                      {this.state.changingPassword ? 'Go Back' : 'Change Password'}
+                    </button>
+                    <button className='main-button login-button' style={{ margin: 'auto', display: 'block', marginTop: '40px', marginBottom: '25px', width: '260px' }} onClick={(e) => this.handleSaveButton(e)}>
+                      {this.state.changingPassword ? 'Update Password' : 'Save Changes'}
+                    </button>
+                  </div>
+                )}
+                {this.state.loading && (
+                  <div className='settings-loading-container'>
+                    <CircularProgress />
+                    <div className='settings-loading-text'>
+                      Loading...
+                    </div>
+                  </div>
+                )}
                 <div className='settings-version-text'>
                   Version {APP_VERSION}
                 </div>
@@ -490,10 +583,6 @@ const mapStateToProps = (state) => {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     userID: state.userDetails.id,
     jwtToken: state.userDetails.jwtToken,
-    //Handles user details & change password
-    loading: state.userDetails.loading,
-    // Handles notification mutation, alerts, errors
-    notificationLoading: state.notification.loading,
     // Existing items in the store to check against new placeholder values
     username: state.userDetails.username,
     firstName: state.userDetails.firstName,
@@ -503,6 +592,7 @@ const mapStateToProps = (state) => {
     isTeacher: state.userDetails.isTeacher,
     school: state.userDetails.school,
     birthDate: state.userDetails.birthDate,
+    lastRetrievedModules: state.coursesmodules.lastRetrievedModules,
   };
 };
 
@@ -514,7 +604,10 @@ const mapDispatchToProps = (dispatch) => {
     updateUser: (token, updateName, updateValue, returnName) => dispatch(updateUser(token, updateName, updateValue, returnName)),
     // checks to see if email and username is unique before allowing user to proceed
     isEmailUnique: (email) => dispatch(isEmailUnique(email)),
+    // Allows User To Dispatch Action To Change Password Associated With Their Account
     changePassword: (jwtToken, oldPass, newPass, confirmPass) => dispatch(changePassword(jwtToken, oldPass, newPass, confirmPass)),
+    // Allows User To Refresh Current Course Content & Retrieve The Most Up To Date Modules
+    refreshModules: (token, getPublicModules, getTeacherModules, modulesList) => dispatch(getModules(token, getPublicModules, getTeacherModules, modulesList)),
   };
 };
 

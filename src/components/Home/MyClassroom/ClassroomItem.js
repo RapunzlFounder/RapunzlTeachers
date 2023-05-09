@@ -99,9 +99,9 @@ class ClassroomItem extends Component {
         <NotifyStudentAlert
           visible={this.state.notifyAlertVisible}
           dismiss={this.dismissNotifyAlert}
-          firstName={'Christopher'}
-          lastName={'Thomas'}
-          username={'cthomas'}
+          firstName={this.props.item.firstName}
+          lastName={this.props.item.lastName}
+          username={this.props.item.username}
         />
         <div className='student-item-collapsed'>
           <div className='student-item-left'>

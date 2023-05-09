@@ -4,7 +4,7 @@
 // Set this input paramter to 0 to return all records that have not been skipped.
 export const GET_MODULES = (getPublicModules, getTeacherModules, moduleIds) => `
   query{
-    getTeacherModules(getPublicModules: "${getPublicModules}", getTeacherModules: ${getTeacherModules}, moduleIds: ${moduleIds}}) {
+    getTeacherModules(getPublicModules: ${getPublicModules}, getTeacherModules: ${getTeacherModules}, moduleIds: ${moduleIds}}) {
       id
       name
       description

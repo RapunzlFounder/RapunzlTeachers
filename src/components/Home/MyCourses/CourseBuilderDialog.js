@@ -4,6 +4,7 @@ import '../../../styles/Admin/Admin.css';
 import Pie from '../../Admin/Pie';
 import PrebuiltCourses from '../../../constants/PrebuiltCourses';
 import { connect } from 'react-redux';
+import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 
 class CourseBuilderDialog extends React.PureComponent {
   // eslint-disable-next-line
@@ -18,15 +19,32 @@ class CourseBuilderDialog extends React.PureComponent {
     this.props.saveCourse();
   }
 
+  // Retrieves Standards Covered By Any Of The Modules Included In The Selected Course & Calculates Percentage Of Total Standards
+  // Returns Array Including Module Numbers (String), Investing Standards Covered (%), All Standards Covered (%), Articles (Array), Activities (Array)
   getCoveredModules() {
     let modulesString = '';
-    for (var i = 0; i < PrebuiltCourses[this.props.selectedCourse].moduleIDList.length; i++) {
-      modulesString = modulesString + PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] + ', ';
+    // Retrieves A List Of Articles Associated With The Modules In This Course So We Can Display 5 And The Total Article Count
+    let courseArticles = [];
+    // Retrieves A List Of Activities Associated With The Modules In This Course So We Can Display 5 And The Total Activity Count
+    let courseActivities = [];
+    if (this.props.selectedCourse !== null && this.props.selectedCourse !== undefined && PrebuiltCourses[this.props.selectedCourse] !== undefined) {
+      for (var i = 0; i < PrebuiltCourses[this.props.selectedCourse].moduleIDList.length; i++) {
+        modulesString = modulesString + PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] + ', ';
+        // Loop Through Articles For Each Module And Add To Array
+        for (var j = 0; j < this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].articles.length; j++) {
+          courseArticles.push(this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].articles[j]);
+        }
+        // Loop Through Activities For Each Module And Add To Array
+        for (var k = 0; k < this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].activities.length; k++) {
+          courseActivities.push(this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].activities[k]);
+        }
+      }
     }
-    return modulesString;
+    return [modulesString, courseArticles, courseActivities];
   }
 
   render() {
+    let modulesArray = this.getCoveredModules();
     if (this.props.selectedCourse !== undefined && this.props.selectedCourse !== null && this.props.selectedCourse !== false) {
       return (
         <Dialog
@@ -51,7 +69,7 @@ class CourseBuilderDialog extends React.PureComponent {
                     Modules Included
                   </div>
                   <div className='selected-education-confirm-title'>
-                    {this.getCoveredModules()}
+                    {modulesArray[0]}
                   </div>
                   <div className='selected-education-title'>
                     Esimated Class Time
@@ -62,15 +80,45 @@ class CourseBuilderDialog extends React.PureComponent {
                   <div className='selected-education-title' style={{ paddingTop: 16 }}>
                     Articles In Course
                   </div>
-                  <div className='selected-education-confirm-text'>
-                    Article 1
-                  </div>
+                  {modulesArray[1].map((item, index) => {
+                    if (index < 3) {
+                      return (
+                        <div className='selected-education-confirm-text'>
+                          {item.articleName}
+                        </div>
+                      );
+                    } else if (index === 3) {
+                      return (
+                        <div className='selected-education-total-count'>
+                          And {modulesArray[1].length - 3} More...
+                        </div>
+                      );
+                    } else {
+                      return <div/>
+                    }
+                  })}
+                  
                   <div className='selected-education-title' style={{ paddingTop: 16 }}>
                     Activities In Course
                   </div>
-                  <div className='selected-education-confirm-text'>
-                    Activity 1
-                  </div>
+                  {modulesArray[2].map((item, index) => {
+                    if (index < 3) {
+                      return (
+                        <div className='selected-education-confirm-text'>
+                          {item.activityName}
+                        </div>
+                      );
+                    } else if (index === 3) {
+                      return (
+                        <div className='selected-education-total-count'>
+                          And {modulesArray[2].length - 3} More...
+                        </div>
+                      );
+                    } else {
+                      return <div />
+                    }
+                  })}
+                  
                 </div>
                 <div className='confirm-section-right2'>
                   <Pie
@@ -115,6 +163,7 @@ const mapStateToProps = (state) => {
   return {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
+    publicModules: getAllPublicModules(state),
   };
 };
 

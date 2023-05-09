@@ -333,8 +333,8 @@ export function getFinancialLiteracyStandards(token) {
 // input parameter 'modulesList' - Array of Teacher Portal Module Id's to retrieve.  Only these Teacher Portal Modules will be retrieved.
 export function getModules(token, getPublicModules, getTeacherModules, modulesList) {
   return function(dispatch){
-    const stringifyModulesList = stringifyIntArray(modulesList)
-    const mutationText = GET_MODULES(getPublicModules, getTeacherModules, stringifyModulesList)
+    const stringifyModulesList = stringifyIntArray(modulesList);
+    const mutationText = GET_MODULES(getPublicModules, getTeacherModules, stringifyModulesList);
     dispatch(getModulesBegin());
     return axios.post(GRAPHQL_URL, { query: mutationText }, {
       headers: {
@@ -373,7 +373,10 @@ export function getModules(token, getPublicModules, getTeacherModules, modulesLi
           return json.data.data.getTeacherModules;
         }
       })
-      .catch(error => dispatch(getModulesFailure(error.message)));
+      .catch(error => {
+        dispatch(getModulesFailure(error.message));
+        return { errors: [{ message: error.message }]}
+      });
   };
 }
 
