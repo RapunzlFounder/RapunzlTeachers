@@ -53,9 +53,10 @@
   align-items: center;
 }
 .react-pdf__Page__canvas {
-  width: 85% !important;
-  min-width: 1100px !important;
-  height: auto !important;
+  width: auto !important;
+  height: max-content !important;
+  max-width: 97vw !important;
+  max-height: 75vh !important;
   display: block;
   margin: auto;
 }
