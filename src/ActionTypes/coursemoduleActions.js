@@ -302,6 +302,7 @@ export function removeCourseModules(token, courseId, modulesList) {
   };
 }
 
+// Handles Retrieving Financial Literacy Standards Which Are Mapped To Various Resources To Show Standards Alignment To The Teacher
 export function getFinancialLiteracyStandards(token) {
   return function(dispatch){
     dispatch(getFinLitStandardsBegin());

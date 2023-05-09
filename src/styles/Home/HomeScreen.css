@@ -531,6 +531,7 @@ path {
     background: none;
     color: white;
     margin-left: 10px;
+    width: 310px;
 }
 .classmates-container {
     padding-top: 30px;
@@ -702,6 +703,26 @@ path {
 }
 .submit-class-details-button:hover {
     background-color: #1eaa84;
+}
+.add-students-dropzone-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 95px;
+    padding-bottom: 135px;
+}
+.add-students-loading-text {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 400;
+    margin-top: 15px;
+}
+.add-students-disclosure {
+    font-size: 13px;
+    font-weight: 200;
+    color: #ffffff8f;
+    margin-top: 8px;
 }
 .classroom-upload-button {
     font-size: 11px;
@@ -1077,7 +1098,7 @@ path {
     padding-bottom: 14px;
     background-color: #007154;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     transition: 0.2s all;
     cursor: pointer;
@@ -1453,6 +1474,35 @@ path {
 }
 .view-portfolio-toggle-button:hover {
     background-color: #0e4236;
+}
+.view-portfolio-positions-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 85px;
+    padding-bottom: 310px;
+}
+.portfolio-positions-loading-text {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 12px;
+    font-weight: 500;
+}
+.view-portfolio-positions-image {
+    width: 160px;
+}
+.portfolio-positions-h1 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.portfolio-positions-text {
+    width: 300px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 200;
 }
 .toggle-button-left {
     border-top-left-radius: 10px;

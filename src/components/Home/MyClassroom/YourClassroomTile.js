@@ -11,6 +11,7 @@ import ClassroomOverview from '../Dashboard/ClassroomOverview';
 import PortfolioPreview from './PortfolioPreview';
 import EmptyGrades from '../Gradebook/EmptyGrades';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import Alert from '../../Admin/Alert';
 
 class YourClassroomTile extends Component {
   constructor(props) {
@@ -133,6 +134,11 @@ class YourClassroomTile extends Component {
     }
   }
 
+  // Pass through arrow function to dismiss Alert Dialog after it is presented to the user
+  toggleAlert = () => {
+    this.setState({ alertVisible: false });
+  }
+
   render() {
     // Handles If The Teacher User Has Not Created Any Classrooms Yet
     if (this.props.allClassrooms.length === 0) {
@@ -145,7 +151,7 @@ class YourClassroomTile extends Component {
     // Handles If User Has Multiple Classrooms By Prompting Them To Selected One
     else if (!this.props.selectedClass) {
       return (
-        <div className='tile create-class-name-container' style={{ paddingBottom: 260 }}>
+        <div className='tile create-class-name-container' style={{ paddingBottom: this.props.allClassrooms.length > 3 ? 110 : 260 }}>
           <div className='create-class-name-subtext'>
             Select Your Classroom
           </div>
@@ -184,6 +190,12 @@ class YourClassroomTile extends Component {
       const classInfo = this._getClassroomInfo();
       return (
         <div>
+          <Alert
+            title={this.state.alertTitle}
+            message={this.state.alertMessage}
+            visible={this.state.alertVisible}
+            dismiss={this.toggleAlert}
+          />
           {/* Handles If Portfolio Preview Is Selected From Classroom Item To View Student Portfolio */}
           <PortfolioPreview
             dismissPortfolio={this.togglePortfolio}
@@ -204,7 +216,7 @@ class YourClassroomTile extends Component {
                 <div className='classroom-header-flex' style={{ paddingLeft: 12, paddingBottom: 5, paddingTop: this.state.removeStudents ? 12 : 0 }}>
                   <OtherHouses />
                   <div className='classroom-title' style={{ paddingLeft: 10 }}>
-                    Your Classroom
+                    {classInfo.className}
                   </div>
                 </div>
                 {!this.state.removeStudents && (

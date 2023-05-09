@@ -1,0 +1,54 @@
+.fallback-img {
+    height: 200px;
+    width: 200px;
+    display: block;
+    margin: auto;
+    margin-top: 150px;
+    margin-bottom: 10px;
+}
+.fallback-error-h1 {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    padding-bottom: 7px;
+}
+.fallback-error-text {
+    width: 90%;
+    margin: auto;
+    text-align: center;
+    max-width: 420px;
+    font-size: 17px;
+    font-weight: 200;
+    margin-bottom: 50px;
+}
+.fallback-button-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    margin: auto;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    margin-bottom: 17px;
+    background-color: #00946e;
+    border-radius: 6px;
+    transition: 0.2s all;
+    cursor: pointer;
+}
+.fallback-button-flex:hover {
+    background-color: #49c1a2;
+}
+.fallback-support-button {
+    background-color: #064233;
+}
+.fallback-support-button:hover {
+    background-color: #1b715c;
+}
+.fallback-button-icon {
+    font-size: 15px !important;
+    margin-right: 6px !important;
+}
+.fallback-button-text {
+    font-size: 14px;
+    font-weight: 400;
+}

@@ -27,6 +27,18 @@ class AssignCourseDialog extends React.PureComponent {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    // Resets Component State When Dialog Is Dismissed & Becomes Visible Again To Avoid Showing Error/Success Message After Assigning
+    if (prevProps.visible !== this.props.visible && this.props.visible === true) {
+      this.setState({
+        selectedClassroom: false,
+        progress: 'select',
+        loading: false,
+        errorMessage: '',
+      });
+    }
+  }
+
   // Gets Arrays To Render In Lists For Classrooms Currently Assigned To A Course & Those That Are Not
   _getClassArrays() {
     let assignedClassrooms = [];

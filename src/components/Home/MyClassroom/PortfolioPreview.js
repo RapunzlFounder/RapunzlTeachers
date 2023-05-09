@@ -4,6 +4,9 @@ import { FetchOtherUserDetails } from '../../../ActionTypes/socialActions';
 import '../../../styles/Home/HomeScreen.css';
 import ProfileIcon from '../../../assets/images/School/BlankProfile.png';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import { objectToArray } from '../../../helper_functions/utilities';
+import EmptyPositions from '../../../assets/images/Search/SearchEmpty.png';
+import CircularProgress from '@mui/material/CircularProgress';
 
 class PortfolioPreview extends Component {
   // eslint-disable-next-line
@@ -13,19 +16,25 @@ class PortfolioPreview extends Component {
       portfolioSelected: 'stock',
       alertVisible: false,
       alertTitle: '',
-      alertMessage: ''
+      alertMessage: '',
+      loading: true,
+      error: false,
+      userData: {
+        stocks: [],
+        crypto: []
+      }
     }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.visible !== this.props.visible && this.props.visible === true) {
-      // this._fetchUserDetails();
+      this._fetchUserDetails();
     }
   }
 
   // Handles Dispatch To Fetch Other User Details & Stores Result In State
   _fetchUserDetails() {
-    this.setState({ loading: true });
+    this.setState({ loading: true, error: false });
     this.props.fetchOtherUserDetails(this.props.jwtToken, this.props.portfolioUsername).then((res) => {
       // Handles If There Is An Error With The Dispatch By Displaying Alert Modal & Setting Loading To False
       if (!(res && !('errors' in res))) {
@@ -34,13 +43,19 @@ class PortfolioPreview extends Component {
           alertTitle: 'Something Went Wrong...',
           alertMessage: 'We had an issue retrieving the portfolio information from our servers. ' + res.errors[0].message + ' Please try again in a few minutes or contact support.',
           loading: false,
+          error: true,
         })
       }
       // Handles Successful Fetch By Updating State Values & Setting Loading To False
       else { 
+        const stockPositions = objectToArray(res.stockPortfolios[Object.keys(res.stockPortfolios)].positions);
+        const cryptoPositions = objectToArray(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].positions);
         this.setState({
           loading: false,
-          userData: res,
+          userData: {
+            stocks: stockPositions,
+            crypto: cryptoPositions,
+          },
         })
       }
     })
@@ -56,6 +71,15 @@ class PortfolioPreview extends Component {
     this.setState({ alertVisible: !this.state.alertVisible });
   }
 
+  // Get Portfolio Data Depending Upon Tab Selected
+  _getPortfolioData() {
+    if (this.state.portfolioSelected === 'stock') {
+      return this.state.userData.stocks;
+    } else {
+      return this.state.userData.crypto;
+    }
+  }
+
   render() {
     if (this.props.visible) {
       return (
@@ -66,7 +90,7 @@ class PortfolioPreview extends Component {
               View Portfolio
             </div>
           </div>
-          <div onClick={() => this.props.dismissPortfolio()} className='manual-back' style={{ paddingLeft: 12, marginTop: -15, fontSize: 13, fontWeight: '500' }}>
+          <div onClick={() => this.props.dismissPortfolio()} className='manual-back' style={{ paddingLeft: 12, marginTop: -15, fontSize: 13, fontWeight: '500', width: 'fit-content' }}>
             Go Back
           </div>
           <div className='view-portfolio-header-flex'>
@@ -95,26 +119,62 @@ class PortfolioPreview extends Component {
             </div>
             <div className='view-portfolio-line' />
           </div>
-          <div className='view-portfolio-position-flex'>
-            {[0,1,2,3,4,5,6,7].map((item) => {
-              return (
-                <div key={item} className='view-portfolio-position'>
-                  <div className='portfolio-position-symbol'>
-                    AAPL
+          {// Loading State
+          this.state.loading && !this.state.error && (
+            <div className='view-portfolio-positions-container'>
+              <CircularProgress />
+              <div className='portfolio-positions-loading-text'>
+                Fetching Portfolio<br/>Positions...
+              </div>
+            </div>
+          )}
+          {// Error State
+          !this.state.loading && this.state.error && (
+            <div className='view-portfolio-positions-container' style={{ paddingTop: '45px', paddingBottom: '210px' }}>
+              <img alt='' className='view-portfolio-positions-image' src={EmptyPositions} />
+              <div className='portfolio-positions-h1'>
+                We Experienced An Error...
+              </div>
+              <div className='portfolio-positions-text'>
+                Something went wrong trying to retrieve your student's portfolio positions. Please try again and if the problem continues, please contact support.
+              </div>
+            </div>
+          )}
+          {// Empty Positions For Selected Portfolio
+          ((this.state.userData.stocks.length === 0 && this.state.portfolioSelected === 'stock') || (this.state.userData.crypto.length === 0 && this.state.portfolioSelected)) && !this.state.loading && !this.state.error && (
+            <div className='view-portfolio-positions-container' style={{ paddingTop: '45px', paddingBottom: '210px' }}>
+              <img alt='' className='view-portfolio-positions-image' src={EmptyPositions} />
+              <div className='portfolio-positions-h1'>
+                No Positions To Display
+              </div>
+              <div className='portfolio-positions-text'>
+                It does not seem like {this.props.portfolioName} has any current positions. They need to place a trade in order to add a position to their portfolio.
+              </div>
+            </div>
+          )}
+          {// When There Are Positions Present For Selected Portfolio
+          ((this.state.userData.stocks.length !== 0 && this.state.portfolioSelected === 'stock') || (this.state.userData.crypto.length !== 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && (
+            <div className='view-portfolio-position-flex'>
+              {this._getPortfolioData().map((item) => {
+                return (
+                  <div key={item} className='view-portfolio-position'>
+                    <div className='portfolio-position-symbol'>
+                      AAPL
+                    </div>
+                    <div className='portfolio-position-name'>
+                      Apple Inc.
+                    </div>
+                    <div className='portfolio-position-performance'>
+                      +6.7%
+                    </div>
+                    <div className='portfolio-position-time'>
+                      Purchased<br/>7 Weeks Ago
+                    </div>
                   </div>
-                  <div className='portfolio-position-name'>
-                    Apple Inc.
-                  </div>
-                  <div className='portfolio-position-performance'>
-                    +6.7%
-                  </div>
-                  <div className='portfolio-position-time'>
-                    Purchased<br/>7 Weeks Ago
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       );
     } else {

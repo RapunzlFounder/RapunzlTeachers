@@ -6,6 +6,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import LoadingPage from "./components/Admin/LoadingPage";
 import './styles/App.css';
 import NotFoundPage from "./components/Admin/NotFoundPage";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "./components/Admin/ErrorFallback";
 import ArticleScreen from "./routes/ArticleScreen";
 
 // Handles Route-Based Code Splitting To Reduce Package Size & Improve Loading Times For Project
@@ -59,13 +61,16 @@ class App extends Component {
       <BrowserRouter>
       <ScrollToTop />
         <ThemeProvider theme={theme}>
-          <Routes>
-            <Route path="/" element={<AuthLoadingScreen />} />
-            <Route path="article/:articleID" element={<ArticleScreenWrapper />} />
-            <Route path="login" element={<Suspense fallback={<LoadingPage />}><NotSignedInScreen /></Suspense>}/>
-            <Route path="dashboard" element={<Suspense fallback={<LoadingPage />}><HomeScreen /></Suspense>} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+          <ErrorBoundary FallbackComponent={<ErrorFallback />}>
+            <Routes>
+              <Route path="/" element={<AuthLoadingScreen />} />
+              <Route path="article/:articleID" element={<ArticleScreenWrapper />} />
+              <Route path="login" element={<Suspense fallback={<LoadingPage />}><NotSignedInScreen /></Suspense>}/>
+              <Route path="dashboard" element={<Suspense fallback={<LoadingPage />}><HomeScreen /></Suspense>} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+            <ErrorFallback />
+          </ErrorBoundary>
         </ThemeProvider>
     </BrowserRouter>
     );
