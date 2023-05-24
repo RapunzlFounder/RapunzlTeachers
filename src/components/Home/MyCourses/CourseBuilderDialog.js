@@ -5,12 +5,27 @@ import Pie from '../../Admin/Pie';
 import PrebuiltCourses from '../../../constants/PrebuiltCourses';
 import { connect } from 'react-redux';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
+import PDFViewer from '../../Admin/PDFViewer';
 
 class CourseBuilderDialog extends React.PureComponent {
   // eslint-disable-next-line
   constructor(props) {
     super(props);
     this.state = {
+      pdfURL: 'images/M1/M1_Presentation.pdf',
+      PDFVisible: false,
+      pdfOrientation: 'landscape',
+    }
+  }
+
+  // Resets State If Visibility Of CourseBuilderDialog Changes To True To Avoid Relics Of Previous Sessions
+  componentDidUpdate(prevProps) {
+    if (this.props.visible !== prevProps.visible && this.props.visible) {
+      this.setState({
+        pdfURL: 'images/M1/M1_Presentation.pdf',
+        PDFVisible: false,
+        pdfOrientation: 'landscape',
+      });
     }
   }
 
@@ -43,6 +58,11 @@ class CourseBuilderDialog extends React.PureComponent {
     return [modulesString, courseArticles, courseActivities];
   }
 
+  // Pass Through Arrow Function To Dismiss PDF Viewer
+  dismissPDFViewer = () => {
+    this.setState({ PDFVisible: false });
+  }
+
   render() {
     let modulesArray = this.getCoveredModules();
     if (this.props.selectedCourse !== undefined && this.props.selectedCourse !== null && this.props.selectedCourse !== false) {
@@ -55,6 +75,12 @@ class CourseBuilderDialog extends React.PureComponent {
           fullWidth={true}
           maxWidth={'sm'}
         >
+          <PDFViewer
+            visible={this.state.PDFVisible}
+            dismiss={this.dismissPDFViewer}
+            pdfURL={this.state.pdfURL}
+            orientation={this.state.pdfOrientation}
+          />
           <div className='container'>
             <div className='alert-title' style={{ fontWeight: '800' }}>
               {PrebuiltCourses[this.props.selectedCourse].title}

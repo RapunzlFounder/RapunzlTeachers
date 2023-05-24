@@ -38,6 +38,7 @@ class ErrorFallback extends React.PureComponent {
   // Handles Dispatching Message To GraphQL So That We Can Contact Support Letting The Support Team Know That The Application Crashed
   contactSupport() {
     this.setState({ loading: true });
+    // eslint-disable-next-line
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     // Checks To Make Sure That The Message Is At Least 6 Characters To Provide Information To The Support Team
     if (this.state.message.length <= 5) {

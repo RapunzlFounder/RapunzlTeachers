@@ -159,7 +159,7 @@ export function fetchBigQuery(token) {
           .then((json) => {
             if ("errors" in json.data){
               dispatch(fetchBigQueryError(json.data.errors[0].message));
-              return {errors: json.data.errors};
+              return { errors: json.data.errors };
             }
             else{
               // Transform arrays in the UserDetails object to objects that further contain objects.
@@ -256,7 +256,10 @@ export function fetchBigQuery(token) {
               return returnVal;
             }
           })
-          .catch(error => dispatch(fetchBigQueryFailure(error.message)));
+          .catch(error => {
+            dispatch(fetchBigQueryFailure(error.message));
+            return { errors: [{ message: error.message }]};
+          });
   };
 }
 

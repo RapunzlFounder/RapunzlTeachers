@@ -94,6 +94,8 @@ path {
     transition: 0.2s;
     text-align: left;
     padding-left: 25px;
+    padding-right: 20px;
+    width: fit-content;
 }
 .back-to-all-courses-button:hover {
     text-decoration: underline;

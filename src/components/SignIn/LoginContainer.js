@@ -83,7 +83,7 @@ class LoginContainer extends React.PureComponent {
 
   _handleLogin = () => {
     // set the state & nav state for login button to loading
-    this.setState({ loginLoading: true });
+    this.setState({ loginLoading: true, alertVisible: false });
     // create an object with the entered username and password for logging in and getting a JWT token
     const loginCredentials = {
       username: this.state.username.toLowerCase(),
@@ -99,8 +99,23 @@ class LoginContainer extends React.PureComponent {
         // execute the big query with the response as the jwt token input parameter if the token is a valid token
         // eslint-disable-next-line
         if (jwttoken && jwttoken.substring(0,4) == 'JWT '){
-          this.props.fetchBigQuery(jwttoken).then(response => {
-            this.setState({ success: true });
+          this.props.fetchBigQuery(jwttoken).then(res => {
+            // Handles Error With Big Query
+            if (res !== true && !(res && !('errors' in res))) {
+              this.setState({
+                loginLoading: false,
+                alertVisible: true,
+                alertTitle: 'Issue With Login',
+                alertMessage: res.errors[0].message
+              })
+            }
+            // Handles Successful Login And Fetching Of The Big Query
+            else {
+              this.setState({
+                success: true,
+                loginLoading: false,
+              });
+            }
           });
         }
         else {
