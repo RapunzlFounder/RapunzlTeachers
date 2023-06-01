@@ -67,11 +67,44 @@ class StandardsPopup extends React.PureComponent {
 
     return alignmentArray;
   }
+
+  // Handles Rendering Standard Section For List
+  _renderStandardSection(list) {
+    if (list.length !== 0) {
+      return (
+        <div>
+          {list.map((item) => {
+            return (
+            <div key={item} className='standards-item-flex'>
+              <div className='standard-item-left'>
+                <div className='standard-item-title'>
+                  {item.title}
+                </div>
+                <div className='standard-item-text'>
+                  {item.subject}
+                </div>
+              </div>
+              <div className='standard-item-right'>
+                <div className='standard-item-title' style={{ color: '#00ab7f' }}>
+                  {item.standard}:
+                </div>
+                <div className='standard-item-text' style={{ width: '320px' }}>
+                  {item.description}
+                </div>
+              </div>
+            </div>
+          )})}
+        </div>
+      )
+    } else {
+      return <div />
+    }
+  }
   
   // Handles Copying Standards To Clipboard If Teachers Need To Keep That Information
   copyStandards() {
     this.setState({ copied: true });
-    navigator.clipboard.writeText('8.1a, 8.2a, 8.2b, 8.2c, 8.3a');
+    navigator.clipboard.writeText(this.props.data.allStandardStrings.sort());
   }
 
   // Toggles Visibility Of Alert Dialog
@@ -104,40 +137,25 @@ class StandardsPopup extends React.PureComponent {
                 style={{ fill: '#01452f', paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
               />
             </div>
-            <div
-              onClick={() => this.copyStandards()}
-              className='upload-template-instructions'
-              style={{ cursor: 'pointer', paddingBottom: 5 }}
-            >
-              8.1a, 8.2a, 8.2b, 8.2c, 8.3a
-            </div>
-            {this.state.copied && (
-              <div className='standard-item-title' style={{ marginLeft: 23, marginTop: 5, color: '#00ab7f' }}>
-                Copied
-              </div>
-            )}
             <div className='standards-popup-container'>
-              {this.props.standardsArray.map((item) => {
-                return (
-                <div key={item} className='standards-item-flex'>
-                  <div className='standard-item-left'>
-                    <div className='standard-item-title'>
-                      Earning Income 8.1
-                    </div>
-                    <div className='standard-item-text'>
-                      This is example text for the expected outcomes for a specific learning standard and can be quite long.
-                    </div>
-                  </div>
-                  <div className='standard-item-right'>
-                    <div className='standard-item-title' style={{ color: '#00ab7f' }}>
-                      8.1a:
-                    </div>
-                    <div className='standard-item-text'>
-                      This is example text for the expected outcomes for a specific learning standard and can be quite long and usually is longer than the substandard that is to the left of this.
-                    </div>
-                  </div>
+              <div
+                onClick={() => this.copyStandards()}
+                className='upload-template-instructions'
+                style={{ cursor: 'pointer', paddingBottom: 5, width: 'auto' }}
+              >
+                {this.props.data.allStandardStrings.sort()}
+              </div>
+              {this.state.copied && (
+                <div className='standard-item-title' style={{ marginLeft: 23, marginTop: 5, color: '#00ab7f' }}>
+                  Copied
                 </div>
-              )})}
+              )}
+              {this._renderStandardSection(this.props.data.incomeArray)}
+              {this._renderStandardSection(this.props.data.spendingArray)}
+              {this._renderStandardSection(this.props.data.savingArray)}
+              {this._renderStandardSection(this.props.data.investingArray)}
+              {this._renderStandardSection(this.props.data.creditArray)}
+              {this._renderStandardSection(this.props.data.riskArray)}
             </div>
           </div>
         </Dialog>

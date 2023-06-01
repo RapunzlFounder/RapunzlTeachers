@@ -568,3 +568,7 @@
 .notify-student-alert-p {
     
 }
+.course-builder-text:hover {
+    font-weight: 700;
+    cursor: pointer
+}

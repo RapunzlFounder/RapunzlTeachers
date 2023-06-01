@@ -6,6 +6,8 @@ import PrebuiltCourses from '../../../constants/PrebuiltCourses';
 import { connect } from 'react-redux';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import PDFViewer from '../../Admin/PDFViewer';
+import { objectToArray } from '../../../helper_functions/utilities';
+import StandardsPopup from '../../Admin/StandardsPopup';
 
 class CourseBuilderDialog extends React.PureComponent {
   // eslint-disable-next-line
@@ -15,6 +17,7 @@ class CourseBuilderDialog extends React.PureComponent {
       pdfURL: 'images/M1/M1_Presentation.pdf',
       PDFVisible: false,
       pdfOrientation: 'landscape',
+      standardsVisible: false
     }
   }
 
@@ -34,7 +37,6 @@ class CourseBuilderDialog extends React.PureComponent {
     this.props.saveCourse();
   }
 
-  // Retrieves Standards Covered By Any Of The Modules Included In The Selected Course & Calculates Percentage Of Total Standards
   // Returns Array Including Module Numbers (String), Investing Standards Covered (%), All Standards Covered (%), Articles (Array), Activities (Array)
   getCoveredModules() {
     let modulesString = '';
@@ -58,9 +60,109 @@ class CourseBuilderDialog extends React.PureComponent {
     return [modulesString, courseArticles, courseActivities];
   }
 
+  // Takes Array of Module IDs & Returns An Object With 6 Arrays For Standards That Map To Each Standard Type, Removing Initial Int Because
+  // Standards Are Of The Format x.y.z. If you search for this function, it is used in several places, but it is not a helper function because we want access to redux
+  _getModuleStandards(moduleList) {
+    let modulesArray = moduleList.split(',');
+    let allStandardStrings = [];
+    let spendingArray = [];
+    let savingArray = [];
+    let investingArray = [];
+    let incomeArray = [];
+    let riskArray = [];
+    let creditArray = [];
+    let standardsTableArray = objectToArray(this.props.financialLiteracyStandards);
+    for (var i = 0; i < modulesArray.length; i++) {
+      if (parseInt(modulesArray[i]) > 0) {
+        for (var j = 0; j < this.props.publicModules[modulesArray[i] - 1].presentationStandards.length; j++) {
+          if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Spending') {
+            spendingArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
+                description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+              }
+            );
+            allStandardStrings.push('2.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+          } else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Saving') {
+            savingArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
+                description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+              }
+            );
+            allStandardStrings.push('3.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+          } else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Investing') {
+            investingArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
+                description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+              }
+            );
+            allStandardStrings.push('4.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+          } else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Earning Income') {
+            incomeArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
+                description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+              }
+            );
+            allStandardStrings.push('1.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+          } else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Risk') {
+            riskArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
+                description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+              }
+            );
+            allStandardStrings.push('6.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+          } else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Credit') {
+            creditArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
+                description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+              }
+            );
+            allStandardStrings.push('5.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+          }
+        }
+      }
+    }
+    return {
+      spendingArray,
+      savingArray,
+      investingArray,
+      incomeArray,
+      riskArray,
+      creditArray,
+      allStandardStrings
+    };
+  }
+
+  // Updates State To Display PDF Of Selected Educational Resource
+  viewResource(item) {
+    this.setState({ PDFVisible: true, pdfURL: item.pdfUrl, pdfOrientation: 'portrait' });
+  }
+
   // Pass Through Arrow Function To Dismiss PDF Viewer
   dismissPDFViewer = () => {
     this.setState({ PDFVisible: false });
+  }
+
+  // Pass Through Arrow Function To Toggle Visibility Of StandardsPopup
+  toggleStandards = () => {
+    this.setState({ standardsVisible: !this.state.standardsVisible });
   }
 
   render() {
@@ -81,6 +183,12 @@ class CourseBuilderDialog extends React.PureComponent {
             pdfURL={this.state.pdfURL}
             orientation={this.state.pdfOrientation}
           />
+          <StandardsPopup
+            visible={this.state.standardsVisible}
+            dismiss={this.toggleStandards}
+            type='Course'
+            data={this._getModuleStandards(modulesArray[0])}
+          />
           <div className='container'>
             <div className='alert-title' style={{ fontWeight: '800' }}>
               {PrebuiltCourses[this.props.selectedCourse].title}
@@ -97,6 +205,9 @@ class CourseBuilderDialog extends React.PureComponent {
                   <div className='selected-education-confirm-title'>
                     {modulesArray[0]}
                   </div>
+                  <div onClick={this.toggleStandards} className='selected-education-confirm-text' style={{ marginTop: -10, paddingBottom: 25, cursor: 'pointer' }}>
+                    View Standards Covered
+                  </div>
                   <div className='selected-education-title'>
                     Esimated Class Time
                   </div>
@@ -107,9 +218,10 @@ class CourseBuilderDialog extends React.PureComponent {
                     Articles In Course
                   </div>
                   {modulesArray[1].map((item, index) => {
+                    console.log('article', item);
                     if (index < 3) {
                       return (
-                        <div className='selected-education-confirm-text'>
+                        <div onClick={() => this.viewResource(item)} className='selected-education-confirm-text course-builder-text'>
                           {item.articleName}
                         </div>
                       );
@@ -128,9 +240,10 @@ class CourseBuilderDialog extends React.PureComponent {
                     Activities In Course
                   </div>
                   {modulesArray[2].map((item, index) => {
+                    console.log('activities', item);
                     if (index < 3) {
                       return (
-                        <div className='selected-education-confirm-text'>
+                        <div onClick={() => this.viewResource(item)} className='selected-education-confirm-text course-builder-text'>
                           {item.activityName}
                         </div>
                       );
@@ -190,6 +303,7 @@ const mapStateToProps = (state) => {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
     publicModules: getAllPublicModules(state),
+    financialLiteracyStandards: state.coursesmodules.financialLiteracyStandards,
   };
 };
 

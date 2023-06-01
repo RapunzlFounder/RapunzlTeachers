@@ -140,7 +140,7 @@ path {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     margin-left: 23px;
     margin-right: 25px;
     padding-top: 13px;
@@ -159,6 +159,8 @@ path {
     color: #064c3a;
     font-size: 14px;
     font-weight: 400;
+    width: 220px;
+    margin-right: 15px;
 }
 .standard-item-right {
 

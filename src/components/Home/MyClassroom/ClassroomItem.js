@@ -147,12 +147,14 @@ class ClassroomItem extends Component {
                 Crypto
               </div>
             </div>
+            {/*
+            NotifyStudentAlert 
             <div onClick={() => this.selectNotify()} className='message-student-button'>
               <NotificationAddOutlinedIcon className='message-student-icon' />
               <div className='message-student-text'>
                 Notify
               </div>
-            </div>
+            </div> */}
             </div>
             <div className='expanded-student-flex'>
               <div className='expanded-student-item'>

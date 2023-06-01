@@ -3,6 +3,9 @@ import Dialog from '@mui/material/Dialog';
 import '../../../styles/Admin/Admin.css';
 import { connect } from 'react-redux';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
+import StandardsPopup from '../../Admin/StandardsPopup';
+import { objectToArray } from '../../../helper_functions/utilities';
+import PDFViewer from '../../Admin/PDFViewer';
 
 class SectionBuilderDialog extends React.PureComponent {
   constructor(props) {
@@ -13,6 +16,9 @@ class SectionBuilderDialog extends React.PureComponent {
       selectedArticles: [],
       selectedActivities: [],
       includeAssessment: false,
+      PDFVisible: false,
+      pdfURL: false,
+      pdfOrientation: 'portrait'
     }
   }
 
@@ -72,6 +78,109 @@ class SectionBuilderDialog extends React.PureComponent {
     return `${Math.floor(totalTime / 60)} Hours, ${totalTime - (Math.floor(totalTime / 60) * 60)} Minutes`;
   }
 
+  // Pass Through Arrow Function To Toggle Visibility Of StandardsPopup
+  toggleStandards = () => {
+    this.setState({ standardsVisible: !this.state.standardsVisible });
+  }
+
+  // Takes Array of Module IDs & Returns An Object With 6 Arrays For Standards That Map To Each Standard Type, Removing Initial Int Because
+  // Standards Are Of The Format x.y.z. If you search for this function, it is used in several places, but it is not a helper function because we want access to redux
+  _getModuleStandards(moduleID) {
+    
+    let allStandardStrings = [];
+    let spendingArray = [];
+    let savingArray = [];
+    let investingArray = [];
+    let incomeArray = [];
+    let riskArray = [];
+    let creditArray = [];
+    if (moduleID > 0) {
+      let standardsTableArray = objectToArray(this.props.financialLiteracyStandards);
+      for (var j = 0; j < this.props.publicModules[moduleID - 1].presentationStandards.length; j++) {
+        if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Spending') {
+          spendingArray.push(
+            {
+              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+              standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+              description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+            }
+          );
+          allStandardStrings.push('2.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
+        } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Saving') {
+          savingArray.push(
+            {
+              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+              standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+              description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+            }
+          );
+          allStandardStrings.push('3.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
+        } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Investing') {
+          investingArray.push(
+            {
+              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+              standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+              description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+            }
+          );
+          allStandardStrings.push('4.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
+        } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Earning Income') {
+          incomeArray.push(
+            {
+              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+              standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+              description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+            }
+          );
+          allStandardStrings.push('1.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
+        } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Risk') {
+          riskArray.push(
+            {
+              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+              standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+              description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+            }
+          );
+          allStandardStrings.push('6.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
+        } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Credit') {
+          creditArray.push(
+            {
+              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+              standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+              description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+            }
+          );
+          allStandardStrings.push('5.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
+        }
+      }
+    }
+    return {
+      spendingArray,
+      savingArray,
+      investingArray,
+      incomeArray,
+      riskArray,
+      creditArray,
+      allStandardStrings
+    };
+  }
+
+  // Updates State To Display PDF Of Selected Educational Resource
+  viewResource(item) {
+    this.setState({ PDFVisible: true, pdfURL: item.pdfUrl, pdfOrientation: 'portrait' });
+  }
+
+  // Pass Through Arrow Function To Dismiss PDF Viewer
+  dismissPDFViewer = () => {
+    this.setState({ PDFVisible: false });
+  }
+
   render() {
     return (
       <Dialog
@@ -82,6 +191,18 @@ class SectionBuilderDialog extends React.PureComponent {
         fullWidth={true}
         maxWidth={this.state.status === 'confirm' ? 'sm' : 'md'}
       >
+        <StandardsPopup
+          visible={this.state.standardsVisible}
+          dismiss={this.toggleStandards}
+          type='Module'
+          data={this._getModuleStandards(this.state.selectedModule)}
+        />
+        <PDFViewer
+          visible={this.state.PDFVisible}
+          dismiss={this.dismissPDFViewer}
+          pdfURL={this.state.pdfURL}
+          orientation={this.state.pdfOrientation}
+        />
         <div className='container'>
           <div className='alert-title' style={{ fontWeight: '800' }}>
             Section {parseInt(this.props.selectedSection) + 1}
@@ -119,6 +240,9 @@ class SectionBuilderDialog extends React.PureComponent {
                   <div className='selected-education-confirm-title'>
                     {this.props.publicModules[this.state.selectedModule - 1].name} 
                   </div>
+                  <div className='selected-education-confirm-text course-builder-text' onClick={this.toggleStandards} style={{ marginTop: -10, paddingBottom: 25, cursor: 'pointer' }}>
+                    View Standards Covered
+                  </div>
                   <div className='selected-education-title'>
                     Esimated Class Time
                   </div>
@@ -137,7 +261,7 @@ class SectionBuilderDialog extends React.PureComponent {
                     <div>
                       {this.props.publicModules[this.state.selectedModule - 1].activities.map((item) => {
                         return (
-                          <div key={item} className='selected-education-confirm-text'>
+                          <div key={item} onClick={() => this.viewResource(item)} className='selected-education-confirm-text course-builder-text'>
                             • {item.activityName}
                           </div>
                         );
@@ -158,7 +282,7 @@ class SectionBuilderDialog extends React.PureComponent {
                     <div>
                       {this.props.publicModules[this.state.selectedModule - 1].articles.map((item) => {
                         return (
-                          <div key={item} className='selected-education-confirm-text'>
+                          <div key={item} onClick={() => this.viewResource(item)} className='selected-education-confirm-text course-builder-text'>
                             • {item.articleName}
                           </div>
                         );
@@ -190,6 +314,7 @@ const mapStateToProps = (state) => {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
     publicModules: getAllPublicModules(state),
+    financialLiteracyStandards: state.coursesmodules.financialLiteracyStandards,
   };
 };
 
