@@ -86,89 +86,162 @@ class SectionBuilderDialog extends React.PureComponent {
   // Takes Array of Module IDs & Returns An Object With 6 Arrays For Standards That Map To Each Standard Type, Removing Initial Int Because
   // Standards Are Of The Format x.y.z. If you search for this function, it is used in several places, but it is not a helper function because we want access to redux
   _getModuleStandards(moduleID) {
-    
-    let allStandardStrings = [];
-    let spendingArray = [];
-    let savingArray = [];
-    let investingArray = [];
-    let incomeArray = [];
-    let riskArray = [];
-    let creditArray = [];
+    // Initialize Arrays That We Push Values Into Before Returning To Create A List Of All Standards For Course/Section
+    let allStandardStrings = []; let spendingArray = []; let savingArray = []; let investingArray = []; let incomeArray = []; let riskArray = []; let creditArray = [];
     if (moduleID > 0) {
       let standardsTableArray = objectToArray(this.props.financialLiteracyStandards);
       for (var j = 0; j < this.props.publicModules[moduleID - 1].presentationStandards.length; j++) {
+        // Handles Spending Related Standards
         if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Spending') {
-          spendingArray.push(
-            {
-              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
-              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+          let searchSpendingIndex = spendingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard);
+          // Main Standard Is Already In Spending Array
+          if (searchSpendingIndex !== -1 && spendingArray[searchSpendingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            spendingArray[searchSpendingIndex].subStandards.push({
               standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
               description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
-            }
-          );
+            });
+          }
+          // Main Standard Is Not In The Spending Array So We Add It
+          else {
+            spendingArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic,
+                mainStandard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+                subStandards: [{
+                  standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+                  description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+                }], 
+              }
+            );
+          }
           allStandardStrings.push('2.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
-        } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Saving') {
-          savingArray.push(
-            {
-              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
-              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+        }
+        // Handles Saving Related Standards
+        else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Saving') {
+          let searchSavingIndex = savingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard);
+          // Main Standard Is Already In Saving Array
+          if (searchSavingIndex !== -1 && savingArray[searchSavingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            savingArray[searchSavingIndex].subStandards.push({
               standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
               description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
-            }
-          );
+            });
+          }
+          // Main Standard Is Not In The Saving Array So We Add It
+          else {
+            savingArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic,
+                mainStandard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+                subStandards: [{
+                  standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+                  description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+                }], 
+              }
+            );
+          }
           allStandardStrings.push('3.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
         } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Investing') {
-          investingArray.push(
-            {
-              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
-              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+          let searchInvestingArray = investingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard);
+          // Main Standard Is Already In Investing Array
+          if (searchInvestingArray !== -1 && investingArray[searchInvestingArray].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            investingArray[searchInvestingArray].subStandards.push({
               standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
               description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
-            }
-          );
+            });
+          }
+          // Main Standard Is Not In The Investing Array So We Add It
+          else {
+            investingArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic,
+                mainStandard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+                subStandards: [{
+                  standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+                  description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+                }], 
+              }
+            );
+          }
           allStandardStrings.push('4.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
         } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Earning Income') {
-          incomeArray.push(
-            {
-              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
-              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+          let searchIncomeArray = incomeArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard);
+          // Main Standard Is Already In Spending Array
+          if (searchIncomeArray !== -1 && incomeArray[searchIncomeArray].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            incomeArray[searchIncomeArray].subStandards.push({
               standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
               description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
-            }
-          );
+            });
+          }
+          // Main Standard Is Not In The Spending Array So We Add It
+          else {
+            incomeArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic,
+                mainStandard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+                subStandards: [{
+                  standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+                  description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+                }], 
+              }
+            );
+          }
           allStandardStrings.push('1.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
         } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Risk') {
-          riskArray.push(
-            {
-              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
-              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+          let searchRiskArray = riskArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard);
+          // Main Standard Is Already In Spending Array
+          if (searchRiskArray !== -1 && riskArray[searchRiskArray].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            riskArray[searchRiskArray].subStandards.push({
               standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
               description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
-            }
-          );
+            });
+          }
+          // Main Standard Is Not In The Spending Array So We Add It
+          else {
+            riskArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic,
+                mainStandard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+                subStandards: [{
+                  standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+                  description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+                }], 
+              }
+            );
+          }
           allStandardStrings.push('6.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
         } else if (standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic === 'Credit') {
-          creditArray.push(
-            {
-              title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic + ' ' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
-              subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+          let searchCreditArray = creditArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard);
+          // Main Standard Is Already In Spending Array
+          if (searchCreditArray !== -1 && creditArray[searchCreditArray].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            creditArray[searchCreditArray].subStandards.push({
               standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
               description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
-            }
-          );
+            });
+          }
+          // Main Standard Is Not In The Spending Array So We Add It
+          else {
+            creditArray.push(
+              {
+                title: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].topic,
+                mainStandard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].mainStandard,
+                subject: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subject,
+                subStandards: [{
+                  standard: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard,
+                  description: standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].description,
+                }], 
+              }
+            );
+          }
           allStandardStrings.push('5.' + standardsTableArray[this.props.publicModules[moduleID - 1].presentationStandards[j] - 1].subStandard + ', ');
         }
       }
     }
-    return {
-      spendingArray,
-      savingArray,
-      investingArray,
-      incomeArray,
-      riskArray,
-      creditArray,
-      allStandardStrings
-    };
+    return { spendingArray, savingArray, investingArray, incomeArray, riskArray, creditArray, allStandardStrings };
   }
 
   // Updates State To Display PDF Of Selected Educational Resource

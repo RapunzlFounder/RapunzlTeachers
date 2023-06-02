@@ -54,21 +54,7 @@ class StandardsPopup extends React.PureComponent {
     })
   }
 
-  // Filters Through Resources Associated With This Particular Course Module, Then Displays The Standards That 
-  // Are Satisfied With This Module
-  _getAlignmentArray() {
-    // We Are Going To Return An Array To Map Showing All Of The Standards
-    let alignmentArray = [];
-    // Each Object In The Array Will Include: ID, Title, Description, Subtext, Value
-    // Module Standards Include All Resource Standards, So We Loop Through And Match All Of These
-
-    // Standards Included In The Table Have A Title For Major Category, But Resources Have A Number
-    // Earning Income. Saving. Spending. Investing. Managing Credit. Managing Risk.
-
-    return alignmentArray;
-  }
-
-  // Handles Rendering Standard Section For List
+  // Handles Rendering Standard Section For List, If The List Is Not Empty
   _renderStandardSection(list) {
     if (list.length !== 0) {
       return (
@@ -78,19 +64,25 @@ class StandardsPopup extends React.PureComponent {
             <div key={item} className='standards-item-flex'>
               <div className='standard-item-left'>
                 <div className='standard-item-title'>
-                  {item.title}
+                  {item.title} {item.mainStandard}
                 </div>
                 <div className='standard-item-text'>
                   {item.subject}
                 </div>
               </div>
               <div className='standard-item-right'>
-                <div className='standard-item-title' style={{ color: '#00ab7f' }}>
-                  {item.standard}:
-                </div>
-                <div className='standard-item-text' style={{ width: '320px' }}>
-                  {item.description}
-                </div>
+                {item.subStandards.map((item) => {
+                  return (
+                    <div>
+                      <div className='standard-item-title' style={{ color: '#00ab7f' }}>
+                        {item.standard}:
+                      </div>
+                      <div className='standard-item-text' style={{ width: '320px', paddingBottom: 10 }}>
+                        {item.description}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )})}
@@ -100,7 +92,7 @@ class StandardsPopup extends React.PureComponent {
       return <div />
     }
   }
-  
+
   // Handles Copying Standards To Clipboard If Teachers Need To Keep That Information
   copyStandards() {
     this.setState({ copied: true });
@@ -143,7 +135,7 @@ class StandardsPopup extends React.PureComponent {
                 className='upload-template-instructions'
                 style={{ cursor: 'pointer', paddingBottom: 5, width: 'auto' }}
               >
-                {this.props.data.allStandardStrings.sort()}
+                Copy List Of Standards
               </div>
               {this.state.copied && (
                 <div className='standard-item-title' style={{ marginLeft: 23, marginTop: 5, color: '#00ab7f' }}>
