@@ -545,14 +545,6 @@
 .notify-student-button-icon {
     font-size: 17px;
 }
-.notify-student-alert-close-icon {
-    fill: #01452f !important;
-    cursor: pointer;
-    transition: 0.2s all;
-}
-.notify-student-alert-close-icon:hover {
-    fill: rgb(255, 58, 58) !important;
-}
 .notify-student-alert-loading {
 
 }
@@ -571,4 +563,12 @@
 .course-builder-text:hover {
     font-weight: 700;
     cursor: pointer
+}
+.standard-close-x {
+    fill: #01452f !important;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+.standard-close-x:hover {
+    fill: rgb(255, 58, 58) !important
 }

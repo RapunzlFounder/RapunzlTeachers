@@ -142,3 +142,41 @@
     font-weight: 600;
     padding-top: 10px;
 }
+.assigned-class-container {
+    margin-bottom: 45px;
+    margin-top: -10px;
+}
+.assigned-class-item {
+    display: flex;
+    margin-right: 35px;
+    justify-content: space-between;
+    margin-left: 35px;
+    border-bottom: 1px solid #007154;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+.assigned-class-item:hover {
+    background-color: #ffffff24;
+}
+.assigned-class-left {
+
+}
+.assigned-class-name {
+    font-size: 15px;
+    font-weight: 500;
+    padding-bottom: 3px;
+    color: #3cffcd;
+}
+.assigned-class-students {
+    font-size: 14px;
+    font-weight: 200;
+    color: white;
+}
+.assigned-class-arrow {
+    font-size: 16px !important;
+}

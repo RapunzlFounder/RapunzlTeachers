@@ -69,6 +69,7 @@ path {
 .right-section {
 	width: 19%;
     height: 775px;
+    overflow-y: scroll;
 }
 
 /* LEFT MENU */

@@ -7,6 +7,7 @@ import MessageSuccessIcon from '../../assets/images/Support/MessageSuccess.png';
 import MessageFailedIcon from '../../assets/images/Support/MessageFailure.png';
 import '../../styles/Home/Support.css';
 import Alert from '../Admin/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 
 class Support extends Component {
   constructor(props) {
@@ -20,20 +21,10 @@ class Support extends Component {
       issueSelected: null,
       alertVisible: false,
       alertTitle: '',
-      alertMessage: ''
+      alertMessage: '',
+      emailError: false,
+      loading: false,
     }
-  }
-
-  editEmailInput() {
-
-  }
-
-  editSubjectInput() {
-
-  }
-
-  editMessageInput() {
-
   }
 
   // Allows User To Toggle Which Issue The Support Message Is Related To & Includes It In The Message
@@ -45,28 +36,26 @@ class Support extends Component {
     }
   }
 
-  toggleUploadModal() {
-
-  }
-
   // Handles Creating Support Message From Various Inputs, Validates Inputs, Then Returns Message To Dispatch With GraphQL
   createSupportMessage() {
     // Checks Email To Make Sure It Is Valid To Ensure That Support Can Respond To The Teacher
     // Handles When Email Is Not Valid.      
     // eslint-disable-next-line
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!re.test(this.state.emailInput)) {
+    let email = this.state.emailInput.length > 0 ? this.state.emailInput : this.props.email;
+    if (!re.test(email)) {
       this.setState({
         alertVisible: true,
         alertTitle: 'Problem With Email...',
-        alertMessage: 'Sorry, but we do not recognize the format of your email address. You probably made a typo while inputting your email address. Please try again.'
+        alertMessage: 'Sorry, but we do not recognize the format of your email address. You probably made a typo while inputting your email address. Please try again.',
+        emailError: true,
       });
+      return false;
     }
     // Handles When Email Is Valid
     else {
-      let supportMessage = '';
       // Matches The Correct Issue With State To Construct Support Message
-      let issueText = 'No Subject - ';
+      let issueText = 'No Topic - ';
       if (this.state.issuedSelected === 1) {
         issueText = 'Class Upload - ';
       } else if (this.state.issueSelected === 2) {
@@ -77,17 +66,17 @@ class Support extends Component {
         issueText = 'Curriculum Questions - ';
       } else if (this.state.issueSelected === 5) {
         issueText = 'Missing Resources - ';
+      } else if (this.state.issueSelected === 6) {
+        issueText = 'Other - ';
       }
-      supportMessage = issueText;
-      return supportMessage;
+      return issueText + 'Subject: ' + this.state.subjectInput + ':  ' + this.state.messageInput + '........... Respond To: ' + email + ' // ' + this.props.firstName.toString() + ' ' + this.props.lastName.toString();
     }
   }
 
   contactSupport() {
-    let handledText = this.state.message;
-    if (handledText.length > 5) {
-      let platformDetails = `Developer Info: Web`;
-      handledText = handledText + ' // ' + platformDetails + ' // ' + this.props.email + ' // ' + this.props.firstName.toString() + ' ' + this.props.lastName.toString();
+    this.setState({ loading: true });
+    let handledText = this.createSupportMessage();
+    if (handledText) {
       this.props.contactSupport(this.props.jwtToken, handledText).then((res) => {
         // Handles Error With Dispatch & Displays Alert To User
         if (!(res && !('errors' in res))) {
@@ -95,6 +84,7 @@ class Support extends Component {
             alertVisible: true,
             alertMessage: 'We had trouble sending your message to our support team. Please try again or reach out directly to support@rapunzl.org.',
             alertTitle: 'Something Went Wrong',
+            messageStatus: 'failed'
           });
         }
         // Handles Success And Displays Alert To User
@@ -103,16 +93,16 @@ class Support extends Component {
             alertVisible: true,
             alertMessage: 'Your support request has been sent. Someone will get back to you within 24 hours to help resolve your issue. Thanks for your patience.',
             alertTitle: 'Success!',
+            messageStatus: 'success'
           });
         }
       })
-    }
-    // Handles If Support Message Is Less Than 5 Characters
-    else {
+    } else {
       this.setState({
         alertVisible: true,
-        alertMessage: 'Please describe your issue in a little more detail and someone will respond within 24 hours to help resolve your issue. Thanks for your patience.',
-        alertTitle: 'Wait A Second...',
+        alertMessage: 'We had trouble sending your support email because we do not have a valid email address to contact you. Please update your email and try again or email us directly at support@rapunzl.org',
+        alertTitle: 'We Had A Problem...',
+        messageStatus: 'failed'
       });
     }
   }
@@ -121,6 +111,11 @@ class Support extends Component {
   toggleAlert = () => {
     this.setState({ alertVisible: !this.state.alertVisible });
   }
+
+  // These Functions Handle Updating The Text In Each Of The 3 Text Input Boxes
+  changeMessage(text) { this.setState({ messageInput: text }); }
+  changeSubject(text) { this.setState({ subjectInput: text }); }
+  changeEmail(text) { this.setState({ emailInput: text, emailError: false }); }
 
   render() {
     if (this.props.visible) {
@@ -135,9 +130,11 @@ class Support extends Component {
             <div onClick={() => this.props.setMenuTab(this.props.previousTab)} className='support-go-back'>
               Go Back
             </div>
-            <div className='classroom-title' style={{ paddingTop: 20, paddingBottom: 15, paddingLeft: 10 }}>
-              Contact Support
-            </div>
+            {this.state.messageStatus === 'sending' && (
+              <div className='classroom-title' style={{ paddingTop: 20, paddingBottom: 15, paddingLeft: 10 }}>
+                Contact Support
+              </div>
+            )}
             {this.state.messageStatus === 'sending' && (
               <div className='support-container'>
                 <div className='support-subtitle'>
@@ -197,6 +194,16 @@ class Support extends Component {
                         Missing Resources
                       </div>
                     </div>
+                    <div onClick={() => this.selectSupportIssue(6)} className='support-issue-flex'>
+                      {this.state.issueSelected !== 5 ? (
+                        <CheckBoxOutlineBlank fontSize="small" />
+                      ) : (
+                        <CheckBox fontSize="small" />
+                      )}
+                      <div className='support-issue-text' style={{ fontWeight: this.state.issueSelected !== 5 ? '200' : '600'}}>
+                        Other
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className='support-subtitle' style={{ paddingTop: 18 }}>
@@ -205,6 +212,7 @@ class Support extends Component {
                 <input
                   placeholder={this.props.email}
                   value={this.state.emailInput}
+                  onChange={(event) => this.changeEmail(event.target.value)}
                   className='support-line-input'
                 />
                 <div className='support-subtitle' style={{ paddingTop: 10 }}>
@@ -213,6 +221,7 @@ class Support extends Component {
                 <input
                   placeholder={'Rapunzl Teacher Portal Support'}
                   value={this.state.subjectInput}
+                  onChange={(event) => this.changeSubject(event.target.value)}
                   className='support-line-input'
                 />
                 <div className='support-subtitle' style={{ paddingTop: 10 }}>
@@ -221,17 +230,17 @@ class Support extends Component {
                 <textarea
                   placeholder={'Describe your support request with as much detail as possible...'}
                   value={this.state.messageInput}
+                  onChange={(event) => this.changeMessage(event.target.value)}
                   className='support-message-input'
                 />
-                <div className='support-subtitle' style={{ paddingTop: 12 }}>
-                  Attachments
-                </div>
-                <div className='support-upload-button'>
-                  Upload File
-                </div>
-                <div className='support-submit-button'>
-                  Submit Message
-                </div>
+                {!this.state.loading && (
+                  <div onClick={() => this.contactSupport()} className='support-submit-button'>
+                    Submit Message
+                  </div>
+                )}
+                {this.state.loading && (
+                  <CircularProgress />
+                )}
               </div>
             )}
             {this.state.messageStatus === 'success' && (

@@ -28,6 +28,7 @@ path {
 .support-tile {
     padding-left: 15px;
     padding-right: 15px;
+    padding-bottom: 35px;
 }
 .support-container {
     padding-left: 10px;
@@ -144,7 +145,7 @@ path {
     margin: auto;
     width: 170px;
     height: 170px;
-    margin-top: 45px;
+    margin-top: 95px;
 }
 .support-message-result-title {
     text-align: center;

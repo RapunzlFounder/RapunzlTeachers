@@ -39,40 +39,6 @@ class AssignCourseDialog extends React.PureComponent {
     }
   }
 
-  // Gets Arrays To Render In Lists For Classrooms Currently Assigned To A Course & Those That Are Not
-  _getClassArrays() {
-    let assignedClassrooms = [];
-    let unassignedArray = [];
-    // If Teacher Has No Classroom Courses, All Classrooms Are In The Unassigned Array
-    if (this.props.classroomCourses.length === 0) {
-      unassignedArray = this.props.allClassrooms;
-    }
-    // Handles If Teacher Has Classroom Courses By Determining If A Class Is Assigned To A Course
-    else {
-      // Loop Through All Classrooms To Determine Which Return Array To Place Them In
-      for (var i in this.props.allClassrooms) {
-        // Initially Assume Classroom Is Not In A Course
-        let assigned = false;
-        // Check All Courses To Determine If Course ClassID Matches Classroom ID
-        for (var j in this.props.classroomCourses) {
-          // eslint-disable-next-line
-          if (this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
-            // If Classroom Matches, Then We Set Assigned to True
-            assigned = true;
-          }
-        }
-        // For Each Classroom We Either Add It To Assigned Classrooms or Unassigned Array
-        if (assigned) {
-          assignedClassrooms.push(this.props.allClassrooms[i]);
-        } else {
-          unassignedArray.push(this.props.allClassrooms[i]);
-        }
-      }
-    }
-    // Returns An Array Of Array To Be Used In Render Method For Lists
-    return [unassignedArray, assignedClassrooms]
-  }
-
   // Selects A Classroom To Assign The Course To From The List Rendered 
   selectClass(classID) {
     // Handles Toggling Off Of A Class When User Clicks For The Second Time
@@ -107,7 +73,6 @@ class AssignCourseDialog extends React.PureComponent {
 
 
   render() {
-    let classArrays = this._getClassArrays();
     if (this.props.allClassrooms.length === 0) {
       return (
         <Dialog
@@ -154,7 +119,8 @@ class AssignCourseDialog extends React.PureComponent {
               )}
               <HighlightOffIcon
                 onClick={() => this.props.dismiss()}
-                style={{ fill: '#01452f', paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
+                className='standard-close-x'
+                style={{ paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
               />
             </div>
             {!this.state.loading && this.state.progress === 'select' && (
@@ -165,7 +131,7 @@ class AssignCourseDialog extends React.PureComponent {
                     Currently Assigned
                   </div>
                 </div>
-                {classArrays[1].length === 0 && (
+                {this.props.classArrays[1].length === 0 && (
                   <div className='assign-course-content' style={{ paddingTop: 35 }}>
                     <ErrorOutlineIcon className='assign-course-empty-icon'/>
                     <div className='assign-course-existing-empty'>
@@ -173,11 +139,11 @@ class AssignCourseDialog extends React.PureComponent {
                     </div>
                   </div>
                 )}
-                {classArrays[1].length !== 0 && (
+                {this.props.classArrays[1].length !== 0 && (
                   <div className='assign-course-content' style={{ paddingBottom: 25 }}>
-                    {classArrays[1].map((item, index) => {
+                    {this.props.classArrays[1].map((item, index) => {
                       return (
-                        <div key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === classArrays[1].length - 1 ? 0 : 1}}>
+                        <div key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[1].length - 1 ? 0 : 1}}>
                           <div>
                             <div className='assign-course-class-title'>
                               {item.className} - {item.classYear}
@@ -186,7 +152,7 @@ class AssignCourseDialog extends React.PureComponent {
                               {item.noStudents} {item.noStudents === 1 ? 'Student' : 'Students'}
                             </div>
                           </div>
-                          <VerifiedOutlinedIcon className='assign-course-class-checkbox' />
+                          <VerifiedOutlinedIcon className='assign-course-class-checkbox' style={{ cursor: 'auto' }} />
                         </div>
                       );
                     })}
@@ -199,9 +165,9 @@ class AssignCourseDialog extends React.PureComponent {
                   </div>
                 </div>
                 <div className='assign-course-content' style={{ paddingBottom: 30 }}>
-                  {classArrays[0].map((item, index) => {
+                  {this.props.classArrays[0].map((item, index) => {
                     return (
-                      <div onClick={() => this.selectClass(item.id)} key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === classArrays[0].length - 1 ? 0 : 1 }}>
+                      <div onClick={() => this.selectClass(item.id)} key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[0].length - 1 ? 0 : 1 }}>
                         <div>
                           <div className='assign-course-class-title'>
                             {item.className} - {item.classYear}

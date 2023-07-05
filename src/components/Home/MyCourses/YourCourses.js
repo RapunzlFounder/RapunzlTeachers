@@ -17,6 +17,38 @@ class YourCourses extends Component {
     }
   }
 
+  // Gets Arrays To Render In Lists For Classrooms Currently Assigned To A Course & Those That Are Not
+  _getAssignedClasses() {
+    let assignedClassrooms = 0;
+    let unassignedArray = [];
+    // If Teacher Has No Classroom Courses, All Classrooms Are In The Unassigned Array
+    if (this.props.classroomCourses.length === 0) {
+      return 0;
+    }
+    // Handles If Teacher Has Classroom Courses By Determining If A Class Is Assigned To A Course
+    else {
+      // Loop Through All Classrooms To Determine Which Return Array To Place Them In
+      for (var i in this.props.allClassrooms) {
+        // Initially Assume Classroom Is Not In A Course
+        let assigned = false;
+        // Check All Courses To Determine If Course ClassID Matches Classroom ID
+        for (var j in this.props.classroomCourses) {
+          // eslint-disable-next-line
+          if (this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
+            // If Classroom Matches, Then We Set Assigned to True
+            assigned = true;
+          }
+        }
+        // For Each Classroom We Either Add It To Assigned Classrooms or Unassigned Array
+        if (assigned) {
+          assignedClassrooms = assignedClassrooms + 1;
+        }
+      }
+    }
+    // Returns An Array Of Array To Be Used In Render Method For Lists
+    return [unassignedArray, assignedClassrooms]
+  }
+
   render() {
     if (this.props.selectedCourse === null) {
       return (  

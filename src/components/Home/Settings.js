@@ -218,8 +218,9 @@ class Settings extends Component {
       if (!(res && !('errors' in res))) {
         this.setState({
           alertVisible: true,
-          alertMessage: 'Something went wrong with our servers. Please try again in a couple minutes.',
-          alertTitle: 'Unable To Save',
+          alertMessage: res.errors[0].message,
+          alertTitle: 'Unable To Save Information',
+          loading: false,
         });
       }
       // Handles Successful Update Of User Settings & Displays Alert To User
@@ -228,6 +229,7 @@ class Settings extends Component {
           alertVisible: true,
           alertMessage: 'We have updated your account information and you are all set!',
           alertTitle: 'Save Successful!',
+          loading: false,
         });
       }
     });

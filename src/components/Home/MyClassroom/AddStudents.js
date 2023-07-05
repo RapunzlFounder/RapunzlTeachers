@@ -547,9 +547,17 @@ class AddStudents extends Component {
             <div onClick={() => this.toggleTemplate()} className='classroom-upload-button template-button'>
               View Template
             </div>
+            {/* 
+            
+            TO DO
+            This will allow teachers to find previous students and add them to their class.
+            They can also use this to search students who may have already created an account and would like to use that account.
+
             <div onClick={() => this.toggleSearch()} className='classroom-upload-button manual-upload' style={{ backgroundColor: '#1c9c6c' }}>
               Look Up Students
-            </div>
+            </div> 
+            
+            */}
             {!this.props.creatingClass && (
               <div onClick={() => this.props.toggleManualEntry()} className='classroom-upload-button manual-upload'>
                 Enter Students Manually  

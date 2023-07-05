@@ -4,6 +4,8 @@ import { Outlet, Navigate } from "react-router-dom";
 import { connect } from 'react-redux';
 import { fetchBigQuery, fetchMiniQuery } from '../ActionTypes/userDataActions';
 import { resetNotificationErrors } from '../ActionTypes/notificationActions';
+import { getFinancialLiteracyStandards } from '../ActionTypes/coursemoduleActions';
+import { objectToArray } from '../helper_functions/utilities';
 import Container from '@mui/material/Container';
 import Header from '../components/Admin/Header';
 import Footer from '../components/Admin/Footer';
@@ -51,6 +53,7 @@ class HomeScreen extends Component {
     }
     // Checks if current redux store is in alignment with latest release, otherwise calls the big query
     this._handleUpdate();
+    this._handleCheckForStandards();
   }
 
   componentDidUpdate(prevProps) {
@@ -128,6 +131,37 @@ class HomeScreen extends Component {
         this.setState({ previousTab: this.state.visibleTab, visibleTab: int, addingStudents: false, courseBuilderVisible: false, creatingClass: false });
       }
     }
+  }
+
+  // Handles checking if we should retrieve standards so that we can map them to the correct resources
+  _handleCheckForStandards() {
+    if (objectToArray(this.props.standards).length === 0) {
+      this._getStandards();
+    }
+    // Used To Check Time Difference Between Current Time And Time Standards Were Retrieved
+    else {
+      const localTime = new Date();
+      const currentTime = moment(localTime);
+      const standardsRetrievedTime = moment(this.props.standardsLastRetrieved);
+      const secondsDiff = currentTime.diff(standardsRetrievedTime, 'seconds');
+      // If It Has Been Over 14 Days, Refresh Standards
+      if (secondsDiff > 1209600) {
+        this._getStandards();
+      }
+    }    
+  }
+
+  // Handles actual dispatch to get standards and save to redux. Also handles alert if there's an error.
+  _getStandards() {
+    this.props.getStandards(this.props.jwtToken).then((res) => {
+      if (!(res && !('errors' in res))) {
+        this.setState({
+          alertVisible: true,
+          alertTitle: 'Something Went Wrong...',
+          alertMessage: 'We had trouble retrieving financial literacy standards that align with these resources. Please contact support so that we can help resolve this issue.'
+        });
+      }
+    })
   }
 
   // Pass Through Arrow Function To Add Students In My Classroom Through Quick Access Component
@@ -288,6 +322,9 @@ const mapStateToProps = (state) => {
     logoutRequired: state.userDetails.logoutRequired,
     // gets the timestamp for when the teacher's classrooms were last retrieved from the server, ie mini query
     classroomLastRetrievedTime: state.classroom.classroomLastRetrievedTime,
+    // Last Time Standards Were Retrieved To Avoid Hitting Server 
+    standardsLastRetrieved: state.coursesmodules.standardsLastRetrieved,
+    standards: state.coursesmodules.financialLiteracyStandards,
   };
 };
 
@@ -301,6 +338,8 @@ const mapDispatchToProps = (dispatch) => {
       fetchBigQuery: (token) => dispatch(fetchBigQuery(token)),
       // executes the Mini Query
       FetchMiniQuery: (token) => dispatch(fetchMiniQuery(token)),
+      // Handles Retrieving Financial Literacy Standards Which Are Mapped To Various Resource
+      getStandards: (token) => dispatch(getFinancialLiteracyStandards(token)),
    };
 };
 

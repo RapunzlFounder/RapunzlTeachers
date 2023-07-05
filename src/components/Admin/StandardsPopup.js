@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getFinancialLiteracyStandards } from '../../ActionTypes/coursemoduleActions';
 import Dialog from '@mui/material/Dialog';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import '../../styles/Admin/Admin.css';
-import moment from 'moment';
-import { objectToArray } from '../../helper_functions/utilities';
 import Alert from './Alert';
 
 class StandardsPopup extends React.PureComponent {
@@ -17,41 +14,6 @@ class StandardsPopup extends React.PureComponent {
       alertTitle: '',
       alertMessage: ''
     }
-  }
-
-  componentDidMount() {
-    this._handleCheckForStandards();
-  }
-
-  // Handles checking if we should retrieve standards so that we can map them to the correct resources
-  _handleCheckForStandards() {
-    if (objectToArray(this.props.standards).length === 0) {
-      this._getStandards();
-    }
-    // Used To Check Time Difference Between Current Time And Time Standards Were Retrieved
-    else {
-      const localTime = new Date();
-      const currentTime = moment(localTime);
-      const standardsRetrievedTime = moment(this.props.standardsLastRetrieved);
-      const secondsDiff = currentTime.diff(standardsRetrievedTime, 'seconds');
-      // If It Has Been Over 14 Days, Refresh Standards
-      if (secondsDiff > 1209600) {
-        this._getStandards();
-      }
-    }    
-  }
-
-  // Handles actual dispatch to get standards and save to redux. Also handles alert if there's an error.
-  _getStandards() {
-    this.props.getStandards(this.props.jwtToken).then((res) => {
-      if (!(res && !('errors' in res))) {
-        this.setState({
-          alertVisible: true,
-          alertTitle: 'Something Went Wrong...',
-          alertMessage: 'We had trouble retrieving financial literacy standards that align with these resources. Please contact support so that we can help resolve this issue.'
-        });
-      }
-    })
   }
 
   // Handles Rendering Standard Section For List, If The List Is Not Empty
@@ -126,7 +88,8 @@ class StandardsPopup extends React.PureComponent {
               </div>
               <HighlightOffIcon
                 onClick={() => this.props.dismiss()}
-                style={{ fill: '#01452f', paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
+                className='standard-close-x'
+                style={{ paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
               />
             </div>
             <div className='standards-popup-container'>
@@ -168,13 +131,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
-const mapDispatchToProps = (dispatch) => {
-  // Action
-  return {
-    // Handles Retrieving Financial Literacy Standards Which Are Mapped To Various Resource
-    getStandards: (token) => dispatch(getFinancialLiteracyStandards(token)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(StandardsPopup);
+export default connect(mapStateToProps)(StandardsPopup);

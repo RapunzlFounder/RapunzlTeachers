@@ -83,6 +83,11 @@ class SearchStudents extends Component {
     }
   }
 
+  _toggleStudentToAdd(studentItem) {
+    
+
+  }
+
   render() {
     return (
       <div className='tile' style={{ paddingBottom: 55, paddingTop: 25, paddingLeft: 10, paddingRight: 10 }}>
@@ -135,7 +140,7 @@ class SearchStudents extends Component {
             </div>
             {this.state.classmatesArray.map((item) => {
               return (
-                <div key={item.id} className='classmate-item'>
+                <div onClick={() => this._toggleStudentToAdd(item)} key={item.id} className='classmate-item'>
                   <div className='classmate-item-left'>
                     <div className='classmate-item-name'>
                       {item.firstName && item.firstName.length !== 0 ? item.firstName : 'No Name '} {item.lastName && item.lastName.length !== 0 ? item.lastName : 'Listed'}

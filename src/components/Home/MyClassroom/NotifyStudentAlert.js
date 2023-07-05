@@ -61,8 +61,8 @@ class NotifyStudentAlert extends React.PureComponent {
               </div>
               <HighlightOffIcon
                 onClick={() => this.props.dismiss()}
-                style={{ fill: '', paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
-                className='notify-student-alert-close-icon'
+                style={{ paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
+                className='standard-close-x'
               />
             </div>
             <textarea
@@ -97,8 +97,8 @@ class NotifyStudentAlert extends React.PureComponent {
               <div className='alert-title'/>
               <HighlightOffIcon
                 onClick={() => this.props.dismiss()}
-                style={{ fill: '', paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
-                className='notify-student-alert-close-icon'
+                style={{ paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
+                className='standard-close-x'
               />
             </div>
             <img alt='' className='notify-student-alert-image' />
@@ -116,8 +116,8 @@ class NotifyStudentAlert extends React.PureComponent {
               <div className='alert-title'/>
               <HighlightOffIcon
                 onClick={() => this.props.dismiss()}
-                style={{ fill: '', paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
-                className='notify-student-alert-close-icon'
+                style={{ paddingRight: 24, paddingTop: 20, cursor: 'pointer' }}
+                className='standard-close-x'
               />
             </div>
             <img alt='' className='notify-student-alert-image' />
