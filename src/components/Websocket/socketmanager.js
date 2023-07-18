@@ -36,7 +36,7 @@ export class WrappedSocketManager extends React.Component {
     this.socket.on('connect', () => {
         //console.log(this.socket.id); 
         // subscribe to the pub/sub channels for the list of symbols that the user needs
-        this.subscibeToClassroomStudents();
+        //this.subscibeToClassroomStudents();
         // update the redux state that the websocket is connected
         this.props.updateWebsocketConnected(true);
         //}

@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Outlet, Navigate } from "react-router-dom";
@@ -40,6 +41,8 @@ class HomeScreen extends Component {
       courseBuilderVisible: false,
     };
   }
+
+  
 
   async componentDidMount() {
     // eslint-disable-next-line
@@ -207,6 +210,7 @@ class HomeScreen extends Component {
             paddingTop: 60
           }}
         >
+
           <Header setMenuTab={this.setMenuTab} />
           <div className='home-container'>
             <div className='not-available-container'>
@@ -215,13 +219,14 @@ class HomeScreen extends Component {
                 Your Browser Is Too Narrow
               </div>
               <div className='not-available-text'>
-                At this point in time, Rapunzl's teacher portal is designed for computers and iPads. We do not provide a mobile version of our teacher portal.
+                At this point in time, Rapunzl's teacher portal is designed for PC's, Laptops, and Tablets. We do not provide a mobile version of our teacher portal.
               </div>
             </div>
             <LeftHomeMenu
-              setMenuTab={this.setMenuTab}
+              setMuTab={this.setMenuTab}
               tab={this.state.visibleTab}
             />
+          
             <div className='middle-section'>
               <Dashboard
                 visible={this.state.visibleTab === 1}

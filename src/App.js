@@ -1,3 +1,4 @@
+"use client";
 import React, { Component, Suspense, lazy } from "react";
 import AuthLoadingScreen from './routes/AuthLoadingScreen';
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
@@ -14,6 +15,9 @@ import ArticleScreen from "./routes/ArticleScreen";
 const NotSignedInScreen = lazy(() => import('./routes/NotSignedInScreen'));
 const HomeScreen = lazy(() => import( "./routes/HomeScreen"));
 
+const logError = (error, info) => {
+  console.log('Rapunzl error message: ' + error.message + 'Error Detail: ' + info.componentStack);
+};
 // Handles Creating Wrapper Components For Routes Which Require Navigation Parameters & Props
 const ArticleScreenWrapper = (props) => {
   const params = useParams();
@@ -61,26 +65,41 @@ class App extends Component {
       <BrowserRouter>
       <ScrollToTop />
         <ThemeProvider theme={theme}>
-          <ErrorBoundary FallbackComponent={<ErrorFallback />}>
             <Routes>
               <Route
                 path="/"
-                element={<AuthLoadingScreen />}
+                element={
+                <ErrorBoundary FallbackComponent={ErrorFallback} onError={logError}>
+                  <AuthLoadingScreen />
+                </ErrorBoundary>
+                }
                 errorElement={<ErrorFallback />}
               />
               <Route
                 path="article/:articleID"
-                element={<ArticleScreenWrapper />}
+                element={
+                <ErrorBoundary FallbackComponent={ErrorFallback} onError={logError}>
+                  <ArticleScreenWrapper />
+                </ErrorBoundary>
+                }
                 errorElement={<ErrorFallback />}
               />
               <Route
                 path="login"
-                element={<Suspense fallback={<LoadingPage />}><NotSignedInScreen /></Suspense>}
+                element={<Suspense fallback={<LoadingPage />}>
+                  <ErrorBoundary FallbackComponent={ErrorFallback} onError={logError}>
+                    <NotSignedInScreen />
+                  </ErrorBoundary>
+                  </Suspense>}
                 errorElement={<ErrorFallback />}
               />
               <Route
                 path="dashboard"
-                element={<Suspense fallback={<LoadingPage />}><HomeScreen /></Suspense>}
+                element={<Suspense fallback={<LoadingPage />}>
+                  <ErrorBoundary FallbackComponent={ErrorFallback} onError={logError}>
+                    <HomeScreen />
+                  </ErrorBoundary>
+                  </Suspense>}
                 errorElement={<ErrorFallback />}
               />
               <Route
@@ -89,7 +108,6 @@ class App extends Component {
                 errorElement={<ErrorFallback />}
               />
             </Routes>
-          </ErrorBoundary>
         </ThemeProvider>
       </BrowserRouter>
     );
