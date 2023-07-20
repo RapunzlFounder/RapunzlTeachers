@@ -14,11 +14,7 @@ class Dashboard extends Component {
     if (this.props.visible) {
       return(
         <div className='middle-container'>
-          <GettingStartedTips
-            setMenuTab={this.props.setMenuTab}
-            toggleCourseBuilder={this.props.toggleCourseBuilder}
-            toggleCreateClassroom={this.props.toggleCreateClassroom}
-          />
+          <GettingStartedTips />
           <RecommendedArticles />
         </div>   
       );

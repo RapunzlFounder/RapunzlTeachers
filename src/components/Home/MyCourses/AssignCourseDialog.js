@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createTeacherClassroomCourse } from '../../../ActionTypes/classroomActions';
+import { quickAccessAddStudents } from '../../../ActionTypes/dashboardActions';
 import { getAllTeacherClassrooms, getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
 import Dialog from '@mui/material/Dialog';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -68,9 +69,8 @@ class AssignCourseDialog extends React.PureComponent {
           progress: 'success'
         });
       }
-    })
+    });
   }
-
 
   render() {
     if (this.props.allClassrooms.length === 0) {
@@ -89,7 +89,7 @@ class AssignCourseDialog extends React.PureComponent {
             <div className='assign-course-no-classroom-text'>
               You must create a classroom in order to assign this course and ensure that students can access learning materials. Create a classroom using the button below and then you'll be able to assign this course.
             </div>
-            <div onClick={this.props.toggleCreateClassroom} className='assign-course-no-classroom-button'>
+            <div onClick={() => this.props.quickAccessAddStudents()} className='assign-course-no-classroom-button'>
               Create Classroom
             </div>
             <div onClick={this.props.dismiss} className='assign-course-no-classroom-back'>
@@ -246,6 +246,7 @@ const mapDispatchToProps = (dispatch) => {
     // that the teacher wishes to add the course to, and 'courseId', which is the database Id of the Teacher course that the Teacher is adding 
     // to the classroom.
     assignCourse: (token, classroomId, courseId) => dispatch(createTeacherClassroomCourse(token, classroomId, courseId)),
+    quickAccessAddStudents: () => dispatch(quickAccessAddStudents()),
   };
 };
 

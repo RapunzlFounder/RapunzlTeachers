@@ -13,9 +13,13 @@ import gameSettingsReducer from './gameSettingsReducer';
 import payoutReducer from './payoutReducer';
 import supportReducer from './supportReducer';
 import socialReducer from './socialReducer';
+import dashboardNavReducer from './dashboardNavReducer';
 
 // Redux: Root Reducer
 const rootReducer = combineReducers({
+  classroom: classroomReducer,
+  coursesmodules: coursemoduleReducer,
+  dashboard: dashboardNavReducer,
   education: educationReducer,
   firstvisit: firstVisitReducer,
   gamesettings: gameSettingsReducer,
@@ -23,11 +27,9 @@ const rootReducer = combineReducers({
   notification: notificationReducer,
   payout: payoutReducer,
   product: productReducer,
+  socialReducer: socialReducer,
   support: supportReducer,
   userDetails: userDataReducer,
-  coursesmodules: coursemoduleReducer,
-  classroom: classroomReducer,
-  socialReducer: socialReducer,
 });
 
 // Exports

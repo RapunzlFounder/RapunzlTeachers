@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { toggleCourseBuilder } from '../../../ActionTypes/dashboardActions';
 import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import Bookmarks from '@mui/icons-material/Bookmarks';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
@@ -118,7 +119,6 @@ class YourCourses extends Component {
         <ViewCourseTile
           courseId={this.props.selectedCourse}
           selectCourse={this.props.selectCourse}
-          toggleCreateClassroom={this.props.toggleCreateClassroom}
         />
       );
     }
@@ -134,4 +134,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(YourCourses);
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      toggleCourseBuilder: () => dispatch(toggleCourseBuilder())
+   };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(YourCourses);

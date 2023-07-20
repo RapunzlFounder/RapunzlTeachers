@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { createTeacherClassroom, addStudentsToClassroom } from '../../../ActionTypes/classroomActions';
+import { toggleAddStudents } from '../../../ActionTypes/dashboardActions';
 import { nanoid } from "nanoid";
 import ExcelIcon from '../../../assets/images/Admin/excel.png';
 import UploadGraphic from '../../../assets/images/School/Upload.png';
@@ -364,7 +365,7 @@ class AddStudents extends Component {
     // If This Is Not A New Classroom, We Handle If This Is An Existing Class & Add Students To The Class
     else {
       // Adds Students To Existing Class Using ClassID Which Is The Selected Class Passed As Props
-      this.props.addStudentsToClassroom(this.props.jwtToken, this.props.selectedClass, studentArray).then((res) => {
+      this.props.addStudentsToClassroom(this.props.jwtToken, this.props.selectedClassroom, studentArray).then((res) => {
         // Handles Error With Add Students To Classroom
         if (!(res && !('errors' in res))) {
           this.setState({
@@ -405,7 +406,7 @@ class AddStudents extends Component {
   }
 
   handleBackButton() {
-    if (this.props.creatingClass) {
+    if (this.props.creatingClassroom) {
       this.setState({ progress: 'name' });
     } else {
       this.props.toggleAddStudents();
@@ -443,7 +444,7 @@ class AddStudents extends Component {
       );
     }
     // Handles If There Is No Classroom
-    else if (this.props.creatingClass && this.state.progress === 'name') {
+    else if (this.props.creatingClassroom && this.state.progress === 'name') {
       return (
         <div className='tile create-class-name-container'>
           <div className='create-class-name-subtext'>
@@ -558,13 +559,13 @@ class AddStudents extends Component {
             </div> 
             
             */}
-            {!this.props.creatingClass && (
+            {!this.props.creatingClassroom && (
               <div onClick={() => this.props.toggleManualEntry()} className='classroom-upload-button manual-upload'>
                 Enter Students Manually  
               </div>
             )}
             <div onClick={() => this.handleBackButton()} className='classroom-upload-button classroom-upload-back'>
-              {this.props.creatingClass ? 'Back To Name' : 'Back To Classroom'}
+              {this.props.creatingClassroom ? 'Back To Name' : 'Back To Classroom'}
             </div>
           </div>
           {!this.state.loading && (
@@ -641,6 +642,8 @@ const mapStateToProps = (state) => {
     colors: state.userDetails.appColors,
     // Token used For Creating Classroom & Adding Students to Classroom
     jwtToken: state.userDetails.jwtToken,
+    creatingClassroom: state.dashboard.creatingClassroom,
+    selectedClassroom: state.dashboard.selectedClassroom,
   };
 };
 
@@ -655,6 +658,7 @@ const mapDispatchToProps = (dispatch) => {
       // Make sure that double quotes are used for the string and date format input fileds in each object
       // { email: "welshman@me.edu", firstname: "Chris", lastName: "Thomas", birthDate: "2008-06-06" }
       addStudentsToClassroom: (token, classroomId, studentsList) => dispatch(addStudentsToClassroom(token, classroomId, studentsList)),
+      toggleAddStudents: () => dispatch(toggleAddStudents()),
    };
 };
 

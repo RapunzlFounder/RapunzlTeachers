@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ContactSupport } from '../../ActionTypes/settingsAction';
+import { setMenuTab } from '../../ActionTypes/dashboardActions';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBox from '@mui/icons-material/CheckBox';
 import MessageSuccessIcon from '../../assets/images/Support/MessageSuccess.png';
@@ -288,6 +289,7 @@ const mapStateToProps = (state) => {
     loading: state.support.loading,
     firstName: state.userDetails.firstName,
     lastName: state.userDetails.lastName,
+    previousTab: state.dashboard.previousTab,
   };
 };
 
@@ -297,6 +299,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // Handles sending message to Database to email to support email address
     contactSupport: (token, text) => dispatch(ContactSupport(token, text)),
+    // Handles sending message to Database to email to support email address
+    setMenuTab: (tab) => dispatch(setMenuTab(tab)),
   };
 };
 

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { logoutUser } from '../../ActionTypes/loginActions';
+import { setMenuTab } from "../../ActionTypes/dashboardActions";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -131,6 +132,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
       // log the user out of the App
       logout: () => dispatch(logoutUser()),
+      // Handles sending message to Database to email to support email address
+      setMenuTab: (tab) => dispatch(setMenuTab(tab)),
    };
 };
 

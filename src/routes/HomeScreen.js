@@ -6,11 +6,17 @@ import { connect } from 'react-redux';
 import { fetchBigQuery, fetchMiniQuery } from '../ActionTypes/userDataActions';
 import { resetNotificationErrors } from '../ActionTypes/notificationActions';
 import { getFinancialLiteracyStandards } from '../ActionTypes/coursemoduleActions';
+import {
+  setMenuTab,
+  quickAccessAddStudents,
+  quickAccessCourseBuilder,
+  toggleAddStudents,
+  toggleCourseBuilder,
+} from '../ActionTypes/dashboardActions';
 import { objectToArray } from '../helper_functions/utilities';
 import Container from '@mui/material/Container';
 import Header from '../components/Admin/Header';
 import Footer from '../components/Admin/Footer';
-import '../styles/Home/HomeScreen.css';
 import LeftHomeMenu from '../components/Home/LeftMenu/LeftHomeMenu';
 import Dashboard from '../components/Home/Dashboard/Dashboard';
 import MyCourse from '../components/Home/MyCourses/MyCourse';
@@ -24,6 +30,7 @@ import Settings from '../components/Home/Settings';
 import YourPlan from '../components/Home/YourPlan';
 import FAQ from '../components/Home/FAQ';
 import TooNarrowIcon from '../assets/images/Admin/TooNarrow.png';
+import '../styles/Home/HomeScreen.css';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -38,7 +45,6 @@ class HomeScreen extends Component {
       alertType: '',
       contactUs: false,
       addingStudents: false,
-      courseBuilderVisible: false,
     };
   }
 
@@ -127,12 +133,8 @@ class HomeScreen extends Component {
 
   // Updates the currently selected tab and passed through as arrow functions to LeftHomeMenu
   setMenuTab = (int) => {
-    if (this.state.visibleTab !== int) {
-      if (this.state.visibleTab === 7 || this.state.visibleTab === 8) {
-        this.setState({ visibleTab: int, addingStudents: false, courseBuilderVisible: false, creatingClass: false });
-      } else {
-        this.setState({ previousTab: this.state.visibleTab, visibleTab: int, addingStudents: false, courseBuilderVisible: false, creatingClass: false });
-      }
+    if (this.props.visibleTab !== int) {
+      this.props.setMenuTab(int);
     }
   }
 
@@ -169,28 +171,20 @@ class HomeScreen extends Component {
 
   // Pass Through Arrow Function To Add Students In My Classroom Through Quick Access Component
   quickAccessAddStudents = () => {
-    if (this.state.visibleTab === 7 || this.state.visibleTab === 8) {
-      this.setState({ courseBuilderVisible: false, addingStudents: true, creatingClass: true, visibleTab: 3 });
-    } else {
-      this.setState({ previousTab: this.state.visibleTab, addingStudents: true, creatingClass: true, courseBuilderVisible: false, visibleTab: 3 });
-    }
+    this.props.quickAccessAddStudents();
   }
 
   // Pass Through Arrow Function To Go To Course Builder In My Courses Through Quick Access Component
   quickAccessCourseBuilder = () => {
-    if (this.state.visibleTab === 7 || this.state.visibleTab === 8) {
-      this.setState({ courseBuilderVisible: true, addingStudents: false, creatingClass: false, visibleTab: 2 });
-    } else {
-      this.setState({ previousTab: this.state.visibleTab, addingStudents: false, creatingClass: false, courseBuilderVisible: true, visibleTab: 2 });
-    }
+    this.props.quickAccessCourseBuilder();
   }
 
   toggleAddStudents = () => {
-    this.setState({ addingStudents: !this.state.addingStudents, creatingClass: false });
+    this.props.toggleAddStudents();
   }
 
   toggleCourseBuilder = () => {
-    this.setState({ courseBuilderVisible: !this.state.courseBuilderVisible, creatingFalse: false });
+    this.props.toggleCourseBuilder();    
   }
 
   render() {
@@ -211,7 +205,7 @@ class HomeScreen extends Component {
           }}
         >
 
-          <Header setMenuTab={this.setMenuTab} />
+          <Header />
           <div className='home-container'>
             <div className='not-available-container'>
               <img alt='' className='not-available-image' src={TooNarrowIcon} />
@@ -223,63 +217,40 @@ class HomeScreen extends Component {
               </div>
             </div>
             <LeftHomeMenu
-              setMuTab={this.setMenuTab}
-              tab={this.state.visibleTab}
+              tab={this.props.visibleTab}
             />
-          
             <div className='middle-section'>
               <Dashboard
-                visible={this.state.visibleTab === 1}
-                setMenuTab={this.setMenuTab}
-                toggleCourseBuilder={this.quickAccessCourseBuilder}
-                toggleCreateClassroom={this.quickAccessAddStudents}
+                visible={this.props.visibleTab === 1}
               />
               <MyCourse
-                visible={this.state.visibleTab === 2}
-                courseBuilderVisible={this.state.courseBuilderVisible}
-                toggleCourseBuilder={this.toggleCourseBuilder}
-                toggleCreateClassroom={this.quickAccessAddStudents}
-                setMenuTab={this.setMenuTab}
+                visible={this.props.visibleTab === 2}
               />
               <MyClassroom
-                visible={this.state.visibleTab === 3}
-                toggleAddStudents={this.toggleAddStudents}
-                creatingClass={this.state.creatingClass}
-                createClass={this.quickAccessAddStudents}
+                visible={this.props.visibleTab === 3}
                 addingStudents={this.state.addingStudents}
-                setMenuTab={this.setMenuTab}
               />
               <ResourceLibrary
-                visible={this.state.visibleTab === 4}
+                visible={this.props.visibleTab === 4}
               />
               <GradebookTile
-                visible={this.state.visibleTab === 5}
-                toggleCreateClassroom={this.quickAccessAddStudents}
+                visible={this.props.visibleTab === 5}
               />
               <Settings
-                visible={this.state.visibleTab === 6}
+                visible={this.props.visibleTab === 6}
               />
               <Support
-                visible={this.state.visibleTab === 7}
-                previousTab={this.state.previousTab}
-                setMenuTab={this.setMenuTab}
+                visible={this.props.visibleTab === 7}
               />
               <YourPlan
-                visible={this.state.visibleTab === 8}
-                previousTab={this.state.previousTab}
-                setMenuTab={this.setMenuTab}
+                visible={this.props.visibleTab === 8}
               />
               <FAQ
-                visible={this.state.visibleTab === 9}
-                setMenuTab={this.setMenuTab}
+                visible={this.props.visibleTab === 9}
               />
             </div>
             <div className='tile right-section'>
-              <QuickAccess
-                toggleAddStudents={this.quickAccessAddStudents}
-                toggleCourseBuilder={this.quickAccessCourseBuilder}
-                setMenuTab={this.setMenuTab}
-              />
+              <QuickAccess />
               <TrendingCourses />
             </div>
           </div>
@@ -330,6 +301,15 @@ const mapStateToProps = (state) => {
     // Last Time Standards Were Retrieved To Avoid Hitting Server 
     standardsLastRetrieved: state.coursesmodules.standardsLastRetrieved,
     standards: state.coursesmodules.financialLiteracyStandards,
+    // These Elements In Redux Handle Navigation Throughout The Dashboard To Avoid Unnecessary Passing Of Props
+    visibleTab: state.dashboard.visibleTab,
+    previousTab: state.dashboard.previousTab,
+    // REFACTOR
+    addingStudents: state.dashboard.addingStudents,
+    // REFACTOR
+    creatingClassroom: state.dashboard.creatingClassroom,
+    // REFACTOR
+    selectedClassroom: state.dashboard.selectedClassroom
   };
 };
 
@@ -345,6 +325,12 @@ const mapDispatchToProps = (dispatch) => {
       FetchMiniQuery: (token) => dispatch(fetchMiniQuery(token)),
       // Handles Retrieving Financial Literacy Standards Which Are Mapped To Various Resource
       getStandards: (token) => dispatch(getFinancialLiteracyStandards(token)),
+      // Handles sending message to Database to email to support email address
+      setMenuTab: (tab) => dispatch(setMenuTab(tab)),
+      quickAccessAddStudents: () => dispatch(quickAccessAddStudents()),
+      quickAccessCourseBuilder: () => dispatch(quickAccessCourseBuilder()),
+      toggleAddStudents: () => dispatch(toggleAddStudents()),
+      toggleCourseBuilder: () => dispatch(toggleCourseBuilder())
    };
 };
 

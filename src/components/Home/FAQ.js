@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { setMenuTab } from '../../ActionTypes/dashboardActions';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import Accordion from '@mui/material/Accordion';
@@ -311,4 +312,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Menu);
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      // Handles sending message to Database to email to support email address
+      setMenuTab: (tab) => dispatch(setMenuTab(tab)),
+   };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);

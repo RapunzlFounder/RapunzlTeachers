@@ -29,7 +29,7 @@ class GradebookTile extends Component {
               <YourGrades />
             )}
             {false && (
-              <EmptyGrades toggleCreateClassroom={this.props.toggleCreateClassroom} />
+              <EmptyGrades />
             )}
           </div>
         </div>

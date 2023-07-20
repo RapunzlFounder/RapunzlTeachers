@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { setMenuTab, quickAccessAddStudents, quickAccessCourseBuilder } from '../../../ActionTypes/dashboardActions';
 import PollIcon from '@mui/icons-material/Poll';
 import AddStudentsBW from '../../../assets/images/ChecklistTips/AddStudents_BW.png';
 import AddStudentsColor from '../../../assets/images/ChecklistTips/AddStudents_Color.png';
@@ -103,7 +104,7 @@ class GettingStartedTips extends Component {
           <div className='checklist-progress-ball' style={{ marginLeft: '-15px', backgroundColor: '#ff9700' }} />
         </div>
         {progress < 2 && (
-          <div onClick={() => this.props.toggleCreateClassroom()} className={`checklist-item ${progress === 1 ? '' : 'checklist-item-not-selected'}`}>
+          <div onClick={() => this.props.quickAccessAddStudents()} className={`checklist-item ${progress === 1 ? '' : 'checklist-item-not-selected'}`}>
             <img alt='' className='checklist-item-image' src={progress === 1 ? CreateClassroomColor : CreateClassroomBW} />
             <div className='checklist-text-container'>
               <div className='checklist-item-header' style={{ color: progress === 1 ? '#ffc300' : '#4a9c80' }}>
@@ -129,7 +130,7 @@ class GettingStartedTips extends Component {
           </div>
         )}
         {progress < 4 && (
-          <div onClick={() => this.props.toggleCourseBuilder()} className={`checklist-item ${progress === 3 ? '' : 'checklist-item-not-selected'}`}>
+          <div onClick={() => this.props.quickAccessCourseBuilder()} className={`checklist-item ${progress === 3 ? '' : 'checklist-item-not-selected'}`}>
             <img alt='' className='checklist-item-image' src={progress === 3 ? BuildCourseColor : BuildCourseBW} />
             <div className='checklist-text-container'>
               <div className='checklist-item-header' style={{ color: progress === 3 ? '#ffc300' : '#4a9c80' }}>
@@ -184,4 +185,15 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(GettingStartedTips);
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+  return {
+    // Handles sending message to Database to email to support email address
+    setMenuTab: (tab) => dispatch(setMenuTab(tab)),
+    quickAccessAddStudents: () => dispatch(quickAccessAddStudents()),
+    quickAccessCourseBuilder: () => dispatch(quickAccessCourseBuilder()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GettingStartedTips);

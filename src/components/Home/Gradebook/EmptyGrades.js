@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { quickAccessAddStudents } from '../../../ActionTypes/dashboardActions';
 import EmptyGradesImage from '../../../assets/images/Education/EmptyGrades.png'
 
 class EmptyGrades extends Component {
@@ -21,7 +22,7 @@ class EmptyGrades extends Component {
         <div className='manual-student-empty-text' style={{ fontSize: 16 }}>
           It looks like you haven't created a classroom yet! Get started by creating a classroom and course to track student grades.
         </div>
-        <div onClick={() => this.props.toggleCreateClassroom()} className='empty-grades-class-button'>
+        <div onClick={() => this.props.quickAccessAddStudents()} className='empty-grades-class-button'>
           Create Classroom
         </div>
       </div>
@@ -38,4 +39,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(EmptyGrades);
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      quickAccessAddStudents: () => dispatch(quickAccessAddStudents()),
+   };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EmptyGrades);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { setMenuTab } from '../../ActionTypes/dashboardActions';
 import DiamondIcon from '@mui/icons-material/Diamond';
 import NoUpgradeGraphic from '../../assets/images/Admin/NoUpgradeAvailable.png';
 import '../../styles/Home/HomeScreen.css';
@@ -53,7 +54,17 @@ const mapStateToProps = (state) => {
   return {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
+    previousTab: state.dashboard.previousTab,
   };
 };
 
-export default connect(mapStateToProps)(YourPlan);
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+  return {
+    // Handles sending message to Database to email to support email address
+    setMenuTab: (tab) => dispatch(setMenuTab(tab)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(YourPlan);

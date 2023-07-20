@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { setMenuTab, quickAccessCourseBuilder, quickAccessAddStudents } from '../../../ActionTypes/dashboardActions';
 import MoreTime from '@mui/icons-material/MoreTime';
 import '../../../styles/Home/HomeScreen.css';
 
@@ -18,10 +19,10 @@ class QuickAccess extends Component {
             Quick Access
           </div>
         </div>
-        <div onClick={() => this.props.toggleAddStudents()} className='quick-access-item'>
+        <div onClick={() => this.props.quickAccessAddStudents()} className='quick-access-item'>
           Upload A Classroom
         </div>
-        <div onClick={() => this.props.toggleCourseBuilder()} className='quick-access-item'>
+        <div onClick={() => this.props.quickAccessCourseBuilder()} className='quick-access-item'>
           Build A Course
         </div>
         <div onClick={() => this.props.setMenuTab(4)} className='quick-access-item'>
@@ -47,5 +48,15 @@ const mapStateToProps = (state) => {
   };
 };
 
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      // Handles sending message to Database to email to support email address
+      setMenuTab: (tab) => dispatch(setMenuTab(tab)),
+      quickAccessCourseBuilder: () => dispatch(quickAccessCourseBuilder()),
+      quickAccessAddStudents: () => dispatch(quickAccessAddStudents()),
+   };
+};
 
-export default connect(mapStateToProps)(QuickAccess);
+export default connect(mapStateToProps, mapDispatchToProps)(QuickAccess);

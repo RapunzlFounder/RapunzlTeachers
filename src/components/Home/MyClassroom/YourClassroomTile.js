@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import { FetchOtherUserDetails } from '../../../ActionTypes/socialActions';
 import { removeStudentsFromClassroom } from '../../../ActionTypes/classroomActions';
+import { toggleAddStudents, quickAccessAddStudents, selectClassroom } from '../../../ActionTypes/dashboardActions';
 import OtherHouses from '@mui/icons-material/OtherHouses';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClassroomItem from './ClassroomItem';
@@ -119,10 +120,10 @@ class YourClassroomTile extends Component {
 
   // Once A User Selects A Classroom, We Are Able To Find That Class Using ID In State And Return To Map Students Into List
   _getClassroomInfo() {
-    if (this.props.selectedClass !== false) {
+    if (this.props.selectedClassroom !== false) {
       let classroomObject;
       for (var i in this.props.allClassrooms) {
-        if (this.props.allClassrooms[i].id === this.props.selectedClass) {
+        if (this.props.allClassrooms[i].id === this.props.selectedClassroom) {
           classroomObject = this.props.allClassrooms[i];
         }
       }
@@ -144,12 +145,12 @@ class YourClassroomTile extends Component {
     if (this.props.allClassrooms.length === 0) {
       return (
         <div className='tile classroom-overview'>
-          <EmptyGrades toggleCreateClassroom={this.props.createClass} />
+          <EmptyGrades />
         </div>
       );
     }
     // Handles If User Has Multiple Classrooms By Prompting Them To Selected One
-    else if (!this.props.selectedClass) {
+    else if (!this.props.selectedClassroom) {
       return (
         <div className='tile create-class-name-container' style={{ paddingBottom: this.props.allClassrooms.length > 3 ? 110 : 260 }}>
           <div className='create-class-name-subtext'>
@@ -176,7 +177,7 @@ class YourClassroomTile extends Component {
               </div>
             )
           })}
-          <div onClick={() => this.props.createClass()} className='create-new-classroom-button'>
+          <div onClick={() => this.props.quickAccessAddStudents()} className='create-new-classroom-button'>
             <AddCircleOutlineOutlinedIcon className='create-new-classroom-plus-icon' />
             <div className='create-new-classroom-button-text'>
               Create New Classroom
@@ -291,6 +292,7 @@ const mapStateToProps = (state) => {
     colors: state.userDetails.appColors,
     allClassrooms: getAllTeacherClassrooms(state),
     jwtToken: state.userDetails.jwtToken,
+    selectedClassroom: state.dashboard.selectedClassroom,
   };
 };
 
@@ -302,6 +304,9 @@ const mapDispatchToProps = (dispatch) => {
       fetchOtherUserDetails: (token, userName) => dispatch(FetchOtherUserDetails(token, userName)),
       // Dispatch To Remove Students From Classroom Which Takes An Array Of Student IDs In Student List And The Classroom ID
       removeStudents: (token, classroomId, studentsList) => dispatch(removeStudentsFromClassroom(token, classroomId, studentsList)),
+      toggleAddStudents: () => dispatch(toggleAddStudents()),
+      quickAccessAddStudents: () => dispatch(quickAccessAddStudents()),
+      selectClassroom: (classID) => dispatch(selectClassroom(classID))
    };
 };
 

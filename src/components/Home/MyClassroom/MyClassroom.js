@@ -12,7 +12,6 @@ class MyClassroom extends Component {
     this.state = {
       manualAdd: false,
       className: '',
-      selectedClass: false,
     }
   }
 
@@ -21,7 +20,6 @@ class MyClassroom extends Component {
     if (this.props.visible !== prevProps.visible) {
       this.setState({
         manualAdd: false,
-        selectedClass: false,
         className: '',
       });
     }
@@ -38,7 +36,7 @@ class MyClassroom extends Component {
 
   // Handles Selecting A Classroom When The User Has Multiple Classrooms, Which Allows Them To See Students
   selectClassroom = (classID) => {
-    this.setState({ selectedClass: classID, className: '' });
+    this.setState({ className: '' });
   }
 
   render() {
@@ -48,24 +46,17 @@ class MyClassroom extends Component {
           {!this.props.addingStudents && (
             <YourClassroomTile
               addingStudents={this.props.addingStudents}
-              toggleAddStudents={this.props.toggleAddStudents}
               className={this.state.className}
               changeClassName={this.changeClassName}
-              createClass={this.props.createClass}
               visible={this.props.visible}
-              selectedClass={this.state.selectedClass}
-              selectClassroom={this.selectClassroom}
             />
           )}
           {this.props.addingStudents && !this.state.viewPortfolio && (
             <AddStudents
               toggleManualEntry={this.toggleManualEntry}
-              toggleAddStudents={this.props.toggleAddStudents}
               newClassName={this.state.className}
-              creatingClass={this.props.creatingClass}
               changeClassName={this.changeClassName}
               manualAdd={this.state.manualAdd}
-              selectedClass={this.state.selectedClass}
             />
           )}
           {this.props.addingStudents && !this.state.viewPortfolio && (

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createTeacherCourse } from '../../../ActionTypes/coursemoduleActions';
+import { toggleCourseBuilder } from '../../../ActionTypes/dashboardActions';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import TextField from '@mui/material/TextField';
@@ -291,6 +292,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
       // Creates A Course For The Teacher With List Of Modules Associated With It
       createTeacherCourse: (token, courseName, isPrivate, modulesList) => dispatch(createTeacherCourse(token, courseName, isPrivate, modulesList)),
+      toggleCourseBuilder: () => dispatch(toggleCourseBuilder())
    };
 };
 

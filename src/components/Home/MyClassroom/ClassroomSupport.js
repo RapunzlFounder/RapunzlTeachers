@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { setMenuTab } from '../../../ActionTypes/dashboardActions';
 import HelpOutline from '@mui/icons-material/HelpOutline';
 
 class ClassroomSupport extends Component {
@@ -57,4 +58,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(ClassroomSupport);
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      // Handles sending message to Database to email to support email address
+      setMenuTab: (tab) => dispatch(setMenuTab(tab)),
+   };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClassroomSupport);

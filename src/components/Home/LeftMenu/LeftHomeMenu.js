@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { setMenuTab } from '../../../ActionTypes/dashboardActions';
 import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import { Navigate } from "react-router-dom";
 import { logoutUser } from '../../../ActionTypes/loginActions';
@@ -209,6 +210,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
       // log the user out of the App
       logout: () => dispatch(logoutUser()),
+      // Handles sending message to Database to email to support email address
+      setMenuTab: (tab) => dispatch(setMenuTab(tab)),
    };
 };
 

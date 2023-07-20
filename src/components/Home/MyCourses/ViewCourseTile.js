@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { viewAssignedClass } from '../../../ActionTypes/dashboardActions';
 import { getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import { getAllTeacherClassrooms, getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
@@ -381,7 +382,6 @@ class ViewCourseTile extends Component {
           course={this.props.currentCourse}
           visible={this.state.assigningCourse}
           dismiss={this.toggleAssignCourse}
-          toggleCreateClassroom={this.props.toggleCreateClassroom}
           classArrays={this._getClassArrays()}
         />
         <StandardsPopup
@@ -528,7 +528,7 @@ class ViewCourseTile extends Component {
             <div className='assigned-class-container'>
               {this._getClassArrays()[1].map((classItem) => {
                 return (
-                  <div className='assigned-class-item'>
+                  <div key={classItem.id} onClick={() => this.props.viewAssignedClass(classItem.id)} className='assigned-class-item'>
                     <div className='assigned-class-left'>
                       <div className='assigned-class-name'>
                         {classItem.className}
@@ -569,4 +569,12 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(ViewCourseTile);
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      viewAssignedClass: (classID) => dispatch(viewAssignedClass(classID)),
+   };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewCourseTile);

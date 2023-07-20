@@ -63,7 +63,7 @@ class Header extends React.PureComponent {
               <div className='company-logo-container'>
                 <img alt="Rapunzl Company Logo" src={Logo} className="company-logo" />
               </div>
-              <HeaderMenu setMenuTab={this.props.setMenuTab} />
+              <HeaderMenu />
             </div>
           </div>
       );

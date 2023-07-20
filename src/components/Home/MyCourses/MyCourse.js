@@ -37,8 +37,6 @@ class MyCourse extends Component {
       return(  
         <div className='middle-container'>
           <YourCourses
-            toggleCourseBuilder={this.props.toggleCourseBuilder}
-            toggleCreateClassroom={this.props.toggleCreateClassroom}
             selectCourse={this.selectCourse}
             selectedCourse={this.state.selectedCourse}
           />
@@ -49,7 +47,7 @@ class MyCourse extends Component {
       );
     } else if (this.props.visible && this.props.courseBuilderVisible) {
       return (
-        <CourseBuilder toggleCourseBuilder={this.props.toggleCourseBuilder} />
+        <CourseBuilder />
       )
     } else {
       return <div />
@@ -63,6 +61,7 @@ const mapStateToProps = (state) => {
   return {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
+    courseBuilderVisible: state.dashboard.courseBuilderVisible,
   };
 };
 
