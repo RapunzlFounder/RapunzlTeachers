@@ -15,13 +15,14 @@ import { FORGOT_PASSWORD } from '../graphql/mutations/ForgotPassword';
 // import the GraphQL mutation text needed for when a user wishes to change their password
 import { CHANGE_PASSWORD } from '../graphql/mutations/ChangePassword';
 
-import { logoutUserEducation } from '../ActionTypes/educationActions';
-import { logoutUserSettings } from '../ActionTypes/gameSettingsActions';
-import { logoutUserNotifications } from '../ActionTypes/notificationActions';
-import { logoutUserProducts } from '../ActionTypes/productActions';
-import { updateAllPublicModules, logoutUserCourseModule, createTeacherEmptyCoursesModules } from '../ActionTypes/coursemoduleActions';
-import { createTeacherEmptyClassrooms } from '../ActionTypes/classroomActions';
-import { logoutUserClassroom } from '../ActionTypes/classroomActions';
+import { logoutUserEducation } from './educationActions';
+import { logoutUserSettings } from './gameSettingsActions';
+import { logoutUserNotifications } from './notificationActions';
+import { logoutUserProducts } from './productActions';
+import { resetDashboard } from './dashboardActions';
+import { updateAllPublicModules, logoutUserCourseModule, createTeacherEmptyCoursesModules } from './coursemoduleActions';
+import { createTeacherEmptyClassrooms } from './classroomActions';
+import { logoutUserClassroom } from './classroomActions';
 
 import {
   arrayToObjectID,
@@ -213,6 +214,7 @@ export function logoutUser() {
     dispatch(logoutUserSettings());
     dispatch(logoutUserNotifications());
     dispatch(logoutUserProducts());
+    dispatch(resetDashboard());
   };
 }
 // Action Creator function to dispatch redux actions to determine if an username is unique or not in the user database table.
@@ -309,7 +311,7 @@ export function createUser(userDetail, invitationCode) {
           dispatch(createUserSuccess(mainReturnedObj.createTeacheruser.newUser, userDetail.password));
           dispatch(createTeacherEmptyCoursesModules());
           dispatch(createTeacherEmptyClassrooms());
-
+          dispatch(resetDashboard());
           return true;
 
         }
@@ -333,10 +335,12 @@ export function loginUser(userLogin) {
       .then((json) => {
         if ('errors' in json.data) {
           dispatch(loginUserError(json.data.errors[0].message));
+          dispatch(resetDashboard());
           return false;
         }
         else{
           dispatch(loginUserSuccess('JWT ' + json.data.data.tokenAuth.token));
+          dispatch(resetDashboard());
           return 'JWT ' + json.data.data.tokenAuth.token;
         }
       })

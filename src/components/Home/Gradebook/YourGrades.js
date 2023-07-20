@@ -11,11 +11,13 @@ class YourGrades extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      selected: '',
     }
   }
 
   selectClass(text) {
     this.props.selectClassroom(text);
+    this.setState({ selected: text });
   }
 
   render() {
@@ -39,7 +41,7 @@ class YourGrades extends Component {
               value={this.props.selectedClassroom}
               onChange={(e) => this.selectClass(e.target.value)}
             >
-              <option className='gradebook-class-option' value={false}>Select Classroom</option>
+              <option className='gradebook-class-option' value={''}>Select Classroom</option>
               {this.props.allClassrooms.map((item) => {
                 return (
                   <option
@@ -67,7 +69,7 @@ class YourGrades extends Component {
             classroomId={this.props.selectedClassroom}
           />
         )}
-        {!(this.props.selectedClassroom !== null && this.props.allClassrooms.length !== 0) && (
+        {(this.props.allClassrooms.length === 0 || this.state.selected === '') && (
           <div className='gradebook-container'>
             <img alt='' className='gradebook-empty-image' src={EmptyGradebook} />
             <div className='gradebook-empty-header'>

@@ -196,8 +196,6 @@ class CourseBuilder extends Component {
             sx={{ backgroundColor: '#2e7361', borderRadius: '7px', width: '47%' }}
           >
             <MenuItem value={0}>Select Length</MenuItem>
-            <MenuItem value={1}>1 Section</MenuItem>
-            <MenuItem value={2}>2 Sections</MenuItem>
             <MenuItem value={3}>3 Sections</MenuItem>
             <MenuItem value={4}>4 Sections</MenuItem>
             <MenuItem value={5}>5 Sections</MenuItem>

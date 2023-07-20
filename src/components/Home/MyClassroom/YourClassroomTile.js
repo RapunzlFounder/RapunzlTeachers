@@ -142,7 +142,7 @@ class YourClassroomTile extends Component {
 
   render() {
     // Handles If The Teacher User Has Not Created Any Classrooms Yet
-    if (this.props.allClassrooms.length === 0) {
+    if (this.props.allClassrooms.length === 0 && !this.props.creatingClassroom) {
       return (
         <div className='tile classroom-overview'>
           <EmptyGrades />
@@ -293,6 +293,7 @@ const mapStateToProps = (state) => {
     allClassrooms: getAllTeacherClassrooms(state),
     jwtToken: state.userDetails.jwtToken,
     selectedClassroom: state.dashboard.selectedClassroom,
+    creatingClassroom: state.dashboard.creatingClassroom,
   };
 };
 
