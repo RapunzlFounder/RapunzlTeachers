@@ -204,7 +204,7 @@ class YourClassroomTile extends Component {
             portfolioUsername={this.state.selectedPortfolioUsername}
             visible={this.state.viewPortfolio}
           />
-          {!this.props.addingStudents && classInfo.studentList.length !== 0 && !this.state.viewPortfolio && (
+          {false && !this.props.addingStudents && classInfo.studentList.length !== 0 && !this.state.viewPortfolio && (
             <div className='tile classroom-overview'>
               <ClassroomOverview
                 classroom={classInfo}

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Navigate } from "react-router-dom";
 import { connect } from 'react-redux';
 import { logoutUser } from '../../ActionTypes/loginActions';
 import { setMenuTab } from "../../ActionTypes/dashboardActions";
@@ -19,6 +20,8 @@ class HeaderMenu extends Component {
     this.state = {
       open: false,
       anchor: null,
+      // If JWTToken becomes null, we navigate the user to the login screen to login again
+      handleLogout: false
     }
   }
 
@@ -39,8 +42,7 @@ class HeaderMenu extends Component {
   handleLogout = () => {
     // Handles Logging Out User & Routing To AuthLoadingScreen
     this.props.logout();
-    this.setState({ open: false });
-    this.setState({ navigateToLogin: true });
+    this.setState({ open: false, navigateToLogin: true });
   };
 
   handleClose = () => {
@@ -48,72 +50,79 @@ class HeaderMenu extends Component {
   }
 
   render() {
-    return (
-      <div className="mobile-menu-container">
-        <Button
-          id="basic-button"
-          aria-controls={this.state.open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={this.state.open ? 'true' : undefined}
-          onClick={this.handleMenuButtonClick}
-          style={{ marginTop: 15, marginRight: 9 }}
-        >
-          <MenuIcon />
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={this.state.anchor}
-          open={this.state.open}
-          onClose={this.handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <div onClick={() => this.setMenuTab(1)} className="menu-item-flex">
-            <House fontSize="small" style={{ fill: '#cefff4 '}} />
-            <div className="menu-item-text">
-              Dashboard
+    // Handles Navigation After User Decides To Logout
+    if (this.state.navigateToLogin) {
+      return (
+        <Navigate to="/login" replace={true} />
+      );
+    } else {
+      return (
+        <div className="mobile-menu-container">
+          <Button
+            id="basic-button"
+            aria-controls={this.state.open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={this.state.open ? 'true' : undefined}
+            onClick={this.handleMenuButtonClick}
+            style={{ marginTop: 15, marginRight: 9 }}
+          >
+            <MenuIcon />
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={this.state.anchor}
+            open={this.state.open}
+            onClose={this.handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <div onClick={() => this.setMenuTab(1)} className="menu-item-flex">
+              <House fontSize="small" style={{ fill: '#cefff4 '}} />
+              <div className="menu-item-text">
+                Dashboard
+              </div>
             </div>
-          </div>
-          <div onClick={() => this.setMenuTab(2)} className="menu-item-flex">
-            <LibraryBooks fontSize="small" style={{ fill: '#cefff4 '}} />
-            <div className="menu-item-text">
-              My Courses
+            <div onClick={() => this.setMenuTab(2)} className="menu-item-flex">
+              <LibraryBooks fontSize="small" style={{ fill: '#cefff4 '}} />
+              <div className="menu-item-text">
+                My Courses
+              </div>
             </div>
-          </div>
-          <div onClick={() => this.setMenuTab(3)} className="menu-item-flex">
-            <Class fontSize="small" style={{ fill: '#cefff4 '}} />
-            <div className="menu-item-text">
-              My Classroom
+            <div onClick={() => this.setMenuTab(3)} className="menu-item-flex">
+              <Class fontSize="small" style={{ fill: '#cefff4 '}} />
+              <div className="menu-item-text">
+                My Classroom
+              </div>
             </div>
-          </div>
-          <div onClick={() => this.setMenuTab(4)} className="menu-item-flex">
-            <MenuBook fontSize="small" style={{ fill: '#cefff4 '}} />
-            <div className="menu-item-text">
-              Resources
+            <div onClick={() => this.setMenuTab(4)} className="menu-item-flex">
+              <MenuBook fontSize="small" style={{ fill: '#cefff4 '}} />
+              <div className="menu-item-text">
+                Resources
+              </div>
             </div>
-          </div>
-          <div onClick={() => this.setMenuTab(6)} className="menu-item-flex">
-            <Settings fontSize="small" style={{ fill: '#cefff4 '}} />
-            <div className="menu-item-text">
-              Settings
+            <div onClick={() => this.setMenuTab(6)} className="menu-item-flex">
+              <Settings fontSize="small" style={{ fill: '#cefff4 '}} />
+              <div className="menu-item-text">
+                Settings
+              </div>
             </div>
-          </div>
-          <div onClick={() => this.setMenuTab(9)} className="menu-item-flex">
-            <QuizIcon fontSize="small" style={{ fill: '#cefff4 '}} />
-            <div className="menu-item-text">
-              FAQ
+            <div onClick={() => this.setMenuTab(9)} className="menu-item-flex">
+              <QuizIcon fontSize="small" style={{ fill: '#cefff4 '}} />
+              <div className="menu-item-text">
+                FAQ
+              </div>
             </div>
-          </div>
-          <div onClick={() => this.handleLogout()} className="menu-item-flex">
-            <Logout fontSize="small" style={{ fill: this.props.colors.perfDown }} />
-            <div className="menu-item-text" style={{ color: this.props.colors.perfDown }}>
-              Logout
+            <div onClick={() => this.handleLogout()} className="menu-item-flex">
+              <Logout fontSize="small" style={{ fill: this.props.colors.perfDown }} />
+              <div className="menu-item-text" style={{ color: this.props.colors.perfDown }}>
+                Logout
+              </div>
             </div>
-          </div>
-        </Menu>
-      </div>
-    );
+          </Menu>
+        </div>
+      );
+    }
   }
 }
 

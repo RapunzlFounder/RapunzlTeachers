@@ -50,26 +50,38 @@ class AssignCourseDialog extends React.PureComponent {
     }
   }
 
-  // Handles Assigning The Selected Course With The Selected Classroom 
+  // Handles Assigning The Selected Course With The Selected Classroom - Button Appears Unresponsive If User Has Not Selected Course To Assign
   _handleAssignCourse() {
-    this.setState({ loading: true });
-    this.props.assignCourse(this.props.jwtToken, this.state.selectedClassroom, this.props.course.id).then((res) => {
-      // Handles If There Is An Error When Assigning A Course To A Classroom & Displays Error
-      if (!(res && !('errors' in res))) {
-        this.setState({
-          loading: false,
-          errorMessage: res.errors[0].message,
-          progress: 'error',
-        });
+    if (this.state.selectedClassroom) {
+      this.setState({ loading: true });
+      this.props.assignCourse(this.props.jwtToken, this.state.selectedClassroom, this.props.course.id).then((res) => {
+        // Handles If There Is An Error When Assigning A Course To A Classroom & Displays Error
+        if (!(res && !('errors' in res))) {
+          this.setState({
+            loading: false,
+            errorMessage: res.errors[0].message,
+            progress: 'error',
+          });
+        }
+        // Handles If Dispatch Is Successful By Updating State Accordingly
+        else {
+          this.setState({
+            loading: false,
+            progress: 'success'
+          });
+        }
+      });
+    }
+  }
+
+  _getClassInfo(classID) {
+    let classInfo = false;
+    for (var i in this.props.allClassrooms) {
+      if (this.props.allClassrooms[i].id === classID) {
+        classInfo = this.props.allClassrooms[i];
       }
-      // Handles If Dispatch Is Successful By Updating State Accordingly
-      else {
-        this.setState({
-          loading: false,
-          progress: 'success'
-        });
-      }
-    });
+    }
+    return classInfo;
   }
 
   render() {
@@ -142,19 +154,24 @@ class AssignCourseDialog extends React.PureComponent {
                 {this.props.classArrays[1].length !== 0 && (
                   <div className='assign-course-content' style={{ paddingBottom: 25 }}>
                     {this.props.classArrays[1].map((item, index) => {
-                      return (
-                        <div key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[1].length - 1 ? 0 : 1}}>
-                          <div>
-                            <div className='assign-course-class-title'>
-                              {item.className} - {item.classYear}
+                      const studentInfo = this._getClassInfo(item.classId);
+                      if (studentInfo !== false) {
+                        return (
+                          <div key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[1].length - 1 ? 0 : 1}}>
+                            <div>
+                              <div className='assign-course-class-title'>
+                                {studentInfo.className} - {studentInfo.classYear}
+                              </div>
+                              <div className='assign-course-class-subtext'>
+                                {studentInfo.noStudents} {studentInfo.noStudents === 1 ? 'Student' : 'Students'}
+                              </div>
                             </div>
-                            <div className='assign-course-class-subtext'>
-                              {item.noStudents} {item.noStudents === 1 ? 'Student' : 'Students'}
-                            </div>
+                            <VerifiedOutlinedIcon className='assign-course-class-checkbox' style={{ cursor: 'auto' }} />
                           </div>
-                          <VerifiedOutlinedIcon className='assign-course-class-checkbox' style={{ cursor: 'auto' }} />
-                        </div>
-                      );
+                        );
+                      } else {
+                        return <div />
+                      }
                     })}
                   </div>
                 )}
@@ -164,27 +181,47 @@ class AssignCourseDialog extends React.PureComponent {
                     Your Classes
                   </div>
                 </div>
-                <div className='assign-course-content' style={{ paddingBottom: 30 }}>
-                  {this.props.classArrays[0].map((item, index) => {
-                    return (
-                      <div onClick={() => this.selectClass(item.id)} key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[0].length - 1 ? 0 : 1 }}>
-                        <div>
-                          <div className='assign-course-class-title'>
-                            {item.className} - {item.classYear}
+                {this.props.classArrays[0].length !== 0 && (
+                  <div className='assign-course-content' style={{ paddingBottom: 30 }}>
+                    {this.props.classArrays[0].map((item, index) => {
+                      const studentInfo = this._getClassInfo(item.classId);
+                      if (studentInfo !== false) {
+                        return (
+                          <div onClick={() => this.selectClass(item.id)} key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[0].length - 1 ? 0 : 1 }}>
+                            <div>
+                              <div className='assign-course-class-title'>
+                                {studentInfo.className} - {studentInfo.classYear}
+                              </div>
+                              <div className='assign-course-class-subtext'>
+                                {studentInfo.noStudents} {studentInfo.noStudents === 1 ? 'Student' : 'Students'}
+                              </div>
+                            </div>
+                            {this.state.selectedClassroom === item.id && (<CheckBox className='assign-course-class-checkbox' />)}
+                            {this.state.selectedClassroom !== item.id && (<CheckBoxOutlineBlank className='assign-course-class-checkbox' />)}
                           </div>
-                          <div className='assign-course-class-subtext'>
-                            {item.noStudents} {item.noStudents === 1 ? 'Student' : 'Students'}
-                          </div>
-                        </div>
-                        {this.state.selectedClassroom === item.id && (<CheckBox className='assign-course-class-checkbox' />)}
-                        {this.state.selectedClassroom !== item.id && (<CheckBoxOutlineBlank className='assign-course-class-checkbox' />)}
-                      </div>
-                    )
-                  })}
-                </div>
-                <div onClick={() => this._handleAssignCourse()} className={`assign-course-save-changes ${this.state.selectedClassroom ? '' : 'assign-course-save-changes-disabled'}`}>
-                  Assign Course
-                </div>
+                        )
+                      } else {
+                        return <div />
+                      }
+                    })}
+                  </div>
+                )}
+                {this.props.classArrays[0].length === 0 && (
+                  <div className='assign-course-content' style={{ paddingTop: 35 }}>
+                    <ErrorOutlineIcon className='assign-course-empty-icon'/>
+                    <div className='assign-course-existing-empty' style={{ paddingBottom: 10 }}>
+                      No Classrooms Remaining
+                    </div>
+                    <div className='assign-course-empty-text'>
+                      All of your classrooms have been assigned to this course already. Create a new classroom to assign this course again.
+                    </div>
+                  </div>
+                )}
+                {this.props.classArrays[0].length !== 0 && (
+                  <div onClick={() => this._handleAssignCourse()} className={`assign-course-save-changes ${this.state.selectedClassroom ? '' : 'assign-course-save-changes-disabled'}`}>
+                    Assign Course
+                  </div>
+                )}
               </div>
             )}
             {this.state.loading && (

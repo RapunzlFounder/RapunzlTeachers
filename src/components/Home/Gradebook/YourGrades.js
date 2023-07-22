@@ -5,6 +5,7 @@ import { selectClassroom } from '../../../ActionTypes/dashboardActions';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import EmptyGradebook from '../../../assets/images/Education/EmptyGradebook.png';
 import ClassGrades from './ClassGrades';
+import ExportGradesDialog from './ExportGradesDialog';
 
 class YourGrades extends Component {
   // eslint-disable-next-line
@@ -12,6 +13,8 @@ class YourGrades extends Component {
     super(props);
     this.state = {
       selected: '',
+      exportVisible: false,
+      viewType: 'Details'
     }
   }
 
@@ -20,9 +23,27 @@ class YourGrades extends Component {
     this.setState({ selected: text });
   }
 
+  // Pass Through Arrow Function Which Toggles The Visibility Of The ExportDialog Which Allows User To Select Export Options
+  _toggleExportDialog = () => {
+    this.setState({ exportVisible: !this.state.exportVisible });
+  }
+
+  // Function To Toggle View Between Details and Summary
+  _handleChangeViewType(text) {
+    if (text === 'Details') {
+      this.setState({ viewType: 'Details' });
+    } else {
+      this.setState({ viewType: 'Summary' });
+    }
+  }
+
   render() {
     return (
       <div>
+        <ExportGradesDialog
+          visible={this.state.exportVisible}
+          dismiss={this._toggleExportDialog}
+        />
         <div className='card-flex-header' style={{ paddingBottom: 5 }}>
           <h2 className='card-header' style={{ marginLeft: 0 }}>
             Your Gradebook
@@ -55,8 +76,32 @@ class YourGrades extends Component {
               })}
             </select>
           )}
-          {this.props.selectedClassroom !== null && (
-            <div className='gradebook-class-dropdown gradebook-export-button'>
+          {!!this.props.selectedClassroom && (
+            <div className='gradebook-class-option-flex'>
+              <div
+                onClick={() => this._handleChangeViewType('Summary')}
+                className={`gradebook-class-option-button ${this.state.viewType === 'Summary' ? 'gradebook-class-option-selected' : 'gradebook-class-option-unselected'}`}
+                style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+              >
+                <FileDownloadIcon className='gradebook-export-icon' style={{ fill: this.state.viewType === 'Summary' ? '#ffffff' : '#41d0ac' }} />
+                <div style={{ color: this.state.viewType === 'Summary' ? '#ffffff' : '#41d0ac' }}>
+                  Class Summary
+                </div>
+              </div>
+              <div
+                onClick={() => this._handleChangeViewType('Details')}
+                className={`gradebook-class-option-button ${this.state.viewType === 'Details' ? 'gradebook-class-option-selected' : 'gradebook-class-option-unselected'}`}
+                style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+              >
+                <FileDownloadIcon className='gradebook-export-icon' style={{ fill: this.state.viewType === 'Details' ? '#ffffff' : '#41d0ac' }} />
+                <div style={{ color: this.state.viewType === 'Details' ? '#ffffff' : '#41d0ac' }}>
+                  Grade Details
+                </div>
+              </div>
+            </div>
+          )}
+          {this.props.selectedClassroom !== '' && (
+            <div onClick={this._toggleExportDialog} className='gradebook-class-dropdown gradebook-export-button'>
               <FileDownloadIcon className='gradebook-export-icon' />
               <div className='export-button-text'>
                 Export Grades
@@ -67,9 +112,10 @@ class YourGrades extends Component {
         {!!this.props.selectedClassroom && (
           <ClassGrades
             classroomId={this.props.selectedClassroom}
+            isSummary={this.state.viewType === 'Summary'}
           />
         )}
-        {(this.props.allClassrooms.length === 0 || this.state.selected === '') && (
+        {(this.props.allClassrooms.length === 0 || this.state.selected === '') && !this.props.selectedClassroom && (
           <div className='gradebook-container'>
             <img alt='' className='gradebook-empty-image' src={EmptyGradebook} />
             <div className='gradebook-empty-header'>

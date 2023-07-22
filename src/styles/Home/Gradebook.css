@@ -66,6 +66,7 @@ body {
     border-color: #41d0ac;
     transition: 0.2s all;
     cursor: pointer;
+    height: 20px;
 }
 .gradebook-export-button:hover {
     color: white;
@@ -74,14 +75,61 @@ body {
 .gradebook-export-icon {
     font-size: 18px !important;
     margin-right: 7px;
-    fill: #41d0ac !important;
+    fill: #41d0ac;
     transition: 0.2s all;
 }
 .gradebook-export-button:hover .gradebook-export-icon {
-    fill: white !important;
+    fill: white;
 }
 .export-button-text {
     color: #41d0ac;
+}
+.gradebook-class-option-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.gradebook-class-option-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 13px;
+    padding-right: 13px;
+    
+    transition: 0.2s all;
+    cursor: pointer;
+    height: 20px;
+    background: none;
+    outline: none;
+    border: 1px solid #41d0ac;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-top: 10px;
+    width: -moz-fit-content;
+    width: fit-content;
+}
+.gradebook-class-option-selected {
+    background-color:#049f78;
+    color: #ffffff;
+}
+.gradebook-class-option-unselected {
+    background: none;
+    color: #41d0ac;
+}
+.gradebook-class-option-selected:hover {
+    background-color:#049f78;
+    color: white;
+}
+.gradebook-class-option-unselected:hover {
+    background-color:#186854;
+    color: white;
+}
+.gradebook-class-option-icon {
+
 }
 .gradebook-export-button:hover .export-button-text {
     color: white;
@@ -116,10 +164,13 @@ body {
     margin: auto;
     margin-left: 1%;
     margin-right: 1%;
-    padding-top: 15px;
+    padding-top: 25px;
     padding-bottom: 15px;
     cursor: pointer;
     transition: 0.2s all;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .student-grade-name-flex {
     display: flex;
@@ -138,10 +189,10 @@ body {
     color: #07e2aa;
 }
 .student-grades-overview {
-    padding-bottom: 20px;
+    padding-bottom: 35px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     margin-left: 1%;
     margin-right: 1%;
 }
@@ -163,4 +214,104 @@ body {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+.overview-grade-circle:hover {
+    background-color: #ffffff1c;
+}
+.student-grade-instructions {
+    font-size: 14px;
+    font-weight: 200;
+    padding-top: 8px;
+    width: 520px;
+}
+.grade-circle-percent {
+    font-size: 10px;
+    font-weight: 800;
+    margin-bottom: -1px;
+}
+.grade-circle-number {
+    font-size: 15px;
+    font-weight: 600;
+    padding-right: 2px;
+}
+.quiz-questions {
+	margin-bottom: 100px;
+}
+.question-item {
+
+}
+.question-main {
+    max-width: 800px;
+    margin: auto;
+    background-color: #ffffff1c;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 25px;
+}
+.question-main-flex {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+.question-number {
+    width: 30px;
+    font-size: 18px;
+    font-weight: 800;
+}
+.question-text {
+    font-size: 19px;
+    font-weight: 200;
+}
+.question-icon {
+
+}
+.question-expanded {
+	max-width: 800px;
+    margin: auto;
+    background-color: #ffffff1c;
+	padding: 25px;
+	margin-bottom: 5px;
+	padding-top: 0px;
+	padding-bottom: 13px;
+}
+.question-expanded-header {
+    padding-bottom: 5px;
+    font-size: 13px;
+    font-weight: 700;
+}
+.question-response {
+    font-size: 17px;
+    font-weight: 200;
+    padding-bottom: 25px;
+}
+.results-back-button {
+    font-size: 14px;
+    font-weight: 400;
+    width: 150px;
+    padding: 15px;
+	cursor: pointer;
+	transition: 0.2s all;
+}
+.results-flex {
+	max-width: 830px;
+    margin: auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-end;
+	margin-bottom: 6px;
+}
+.results-back-button:hover {
+	font-weight: 700;
+}
+.results-title {
+	font-size: 24px;
+    font-weight: 200;
+	padding-bottom: 15px;
 }

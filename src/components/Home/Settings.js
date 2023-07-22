@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { APP_VERSION } from "../../constants";
 import moment from 'moment';
+import { Navigate } from 'react-router-dom';
 // Redux Actions
 import { connect } from 'react-redux';
 import { getModules } from '../../ActionTypes/coursemoduleActions';
@@ -377,7 +378,11 @@ class Settings extends Component {
   }
 
   render() {
-    if (this.props.visible) {
+    if (this.state.handleLogout) {
+      return(
+        <Navigate to="/login" replace={true} />
+      );
+    } else if (this.props.visible) {
       return (
         <div className='tile' style={{ paddingTop: 40 }}>
           <Alert

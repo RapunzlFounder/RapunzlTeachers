@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { isEmailUnique, logoutUser } from '../../ActionTypes/loginActions';
 import { updateUser } from '../../ActionTypes/updateUserDataActions';
 import { FetchVerificationStatus, ResendVerification } from '../../ActionTypes/verificationActions';
+import { Navigate } from 'react-router-dom';
 import Alert from '../Admin/Alert';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -22,6 +23,8 @@ class VerifyAccountContainer extends React.PureComponent {
       aletTitle: '',
       alertMessage: '',
       loading: false,
+      // If JWTToken becomes null, we navigate the user to the login screen to login again
+      handleLogout: false
     };
   }
 
@@ -137,9 +140,10 @@ class VerifyAccountContainer extends React.PureComponent {
     }
   }
 
-  // Handles Logging User Out And Sending Them Back To CreateAccountScreen
-  handleLogout() {
+  // Handles Dispatch To Clear Redux And Updates State So That User Is Navigated To Home Screen
+  _handleLogout() {
     this.props.logout();
+    this.setState({ handleLogout: true });
   }
 
   // Toggles Between Main Verification Screen & Option For User To Change Email Address
@@ -158,84 +162,90 @@ class VerifyAccountContainer extends React.PureComponent {
   }
 
   render() {
-    return (
-      <Container
-        disableGutters={true}
-        fixed={false}
-        maxWidth={'md'}
-        style={{ padding: '20px', marginTop: '20px', borderRadius: '5px' }}
-      >
-        <Alert
-          title={this.state.alertTitle}
-          message={this.state.alertMessage}
-          visible={this.state.alertVisible}
-          dismiss={this.toggleAlert}
-        />
-        <img
-          alt="Verify Account Header"
-          className='verification-image'
-          src={VerificationLetter}
-        />
-        <div className='verification-header'>
-          We emailed you a link to verify your account. If you can't find the email, check your spam and junk folders before resending the link.
-        </div>
-        <Box style={{ width: '90%', maxWidth: '500px', margin: 'auto' }} component="form">
-          {!this.state.changeEmail && (
-            <div className='verification-email-container'>
-              <div className="verification-email">
-                {this.props.email}
+    if (this.state.handleLogout) {
+      return(
+        <Navigate to="/login" replace={true} />
+      );
+    } else {
+      return (
+        <Container
+          disableGutters={true}
+          fixed={false}
+          maxWidth={'md'}
+          style={{ padding: '20px', marginTop: '20px', borderRadius: '5px' }}
+        >
+          <Alert
+            title={this.state.alertTitle}
+            message={this.state.alertMessage}
+            visible={this.state.alertVisible}
+            dismiss={this.toggleAlert}
+          />
+          <img
+            alt="Verify Account Header"
+            className='verification-image'
+            src={VerificationLetter}
+          />
+          <div className='verification-header'>
+            We emailed you a link to verify your account. If you can't find the email, check your spam and junk folders before resending the link.
+          </div>
+          <Box style={{ width: '90%', maxWidth: '500px', margin: 'auto' }} component="form">
+            {!this.state.changeEmail && (
+              <div className='verification-email-container'>
+                <div className="verification-email">
+                  {this.props.email}
+                </div>
+                <div className="verification-email-subtext">
+                  Your Email Address
+                </div>
+                {/* <button className='verification-edit-email' onClick={() => this.toggleChangeEmail()}>
+                  Edit Email Address
+                </button> */}
               </div>
-              <div className="verification-email-subtext">
-                Your Email Address
-              </div>
-              {/* <button className='verification-edit-email' onClick={() => this.toggleChangeEmail()}>
-                Edit Email Address
-              </button> */}
-            </div>
-          )}
-          {this.state.changeEmail && (
-            <div className='verification-email-container'>
-              <div className="verification-email">
-                {this.props.email}
-              </div>
-              <div className="verification-email-subtext">
-                Your Email Address
-              </div>
-              <button className='change-email-button' onClick={() => this.submitEmail()}>
-                Change Email
-              </button>
-              <button className='go-back-button' onClick={() => this.toggleChangeEmail()}>
-                Cancel
-              </button>
-            </div>
-          )}
-          {!this.state.changeEmail && !this.state.loading && !this.props.loading && (
-            <div className='verification-buttons-container'>
-              <div className='verification-buttons-flex'>
-                <button className='verification-button resend-email-button' onClick={() => this.resendVerification()}>
-                  Resend Email
+            )}
+            {this.state.changeEmail && (
+              <div className='verification-email-container'>
+                <div className="verification-email">
+                  {this.props.email}
+                </div>
+                <div className="verification-email-subtext">
+                  Your Email Address
+                </div>
+                <button className='change-email-button' onClick={() => this.submitEmail()}>
+                  Change Email
                 </button>
-                <button className='verification-button refresh-status-button' onClick={() => this.updateVerificationStatus()}>
-                  Refresh Status
+                <button className='go-back-button' onClick={() => this.toggleChangeEmail()}>
+                  Cancel
                 </button>
               </div>
-              <button className='verification-logout-button' onClick={() => this.handleLogout()}>
-                Logout
-              </button>
-            </div>
-          )}
-          {(this.state.loading || this.props.loading) && (
-            <div className='verify-loading-container'>
-              <CircularProgress />
-              <div className='verify-loading-text'>
-                Refreshing Verification<br/>Status...
+            )}
+            {!this.state.changeEmail && !this.state.loading && !this.props.loading && (
+              <div className='verification-buttons-container'>
+                <div className='verification-buttons-flex'>
+                  <button className='verification-button resend-email-button' onClick={() => this.resendVerification()}>
+                    Resend Email
+                  </button>
+                  <button className='verification-button refresh-status-button' onClick={() => this.updateVerificationStatus()}>
+                    Refresh Status
+                  </button>
+                </div>
+                <button className='verification-logout-button' onClick={() => this.handleLogout()}>
+                  Logout
+                </button>
               </div>
-            </div>
-            
-          )}
-        </Box>
-      </Container>
-    );
+            )}
+            {(this.state.loading || this.props.loading) && (
+              <div className='verify-loading-container'>
+                <CircularProgress />
+                <div className='verify-loading-text'>
+                  Refreshing Verification<br/>Status...
+                </div>
+              </div>
+              
+            )}
+          </Box>
+        </Container>
+      );
+    }
   }
 }
 

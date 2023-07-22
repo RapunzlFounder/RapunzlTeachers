@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { toggleCourseBuilder } from '../../../ActionTypes/dashboardActions';
+import { getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
 import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import Bookmarks from '@mui/icons-material/Bookmarks';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
@@ -18,36 +19,19 @@ class YourCourses extends Component {
     }
   }
 
-  // Gets Arrays To Render In Lists For Classrooms Currently Assigned To A Course & Those That Are Not
-  _getAssignedClasses() {
-    let assignedClassrooms = 0;
-    let unassignedArray = [];
-    // If Teacher Has No Classroom Courses, All Classrooms Are In The Unassigned Array
+  // Returns An Array Length Of The Classes Assigned To This Specific Course
+  _getAssignedClasses(courseID) {
+    let assignedClassLength = 0;
     if (this.props.classroomCourses.length === 0) {
       return 0;
-    }
-    // Handles If Teacher Has Classroom Courses By Determining If A Class Is Assigned To A Course
-    else {
-      // Loop Through All Classrooms To Determine Which Return Array To Place Them In
-      for (var i in this.props.allClassrooms) {
-        // Initially Assume Classroom Is Not In A Course
-        let assigned = false;
-        // Check All Courses To Determine If Course ClassID Matches Classroom ID
-        for (var j in this.props.classroomCourses) {
-          // eslint-disable-next-line
-          if (this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
-            // If Classroom Matches, Then We Set Assigned to True
-            assigned = true;
-          }
-        }
-        // For Each Classroom We Either Add It To Assigned Classrooms or Unassigned Array
-        if (assigned) {
-          assignedClassrooms = assignedClassrooms + 1;
+    } else {
+      for (var i in this.props.classroomCourses) {
+        if (this.props.classroomCourses[i].courseId === courseID) {
+          assignedClassLength = assignedClassLength + 1;
         }
       }
+      return assignedClassLength;
     }
-    // Returns An Array Of Array To Be Used In Render Method For Lists
-    return [unassignedArray, assignedClassrooms]
   }
 
   render() {
@@ -88,7 +72,7 @@ class YourCourses extends Component {
                       <div className='your-courses-text-flex'>
                         <PeopleAltOutlinedIcon className='your-courses-flex-icon' />
                         <div className='your-courses-text'>
-                          Assigned To 0 Classes
+                          Assigned To {this._getAssignedClasses(course.id) === 1 ? '1 Class' : course.id + ' Classes'}
                         </div>
                       </div>
                       <div className='your-courses-text-flex' style={{ marginTop: 8 }}>
@@ -131,6 +115,8 @@ const mapStateToProps = (state) => {
   return {
     // Selector Which Handles All Teacher Courses
     teacherCourses: getAllTeacherCourses(state),
+    // Selector Which Handles All Teacher Classroom Courses To Determine Which Classrooms Are Assigned
+    classroomCourses: getAllTeacherClassroomCourses(state),
   };
 };
 

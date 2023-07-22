@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { viewAssignedClass } from '../../../ActionTypes/dashboardActions';
 import { getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
-import { getAllTeacherClassrooms, getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
+import { getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
 import StandardsPopup from '../../Admin/StandardsPopup';
 import { objectToArray } from '../../../helper_functions/utilities';
 import ProgressBar from './ProgressBar';
@@ -26,6 +26,7 @@ class ViewCourseTile extends Component {
       pdfURL: 'images/M1/M1_Presentation.pdf',
       PDFVisible: false,
       pdfOrientation: 'landscape',
+      navigateToClassroom: false
     }
   }
 
@@ -331,39 +332,25 @@ class ViewCourseTile extends Component {
     };
   }
 
-  // Gets Arrays To Render In Lists For Classrooms Currently Assigned To A Course & Those That Are Not
-  _getClassArrays() {
-    let assignedClassrooms = [];
-    let unassignedArray = [];
-    // If Teacher Has No Classroom Courses, All Classrooms Are In The Unassigned Array
+  // Returns An Array Of Classes Assigned To This Specific Course
+  _getAssignedClasses() {
+    let assignedArray = [];
+    let notAssignedArray = [];
     if (this.props.classroomCourses.length === 0) {
-      unassignedArray = this.props.allClassrooms;
-    }
-    // Handles If Teacher Has Classroom Courses By Determining If A Class Is Assigned To A Course
-    else {
-      // Loop Through All Classrooms To Determine Which Return Array To Place Them In
-      for (var i in this.props.allClassrooms) {
-        // Initially Assume Classroom Is Not In A Course
-        let assigned = false;
-        // Check All Courses To Determine If Course ClassID Matches Classroom ID
-        for (var j in this.props.classroomCourses) {
-          // eslint-disable-next-line
-          if (this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
-            // If Classroom Matches, Then We Set Assigned to True
-            assigned = true;
-          }
-        }
-        // For Each Classroom We Either Add It To Assigned Classrooms or Unassigned Array
-        if (assigned) {
-          assignedClassrooms.push(this.props.allClassrooms[i]);
+      return [notAssignedArray, assignedArray];
+    } else {
+      for (var i in this.props.classroomCourses) {
+        if (this.props.classroomCourses[i].courseId === this.props.currentCourse.id) {
+          assignedArray.push(this.props.classroomCourses[i]);
         } else {
-          unassignedArray.push(this.props.allClassrooms[i]);
+          notAssignedArray.push(this.props.classroomCourses[i]);
         }
       }
+      return [notAssignedArray, assignedArray];
     }
-    // Returns An Array Of Array To Be Used In Render Method For Lists
-    return [unassignedArray, assignedClassrooms]
   }
+
+  // Handles When User Selects An Assigned Classroom By Updating Dashboard Redux State
 
   // Pass Through Arrow Function Which Handles Toggling Visibilty Of Alert To Assign A Selected Course To A Classroom
   toggleAssignCourse = () => {
@@ -376,13 +363,14 @@ class ViewCourseTile extends Component {
   }
 
   render() {
+    let assignedArray = this._getAssignedClasses();
     return (
       <div className='tile current-course' style={{ paddingBottom: 20 }}>
         <AssignCourseDialog
           course={this.props.currentCourse}
           visible={this.state.assigningCourse}
           dismiss={this.toggleAssignCourse}
-          classArrays={this._getClassArrays()}
+          classArrays={assignedArray}
         />
         <StandardsPopup
           visible={this.state.standardsVisible}
@@ -518,7 +506,7 @@ class ViewCourseTile extends Component {
             </div>
             <div className='assigned-flex-divider' />
           </div>
-          {this._getClassArrays()[1].length === 0 ? (
+          {assignedArray[1].length === 0 ? (
             <div>
               <div className='assigned-text-empty'>
                 This course is not assigned to any classrooms. Assign this course to a class so they can begin accessing course material.
@@ -526,15 +514,15 @@ class ViewCourseTile extends Component {
             </div>
           ) : (
             <div className='assigned-class-container'>
-              {this._getClassArrays()[1].map((classItem) => {
+              {assignedArray[1].map((classItem) => {
                 return (
-                  <div key={classItem.id} onClick={() => this.props.viewAssignedClass(classItem.id)} className='assigned-class-item'>
+                  <div key={classItem.id} onClick={() => this.props.viewAssignedClass(classItem.classId)} className='assigned-class-item'>
                     <div className='assigned-class-left'>
                       <div className='assigned-class-name'>
                         {classItem.className}
                       </div>
                       <div className='assigned-class-students'>
-                        {parseInt(classItem.noStudents) !== 1 ? classItem.noStudents + ' Students' : classItem.noStudents + ' Student'}
+                        View Classroom
                       </div>
                     </div>
                     <ArrowForwardIosIcon className='assigned-class-arrow' />
@@ -563,7 +551,6 @@ const mapStateToProps = (state, ownProps) => {
     currentCourse: getTeacherCourse(state, ownProps),
     publicModules: getAllPublicModules(state),
     // Retrieves All Teacher Classrooms
-    allClassrooms: getAllTeacherClassrooms(state),
     classroomCourses: getAllTeacherClassroomCourses(state),
     financialLiteracyStandards: state.coursesmodules.financialLiteracyStandards,
   };

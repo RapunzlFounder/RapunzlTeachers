@@ -344,6 +344,14 @@
     font-size: 13px;
     font-weight: 600;
 }
+.assign-course-empty-text {
+    text-align: center;
+    width: 340px;
+    margin: auto;
+    color: #007154;
+    font-size: 14px;
+    padding-bottom: 55px;
+}
 .assign-course-empty-icon {
     display: block !important;
     margin: auto !important;

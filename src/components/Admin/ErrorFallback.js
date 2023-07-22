@@ -1,4 +1,5 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
 import '../../styles/Admin/Fallback.css';
 import { ContactSupport } from '../../ActionTypes/settingsAction';
 import { logoutUser } from '../../ActionTypes/loginActions';
@@ -31,7 +32,9 @@ class ErrorFallback extends React.PureComponent {
       name: '',
       nameError: false,
       message: '',
-      messageError: false
+      messageError: false,
+      // If JWTToken becomes null, we navigate the user to the login screen to login again
+      handleLogout: false
     }
   }
 
@@ -110,8 +113,10 @@ class ErrorFallback extends React.PureComponent {
     }
   }
 
+  // Handles Dispatch To Clear Redux And Updates State So That User Is Navigated To Home Screen
   _handleLogout() {
     this.props.logout();
+    this.setState({ handleLogout: true });
   }
 
   // Pass Through Arrow Function Which Toggles Visibility Of Alert Dialog
@@ -125,102 +130,108 @@ class ErrorFallback extends React.PureComponent {
   _handleChangeEmail(text) { this.setState({ email: text, emailError: false }); }
 
   render() {
-    return (
-      <div>
-        <Alert
-          title={this.state.alertTitle}
-          message={this.state.alertMessage}
-          visible={this.state.alertVisible}
-          dismiss={this.toggleAlert}
-        />
-        {this.state.status === 'initial' && (
-          <div>
-            <img alt='' className='fallback-img' src={FallbackImage} />
-            <div className='fallback-error-h1'>
-              {this.state.contacted ? 'Unable To Connect To Rapunzl' : 'Rapunzl Encountered An Error...'}
-            </div>
-            <div className='fallback-error-text'>
-              Something went wrong which caused Rapunzl to crash and become disconnected from the server. Please login to Rapunzl again in order to access your account. {this.props.jwtToken !== null && this.props.jwtToken !== undefined && this.props.jwtToken !== false && !this.state.contacted ? 'If the problem continues, please contact support.' : ''}
-            </div>
+    if (this.state.handleLogout) {
+      return(
+        <Navigate to="/login" replace={true} />
+      );
+    } else {
+      return (
+        <div>
+          <Alert
+            title={this.state.alertTitle}
+            message={this.state.alertMessage}
+            visible={this.state.alertVisible}
+            dismiss={this.toggleAlert}
+          />
+          {this.state.status === 'initial' && (
             <div>
-              <div onClick={() => this._handleLogout()} className='fallback-button-flex'>
-                <LogoutIcon className='fallback-button-icon' />
-                <div className='fallback-button-text' style={{ fontWeight: '500' }}>
-                  Logout
+              <img alt='' className='fallback-img' src={FallbackImage} />
+              <div className='fallback-error-h1'>
+                {this.state.contacted ? 'Unable To Connect To Rapunzl' : 'Rapunzl Encountered An Error...'}
+              </div>
+              <div className='fallback-error-text'>
+                Something went wrong which caused Rapunzl to crash and become disconnected from the server. Please login to Rapunzl again in order to access your account. {this.props.jwtToken !== null && this.props.jwtToken !== undefined && this.props.jwtToken !== false && !this.state.contacted ? 'If the problem continues, please contact support.' : ''}
+              </div>
+              <div>
+                <div onClick={() => this._handleLogout()} className='fallback-button-flex'>
+                  <LogoutIcon className='fallback-button-icon' />
+                  <div className='fallback-button-text' style={{ fontWeight: '500' }}>
+                    Logout
+                  </div>
+                </div>
+                {this.props.jwtToken !== null && this.props.jwtToken !== undefined && this.props.jwtToken !== false && !this.state.contacted && (
+                  <div onClick={() => this._toggleContactSupport()} className='fallback-button-flex fallback-support-button'>
+                    <CommentOutlinedIcon className='fallback-button-icon' style={{ fill: '#c5c5c5', fontSize: '14px' }} />
+                    <div className='fallback-button-text' style={{ color: '#c5c5c5', fontWeight: '300', fontSize: '13px', marginLeft: 3 }}>
+                      Contact Support
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {this.state.status === 'contact' && (
+            <div className='fallback-contact-container'>
+              <div onClick={() => this._toggleContactSupport()} className='fallback-contact-back-button-flex'>
+                <ArrowCircleLeftOutlinedIcon className='fallback-back-button-icon'/>
+                <div className='fallback-back-button-text'>
+                  Go Back
                 </div>
               </div>
-              {this.props.jwtToken !== null && this.props.jwtToken !== undefined && this.props.jwtToken !== false && !this.state.contacted && (
-                <div onClick={() => this._toggleContactSupport()} className='fallback-button-flex fallback-support-button'>
-                  <CommentOutlinedIcon className='fallback-button-icon' style={{ fill: '#c5c5c5', fontSize: '14px' }} />
-                  <div className='fallback-button-text' style={{ color: '#c5c5c5', fontWeight: '300', fontSize: '13px', marginLeft: 3 }}>
-                    Contact Support
+              <div className='fallback-contact-h1' style={{ color: this.state.emailError ? '#ff4a4a' : '#ffffff' }}>
+                Your Email Address
+              </div>
+              <input
+                className='fallback-contact-input'
+                value={this.state.email}
+                error={this.state.emailError}
+                onChange={(event) => this._handleChangeEmail(event.target.value)}
+                style={{ backgroundColor: this.state.emailError ? '#bc2e2ea1' : '#0e5845' }}
+              />
+              <div className='fallback-contact-h1' style={{ color: this.state.nameError ? '#ff4a4a' : '#ffffff' }}>
+                Your Name
+              </div>
+              <input
+                className='fallback-contact-input'
+                value={this.state.name}
+                error={this.state.nameError}
+                onChange={(event) => this._handleChangeName(event.target.value)}
+                style={{ backgroundColor: this.state.nameError ? '#bc2e2ea1' : '#0e5845' }}
+              />
+              <div className='fallback-contact-h1' style={{ color: this.state.messageError ? '#ff4a4a' : '#ffffff' }}>
+                Your Message  
+              </div>
+              <textarea
+                className='fallback-contact-input fallback-contact-textarea'
+                multiline={true}
+                value={this.state.message}
+                error={this.state.messageError}
+                onChange={(event) => this._handleMessageChange(event.target.value)}
+                placeholder='Please describe your issue with as much detail as possible'
+                style={{ backgroundColor: this.state.messageError ? '#bc2e2ea1' : '#0e5845' }}
+              />
+              {!this.state.loading && (
+                <div onClick={() => this.contactSupport()} className='fallback-contact-button-flex'>
+                  <SendIcon className='fallback-contact-button-icon' />
+                  <div className='fallback-contact-button-text'>
+                    Send Message
+                  </div>
+                </div>
+              )}
+              {this.state.loading && (
+                <div className='fallback-loading-container'>
+                  <CircularProgress />
+                  <div className='fallback-contact-loading-text'>
+                    Sending Support Message...
                   </div>
                 </div>
               )}
             </div>
-          </div>
-        )}
-        {this.state.status === 'contact' && (
-          <div className='fallback-contact-container'>
-            <div onClick={() => this._toggleContactSupport()} className='fallback-contact-back-button-flex'>
-              <ArrowCircleLeftOutlinedIcon className='fallback-back-button-icon'/>
-              <div className='fallback-back-button-text'>
-                Go Back
-              </div>
-            </div>
-            <div className='fallback-contact-h1' style={{ color: this.state.emailError ? '#ff4a4a' : '#ffffff' }}>
-              Your Email Address
-            </div>
-            <input
-              className='fallback-contact-input'
-              value={this.state.email}
-              error={this.state.emailError}
-              onChange={(event) => this._handleChangeEmail(event.target.value)}
-              style={{ backgroundColor: this.state.emailError ? '#bc2e2ea1' : '#0e5845' }}
-            />
-            <div className='fallback-contact-h1' style={{ color: this.state.nameError ? '#ff4a4a' : '#ffffff' }}>
-              Your Name
-            </div>
-            <input
-              className='fallback-contact-input'
-              value={this.state.name}
-              error={this.state.nameError}
-              onChange={(event) => this._handleChangeName(event.target.value)}
-              style={{ backgroundColor: this.state.nameError ? '#bc2e2ea1' : '#0e5845' }}
-            />
-            <div className='fallback-contact-h1' style={{ color: this.state.messageError ? '#ff4a4a' : '#ffffff' }}>
-              Your Message  
-            </div>
-            <textarea
-              className='fallback-contact-input fallback-contact-textarea'
-              multiline={true}
-              value={this.state.message}
-              error={this.state.messageError}
-              onChange={(event) => this._handleMessageChange(event.target.value)}
-              placeholder='Please describe your issue with as much detail as possible'
-              style={{ backgroundColor: this.state.messageError ? '#bc2e2ea1' : '#0e5845' }}
-            />
-            {!this.state.loading && (
-              <div onClick={() => this.contactSupport()} className='fallback-contact-button-flex'>
-                <SendIcon className='fallback-contact-button-icon' />
-                <div className='fallback-contact-button-text'>
-                  Send Message
-                </div>
-              </div>
-            )}
-            {this.state.loading && (
-              <div className='fallback-loading-container'>
-                <CircularProgress />
-                <div className='fallback-contact-loading-text'>
-                  Sending Support Message...
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    );
-   }
+          )}
+        </div>
+      );
+    }
+  }
 }
 
 // Map State To Props (Redux Store Passes State To Component)

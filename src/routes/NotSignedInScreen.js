@@ -18,7 +18,6 @@ class NotSignedInScreen extends Component {
     this.state = {
       loading: false,
 	    tab: 1,
-      handleLogout: false,       
     };
   }
 
