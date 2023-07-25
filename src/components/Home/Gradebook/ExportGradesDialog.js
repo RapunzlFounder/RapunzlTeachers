@@ -140,6 +140,10 @@ class ExportGradesDialog extends React.PureComponent {
                   Select the file format for your exported grades
                 </div>
                 <div className='export-grades-option-flex'>
+                  {/*
+
+                  TODO: IMPLEMENT PDF EXPORT CAPABILITIES
+
                   <div onClick={() => this.selectPDF()} className='export-grades-option'>
                     <img alt='' className='export-grades-icon' src={PDFImage} />
                     {this.state.fileType !== 'PDF' && (
@@ -149,6 +153,8 @@ class ExportGradesDialog extends React.PureComponent {
                       <RadioButtonCheckedOutlinedIcon className='export-grades-option-button-filled' />
                     )}
                   </div>
+                  
+                  */}
                   <div onClick={() => this.selectXLSX()} className='export-grades-option'>
                     <img alt='' className='export-grades-icon' src={XLSXImage} />
                     {this.state.fileType !== 'XLSX' && (
