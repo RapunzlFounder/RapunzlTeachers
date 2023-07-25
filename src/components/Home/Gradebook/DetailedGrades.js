@@ -5,6 +5,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import handleGradeColor from '../../../helper_functions/handleGradeColor';
 
 class DetailedGrades extends Component {
   constructor(props) {
@@ -51,8 +52,19 @@ class DetailedGrades extends Component {
     } else {
       return (
         <div className='student-grades-expanded'>
+          <div className='detailed-grades-flex'>
+            <div className='detailed-grades-title'>
+              Quiz {this.props.questionScores.moduleId}:
+            </div>
+            <div className='detailed-grades-score' style={{ color: handleGradeColor(this.props.questionScores.percentCorrect) }}>
+              {this.props.questionScores.percentCorrect.toFixed(0)}%
+            </div>
+          </div>
+          <div className='detailed-grades-percent-complete' style={{ color: handleGradeColor(this.props.questionScores.percentComplete) }}>
+            {this.props.questionScores.percentComplete.toFixed(0)}% Complete
+          </div>
           <div className='quiz-questions' style={{ marginBottom: 20 }}>
-            {this.props.questionScores.map((item) => {
+            {this.props.questionScores.questionResults.map((item) => {
               let questionObject = this._getQuestionFromRedux(item.moduleQuestionNumber);
               return (  
                 <div key={item.quizQuestionId} className='question-item'>

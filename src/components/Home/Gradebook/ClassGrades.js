@@ -44,18 +44,15 @@ class ClassGrades extends Component {
   }
 
   _getQuestionScores(student) {
-    if (this.state.detailsExpanded !== student.userId) {
+    if (!(this.state.detailsExpanded === student.userId && student.moduleAssessmentScores !== undefined && student.moduleAssessmentScores.length !== 0)) {
       return [];
-    } else if (student.moduleAssessmentScores === undefined) {
+    } else{
+      for (var i in student.moduleAssessmentScores) {
+        if (student.moduleAssessmentScores[i].moduleId === this.state.moduleExpanded) {
+          return student.moduleAssessmentScores[i];
+        }
+      }
       return [];
-    } else if (student.moduleAssessmentScores[this.state.moduleExpanded] === undefined) {
-      return [];
-    } else if (student.moduleAssessmentScores[this.state.moduleExpanded].questionResults === undefined) {
-      return [];
-    } else if (student.moduleAssessmentScores[this.state.moduleExpanded].questionResults.length === 0) {
-      return [];
-    } else {
-      return student.moduleAssessmentScores[this.state.moduleExpanded].questionResults;
     }
   }
 
@@ -141,11 +138,11 @@ class ClassGrades extends Component {
                     {student.moduleAssessmentScores.map((item) => {
                       return (
                         <div key={item.moduleId} onClick={() => this._handleExpandDetails(student.userId, item.moduleId)} className='overview-grade-container'>
-                          <div className='overview-grade-circle' style={{ borderColor: handleGradeColor(item.percentCorrect) }}>
-                            <div className='grade-circle-number' style={{ color: handleGradeColor(item.percentCorrect) }}>
+                          <div className='overview-grade-circle' style={{ borderColor: handleGradeColor(item.percentCorrect), backgroundColor: item.moduleId === this.state.moduleExpanded ? handleGradeColor(item.percentCorrect) : '' }}>
+                            <div className='grade-circle-number' style={{ color: item.moduleId === this.state.moduleExpanded ? '#FFFFFF' : handleGradeColor(item.percentCorrect) }}>
                               {item.percentCorrect.toFixed(0)}
                             </div>
-                            <div className='grade-circle-percent' style={{ color: handleGradeColor(item.percentCorrect) }}>
+                            <div className='grade-circle-percent' style={{ color: item.moduleId === this.state.moduleExpanded ? '#FFFFFF' : handleGradeColor(item.percentCorrect) }}>
                               %
                             </div>
                           </div>

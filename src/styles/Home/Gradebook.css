@@ -192,7 +192,7 @@ body {
     margin-bottom: 15px;
 }
 .student-grades-overview {
-    padding-bottom: 35px;
+    padding-bottom: 20px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -254,6 +254,27 @@ body {
 .quiz-questions {
 	margin-bottom: 100px;
 }
+.detailed-grades-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding-bottom: 5px;
+}
+.detailed-grades-title {
+    font-size: 20px;
+    font-weight: 200;
+}
+.detailed-grades-score {
+    padding-left: 10px;
+    font-size: 22px;
+    font-weight: 700;
+}
+.detailed-grades-percent-complete {
+    font-size: 12px;
+    font-weight: 300;
+    padding-bottom: 15px;
+}
 .question-item {
 
 }
@@ -281,6 +302,7 @@ body {
 .question-text {
     font-size: 19px;
     font-weight: 200;
+    width: fit-content;
 }
 .question-icon {
 
