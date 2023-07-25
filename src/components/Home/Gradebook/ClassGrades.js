@@ -4,11 +4,9 @@ import { getTeacherClassroom, getAllTeacherClassroomCourses } from '../../../sel
 import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import ClassSummarySoonGraphic from '../../../assets/images/Home/Competitions.png';
 import handleGradeColor from '../../../helper_functions/handleGradeColor';
 import ClassSummary from './ClassSummary';
+import DetailedGrades from './DetailedGrades';
 
 class ClassGrades extends Component {
   constructor(props) {
@@ -17,7 +15,6 @@ class ClassGrades extends Component {
       gradesExpanded: null,
       detailsExpanded: null,
       moduleExpanded: null,
-      questionExpanded: null
     }
   }
 
@@ -31,9 +28,9 @@ class ClassGrades extends Component {
   // Function That Updates The Grades Expanded State Variable, Allowing Teachers To View Details On A Students Grades
   _handleExpandGrades(int) {
     if (int === this.state.gradesExpanded) {
-      this.setState({ gradesExpanded: null, detailsExpanded: null, moduleExpanded: null, questionExpanded: null });
+      this.setState({ gradesExpanded: null, detailsExpanded: null, moduleExpanded: null });
     } else {
-      this.setState({ gradesExpanded: int });
+      this.setState({ gradesExpanded: int, detailsExpanded: null, moduleExpanded: null });
     }
   }
 
@@ -59,15 +56,6 @@ class ClassGrades extends Component {
       return [];
     } else {
       return student.moduleAssessmentScores[this.state.moduleExpanded].questionResults;
-    }
-  }
-
-  // Function That Updates The State Of The Expanded Question And Toggles It To View Student Answer
-  _handleExpandQuestion(questionID) {
-    if (questionID === this.state.questionExpanded) {
-      this.setState({ questionExpanded: null });
-    } else {
-      this.setState({ questionExpanded: questionID });
     }
   }
 
@@ -155,7 +143,7 @@ class ClassGrades extends Component {
                         <div key={item.moduleId} onClick={() => this._handleExpandDetails(student.userId, item.moduleId)} className='overview-grade-container'>
                           <div className='overview-grade-circle' style={{ borderColor: handleGradeColor(item.percentCorrect) }}>
                             <div className='grade-circle-number' style={{ color: handleGradeColor(item.percentCorrect) }}>
-                              {item.percentCorrect}
+                              {item.percentCorrect.toFixed(0)}
                             </div>
                             <div className='grade-circle-percent' style={{ color: handleGradeColor(item.percentCorrect) }}>
                               %
@@ -215,54 +203,11 @@ class ClassGrades extends Component {
                   </div> 
                 )}
                 {/* Expandable Section That Is Hidden Initially Because It Is A Lot Of Data */}
-                {this._getQuestionScores(student).length !== 0 && (
-                  <div className='student-grades-expanded'>
-                    <div className='quiz-questions'>
-                      {this._getQuestionScores(student).map((item) => {
-                        return (
-                          <div key={item.quizQuestionId} className='question-item'>
-                            <div className='question-main' onClick={() => this._handleExpandQuestion(item.quizQuestionId)} style={{ marginBottom: this.state.questionExpanded === item.quizQuestionId ? 0 : 5 }}>
-                              <div className='question-main-flex'>
-                                <div className='question-number'>
-                                  {item.moduleQuestionNumber}
-                                </div>
-                                <div className='question-text'>
-                                  Question
-                                </div>
-                              </div>
-                              {item.answerCorrect && (
-                                <TaskAltIcon className='question-icon' style={{ fill: '#00e893' }} />
-                              )}
-                              {!item.answerCorrect && (
-                                <HighlightOffIcon className='question-icon' style={{ fill: '#ed3726' }} />
-                              )}
-                            </div>
-                            {this.state.questionExpanded === item.quizQuestionId && (
-                              <div className='question-expanded'>
-                                <div className='question-expanded-header' style={{ color: item.answerCorrect ? '#00e893' : '#ed3726' }}>
-                                  YOUR ANSWER
-                                </div>
-                                <div className='question-response'>
-                                  Student Answer
-                                </div>
-                                {!item.answerCorrect && (
-                                  <div>
-                                    <div className='question-expanded-header' style={{ color: '#00e893' }}>
-                                      CORRECT ANSWER
-                                    </div>
-                                    <div className='question-response' style={{ color: '#00e893' }}>
-                                      Correct Answer
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )}
+                <DetailedGrades
+                  questionScores={this._getQuestionScores(student)}
+                  moduleId={this.state.moduleExpanded}
+                  gradesExpanded={this.state.gradesExpanded}
+                />
               </div>
             )
           })}

@@ -137,7 +137,7 @@ export const getPublicModule = createSelector(
 export const getPublicModuleAssessments = createSelector(
   [rapunzlPublicModuleSelector],
   (publicModule) => {
-    if (publicModule && publicModule != null) {
+    if (publicModule && publicModule != null && publicModule.assessments != undefined && publicModule.assessments.questions != undefined) {
       let publicModuleCopy = JSON.parse(JSON.stringify(publicModule));
       publicModuleCopy.assessments.questions = objectToArray(publicModuleCopy.assessments.questions); 
       
