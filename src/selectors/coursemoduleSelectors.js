@@ -133,6 +133,22 @@ export const getPublicModule = createSelector(
     }
   )
   
+// selector to return the assessment questions for a specific Public Module created by Rapunzl
+export const getPublicModuleAssessments = createSelector(
+  [rapunzlPublicModuleSelector],
+  (publicModule) => {
+    if (publicModule && publicModule != null) {
+      let publicModuleCopy = JSON.parse(JSON.stringify(publicModule));
+      publicModuleCopy.assessments.questions = objectToArray(publicModuleCopy.assessments.questions); 
+      
+      return publicModuleCopy.assessments.questions;
+    }
+    else{
+      return [];
+    }
+  }
+)
+
 // selector to return all the Modules created by Teacher 
 export const getAllTeacherCreatedModules = createSelector(
     [teacherCreatedModulesArraySelector],
