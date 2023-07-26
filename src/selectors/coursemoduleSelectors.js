@@ -117,6 +117,7 @@ export const getAllPublicModules = createSelector(
 export const getPublicModule = createSelector(
     [rapunzlPublicModuleSelector],
     (publicModule) => {
+      // eslint-disable-next-line
       if (publicModule && publicModule != null) {
         let publicModuleCopy = JSON.parse(JSON.stringify(publicModule));
         publicModuleCopy.teacherGuides = objectToArray(publicModuleCopy.teacherGuides);
@@ -137,6 +138,7 @@ export const getPublicModule = createSelector(
 export const getPublicModuleAssessments = createSelector(
   [rapunzlPublicModuleSelector],
   (publicModule) => {
+    // eslint-disable-next-line
     if (publicModule && publicModule != null && publicModule.assessments != undefined && publicModule.assessments.questions != undefined) {
       let publicModuleCopy = JSON.parse(JSON.stringify(publicModule));
       publicModuleCopy.assessments.questions = objectToArray(publicModuleCopy.assessments.questions); 
@@ -174,6 +176,7 @@ export const getAllTeacherCreatedModules = createSelector(
 export const getTeacherCreatedModule = createSelector(
     [teacherCreatedModuleSelector],
     (teacherModule) => {
+      // eslint-disable-next-line
       if (teacherModule && teacherModule != null) {
         let teacherModuleCopy = JSON.parse(JSON.stringify(teacherModule));
         teacherModuleCopy.teacherGuides = objectToArray(teacherModuleCopy.teacherGuides);

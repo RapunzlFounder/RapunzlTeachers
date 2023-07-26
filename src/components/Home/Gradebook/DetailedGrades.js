@@ -54,7 +54,7 @@ class DetailedGrades extends Component {
         <div className='student-grades-expanded'>
           <div className='detailed-grades-flex'>
             <div className='detailed-grades-title'>
-              Quiz {this.props.questionScores.moduleId}:
+              M{this.props.questionScores.moduleId} Quiz Score:
             </div>
             <div className='detailed-grades-score' style={{ color: handleGradeColor(this.props.questionScores.percentCorrect) }}>
               {this.props.questionScores.percentCorrect.toFixed(0)}%

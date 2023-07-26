@@ -298,7 +298,7 @@ export class WrappedSocketManager extends React.Component {
   }
 
   unsubscibeStudents() {
-    var studentArray = [];
+    // var studentArray = [];
   
   }
 

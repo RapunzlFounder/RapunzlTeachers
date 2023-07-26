@@ -145,7 +145,7 @@ class ClassGrades extends Component {
                             </div>
                           </div>
                           <div className='overview-grade-text'>
-                            Q{item.moduleId}
+                            M{item.moduleId}
                           </div>
                         </div>
                       )
@@ -160,7 +160,7 @@ class ClassGrades extends Component {
                               </div>
                             </div>
                             <div className='overview-grade-text'>
-                              Q{item}
+                              M{item}
                             </div>
                           </div>
                         )
