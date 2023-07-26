@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
+import { getTeacherClassroom, getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
+import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import Dialog from '@mui/material/Dialog';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -46,9 +47,8 @@ class ExportGradesDialog extends React.PureComponent {
   }
 
   // 3 Functions Below Update The File Type Which Is Selected By The User
-  selectPDF() { this.setState({ fileType: 'PDF' }); }
-  selectXLSX() { this.setState({ fileType: 'XLSX' }); }
-  selectCSV() { this.setState({ fileType: 'CSV' }); }
+  selectXLSX() { this.setState({ fileType: 'xlsx' }); }
+  selectCSV() { this.setState({ fileType: 'csv' }); }
 
   // This Function Handles Navigating Forwards Through The Expoprt Flow
   // Steps: FileType, ConfirmDetails, Loading, Success, Failure, ComingSoon
@@ -56,57 +56,84 @@ class ExportGradesDialog extends React.PureComponent {
     if (this.state.status === 'FileType' && this.state.fileType !== false) {
       this.setState({ status: 'ConfirmDetails' });
     } else if (this.state.status === 'ConfirmDetails') {
-      // Handles Updating State To Loading & Creates Export - TO DO
-      this._createDownloadLink();
+      // Handles Updating State To Loading & Creates Export. If Successful, It Will Download Or Else Show Failure
+      this._generateExportFile(this.state.fileType);
     } else if (this.state.status === 'Success' || this.state.status === 'Failure') {
       this.props.dismiss();
     }
   }
 
-  _createDownloadLink() {
-    this.setState({ status: 'Loading' });
-    if (this.state.fileType === 'PDF') {
-      this._generatePDF().then((res) =>{
-        if (res) {
-          this.setState({ status: 'Success' });
-        } else {
-          this.setState({ status: 'Failure' });
-        }
-      });
-    } else if (this.state.fileType === 'CSV') {
-      this._generateCSV().then((res) =>{
-        if (res) {
-          this.setState({ status: 'Success' });
-        } else {
-          this.setState({ status: 'Failure' });
-        }
-      });
+  // Matches The Classroom With The Appropriate Classroom Course Record To Find The Course Number, Then Finds The Course To Determine Number Of Modules
+  _getNumberOfModules() {
+    let courseID = null;
+    let numberOfCourses = 0;
+    for (var i in this.props.classCourse) {
+      if (this.props.classCourse[i].classId === this.props.classroomId) {
+        courseID = this.props.classCourse[i].courseId
+      }
+    }
+    if (courseID === null) {
+      return 0;
     } else {
-      this._generateXLSX().then((res) =>{
-        if (res) {
-          this.setState({ status: 'Success' });
-        } else {
-          this.setState({ status: 'Failure' });
+      for (var j in this.props.allCourses) {
+        if (this.props.allCourses[j].id === courseID) {
+          numberOfCourses = this.props.allCourses[j].numberModules;
         }
-      });
+      }
+      return numberOfCourses;
     }
   }
 
-  // Handles If User Selects PDF By Generating A PDF & Offering User The Option To Download & Save The File
-  // Uses react-pdf, the same package we use for rendering PDFs of Education Resources, But We Do Not Display The
-  // PDF To The User Until They Select Download
-  async _generatePDF() {
-    return true;
-  }
-
   // Handles If User Selects XLSX By Generating File & Offering User The Option To Download & Save
-  async _generateXLSX() {
-    return true;
+  _generateExportFile(fileType) {
+    this.setState({ status: 'Loading' });
+    try {
+      // xlsx, xls, xlsb, xlml, csv
+      var XLSX = require("xlsx");
+      const exportArray = this._createExportArray();
+      var gradeSheet = XLSX.utils.aoa_to_sheet(exportArray);
+      var exportFile = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(exportFile, gradeSheet, "ClassroomGrades.xlsx");
+      XLSX.writeFile(exportFile, `ClassGrades.${fileType}`, { bookType: fileType, type: 'base64' });
+      this.setState({ status: 'Success' });
+    } catch (error) {
+      this.setState({ status: 'Failure' });
+    }
   }
 
-  // Handles If User Selects CSV By Generating File & Offering User The Option To Download & Save
-  async _generateCSV() {
-    return true;
+  // Creates An Array Of Arrays Used In Generating The Export File
+  _createExportArray() {
+    // Columns Are First Name, Last Name, Username, Quiz Headers For Number Of Modules
+    // TODO: Allow for more export options including individual question scores, crypto/stock portfolio performance
+    let headerArray = [
+      'First Name',
+      'Last Name',
+      'Username',
+    ];
+    let exportArray = [headerArray];
+    for (var i = 1; i <= this._getNumberOfModules(); i++) {
+      headerArray.push('Quiz ' + i.toString())
+    }
+    for (var j in this.props.classroom.studentList) {
+      let newRow = [
+        this.props.classroom.studentList[j].firstName,
+        this.props.classroom.studentList[j].lastName,
+        this.props.classroom.studentList[j].username,
+      ];
+      for (var k in this.props.classroom.studentList[j].moduleAssessmentScores) {
+        if (this.props.classroom.studentList[j].moduleAssessmentScores[k].percentComplete === 100) {
+          newRow.push(this.props.classroom.studentList[j].moduleAssessmentScores[k].percentCorrect);
+        } else {
+          newRow.push('Not Complete');
+        }
+      }
+      let missingModules = this._getNumberOfModules() - this.props.classroom.studentList[j].moduleAssessmentScores.length;
+      for (var m = 0; m < missingModules; m++) {
+        newRow.push('Not Complete');
+      }
+      exportArray.push(newRow);
+    }
+    return exportArray;
   }
 
   render() {
@@ -140,36 +167,21 @@ class ExportGradesDialog extends React.PureComponent {
                   Select the file format for your exported grades
                 </div>
                 <div className='export-grades-option-flex'>
-                  {/*
-
-                  TODO: IMPLEMENT PDF EXPORT CAPABILITIES
-
-                  <div onClick={() => this.selectPDF()} className='export-grades-option'>
-                    <img alt='' className='export-grades-icon' src={PDFImage} />
-                    {this.state.fileType !== 'PDF' && (
-                      <RadioButtonUncheckedOutlinedIcon className='export-grades-option-button-outline' />
-                    )}
-                    {this.state.fileType === 'PDF' && (
-                      <RadioButtonCheckedOutlinedIcon className='export-grades-option-button-filled' />
-                    )}
-                  </div>
-                  
-                  */}
                   <div onClick={() => this.selectXLSX()} className='export-grades-option'>
                     <img alt='' className='export-grades-icon' src={XLSXImage} />
-                    {this.state.fileType !== 'XLSX' && (
+                    {this.state.fileType !== 'xlsx' && (
                       <RadioButtonUncheckedOutlinedIcon className='export-grades-option-button-outline' />
                     )}
-                    {this.state.fileType === 'XLSX' && (
+                    {this.state.fileType === 'xlsx' && (
                       <RadioButtonCheckedOutlinedIcon className='export-grades-option-button-filled' />
                     )}
                   </div>
                   <div onClick={() => this.selectCSV()} className='export-grades-option'>
                     <img alt='' className='export-grades-icon' src={CSVImage} style={{ width: '115px' }} />
-                    {this.state.fileType !== 'CSV' && (
+                    {this.state.fileType !== 'csv' && (
                       <RadioButtonUncheckedOutlinedIcon className='export-grades-option-button-outline' />
                     )}
-                    {this.state.fileType === 'CSV' && (
+                    {this.state.fileType === 'csv' && (
                       <RadioButtonCheckedOutlinedIcon className='export-grades-option-button-filled' />
                     )}
                   </div>
@@ -185,19 +197,22 @@ class ExportGradesDialog extends React.PureComponent {
             {this.state.status === 'ConfirmDetails' && (
               <div className='export-grades-content'>
                 <div className='export-grades-instructions' style={{ width: 230 }}>
-                  Click below to generate your {this.state.fileType} download link.
+                  Click below to download your {this.state.fileType} file with your class grades.
                 </div>
                 <img
                   alt=''
                   className='confirm-export-icon-image'
-                  src={this.state.fileType === 'PDF' ? PDFImage : this.state.fileType === 'CSV' ? CSVImage : XLSXImage}
+                  src={this.state.fileType === 'PDF' ? PDFImage : this.state.fileType === 'csv' ? CSVImage : XLSXImage}
                 />
                 <div className='confirm-export-icon-title'>
-                  Class_Grades.{this.state.fileType === 'PDF' ? 'pdf' : this.state.fileType === 'CSV' ? 'csv' : 'xlsx'}
+                  Class_Grades.{this.state.fileType === 'PDF' ? 'pdf' : this.state.fileType === 'csv' ? 'csv' : 'xlsx'}
+                </div>
+                <div className='confirm-export-number-students'>
+                  {this.props.classroom.length} {this.props.classroom.length === 1 ? 'Student' : 'Students'}
                 </div>
                 <div onClick={() => this._handleNext()} className='next-export-section-button'>
                   <div className='next-export-text'>
-                    Generate Download Link
+                    Download Grades
                   </div>
                   <KeyboardDoubleArrowRightIcon className='next-export-button-icon' />
                 </div>
@@ -214,10 +229,10 @@ class ExportGradesDialog extends React.PureComponent {
             {this.state.status === 'Success' && (
               <div className='export-grades-content'>
                 <DownloadingIcon className='export-grades-success-icon' />
-                <div className='export-grades-instructions'>
-                  You're all set! Click the link below to download a file with your classroom grades.
+                <div className='export-grades-instructions' style={{ width: 320 }}>
+                  You're all set! Your download should have started automatically. If not, please click the button below to download your grades.
                 </div>
-                <div onClick={() => this.setState({ status: 'ComingSoon' })} className='next-export-section-button next-export-text-2'>
+                <div onClick={() => this._generateExportFile(this.state.fileType)} className='next-export-section-button next-export-text-2'>
                   Download
                 </div>
               </div>
@@ -254,12 +269,17 @@ class ExportGradesDialog extends React.PureComponent {
 }
 
 // Map State To Props (Redux Store Passes State To Component)
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   // Redux Store --> Component
   return {
     // Used to authenticate contactSupport dispatch to graphQL
     jwtToken: state.userDetails.jwtToken,
-    allClassrooms: getAllTeacherClassrooms(state),
+    // Selector For Selected Classroom Grades
+    classroom: getTeacherClassroom(state, ownProps),
+    // Selector For Teacher Courses
+    allCourses: getAllTeacherCourses(state),
+    // Selector For Classroom Courses
+    classCourse: getAllTeacherClassroomCourses(state),
   };
 };
 

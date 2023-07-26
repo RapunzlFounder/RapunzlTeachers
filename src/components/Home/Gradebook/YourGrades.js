@@ -42,6 +42,7 @@ class YourGrades extends Component {
       <div>
         <ExportGradesDialog
           visible={this.state.exportVisible}
+          classroomId={this.props.selectedClassroom}
           dismiss={this._toggleExportDialog}
         />
         <div className='card-flex-header' style={{ paddingBottom: 5 }}>

@@ -187,6 +187,7 @@ body {
     font-size: 13px;
     font-weight: 600;
     color: #07e2aa;
+    margin-top: -2px;
 }
 .overview-grade-container {
     margin-bottom: 15px;
@@ -199,6 +200,11 @@ body {
     margin-left: 1%;
     margin-right: 1%;
     flex-wrap: wrap;
+}
+.student-grades-completed-text {
+    font-size: 11px;
+    padding-top: 6px;
+    font-weight: 400;
 }
 .student-grades-expanded {
 

@@ -125,7 +125,7 @@ export class WrappedSocketManager extends React.Component {
         this.unsubscibeAllStudents();
         this.props.updateWebsocketConnected(false);
       } catch (e) {
-        // console.log("Websocket disconnect error");
+        //console.log("Websocket disconnect error");
         //console.error(e);
       }
     }

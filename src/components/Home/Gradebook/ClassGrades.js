@@ -18,13 +18,6 @@ class ClassGrades extends Component {
     }
   }
 
-  // TODO: Function that helps find the course which the students are participating in, which will return the number of modules
-  // which is used to display the student grades overview by rendering a list with the same number of elements as there are modules
-  // in the course
-  _retrieveClassroomCourse() {
-
-  }
-
   // Function That Updates The Grades Expanded State Variable, Allowing Teachers To View Details On A Students Grades
   _handleExpandGrades(int) {
     if (int === this.state.gradesExpanded) {
@@ -83,8 +76,7 @@ class ClassGrades extends Component {
   }
 
   // Creates An Array With The Number Of Elements Required To Fill 9 Modules If Necessary
-  _renderMissingQuizzes(scoredQuizzes) {
-    const numberOfModules = this._getNumberOfModules();
+  _renderMissingQuizzes(scoredQuizzes, numberOfModules) {
     const missingModules = numberOfModules - scoredQuizzes;
     if (missingModules === 0) {
       return [];
@@ -105,6 +97,7 @@ class ClassGrades extends Component {
         />
       );
     } else {
+      let numberOfModules = this._getNumberOfModules();
       return (
         <div className='gradebook-container' style={{ paddingTop: 18 }}>
           {this.props.classroom.studentList.map((student) => {
@@ -123,6 +116,11 @@ class ClassGrades extends Component {
                     <div className='student-grade-username'>
                       @{student.username}
                     </div>
+                    {student.moduleAssessmentScores.length !== undefined && numberOfModules !== 0 && (
+                      <div className='student-grades-completed-text' style={{ color: handleGradeColor(100 * student.moduleAssessmentScores.length / numberOfModules) }}>
+                        {student.moduleAssessmentScores.length} of {numberOfModules} Quizzes Completed
+                      </div>
+                    )}
                     {this.state.gradesExpanded === student.userId && (
                       <div className='student-grade-instructions'>
                         Click on an assessment score in order to see a breakdown of the questions which the student answered correctly and incorrectly.
@@ -152,8 +150,8 @@ class ClassGrades extends Component {
                         </div>
                       )
                     })}
-                    {this._renderMissingQuizzes(student.moduleAssessmentScores.length).length !== 0 && (
-                      this._renderMissingQuizzes(student.moduleAssessmentScores.length).map((item) => {
+                    {this._renderMissingQuizzes(student.moduleAssessmentScores.length, numberOfModules).length !== 0 && (
+                      this._renderMissingQuizzes(student.moduleAssessmentScores.length, numberOfModules).map((item) => {
                         return (
                           <div key={item} className='overview-grade-container'>
                             <div className='overview-grade-circle' style={{ borderColor: '#6e6e6e', cursor: 'auto' }}>
