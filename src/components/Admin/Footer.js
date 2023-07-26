@@ -26,7 +26,8 @@ class Footer extends React.PureComponent {
         <hr className='footer-divider'/>
         <div className='footer-header'>
           Create A Free Rapunzl Account
-          <br/>& Trade Alongside Your Class
+          <br/>
+          & Trade Alongside Your Class
         </div>
         <div className='footer-flex'>
           <button 
@@ -50,14 +51,13 @@ class Footer extends React.PureComponent {
             />
           </button>
         </div>
-        <button
-          href="https://www.rapunzlinvestments.com"
-          className="website-button"
-        >
-          View Rapunzl Website
-        </button>
+        <a href="https://www.rapunzlinvestments.com">
+          <div className="website-button">
+            View Rapunzl Website
+          </div>
+        </a>
         <div className='copyright-text'>
-          © 2020 Rapunzl. All rights reserved.
+          © 2023 Rapunzl. All rights reserved.
         </div>
       </Container>
     );
