@@ -196,7 +196,7 @@ class ExportGradesDialog extends React.PureComponent {
             )}
             {this.state.status === 'ConfirmDetails' && (
               <div className='export-grades-content'>
-                <div className='export-grades-instructions' style={{ width: 230 }}>
+                <div className='export-grades-instructions' style={{ width: 230, marginBottom: 40 }}>
                   Click below to download your {this.state.fileType} file with your class grades.
                 </div>
                 <img
@@ -208,9 +208,9 @@ class ExportGradesDialog extends React.PureComponent {
                   Class_Grades.{this.state.fileType === 'PDF' ? 'pdf' : this.state.fileType === 'csv' ? 'csv' : 'xlsx'}
                 </div>
                 <div className='confirm-export-number-students'>
-                  {this.props.classroom.length} {this.props.classroom.length === 1 ? 'Student' : 'Students'}
+                  {this.props.classroom.studentList.length} {this.props.classroom.length === 1 ? 'Student' : 'Students'}, 1 Classroom
                 </div>
-                <div onClick={() => this._handleNext()} className='next-export-section-button'>
+                <div onClick={() => this._handleNext()} className='next-export-section-button' style={{ marginTop: 35 }}>
                   <div className='next-export-text'>
                     Download Grades
                   </div>
@@ -230,10 +230,10 @@ class ExportGradesDialog extends React.PureComponent {
               <div className='export-grades-content'>
                 <DownloadingIcon className='export-grades-success-icon' />
                 <div className='export-grades-instructions' style={{ width: 320 }}>
-                  You're all set! Your download should have started automatically. If not, please click the button below to download your grades.
+                  You're all set! Your download should have started automatically. If the download has not started, please click the button below.
                 </div>
                 <div onClick={() => this._generateExportFile(this.state.fileType)} className='next-export-section-button next-export-text-2'>
-                  Download
+                  Download Now
                 </div>
               </div>
             )}

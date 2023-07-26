@@ -65,6 +65,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: flex-end;
+    padding-top: 30px;
 }
 .export-grades-option {
     width: 150px;
@@ -130,6 +131,12 @@
 .next-export-section-button:hover {
     background-color: #008f6a;
     color: white;
+}
+.confirm-export-number-students {
+    color: #007154;
+    font-size: 13px;
+    text-align: center;
+    padding-top: 4px;
 }
 .next-export-text {
     margin-right: 6px;
