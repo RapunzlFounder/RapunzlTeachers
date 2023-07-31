@@ -1,6 +1,7 @@
 import storage from 'redux-persist/lib/storage';
 import {
   UPDATE_ALL_CLASSROOMS,
+  UPDATE_ALL_DEMO_CLASSROOMS,
   UPDATE_MINI_CLASSROOMS,
   // RESET_CLASSROOM_STATE,
   UPDATE_CLASSROOM_DATA_STATE,
@@ -124,6 +125,90 @@ const initialState = {
 			createdAt: null,
 			isActive: false
     }
+  },
+  demoClassrooms: {
+    0: {
+        id: 0,
+        className: '',
+        createdAt: null,
+        lastModifiedAt: null,
+        noStudents: 0,
+        studentList: {
+          0:{
+            userId: 0,
+            firstName: '',
+            lastName: '',
+            username: '',
+            numberOfFriends: null,
+            lastUpdated: null,
+            numberOfStockTrades: null,
+            numberOfStockPositions: null,
+            defaultStockPortfolioID: null,	
+            stockPortfolioPerformance: null,
+            stockCompetitionsEntered: {
+              0: {
+                id: 0,
+                title: '',
+                status: null,
+                startDate: null,
+                startTime: null,
+                endDate: null,
+                endTime: null,
+                competitorCount: null,
+                compRank: null,
+                compPerformance: null,
+              }
+            },
+            numberOfCryptoTrades: null,
+            numberOfCryptoPositions: null,
+            cryptoPortfolioPerformance: null,	
+            defaultCryptoPortfolioID: null,
+            cryptoCompetitionsEntered: {
+              0: {
+                id: 0,
+                title: '',
+                status: null,
+                startDate: null,
+                startTime: null,
+                endDate: null,
+                endTime: null,
+                competitorCount: null,
+                compRank: null,
+                compPerformance: null,
+              }
+            },
+            moduleAssessmentScores: {
+              0: {
+                moduleId: 0,
+                moduleName: '',
+                percentComplete: 0,
+                percentCorrect: 0,
+                questionResults: {
+                  0: {
+                  quizQuestionId: 0,
+                  moduleQuestionNumber: null,
+                  studentAnswer: '',
+                  answerCorrect: false,
+                  noAttempts: 0,
+                  lastAttemptAt: null
+                  }
+                }
+              },
+            },
+          },
+        }
+      },
+  },
+  demoClassroomCourses:{
+    0: {
+      id: 0,
+			classId: null,
+			className: '',
+			courseId: null,
+			courseName: '',
+			createdAt: null,
+			isActive: false
+    }
   }
 };
 
@@ -157,6 +242,21 @@ const classroomReducer = (state = initialState, action) => {
           classroomLastRetrievedTime: new Date(),
           classrooms: action.payload.classrooms, 
           classroomCourses: action.payload.classroomCourses,
+        };
+     // this updates all of the classrooms and students in the demo classrooms state and is only called if a user logs out of the app 
+     case UPDATE_ALL_DEMO_CLASSROOMS:
+      // Mark the state as "loading" so we can show a spinner or something
+      // Also, reset any errors.
+      // eslint-disable-next-line
+        return {
+          ...state,
+          loading: false,
+          error: null,
+          graphqlError: null,
+          errorTitle: null,
+          classroomLastRetrievedTime: new Date(),
+          demoClassrooms: action.payload.classrooms, 
+          demoClassroomCourses: action.payload.classroomCourses,
         };
      // this updates all of the Teacher classrooms and students in the classrooms state and is only called by the Teacher Mini Query
      case UPDATE_MINI_CLASSROOMS:

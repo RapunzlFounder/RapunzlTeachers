@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import {  objectToArray } from '../helper_functions/utilities';
 
 const teacherCoursesArraySelector = (state) => objectToArray(state.coursesmodules.teacherCourses);
+const demoCoursesArraySelector = (state) => objectToArray(state.coursesmodules.demoCourses);
 const rapunzlPublicModulesObjectSelector = (state) => state.coursesmodules.availablePublicModules;
 const teacherCreatedModulesObjectSelector = (state) => state.coursesmodules.teacherCreatedModules;
 const rapunzlPublicModulesArraySelector = (state) => objectToArray(state.coursesmodules.availablePublicModules);
@@ -19,6 +20,28 @@ export const getAllTeacherCourses = createSelector(
   (teacherCourseArray) => {
     if (teacherCourseArray && teacherCourseArray.length > 0) {
         let courseArrayCopy = JSON.parse(JSON.stringify(teacherCourseArray));
+        let returnArray = [];
+        for (var i in courseArrayCopy){
+            courseArrayCopy[i].courseModules = objectToArray(courseArrayCopy[i].courseModules);
+            const newCourseObject = {id: courseArrayCopy[i].id, courseName: courseArrayCopy[i].courseName, numberModules: courseArrayCopy[i].courseModules.length};
+            returnArray.push(newCourseObject);
+        }
+        // these next 3 lines are for debugging purposes only
+        // const strDate = (new Date()).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
+        return returnArray;
+    }
+    else{
+      return [];
+    }
+  }
+)
+
+// selector to return a summary of all the Demonstration Courses.  The id, name and number of modules is returned for each course
+export const getAllDemoCourses = createSelector(
+  [demoCoursesArraySelector],
+  (demoCourseArray) => {
+    if (demoCourseArray && demoCourseArray.length > 0) {
+        let courseArrayCopy = JSON.parse(JSON.stringify(demoCourseArray));
         let returnArray = [];
         for (var i in courseArrayCopy){
             courseArrayCopy[i].courseModules = objectToArray(courseArrayCopy[i].courseModules);

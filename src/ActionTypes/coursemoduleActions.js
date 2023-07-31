@@ -8,6 +8,7 @@ import { GET_MODULES } from '../graphql/queries/GetModules';
 import { arrayToObjectID, arrayToObjectStandardID, stringifyIntArray } from '../helper_functions/utilities';
 
 export const UPDATE_ALL_COURSES = 'UPDATE_ALL_COURSES';
+export const UPDATE_DEMO_COURSES = 'UPDATE_DEMO_COURSES';
 export const UPDATE_PUBLIC_MODULES = 'UPDATE_PUBLIC_MODULES';
 export const UPDATE_TEACHER_MODULES = 'UPDATE_TEACHER_MODULES';
 export const CREATE_MODULE_BEGIN = 'CREATE_MODULE_BEGIN';
@@ -90,6 +91,11 @@ export const createTeacherEmptyCoursesModules = () => ({
 // this updates all of the courses and modules retrieved by the big query 
 export const updateAllCourses = (coursesObject) => ({
   type: UPDATE_ALL_COURSES,
+  payload: { coursesObject },
+});
+// this updates the demo courses 
+export const updateDemoCourses = (coursesObject) => ({
+  type: UPDATE_DEMO_COURSES,
   payload: { coursesObject },
 });
 // this updates all of the teacher created modules retrieved by the big query 

@@ -1,6 +1,7 @@
 import storage from 'redux-persist/lib/storage';
 import {
   UPDATE_ALL_COURSES,
+  UPDATE_DEMO_COURSES,
   UPDATE_PUBLIC_MODULES,
   UPDATE_TEACHER_MODULES,
   CREATE_TEACHER_NO_COURSES_MODULES,
@@ -33,7 +34,11 @@ import {
   SEARCH_PORTAL_ASSETS_ERROR,
   SEARCH_PORTAL_ASSETS_FAILURE
 } from '../ActionTypes/searchActions';
-
+import { 
+  FETCH_DEMO_BEGIN,
+  FETCH_DEMO_ERROR,
+  FETCH_DEMO_FAILURE
+ } from '../ActionTypes/demoDataActions';
 import { persistReducer } from 'redux-persist';
 
 const initialState = {
@@ -44,6 +49,7 @@ const initialState = {
   availablePublicModules: {},
   teacherCreatedModules: {},
   teacherCourses: {},
+  demoCourses: {},
   financialLiteracyStandards: {},
   standardsLastRetrieved: new Date(),
   lastRetrievedModules: null,
@@ -78,6 +84,43 @@ const coursemoduleReducer = (state = initialState, action) => {
           errorTitle: null,
           teacherCourses: action.payload.coursesObject,
         };
+    // this updates all of the demoCourses state 
+    case UPDATE_DEMO_COURSES:
+      // Mark the state as "loading" so we can show a spinner or something
+      // Also, reset any errors.
+      // eslint-disable-next-line
+        return {
+          ...state,
+          loading: false,
+          error: null,
+          graphqlError: null,
+          errorTitle: null,
+          demoCourses: action.payload.coursesObject,
+        };
+    case FETCH_DEMO_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null
+      }
+    case FETCH_DEMO_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        // graphqlError: 'There was a failure connecting to our servers to create your New Course. Please contact support.'
+        errorTitle: 'Failure Retrieving Demonstration Content',
+      };
+    case FETCH_DEMO_ERROR:
+      return {
+        ...state,
+        loading: false,
+        graphqlError: action.payload.error,
+        // graphqlError: 'There was an error connecting to our servers to create your New Course. Please contact support.'
+        errorTitle: 'Error Retrieving Demonstration Content',
+      };  
     // this updates all of the coursesmodules state and is only called if a user logs out of the app or creates a new account
     case UPDATE_TEACHER_MODULES:
       // Mark the state as "loading" so we can show a spinner or something

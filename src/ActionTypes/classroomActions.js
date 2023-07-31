@@ -11,6 +11,7 @@ import { stringifyIntArray } from '../helper_functions/utilities';
 
 export const CREATE_TEACHER_NO_CLASSROOMS = 'CREATE_TEACHER_NO_CLASSROOMS';
 export const UPDATE_ALL_CLASSROOMS = 'UPDATE_ALL_CLASSROOMS';
+export const UPDATE_ALL_DEMO_CLASSROOMS = 'UPDATE_ALL_DEMO_CLASSROOMS';
 export const UPDATE_MINI_CLASSROOMS = 'UPDATE_MINI_CLASSROOMS';
 export const CREATE_CLASSROOM_BEGIN = 'CREATE_CLASSROOM_BEGIN';
 export const CREATE_CLASSROOM_SUCCESS = 'CREATE_CLASSROOM_SUCCESS';
@@ -52,6 +53,11 @@ export const createTeacherEmptyClassrooms = () => ({
 // this updates all of the classrooms retrieved by either the big query or when a teacher user account is created
 export const updateAllClassrooms = (classrooms, classroomCourses) => ({
   type: UPDATE_ALL_CLASSROOMS,
+  payload: { classrooms, classroomCourses },
+});
+// this updates all of the demo classrooms retrieved by either the big query or when a teacher user account is created
+export const updateAllDemoClassrooms = (classrooms, classroomCourses) => ({
+  type: UPDATE_ALL_DEMO_CLASSROOMS,
   payload: { classrooms, classroomCourses },
 });
 // this updates all of the Teacher classrooms retrieved by the mini query 
