@@ -216,10 +216,17 @@ class HomeScreen extends Component {
                 At this point in time, Rapunzl's teacher portal is designed for PC's, Laptops, and Tablets. We do not provide a mobile version of our teacher portal.
               </div>
             </div>
-            <LeftHomeMenu
-              tab={this.props.visibleTab}
-            />
-            <div className='middle-section'>
+            {!this.props.expandedLibrary && ( 
+              <LeftHomeMenu tab={this.props.visibleTab} />
+            )}
+            <div
+              className='middle-section'
+              style={{
+                width: this.props.expandedLibrary ? '100%' : '59%',
+                maxWidth: this.props.expandedLibrary ? '1500px' : '',
+                margin: this.props.expandedLibrary ? 'auto' : '',
+              }}
+            >
               <Dashboard
                 visible={this.props.visibleTab === 1}
               />
@@ -249,10 +256,12 @@ class HomeScreen extends Component {
                 visible={this.props.visibleTab === 9}
               />
             </div>
-            <div className='tile right-section'>
-              <QuickAccess />
-              <TrendingCourses />
-            </div>
+            {!this.props.expandedLibrary && (
+              <div className='tile right-section'>
+                <QuickAccess />
+                <TrendingCourses />
+              </div>
+            )}
           </div>
           <Outlet />
           <Footer />
@@ -304,12 +313,10 @@ const mapStateToProps = (state) => {
     // These Elements In Redux Handle Navigation Throughout The Dashboard To Avoid Unnecessary Passing Of Props
     visibleTab: state.dashboard.visibleTab,
     previousTab: state.dashboard.previousTab,
-    // REFACTOR
     addingStudents: state.dashboard.addingStudents,
-    // REFACTOR
     creatingClassroom: state.dashboard.creatingClassroom,
-    // REFACTOR
-    selectedClassroom: state.dashboard.selectedClassroom
+    selectedClassroom: state.dashboard.selectedClassroom,
+    expandedLibrary: state.dashboard.expandedLibrary
   };
 };
 
