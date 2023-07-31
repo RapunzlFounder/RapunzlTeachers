@@ -19,6 +19,7 @@ const initialState = {
   addingStudents: false,
   creatingClassroom: false,
   selectedClassroom: false,
+  expandedLibrary: false,
 };
 
 const dashboardNavReducer = (state = initialState, action) => {

@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { SearchPortalAssets } from '../../../ActionTypes/searchActions';
+import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
+import { updateDashboard } from '../../../ActionTypes/dashboardActions';
 import ResourceItem from './ResourceItem';
 import '../../../styles/Home/Resources.css';
 import SearchBeginIcon from '../../../assets/images/Search/SearchBegin.png';
 import SearchEmptyIcon from '../../../assets/images/Search/SearchEmpty.png';
 import TypeButton from './TypeButton';
 import ModuleButton from './ModuleButton';
+import OpenWithIcon from '@mui/icons-material/OpenWith';
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 import { CircularProgress } from '@mui/material';
+import SearchResources from './SearchResources';
 
 class ResourceLibrary extends Component {
   constructor(props) {
@@ -111,11 +116,55 @@ class ResourceLibrary extends Component {
     this.setState({ moduleSearchArray: newArray });
   }
 
+  _getActivities() {
+    let activitiesArray = [];
+    for (var i in this.props.publicModules) {
+      for (var j in this.props.publicModules[i].activities) {
+        activitiesArray.push(this.props.publicModules[i].activities[j]);
+      }
+    }
+    return activitiesArray;
+  }
+
+  _getArticles() {
+    let articleArray = [];
+    for (var i in this.props.publicModules) {
+      for (var j in this.props.publicModules[i].articles) {
+        articleArray.push(this.props.publicModules[i].articles[j]);
+      }
+    }
+    return articleArray;
+  }
+
+  _expandLibrary() {
+    this.props.updateDashboard('expandedLibrary', true);
+  }
+
+  _shrinkLibrary() {
+    this.props.updateDashboard('expandedLibrary', false);
+  }
+
   render() {
     if (this.props.visible) {
       return (
         <div className='middle-container'>
           <div className='tile search-library-container'>
+            {!this.props.expandedLibrary && (
+              <div onClick={() => this._expandLibrary()} className='expand-resource-container'>
+                <OpenWithIcon className='expand-resource-icon' />
+                <div className='expand-resource-text'>
+                  Expand View
+                </div>
+              </div>
+            )}
+            {this.props.expandedLibrary && (
+              <div onClick={() => this._shrinkLibrary()} className='expand-resource-container'>
+                <CloseFullscreenIcon className='expand-resource-icon' />
+                <div className='expand-resource-text'>
+                  Shrink View
+                </div>
+              </div>
+            )}
             <input
               className='search-bar'
               value={this.state.searchText}
@@ -140,47 +189,12 @@ class ResourceLibrary extends Component {
                 selectModule={this.selectModule}
               />
             </div>
-            {this.state.searchData && this.state.searchData.length !== 0 && (
-              <div className='search-results'>
-                {this.state.searchData.map((item) => {
-                  return (
-                    <ResourceItem item={item} />
-                  );
-                })}
-              </div>
-            )}
-            {this.state.searchData && this.state.searchData.length === 0 && !this.state.loading && this.state.searchText.length === 0 && (
-              <div className='search-empty'>
-                <img className='search-empty-icon' alt='' src={SearchBeginIcon} />
-                <div className='search-empty-text'>
-                  Discover Activities, Articles & Teacher Tools For Any Finance Topic
-                </div>
-              </div>
-            )}
-            {this.state.searchData && this.state.searchData.length === 0 && this.state.loading && (
-              <div className='search-loading-container'>
-                <CircularProgress className='search-loading-icon'/>
-                <div className='search-loading-text'>
-                  Searching<br/>Library...
-                </div>
-              </div>
-            )}
-            {this.state.searchData && this.state.searchData.length === 0 && !this.state.loading && this.state.searchText.length > 1 && (
-              <div className='search-empty' style={{ paddingBottom: 35 }}>
-                <img className='search-empty-icon' alt='' src={SearchEmptyIcon} />
-                <div className='search-empty-text'>
-                  We could not find anything that matches your search...
-                </div>
-              </div>
-            )}
-            {(this.state.searchData === undefined || this.state.searchData.length === undefined) && !this.state.loading && (
-              <div className='search-empty' style={{ paddingBottom: 35 }}>
-                <img className='search-empty-icon' alt='' src={SearchEmptyIcon} />
-                <div className='search-empty-text'>
-                  We encountered an error attempting to access our resource library. Please contact support.
-                </div>
-              </div>
-            )}
+            <SearchResources
+              visible={false}
+              loading={this.state.loading}
+              searchData={this.state.searchData}
+              searchText={this.state.searchText}
+            />
           </div>
         </div>
       );
@@ -197,7 +211,9 @@ const mapStateToProps = (state) => {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
     // Required For Dispatch Below To Search Resource Library
-    jwtToken: state.userDetails.jwtToken
+    jwtToken: state.userDetails.jwtToken,
+    publicModules: getAllPublicModules(state),
+    expandedLibrary: state.dashboard.expandedLibrary
   };
 };
 
@@ -210,6 +226,7 @@ const mapDispatchToProps = (dispatch) => {
       // Input parameter 'searchStandard' is set to True to search for portal assets based on a Financial literacy standard search
       // NOTE: both of these search types cannot be set to 'true' at the same time!!
       search: (token, searchKeyword, searchStandard, searchText) => dispatch(SearchPortalAssets(token, searchKeyword, searchStandard, searchText)),
+      updateDashboard: (name, status) => dispatch(updateDashboard(name, status)),
    };
 };
 
