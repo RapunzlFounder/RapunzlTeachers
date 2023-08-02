@@ -390,12 +390,18 @@
     padding-bottom: 15px;
     margin: auto;
     margin-bottom: 30px;
+    margin-top: 35px;
     background-color: #007154;
     font-size: 13px;
     font-weight: 500;
     border-radius: 7px;
     cursor: pointer;
     transition: 0.2s all;
+}
+.change-assigned-course-button {
+    fill: #ff5c00 !important;
+    font-size: 25px !important;
+    cursor: pointer !important;
 }
 .assign-course-save-changes-disabled {
     border: 1px solid #007154;

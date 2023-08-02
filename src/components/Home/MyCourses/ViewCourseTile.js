@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { viewAssignedClass, updateDashboard } from '../../../ActionTypes/dashboardActions';
 import { getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
-import { getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
+import { getAllTeacherClassroomCourses, getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import StandardsPopup from '../../Admin/StandardsPopup';
 import { objectToArray } from '../../../helper_functions/utilities';
 import ProgressBar from './ProgressBar';
@@ -335,22 +335,32 @@ class ViewCourseTile extends Component {
     };
   }
 
-  // Returns An Array Of Classes Assigned To This Specific Course
+  // Returns An Array Of Classrooms That Are Either Assigned To The Current Course, Other Course, No Course
   _getAssignedClasses() {
-    let assignedArray = [];
-    let notAssignedArray = [];
-    if (this.props.classroomCourses.length === 0) {
-      return [notAssignedArray, assignedArray];
-    } else {
-      for (var i in this.props.classroomCourses) {
-        if (this.props.classroomCourses[i].courseId === this.props.currentCourse.id) {
-          assignedArray.push(this.props.classroomCourses[i]);
-        } else {
-          notAssignedArray.push(this.props.classroomCourses[i]);
+    let currentArray = [];
+    let otherCourseArray = [];
+    let noCourseArray = [];
+    // We Loop Through All Teacher Classrooms First With The Goal Of Determing Which Type
+    for (var i in this.props.allClassrooms) {
+      let noCourse = true;
+      for (var j in this.props.classroomCourses) {
+        // Handles If This Classroom Is Already In A Teacher Class Course
+        // This Handles If It Is The Current Course
+        if (this.props.classroomCourses[j].courseId == this.props.currentCourse.id && this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
+          noCourse = false;
+          currentArray.push({ classroom: this.props.allClassrooms[i], type: 'current' });
+        }
+        // This Handles A Different Course
+        else if (this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
+          noCourse = false;
+          otherCourseArray.push({ classroom: this.props.allClassrooms[i], type: 'assigned' });
         }
       }
-      return [notAssignedArray, assignedArray];
+      if (noCourse) {
+        noCourseArray.push({ classroom: this.props.allClassrooms[i], type: 'noCourse' });
+      }
     }
+    return [otherCourseArray, currentArray, noCourseArray];
   }
 
   // Handles When User Selects An Assigned Classroom By Updating Dashboard Redux State
@@ -523,7 +533,7 @@ class ViewCourseTile extends Component {
                   <div key={classItem.id} onClick={() => this.props.viewAssignedClass(classItem.classId)} className='assigned-class-item'>
                     <div className='assigned-class-left'>
                       <div className='assigned-class-name'>
-                        {classItem.className}
+                        {classItem.classroom.className}
                       </div>
                       <div className='assigned-class-students'>
                         View Classroom
@@ -557,6 +567,7 @@ const mapStateToProps = (state, ownProps) => {
     // Retrieves All Teacher Classrooms
     classroomCourses: getAllTeacherClassroomCourses(state),
     financialLiteracyStandards: state.coursesmodules.financialLiteracyStandards,
+    allClassrooms: getAllTeacherClassrooms(state),
   };
 };
 

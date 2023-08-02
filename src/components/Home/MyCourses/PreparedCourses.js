@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createTeacherClassroomCourse } from '../../../ActionTypes/classroomActions';
 import { createTeacherCourse } from '../../../ActionTypes/coursemoduleActions';
 import LibraryBooks from '@mui/icons-material/LibraryBooks';
 import PrebuiltCourses from '../../../constants/PrebuiltCourses';
@@ -118,10 +117,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   // Action
   return {
-    // This adds an existing Teacher Course to a Teacher's exisiting classroom.  The required inputs are 'classroomId', which is the database Id of the classroom
-    // that the teacher wishes to add the course to, and 'courseId', which is the database Id of the Teacher course that the Teacher is adding 
-    // to the classroom.
-    assignCourse: (token, classroomId, courseId) => dispatch(createTeacherClassroomCourse(token, classroomId, courseId)),
     // Creates A Course For The Teacher With List Of Modules Associated With It
     createTeacherCourse: (token, courseName, isPrivate, modulesList) => dispatch(createTeacherCourse(token, courseName, isPrivate, modulesList)),
   };

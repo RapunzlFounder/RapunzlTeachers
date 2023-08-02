@@ -33,7 +33,7 @@ body {
     text-align: center;
 }
 .gradebook-class-dropdown {
-    background: none;
+    background: white;
     outline: none;
     border: 1px solid white;
     color: #000000;
@@ -68,6 +68,7 @@ body {
     transition: 0.2s all;
     cursor: pointer;
     height: 20px;
+    background: none;
 }
 .gradebook-export-button:hover {
     color: white;

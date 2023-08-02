@@ -247,7 +247,6 @@ class ManualEntry extends Component {
         };
         // Adds New Student To newArray
         newArray.push(newStudent);
-        console.log(newArray, newStudent, 'here');
         this.setState({ loading: false });
         // Hides Manual Entry On Submit To Show Loading & Success State in Add Students Since Create Classroom Click Is Pass Through Function
         this.props.toggleManualEntry();

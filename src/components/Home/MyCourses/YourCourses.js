@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { toggleCourseBuilder } from '../../../ActionTypes/dashboardActions';
-import { getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
+import { getAllTeacherClassroomCourses, getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import Bookmarks from '@mui/icons-material/Bookmarks';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
@@ -19,19 +19,20 @@ class YourCourses extends Component {
     }
   }
 
-  // Returns An Array Length Of The Classes Assigned To This Specific Course
+  // Returns An Array Of Classrooms That Are Either Assigned To The Current Course, Other Course, No Course
   _getAssignedClasses(courseID) {
-    let assignedClassLength = 0;
-    if (this.props.classroomCourses.length === 0) {
-      return 0;
-    } else {
-      for (var i in this.props.classroomCourses) {
-        if (this.props.classroomCourses[i].courseId === courseID) {
-          assignedClassLength = assignedClassLength + 1;
+    let assignedCourses = 0;
+    // We Loop Through All Teacher Classrooms First With The Goal Of Determing Which Type
+    for (var i in this.props.allClassrooms) {
+      for (var j in this.props.classroomCourses) {
+        // Handles If This Classroom Is Already In A Teacher Class Course
+        // This Handles If It Is The Current Course
+        if (this.props.classroomCourses[j].courseId == courseID && this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
+          assignedCourses = assignedCourses + 1
         }
       }
-      return assignedClassLength;
     }
+    return assignedCourses;
   }
 
   render() {
@@ -72,7 +73,7 @@ class YourCourses extends Component {
                       <div className='your-courses-text-flex'>
                         <PeopleAltOutlinedIcon className='your-courses-flex-icon' />
                         <div className='your-courses-text'>
-                          Assigned To {this._getAssignedClasses(course.id) === 1 ? '1 Class' : course.id + ' Classes'}
+                          Assigned To {this._getAssignedClasses(course.id) === 1 ? '1 Class' : this._getAssignedClasses(course.id) + ' Classes'}
                         </div>
                       </div>
                       <div className='your-courses-text-flex' style={{ marginTop: 8 }}>
@@ -117,6 +118,7 @@ const mapStateToProps = (state) => {
     teacherCourses: getAllTeacherCourses(state),
     // Selector Which Handles All Teacher Classroom Courses To Determine Which Classrooms Are Assigned
     classroomCourses: getAllTeacherClassroomCourses(state),
+    allClassrooms: getAllTeacherClassrooms(state),
   };
 };
 

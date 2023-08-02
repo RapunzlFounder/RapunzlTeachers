@@ -11,6 +11,7 @@ import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import CheckBox from '@mui/icons-material/CheckBox';
 import ErrorImage from '../../../assets/images/AddStudents/ErrorAddStudents.png';
 import SuccessImage from '../../../assets/images/Courses/EmptyCourses.png';
@@ -72,16 +73,6 @@ class AssignCourseDialog extends React.PureComponent {
         }
       });
     }
-  }
-
-  _getClassInfo(classID) {
-    let classInfo = false;
-    for (var i in this.props.allClassrooms) {
-      if (this.props.allClassrooms[i].id === classID) {
-        classInfo = this.props.allClassrooms[i];
-      }
-    }
-    return classInfo;
   }
 
   render() {
@@ -154,24 +145,19 @@ class AssignCourseDialog extends React.PureComponent {
                 {this.props.classArrays[1].length !== 0 && (
                   <div className='assign-course-content' style={{ paddingBottom: 25 }}>
                     {this.props.classArrays[1].map((item, index) => {
-                      const studentInfo = this._getClassInfo(item.classId);
-                      if (studentInfo !== false) {
-                        return (
-                          <div key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[1].length - 1 ? 0 : 1}}>
-                            <div>
-                              <div className='assign-course-class-title'>
-                                {studentInfo.className} - {studentInfo.classYear}
-                              </div>
-                              <div className='assign-course-class-subtext'>
-                                {studentInfo.noStudents} {studentInfo.noStudents === 1 ? 'Student' : 'Students'}
-                              </div>
+                      return (
+                        <div key={item.classroom.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[1].length - 1 ? 0 : 1}}>
+                          <div>
+                            <div className='assign-course-class-title'>
+                              {item.classroom.className}
                             </div>
-                            <VerifiedOutlinedIcon className='assign-course-class-checkbox' style={{ cursor: 'auto' }} />
+                            <div className='assign-course-class-subtext'>
+                              {item.classroom.noStudents} {item.classroom.noStudents === 1 ? 'Student' : 'Students'}
+                            </div>
                           </div>
-                        );
-                      } else {
-                        return <div />
-                      }
+                          <VerifiedOutlinedIcon className='assign-course-class-checkbox' style={{ cursor: 'auto' }} />
+                        </div>
+                      );
                     })}
                   </div>
                 )}
@@ -181,32 +167,46 @@ class AssignCourseDialog extends React.PureComponent {
                     Your Classes
                   </div>
                 </div>
-                {this.props.classArrays[0].length !== 0 && (
-                  <div className='assign-course-content' style={{ paddingBottom: 30 }}>
-                    {this.props.classArrays[0].map((item, index) => {
-                      const studentInfo = this._getClassInfo(item.classId);
-                      if (studentInfo !== false) {
-                        return (
-                          <div onClick={() => this.selectClass(item.id)} key={item.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[0].length - 1 ? 0 : 1 }}>
-                            <div>
-                              <div className='assign-course-class-title'>
-                                {studentInfo.className} - {studentInfo.classYear}
-                              </div>
-                              <div className='assign-course-class-subtext'>
-                                {studentInfo.noStudents} {studentInfo.noStudents === 1 ? 'Student' : 'Students'}
-                              </div>
+                {this.props.classArrays[2].length !== 0 && (
+                  <div className='assign-course-content'>
+                    {this.props.classArrays[2].map((item, index) => {
+                      return (
+                        <div onClick={() => this.selectClass(item.classroom.id)} key={item.classroom.id} className='assign-course-class-item' style={{ borderBottomWidth: (index === this.props.classArrays[2].length - 1 && this.props.classArrays[0].length === 0) ? 0 : 1 }}>
+                          <div>
+                            <div className='assign-course-class-title'>
+                              {item.classroom.className}
                             </div>
-                            {this.state.selectedClassroom === item.id && (<CheckBox className='assign-course-class-checkbox' />)}
-                            {this.state.selectedClassroom !== item.id && (<CheckBoxOutlineBlank className='assign-course-class-checkbox' />)}
+                            <div className='assign-course-class-subtext'>
+                              {item.classroom.noStudents} {item.classroom.noStudents === 1 ? 'Student' : 'Students'}
+                            </div>
                           </div>
-                        )
-                      } else {
-                        return <div />
-                      }
+                          {this.state.selectedClassroom === item.classroom.id && (<CheckBox className='assign-course-class-checkbox' />)}
+                          {this.state.selectedClassroom !== item.classroom.id && (<CheckBoxOutlineBlank className='assign-course-class-checkbox' />)}
+                        </div>
+                      );
                     })}
                   </div>
                 )}
-                {this.props.classArrays[0].length === 0 && (
+                {this.props.classArrays[0].length !== 0 && (
+                  <div className='assign-course-content'>
+                    {this.props.classArrays[0].map((item, index) => {
+                      return (
+                        <div key={item.classroom.id} className='assign-course-class-item' style={{ borderBottomWidth: index === this.props.classArrays[0].length - 1 ? 0 : 1 }}>
+                          <div>
+                            <div className='assign-course-class-title'>
+                              {item.classroom.className}
+                            </div>
+                            <div className='assign-course-class-subtext' style={{ color: '#ff5c00', fontSize: 12.5 }}>
+                              Already Assigned A Course
+                            </div>
+                          </div>
+                          <PublishedWithChangesIcon className='change-assigned-course-button'/>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                {this.props.classArrays[2].length === 0 && this.props.classArrays[0].length === 0 && (
                   <div className='assign-course-content' style={{ paddingTop: 35 }}>
                     <ErrorOutlineIcon className='assign-course-empty-icon'/>
                     <div className='assign-course-existing-empty' style={{ paddingBottom: 10 }}>
