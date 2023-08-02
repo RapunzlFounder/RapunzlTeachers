@@ -219,14 +219,7 @@ class HomeScreen extends Component {
             {!this.props.expandedLibrary && ( 
               <LeftHomeMenu tab={this.props.visibleTab} />
             )}
-            <div
-              className='middle-section'
-              style={{
-                width: this.props.expandedLibrary ? '100%' : '59%',
-                maxWidth: this.props.expandedLibrary ? '1500px' : '',
-                margin: this.props.expandedLibrary ? 'auto' : '',
-              }}
-            >
+            <div className={`middle-section ${this.props.expandedLibrary ? 'middle-section-expanded' : ''}`}>
               <Dashboard
                 visible={this.props.visibleTab === 1}
               />

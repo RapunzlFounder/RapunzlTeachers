@@ -66,6 +66,11 @@ path {
 .middle-section {
 	width: 59%;
 }
+.middle-section-expanded {
+    width: 100%;
+    max-width: 1500px;
+    margin: auto;
+}
 .right-section {
 	width: 19%;
     height: 775px;
@@ -1683,6 +1688,11 @@ path {
     }
     .middle-section {
         width: 75%;
+    }
+    .middle-section-expanded {
+        width: 100%;
+        max-width: 1500px;
+        margin: auto;
     }
     .right-section {
         width: 24%;
