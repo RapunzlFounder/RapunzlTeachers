@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { viewAssignedClass } from '../../../ActionTypes/dashboardActions';
+import { viewAssignedClass, updateDashboard } from '../../../ActionTypes/dashboardActions';
 import { getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import { getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
@@ -49,6 +49,7 @@ class ViewCourseTile extends Component {
 
   // Select View Module Updates PDF URL, Orientation & Sets To Visible
   viewModule() {
+    this.props.updateDashboard('pdfVisible', true);
     this.setState({
       PDFVisible: true,
       pdfOrientation: 'landscape',
@@ -58,6 +59,7 @@ class ViewCourseTile extends Component {
 
   // View Teacher Guide Updates PDF URL, Orientation & Sets To Visible
   viewTeacherGuide() {
+    this.props.updateDashboard('pdfVisible', true);
     this.setState({
       PDFVisible: true,
       pdfOrientation: 'portrait',
@@ -67,6 +69,7 @@ class ViewCourseTile extends Component {
 
   // View Resource Is Called When Clicking An Article Or Activity & Displays The Correct URL Passed As A Parameter
   viewResource(url) {
+    this.props.updateDashboard('pdfVisible', true);
     this.setState({
       PDFVisible: true,
       pdfOrientation: 'portrait',
@@ -359,6 +362,7 @@ class ViewCourseTile extends Component {
 
   // Pass Through Arrow Function To Dismiss PDF Viewer
   dismissPDFViewer = () => {
+    this.props.updateDashboard('pdfVisible', false);
     this.setState({ PDFVisible: false });
   }
 
@@ -561,6 +565,7 @@ const mapDispatchToProps = (dispatch) => {
   // Action
     return {
       viewAssignedClass: (classID) => dispatch(viewAssignedClass(classID)),
+      updateDashboard: (name, status) => dispatch(updateDashboard(name, status)),
    };
 };
 

@@ -43,8 +43,10 @@ const PDFViewer = (props) => {
   // Returns Component If There Is An Error Loading The PDF
   function errorPDFComponent() {
     return (
-      <div>
-  
+      <div className='pdf-loading-page-container'>
+        <div className='pdf-loading-text'>
+          Error Loading<br/>Document...
+        </div>
       </div>
     )
   }
@@ -54,6 +56,9 @@ const PDFViewer = (props) => {
     return (
       <div className='pdf-loading-page-container'>
         <CircularProgress />
+        <div className='pdf-loading-text'>
+          Loading<br/>Document...
+        </div>
       </div>
     )
   }
@@ -64,7 +69,7 @@ const PDFViewer = (props) => {
       onClose={props.dismiss}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      maxWidth={false}
+      maxWidth={true}
     >
       <div className='pdf-container'>
         <div onClick={props.dismiss} className='pdf-close-flex'>

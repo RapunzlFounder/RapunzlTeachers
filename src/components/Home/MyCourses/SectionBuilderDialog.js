@@ -2,6 +2,7 @@ import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import '../../../styles/Admin/Admin.css';
 import { connect } from 'react-redux';
+import { updateDashboard } from '../../../ActionTypes/dashboardActions';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import StandardsPopup from '../../Admin/StandardsPopup';
 import { objectToArray } from '../../../helper_functions/utilities';
@@ -246,11 +247,13 @@ class SectionBuilderDialog extends React.PureComponent {
 
   // Updates State To Display PDF Of Selected Educational Resource
   viewResource(item) {
+    this.props.updateDashboard('pdfVisible', true);
     this.setState({ PDFVisible: true, pdfURL: item.pdfUrl, pdfOrientation: 'portrait' });
   }
 
   // Pass Through Arrow Function To Dismiss PDF Viewer
   dismissPDFViewer = () => {
+    this.props.updateDashboard('pdfVisible', false);
     this.setState({ PDFVisible: false });
   }
 
@@ -411,4 +414,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(SectionBuilderDialog);
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      updateDashboard: (name, status) => dispatch(updateDashboard(name, status)),
+   };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SectionBuilderDialog);

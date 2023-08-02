@@ -4,6 +4,7 @@ import '../../../styles/Admin/Admin.css';
 import Pie from '../../Admin/Pie';
 import PrebuiltCourses from '../../../constants/PrebuiltCourses';
 import { connect } from 'react-redux';
+import { updateDashboard } from '../../../ActionTypes/dashboardActions';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import PDFViewer from '../../Admin/PDFViewer';
 import { objectToArray } from '../../../helper_functions/utilities';
@@ -309,11 +310,13 @@ class CourseBuilderDialog extends React.PureComponent {
 
   // Updates State To Display PDF Of Selected Educational Resource
   viewResource(item) {
+    this.props.updateDashboard('pdfVisible', true);
     this.setState({ PDFVisible: true, pdfURL: item.pdfUrl, pdfOrientation: 'portrait' });
   }
 
   // Pass Through Arrow Function To Dismiss PDF Viewer
   dismissPDFViewer = () => {
+    this.props.updateDashboard('pdfVisible', false);
     this.setState({ PDFVisible: false });
   }
 
@@ -460,6 +463,14 @@ const mapStateToProps = (state) => {
     publicModules: getAllPublicModules(state),
     financialLiteracyStandards: state.coursesmodules.financialLiteracyStandards,
   };
+};
+
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      updateDashboard: (name, status) => dispatch(updateDashboard(name, status)),
+   };
 };
 
 export default connect(mapStateToProps)(CourseBuilderDialog);

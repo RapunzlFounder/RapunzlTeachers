@@ -40,19 +40,25 @@ class Header extends React.PureComponent {
   }
   
   render() {
-    return (
-      <div className='header-container'>
-          <div className='header-flex'>
-            <div className='company-logo-container'>
-              <img alt="Rapunzl Company Logo" src={Logo} className="company-logo" />
-            </div>
-            <div className='header-right-flex'>
-              <ToggleExpandButton />
-              <HeaderMenu />
+    if (!this.props.pdfVisible) {
+      return (
+        <div className='header-container'>
+            <div className='header-flex'>
+              <div className='company-logo-container'>
+                <img alt="Rapunzl Company Logo" src={Logo} className="company-logo" />
+              </div>
+              <div className='header-right-flex'>
+                <ToggleExpandButton />
+                <HeaderMenu />
+              </div>
             </div>
           </div>
-        </div>
-    );
+      );
+    } else {
+      return (
+        <div />
+      );
+    }
   }
 }
 
@@ -62,6 +68,8 @@ const mapStateToProps = (state) => {
   return {
     // Used To Disable Menu On Home Until Data Is Ready
     userdetailsLoading: state.userDetails.loading,
+    // When we show the PDFViewer Component, We Hide The Header & Use Redux To Store The Current State
+    pdfVisible: state.dashboard.pdfVisible,
   };
 };
 
