@@ -111,7 +111,7 @@ class AssignCourseDialog extends React.PureComponent {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <div className='container' style={{ width: 500 }}>
+          <div className='container' style={{ width: 500, overflowY: 'scroll', maxHeight: 750 }}>
             <div className='standards-header-flex'>
               {this.state.progress === 'select' ? (
                 <div className='alert-title' style={{ fontWeight: '800' }}>
