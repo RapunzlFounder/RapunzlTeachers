@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import { selectClassroom } from '../../../ActionTypes/dashboardActions';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import InsertChartOutlinedRoundedIcon from '@mui/icons-material/InsertChartOutlinedRounded';
 import EmptyGradebook from '../../../assets/images/Education/EmptyGradebook.png';
 import ClassGrades from './ClassGrades';
 import ExportGradesDialog from './ExportGradesDialog';
@@ -84,7 +85,7 @@ class YourGrades extends Component {
                 className={`gradebook-class-option-button ${this.state.viewType === 'Summary' ? 'gradebook-class-option-selected' : 'gradebook-class-option-unselected'}`}
                 style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
               >
-                <FileDownloadIcon className='gradebook-export-icon' style={{ fill: this.state.viewType === 'Summary' ? '#ffffff' : '#41d0ac' }} />
+                <InsertChartOutlinedRoundedIcon className='gradebook-export-icon' style={{ fill: this.state.viewType === 'Summary' ? '#ffffff' : '#41d0ac' }} />
                 <div style={{ color: this.state.viewType === 'Summary' ? '#ffffff' : '#41d0ac' }}>
                   Class Summary
                 </div>

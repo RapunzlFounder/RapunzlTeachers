@@ -876,6 +876,7 @@ path {
     margin-right: 10px;
     transition: 0.2s all;
     cursor: pointer;
+    margin-top: 35px;
 }
 .manual-add-another:hover {
     background-color: #07503d;
@@ -1106,6 +1107,14 @@ path {
 }
 .add-students-result-button:hover {
     background-color: #1b9b7a;
+}
+.manual-add-result-button {
+    background: none;
+    margin-top: 25px;
+    color: #ffc620;
+}
+.manual-add-result-button:hover {
+    background: none;
 }
 .create-class-name-subtext {
     font-size: 16px;

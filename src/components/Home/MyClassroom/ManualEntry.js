@@ -20,77 +20,25 @@ class ManualEntry extends Component {
       firstName: '',
       lastName: '',
       email: '',
-      username: '',
       birthdate: '',
       // Handles Errors Related To Inputs
       onErrorFirstName: false,
       onErrorLastName: false,
-      onErrorUsername: false,
       onErrorEmail: false,
       onErrorBirthday: false,
       // Handles Alert Dialog
       alertVisible: false,
       alertTitle: '',
       alertMessage: '',
-      // Handles Users To Add That Current User Inputs
-      userArray: [],
       // Handles Loading Of validateInputs
       loading: false,
     }
   }
 
-  // Validates User Inputs In Manual Entry Form. If Error, Shows Alert. If Successful, Adds Object With Information To userArray
+  // Validates User Inputs In Manual Entry Form. If Error, Shows Alert. If Successful, Adds Student And Hides Manual Entry
   validateInputs() {
     this.setState({ loading: true });
-    // -------------- USERNAME VALIDATION --------------
-    // Checks If Username Is Too Long
-    if (this.state.username.length >= 15) {
-      this.setState({
-        alertVisible: true,
-        alertTitle: 'Error With Username',
-        alertMessage: 'Username cannot be longer than 15 characters.',
-        onErrorUsername: true,
-        loading: false,
-      });
-    }
-    //Check If Username Is Not Too Short
-    else if (this.state.username.length < 5) {
-      this.setState({
-        alertVisible: true, 
-        alertTitle: 'Error With Username',
-        alertMessage: 'Username must be at least 5 characters.',
-        onErrorUsername: true,
-        loading: false,
-      });
-    }
-    // Checks if username has characters which are not allowed
-    else {
-      // eslint-disable-next-line
-      var format = /[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/;
-      if (format.test(this.state.username)) {
-        this.setState({
-          alertVisible: true,
-          alertTitle: 'Error With Username',
-          alertMessage: 'Username cannot contain special characters except for dashes and underscores.',
-          onErrorUsername: true,
-          loading: false,
-        });
-      }
-      // Checks username for profanity or other prohibited terms 
-      else {
-        // Checks If Username Is Unique
-        this.props.isUsernameUnique(this.state.username).then((res) => {
-          if (!res) {
-            this.setState({
-              alertVisible: true, 
-              alertTitle: 'Error With Username',
-              alertMessage: 'There is already an account with this username.',
-              onErrorUsername: true,
-              loading: false,
-            });
-          }
     // -------------- FIRST & LAST NAME VALIDATION --------------
-    else {
       // Handles Checking Length Of Both First & Last Name
       var letters = /^[a-zA-Z '-]+$/;
       // eslint-disable-next-line
@@ -289,48 +237,25 @@ class ManualEntry extends Component {
       // -------------- VALIDATION SUCCESS OKAY TO ADD TO ARRAY --------------
       else {
         // Initialize Empty Array To Update userArray state
-        let newArray = this.state.userArray;
+        let newArray = [];
         // Creates Object To Add To userArray With New Student Inputs
         const newStudent = {
           firstName: this.state.firstName.charAt(0).toUpperCase() + this.state.firstName.slice(1),
           lastName: this.state.lastName.charAt(0).toUpperCase() + this.state.lastName.slice(1),
           email: this.state.email,
           birthdate: this.state.birthdate,
-          username: this.state.username.toLowerCase(),
-          id: this.state.userArray.length,
         };
         // Adds New Student To newArray
         newArray.push(newStudent);
-        this.setState({
-          userArray: newArray,
-          firstName: '',
-          lastName: '',
-          email: '',
-          birthdate: '',
-          username: '',
-          loading: false,
-        });
-      }}})}}}}})}
+        console.log(newArray, newStudent, 'here');
+        this.setState({ loading: false });
+        // Hides Manual Entry On Submit To Show Loading & Success State in Add Students Since Create Classroom Click Is Pass Through Function
+        this.props.toggleManualEntry();
+        this.props.handleCreateClassroomClick(newArray);
+      }
     }
-  }
-
-  // Removes Student From Array Of Students To Add In userArray
-  removeStudent(id) {
-    this.setState({ loading: true });
-    const newArray = this.state.userArray.filter(function(value) {
-      return value.id !== id;
-    });
-    this.setState({ loading: false, userArray: newArray });
-  }
-
-  // Updates Value of Username From Text Area to State
-  changeUsername(text) {
-    this.setState({
-      username: text.replace(/\s/g, ''),
-      onErrorUsername: false,
-    });
-  }
-
+  })}}}}
+    
   // Updates Value of First Name From Text Area to State
   changeFirstName(text) {
     this.setState({
@@ -368,12 +293,6 @@ class ManualEntry extends Component {
     this.setState({ alertVisible: !this.state.alertVisible });
   }
 
-  // Hides Manual Entry On Submit To Show Loading & Success State in Add Students Since Create Classroom Click Is Pass Through Function
-  _handleAddToClassroom() {
-    this.props.toggleManualEntry();
-    this.props.handleCreateClassroomClick(this.state.userArray);
-  }
-
   render() {
     return (
       <div className='tile' style={{ paddingBottom: 55, paddingTop: 25, paddingLeft: 10, paddingRight: 10 }}>
@@ -390,7 +309,7 @@ class ManualEntry extends Component {
           </div>
         </div>
         <div className='classroom-upload-instructions'>
-          Input information of your students below and click add another student to keep adding students. Once you are ready, click Create Student Accounts and we'll share an email to each of your students with sign-up instructions. If you cannot think of a username for a student, try various combination of their first name, last name, and school year.
+          Input information of your students below and click add another student to keep adding students. Once you are ready, click Create Student Accounts and we'll share an email to each of your students with sign-up instructions.
         </div>
         <div className='classroom-upload-flex'>
           <div onClick={() => this.props.toggleManualEntry()} className='manual-back'>
@@ -446,92 +365,20 @@ class ManualEntry extends Component {
               onChange={(event) => this.changeBirthdate(event.target.value)}
               sx={{ marginBottom: '7px', width: '49%', marginLeft: '1%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
             />
-            <TextField
-              label="Username"
-              placeholder="Username"
-              type="text"
-              fullWidth
-              variant="filled"
-              error={this.state.onErrorUsername}
-              value={this.state.username}
-              onChange={(event) => this.changeUsername(event.target.value)}
-              sx={{ marginBottom: '7px', width: '49%', backgroundColor: '#2e7361', color: 'white', borderRadius: '7px' }}
-            />
           </div>
-          <div className='manual-button-flex'>
-            <div onClick={() => this.validateInputs()} className='manual-add-another'>
-              Add {this.state.userArray.length === 0 ? '' : 'Another'} Student
-            </div>
-            {this.state.userArray.length !== 0 && (
-              <div onClick={() => this._handleAddToClassroom()} className='manual-submit'>
-                Add All To Classroom
+          {!this.state.loading && (
+            <div className='manual-button-flex'>
+              <div onClick={() => this.validateInputs()} className='manual-add-another'>
+                Add Student
               </div>
-            )}
-          </div>
+            </div>
+          )}
           <div className='manual-students-container'>
-            {this.state.userArray.length !== 0 && (
-              <div className='manual-students-flex'>
-                <div className='manual-student-line' />
-                <div className='manual-student-title'>
-                  {this.state.userArray.length} Student{this.state.userArray.length === 1 ? '' : 's'} To Add
-                </div>
-                <div className='manual-student-line' />
-              </div>
-            )}
-            <div className='manual-student-columns'>
-              <div className='manual-student-header' style={{ width: '140px' }}>
-                Name
-              </div>
-              <div className='manual-student-header' style={{ width: '175px' }}>
-                Email
-              </div>
-              <div className='manual-student-header' style={{ width: '130px' }}>
-                Birthday
-              </div>
-              <div className='manual-student-header'>
-                Username
-              </div>
-            </div>
-            {this.state.userArray.length !==0 && (
-              <div className='manual-student-item-container'>
-                {this.state.userArray.map((item) => {
-                  return (
-                    <div key={item.id} className='manual-student-item'>
-                      <div className='manual-student-text' style={{ width: '140px' }}>
-                        {item.firstName} {item.lastName}
-                      </div>
-                      <div className='manual-student-text' style={{ width: '175px' }}>
-                        {item.email.length > 17 ? item.email.slice(0,16) + '...' : item.email}
-                      </div>
-                      <div className='manual-student-text' style={{ width: '130px' }}>
-                        {item.birthdate}
-                      </div>
-                      <div className='manual-student-text manual-student-flex'>
-                        <div>
-                          @{item.username}
-                        </div>
-                        <HighlightOff onClick={() => this.removeStudent(item.id)} className='manual-student-delete'/>
-                      </div>
-                    </div>
-                )})}
-              </div>
-            )}
-            {this.state.userArray.length === 0 && !this.state.loading && (
-              <div className='manual-student-empty-container'>
-                <img alt='' className='manual-student-empty-image' src={EmptyIcon} />
-                <div className='manual-student-empty-title'>
-                  No Students To Add
-                </div>
-                <div className='manual-student-empty-text'>
-                  Create student accounts using the form above and get started adding students to your classroom!
-                </div>
-              </div>
-            )}
             {this.state.loading && (
               <div className='manual-entry-loading-container'>
                 <CircularProgress className='login-loading'/>
                 <div className='login-loading-text' style={{ fontSize: 13, paddingTop: 7, textAlign: 'center' }}>
-                  Validating<br/>Inputs
+                  Creating Student<br/>Account...
                 </div>
               </div>
             )}

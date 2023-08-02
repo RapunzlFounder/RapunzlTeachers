@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Logo from '../../assets/images/Admin/Logo.png';
 import '../../styles/Admin/Header.css';
 import HeaderMenu from './HeaderMenu';
+import ToggleExpandButton from './ToggleExpandButton';
 
 class Header extends React.PureComponent {
   constructor(props) {
@@ -45,7 +46,10 @@ class Header extends React.PureComponent {
             <div className='company-logo-container'>
               <img alt="Rapunzl Company Logo" src={Logo} className="company-logo" />
             </div>
-            <HeaderMenu />
+            <div className='header-right-flex'>
+              <ToggleExpandButton />
+              <HeaderMenu />
+            </div>
           </div>
         </div>
     );

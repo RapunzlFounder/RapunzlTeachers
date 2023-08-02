@@ -264,113 +264,6 @@ class CreateAccountContainer extends React.PureComponent {
               loading: false
             });
           }
-  // -------------- BIRTHDAY VALIDATION --------------
-  else {
-    var today = new Date();
-    // Age Limit Of 13
-    var YYYY = parseInt(today.getFullYear()) - 13;
-    //Handles 0 indexed month
-    var MM = parseInt(today.getMonth()) + 1;
-    var DD = today.getDate();
-    // Handles getting user inputs
-    var inputYear = this.state.birthdate.slice(0, 4);
-    var inputMonth = this.state.birthdate.slice(5, 7);
-    var inputDay = this.state.birthdate.slice(9, 11);
-    // eslint-disable-next-line
-    if (inputMonth == '' && inputYear == '' && inputDay == '') {
-      this.setState({ monthError: true, dayError: true, yearError: true });
-    }
-    // Checks Birth Year
-    if (inputYear < 1900) {
-      this.setState({
-        onErrorBirthday: true,
-        alertVisible: true,
-        alertTitle: 'Invalid Year',
-        alertMessage: 'The oldest person alive, on record, was born in 1903. Please choose a year after that for your birthday in order to proceed or contact support.',
-        loading: false,
-      });
-      return;
-    }
-    // Handles User Input A Valid Date
-    if (inputMonth > 12 || inputMonth <= 0) {
-      this.setState({
-        onErrorBirthday: true,
-        alertVisible: true,
-        alertTitle: 'Invalid Month',
-        alertMessage: 'The date you are trying to enter is invalid. There are only 12 months in the year. Please check your birthday for typos & try again.',
-        loading: false,
-      });
-      return;
-    }
-    // Handles Invalid Date
-    if (inputDay > 31 || inputDay <= 0) {
-      this.setState({
-        onErrorBirthday: true,
-        alertVisible: true,
-        alertTitle: 'Invalid Day',
-        alertMessage: 'The date you are trying to enter is invalid. The day you input is either greater than 31 or less than 1. Please update your birthday & try again.',
-        loading: false,
-      });
-      return;
-    }
-    // Handles Invalid Date
-    // eslint-disable-next-line
-    if ((inputMonth == 1 && inputDay > 31) || (inputMonth == 2 && inputDay > 29) ||
-      // eslint-disable-next-line
-      (inputMonth == 3 && inputDay >= 31) || (inputMonth == 4 && inputDay > 30) ||
-      // eslint-disable-next-line
-      (inputMonth == 5 && inputDay > 31) || (inputMonth == 6 && inputDay > 30) ||
-      // eslint-disable-next-line
-      (inputMonth == 7 && inputDay > 31) || (inputMonth == 8 && inputDay > 31) ||
-      // eslint-disable-next-line
-      (inputMonth == 9 && inputDay > 30) || (inputMonth == 10 && inputDay > 31) ||
-      // eslint-disable-next-line
-      (inputMonth == 11 && inputDay > 30) || (inputMonth == 12 && inputDay > 31)) {
-        this.setState({
-          onErrorBirthday: true,
-          alertVisible: true,
-          alertTitle: 'Invalid Date',
-          alertMessage: 'The date you are trying to enter is invalid. The day you entered does not exist. Please update your birthday & try again.',
-          loading: false,
-        });
-        return;
-    }
-    // Returns False If Not Possible
-    if (inputYear > YYYY) {
-      this.setState({
-        onErrorBirthday: true,
-        alertVisible: true,
-        alertTitle: 'Invalid Date',
-        alertMessage: 'The date you are trying to enter is invalid. You need to be 13 years or older to use this application.',
-        loading: false,
-      });
-      return;
-    }
-    // Checks Year To Determine If Month & Day Check Are Needed
-    // eslint-disable-next-line
-    else if (inputYear == YYYY && (inputMonth > MM || (inputMonth == MM && inputDay > DD))) {
-      if (inputMonth > MM) {
-        this.setState({
-          onErrorBirthday: true,
-          alertVisible: true,
-          alertTitle: 'Invalid Date',
-          alertMessage: 'The date you are trying to enter is invalid. You need to be 13 years or older to use this application.',
-          loading: false,
-        });
-      }
-      // eslint-disable-next-line
-      else if (inputMonth == MM) {
-        if (inputDay > DD) {
-          this.setState({
-            onErrorBirthday: true,
-            alertVisible: true,
-            alertTitle: 'Invalid Date',
-            alertMessage: 'The date you are trying to enter is invalid. You need to be 13 years or older to use this application.',
-            loading: false,
-          });
-        }
-      }
-    }
   // -------------- PASSWORD VALIDATION --------------
     else {
       // Check For Valid Password
@@ -419,7 +312,7 @@ class CreateAccountContainer extends React.PureComponent {
   // -------------- VALIDATION SUCCESS OKAY TO CREATE ACCOUNT --------------
       else {
         this.createAccount();
-      }}}})}}}}})}
+      }}})}}}}})}
     }
   }
 

@@ -21,10 +21,9 @@ class UploadTemplate extends React.PureComponent {
             Example Of Spreadsheet To Upload
           </div>
           <div className='upload-template-instructions'>
-            Please try to upload an Excel Document or a CSV file. Please label the columns in your spreadsheet as indicated below. If you want us to generate usernames for the students, please leave that column blank.
+            Please try to upload an Excel Document or a CSV file. Please label the columns in your spreadsheet as indicated below.
           </div>
           <div className='upload-template-flex'>
-            <div className='upload-column-header'>Username</div>
             <div className='upload-column-header'>First Name</div>
             <div className='upload-column-header'>Last Name</div>
             <div className='upload-column-header'>Email</div>
@@ -35,17 +34,8 @@ class UploadTemplate extends React.PureComponent {
             <div className='upload-column-cell' />
             <div className='upload-column-cell' />
             <div className='upload-column-cell' />
-            <div className='upload-column-cell' />
           </div>
           <div className='upload-template-flex'>
-            <div className='upload-column-cell' />
-            <div className='upload-column-cell' />
-            <div className='upload-column-cell' />
-            <div className='upload-column-cell' />
-            <div className='upload-column-cell' />
-          </div>
-          <div className='upload-template-flex'>
-            <div className='upload-column-cell' />
             <div className='upload-column-cell' />
             <div className='upload-column-cell' />
             <div className='upload-column-cell' />
@@ -56,10 +46,14 @@ class UploadTemplate extends React.PureComponent {
             <div className='upload-column-cell' />
             <div className='upload-column-cell' />
             <div className='upload-column-cell' />
-            <div className='upload-column-cell' />
           </div>
           <div className='upload-template-flex'>
             <div className='upload-column-cell' />
+            <div className='upload-column-cell' />
+            <div className='upload-column-cell' />
+            <div className='upload-column-cell' />
+          </div>
+          <div className='upload-template-flex'>
             <div className='upload-column-cell' />
             <div className='upload-column-cell' />
             <div className='upload-column-cell' />

@@ -106,7 +106,7 @@ class ClassGrades extends Component {
                 <div onClick={() => this._handleExpandGrades(student.userId)} className='student-grade-name-container'>
                   <div>
                     <div className='student-grade-name-flex'>
-                      <div className='student-grade-name-text'>
+                      <div className='student-grade-name-text' style={{ paddingRight: 5 }}>
                         {student.firstName}
                       </div>
                       <div className='student-grade-name-text'>

@@ -3,16 +3,9 @@ import { connect } from 'react-redux';
 import { SearchPortalAssets } from '../../../ActionTypes/searchActions';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import { updateDashboard } from '../../../ActionTypes/dashboardActions';
-import ResourceItem from './ResourceItem';
 import '../../../styles/Home/Resources.css';
-import SearchBeginIcon from '../../../assets/images/Search/SearchBegin.png';
-import SearchEmptyIcon from '../../../assets/images/Search/SearchEmpty.png';
-import TypeButton from './TypeButton';
-import ModuleButton from './ModuleButton';
-import OpenWithIcon from '@mui/icons-material/OpenWith';
-import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
-import { CircularProgress } from '@mui/material';
 import SearchResources from './SearchResources';
+import ResourcesContainer from './ResourcesContainer';
 
 class ResourceLibrary extends Component {
   constructor(props) {
@@ -36,6 +29,8 @@ class ResourceLibrary extends Component {
       searchKeyword: true,
       searchStandard: false,
       loading: false,
+      // Handles Toggle At Top Of Screen
+      selectedView: 'modules',
     }
   }
 
@@ -116,26 +111,6 @@ class ResourceLibrary extends Component {
     this.setState({ moduleSearchArray: newArray });
   }
 
-  _getActivities() {
-    let activitiesArray = [];
-    for (var i in this.props.publicModules) {
-      for (var j in this.props.publicModules[i].activities) {
-        activitiesArray.push(this.props.publicModules[i].activities[j]);
-      }
-    }
-    return activitiesArray;
-  }
-
-  _getArticles() {
-    let articleArray = [];
-    for (var i in this.props.publicModules) {
-      for (var j in this.props.publicModules[i].articles) {
-        articleArray.push(this.props.publicModules[i].articles[j]);
-      }
-    }
-    return articleArray;
-  }
-
   _expandLibrary() {
     this.props.updateDashboard('expandedLibrary', true);
   }
@@ -149,52 +124,36 @@ class ResourceLibrary extends Component {
       return (
         <div className='middle-container'>
           <div className='tile search-library-container'>
-            {!this.props.expandedLibrary && (
-              <div onClick={() => this._expandLibrary()} className='expand-resource-container'>
-                <OpenWithIcon className='expand-resource-icon' />
-                <div className='expand-resource-text'>
-                  Expand View
-                </div>
+            <div className='resource-library-header'>
+              <div onClick={() => this.setState({ selectedView: 'activities' })} className={`resource-menu-item ${this.state.selectedView === 'activities' ? ' resource-menu-item-selected' : ''}`}>
+                Activities
               </div>
-            )}
-            {this.props.expandedLibrary && (
-              <div onClick={() => this._shrinkLibrary()} className='expand-resource-container'>
-                <CloseFullscreenIcon className='expand-resource-icon' />
-                <div className='expand-resource-text'>
-                  Shrink View
-                </div>
+              <div onClick={() => this.setState({ selectedView: 'articles' })} className={`resource-menu-item ${this.state.selectedView === 'articles' ? ' resource-menu-item-selected' : ''}`}>
+                Articles
               </div>
-            )}
-            <input
+              <div onClick={() => this.setState({ selectedView: 'modules' })} className={`resource-menu-item ${this.state.selectedView === 'modules' ? ' resource-menu-item-selected' : ''}`}>
+                Modules
+              </div>
+            </div>
+            {/* <input
               className='search-bar'
               value={this.state.searchText}
               onChange={(event) => this.changeSearchText(event.target.value)}
               placeholder='Discover By Module, Topic, Or Resource Type'
+            /> */}
+            <ResourcesContainer
+              visible={true}
+              loading={this.state.loading}
+              isActivities={this.state.selectedView === 'activities'}
+              isArticles={this.state.selectedView === 'articles'}
+              isModules={this.state.selectedView === 'modules'}
             />
-            <div className='search-bar-options'>
-              <TypeButton
-                selectActivities={this.selectActivities}
-                selectArticles={this.selectArticles}
-                selectAssessments={this.selectAssessments}
-                selectPresentations={this.selectPresentations}
-                selectGuides={this.selectGuides}
-                activitiesSelected={this.state.activitiesSelected}
-                articlesSelected={this.state.articlesSelected}
-                assessmentsSelected={this.state.assessmentsSelected}
-                presentationsSelected={this.state.presentationsSelected}
-                guidesSelected={this.state.guidesSelected}
-              />
-              <ModuleButton
-                moduleSearchArray={this.state.moduleSearchArray}
-                selectModule={this.selectModule}
-              />
-            </div>
-            <SearchResources
+            {/* <SearchResources
               visible={false}
               loading={this.state.loading}
               searchData={this.state.searchData}
               searchText={this.state.searchText}
-            />
+            /> */}
           </div>
         </div>
       );

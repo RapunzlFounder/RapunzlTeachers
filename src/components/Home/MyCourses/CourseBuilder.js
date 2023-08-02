@@ -164,6 +164,7 @@ class CourseBuilder extends Component {
           saveSection={this.saveSection}
           saveCourse={null}
           selectedCourse={null}
+          courseSections={this.state.courseSections}
         />
         <div onClick={() => this.props.toggleCourseBuilder()} className='support-go-back'>
           Go Back

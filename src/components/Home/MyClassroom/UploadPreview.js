@@ -39,19 +39,15 @@ class UploadPreview extends React.PureComponent {
               These are the students we were succesfully able to identify. There were {this._getErrorStudentsNumber()} rows that we are unable to match and they will be highlighted in red.
             </div>
             <div className='upload-template-flex' style={{ width: '90%', margin: 'auto' }}>
-              <div className='upload-column-header' style={{ width: '20%' }}>Username</div>
-              <div className='upload-column-header' style={{ width: '20%' }}>First Name</div>
-              <div className='upload-column-header' style={{ width: '20%' }}>Last Name</div>
-              <div className='upload-column-header' style={{ width: '20%' }}>Email</div>
-              <div className='upload-column-header' style={{ width: '20%' }}>Birthday</div>
+              <div className='upload-column-header' style={{ width: '25%' }}>First Name</div>
+              <div className='upload-column-header' style={{ width: '25%' }}>Last Name</div>
+              <div className='upload-column-header' style={{ width: '25%' }}>Email</div>
+              <div className='upload-column-header' style={{ width: '25%' }}>Birthday</div>
             </div>
             <div className='upload-preview-restrict-height'>
               {this.props.data.map((item) => {
                 return (
                   <div key={item.username} className='upload-template-flex' style={{ width: '90%', margin: 'auto', backgroundColor: item.isError ? '#ffb3b3' : '' }}>
-                    <div className='upload-column-cell'>
-                      {item.username.length > 15 ? item.username.slice(0,14) + '...' : item.username}
-                    </div>
                     <div className='upload-column-cell'>
                       {item.firstName.length > 15 ? item.firstName.slice(0,14) + '...' : item.firstName}
                     </div>

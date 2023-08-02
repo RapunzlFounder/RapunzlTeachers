@@ -20,14 +20,20 @@ path {
 .search-bar {
     outline: none;
     border: none;
-    background: none;
+    display: block;
+    background: #16372f;
     color: white;
-    border-bottom: 2px solid white;
+    /* border: 2px solid white; */
     padding-top: 14px;
     padding-bottom: 10px;
-    width: 94%;
-    margin-left: 3%;
-    margin-top: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    width: 65%;
+    text-align: center;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 25px;
+    margin-bottom: 25px;
 }
 .search-bar-options {
     margin-left: 3%;
@@ -150,4 +156,92 @@ path {
     padding-top: 10px;
     padding-bottom: 10px;
     color: #18deab;
+}
+.expand-resource-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-top: 10px;
+    border: 2px solid #6f7e77;
+    width: fit-content;
+    transition: 0.2s all;
+    cursor: pointer;
+    border-radius: 50px;
+    float: right;
+}
+.expand-resource-icon {
+    font-size: 17px !important;
+    fill: #6f7e77 !important;
+}
+.expand-resource-text {
+    font-size: 14px;
+    margin-left: 7px;
+    font-weight: 500;
+    color: #6f7e77;
+}
+.expand-resource-container:hover {
+    border-color: #3fffa5;
+}
+.expand-resource-container:hover .expand-resource-icon {
+    fill: #3fffa5 !important;
+}
+.expand-resource-container:hover .expand-resource-text {
+    color: #3fffa5;
+}
+.expand-resource-container-shrink:hover {
+    border-color: #ff840a;
+}
+.expand-resource-container-shrink:hover .expand-resource-icon-shrink {
+    fill: #ff840a !important;
+}
+.expand-resource-container-shrink:hover .expand-resource-text-shrink {
+    color: #ff840a;
+}
+.resource-library-header {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 30px;
+}
+.resource-menu-item {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid white;
+    color: white;
+    font-weight: 400;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.resource-menu-item:hover {
+    color:#3fffa5;
+    border-color: #3fffa5;
+}
+.resource-menu-item-selected {
+    color: gold;
+    border-color: gold;
+    border-bottom: 5px solid;
+}
+.resource-menu-item-selected:hover {
+    color: gold;
+    border-color: gold;
+}
+/* Media Size Updates 500px */
+@media only screen and (max-width: 1000px) {
+	.expand-resource-icon {
+        font-size: 14px !important;
+    }
+    .expand-resource-text {
+        font-size: 12px;
+    }
+    .expand-resource-container {
+        border-width: 1px;
+    }
 }

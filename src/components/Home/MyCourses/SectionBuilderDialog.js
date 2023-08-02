@@ -254,7 +254,27 @@ class SectionBuilderDialog extends React.PureComponent {
     this.setState({ PDFVisible: false });
   }
 
+  // Filters Out Modules That Have Already Been Selected
+  _getModuleOptions() {
+    // Gets An Array Of Module IDs That Have Been Selected
+    let currentArray = [];
+    for (var i in this.props.courseSections) {
+      if (this.props.courseSections[i].module !== null) {
+        currentArray.push(parseInt(this.props.courseSections[i].module));
+      }
+    }
+    // Creates A New Array Of Eligible Options
+    let moduleArray = [];
+    for (var j in this.props.publicModules) {
+      if (currentArray.indexOf(parseInt(this.props.publicModules[j].id)) === -1) {
+        moduleArray.push(this.props.publicModules[j]);
+      }
+    }
+    return moduleArray;
+  }
+
   render() {
+    let moduleOptions = this._getModuleOptions();
     return (
       <Dialog
         open={this.props.visible}
@@ -284,9 +304,9 @@ class SectionBuilderDialog extends React.PureComponent {
             {this.state.status === 'module' ? 'Please select a module to assign to this section.' : 'Save this section to continue building your course.'}
           </div>
           <div className='section-builder-container'>
-            {this.state.status === 'module' && (
+            {this.state.status === 'module' && moduleOptions && moduleOptions.length > 0 && (
               <div className='module-flex-container'>
-                {this.props.publicModules.map((item) => {
+                {moduleOptions.map((item) => {
                   return (
                     <div onClick={() => this.selectModule(item.id)} key={item.id} className='module-flex-item'>
                       <img

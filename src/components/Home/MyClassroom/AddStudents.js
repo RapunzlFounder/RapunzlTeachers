@@ -392,8 +392,6 @@ class AddStudents extends Component {
   validateClassName() {
     if (this.props.newClassName.length > 20) {
       return false;
-    } else if (this.props.newClassName.length < 4) {
-      return false;
     } else { 
       return true;
     }
@@ -484,10 +482,13 @@ class AddStudents extends Component {
             We've Added Your Students!
           </div>
           <div className='add-students-result-text'>
-            Rapunzl was able to add all of the students who you provided into your classroom. Any students who did not have an existing Rapunzl account should receive an email with instructions on how to login.
+            Rapunzl was able to add the students into your classroom. If students did not have an existing Rapunzl account, they should receive an email with instructions on how to login.
           </div>
           <div onClick={() => this.props.toggleAddStudents()} className='add-students-result-button'>
             View Classroom
+          </div>
+          <div onClick={() => this.props.toggleManualEntry()} className='add-students-result-button manual-add-result-button'>
+            Manually Add More Students
           </div>
         </div>
       );

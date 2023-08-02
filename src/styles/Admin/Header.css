@@ -239,3 +239,9 @@ path {
     border-bottom-left-radius: 15px !important;
     border-bottom-right-radius: 15px !important;
 }
+.header-right-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
