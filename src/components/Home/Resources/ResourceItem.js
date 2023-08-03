@@ -80,12 +80,13 @@ class ResourceItem extends Component {
           </div>
         );
     } else if (this.props.type === 'modules') {
+      console.log(this.props.item);
       return (
         <div key={this.props.item.id}>
           <PDFViewer
             visible={this.state.pdfVisible}
             dismiss={this.dismissPDFViewer}
-            pdfURL={this.props.item.pdfUrl}
+            pdfURL={this.props.item.presentationUrl}
             orientation={'landscape'}
           />
           <img
