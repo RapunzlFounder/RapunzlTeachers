@@ -88,14 +88,12 @@ class ResourcesContainer extends Component {
         <div className='resources-container'>
           <div className='modules-resources-container'>
             {modulesArray.map((item) => {
-              console.log(item);
               return (
-                <img
-                  alt=''
-                  className='module-resource-image'
-                  src={item.imageUrl}
+                <ResourceItem
+                  item={item}
+                  type={'modules'}
                 />
-              )
+              );
             })}
           </div>
         </div>

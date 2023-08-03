@@ -46,7 +46,8 @@ class ResourceLibrary extends Component {
         presentationsSelected: false,
         guidesSelected: false,
         moduleSearchArray: [],
-        searchData: []
+        searchData: [],
+        selectedView: 'modules'
       });
     }
   }

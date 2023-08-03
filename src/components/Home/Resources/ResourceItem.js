@@ -54,7 +54,7 @@ class ResourceItem extends Component {
       );
     } else if (this.props.type === 'article') {
         return (
-          <div key={this.props.item.assetId}>
+          <div key={this.props.item.id}>
             <PDFViewer
               visible={this.state.pdfVisible}
               dismiss={this.dismissPDFViewer}
@@ -79,6 +79,23 @@ class ResourceItem extends Component {
             </div>
           </div>
         );
+    } else if (this.props.type === 'modules') {
+      return (
+        <div key={this.props.item.id}>
+          <PDFViewer
+            visible={this.state.pdfVisible}
+            dismiss={this.dismissPDFViewer}
+            pdfURL={this.props.item.pdfUrl}
+            orientation={'landscape'}
+          />
+          <img
+            alt=''
+            className='module-resource-image'
+            src={this.props.item.imageUrl}
+            onClick={() => this._handleSelectItem()}
+          />
+        </div>
+      );
     } else {
       return (
         <div key={this.props.item.assetId}>
