@@ -25,32 +25,88 @@ class ResourceItem extends Component {
   }
 
   render() {
-    return (
-      <div key={this.props.item.assetId}>
-        <PDFViewer
-          visible={this.state.pdfVisible}
-          dismiss={this.dismissPDFViewer}
-          pdfURL={this.props.item.documentUrl}
-          orientation={this.props.item.assetType === 'MODULE' ? 'landscape' : 'portrait'}
-        />
-        <div onClick={() => this._handleSelectItem()} className='library-result-flex-item'>
-          <div className='library-result-title'>
-            {this.props.item.assetName}
+    if (this.props.type === 'activity') {
+      return (
+        <div key={this.props.item.id}>
+          <PDFViewer
+            visible={this.state.pdfVisible}
+            dismiss={this.dismissPDFViewer}
+            pdfURL={this.props.item.pdfUrl}
+            orientation={'portrait'}
+          />
+          <div onClick={() => this._handleSelectItem()} className='library-result-flex-item'>
+            <div className='library-result-title'>
+              {this.props.item.activityName}
+            </div>
+            {/* <div className='library-result-module'>
+              Module {this.props.item.moduleId}
+            </div> */}
+            <div className='library-result-summary'>
+              {this.props.item.description}
+            </div>
+            {/* <div className='result-keywords'>
+              <div className='keywords-item'>
+                {this.props.item.assetType.toLowerCase()}
+              </div>
+            </div> */}
           </div>
-          <div className='library-result-module'>
-            Module {this.props.item.moduleId}
+        </div>
+      );
+    } else if (this.props.type === 'article') {
+        return (
+          <div key={this.props.item.assetId}>
+            <PDFViewer
+              visible={this.state.pdfVisible}
+              dismiss={this.dismissPDFViewer}
+              pdfURL={this.props.item.pdfUrl}
+              orientation={'portrait'}
+            />
+            <div onClick={() => this._handleSelectItem()} className='library-result-flex-item'>
+              <div className='library-result-title'>
+                {this.props.item.articleName}
+              </div>
+              {/* <div className='library-result-module'>
+                Module {this.props.item.moduleId}
+              </div> */}
+              <div className='library-result-summary'>
+                {this.props.item.description}
+              </div>
+              {/* <div className='result-keywords'>
+                <div className='keywords-item'>
+                  {this.props.item.assetType.toLowerCase()}
+                </div>
+              </div> */}
+            </div>
           </div>
-          <div className='library-result-summary'>
-            {this.props.item.assetDescription}
-          </div>
-          <div className='result-keywords'>
-            <div className='keywords-item'>
-              {this.props.item.assetType.toLowerCase()}
+        );
+    } else {
+      return (
+        <div key={this.props.item.assetId}>
+          <PDFViewer
+            visible={this.state.pdfVisible}
+            dismiss={this.dismissPDFViewer}
+            pdfURL={this.props.item.documentUrl}
+            orientation={this.props.item.assetType === 'MODULE' ? 'landscape' : 'portrait'}
+          />
+          <div onClick={() => this._handleSelectItem()} className='library-result-flex-item'>
+            <div className='library-result-title'>
+              {this.props.item.assetName}
+            </div>
+            <div className='library-result-module'>
+              Module {this.props.item.moduleId}
+            </div>
+            <div className='library-result-summary'>
+              {this.props.item.assetDescription}
+            </div>
+            <div className='result-keywords'>
+              <div className='keywords-item'>
+                {this.props.item.assetType.toLowerCase()}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 

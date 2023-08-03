@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../../../styles/Home/Resources.css';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
+import ResourceItem from './ResourceItem';
 
 class ResourcesContainer extends Component {
   // eslint-disable-next-line
@@ -43,28 +44,60 @@ class ResourcesContainer extends Component {
     return articleArray;
   }
 
+  _getModules() {
+    return this.props.publicModules;
+  }
+
   render() {
     // Handles Activities
     if (this.props.visible && this.props.isActivities) {
+      let activitiesArray = this._getActivities();
       return (
         <div className='resources-container'>
-
+          {activitiesArray.map((item) => {
+            return (
+              <ResourceItem
+                item={item}
+                type={'activity'}
+              />
+            );
+          })}
         </div>
       );
     }
     // Handles Articles
     else if (this.props.visible && this.props.isArticles) {
+      let articlesArray = this._getArticles();
       return (
         <div className='resources-container'>
-
+          {articlesArray.map((item) => {
+            return (
+              <ResourceItem
+                item={item}
+                type={'article'}
+              />
+            );
+          })}
         </div>
       );
     }
     // Handles Modules
     else if (this.props.visible && this.props.isModules) {
+      let modulesArray = this._getModules();
       return (
         <div className='resources-container'>
-
+          <div className='modules-resources-container'>
+            {modulesArray.map((item) => {
+              console.log(item);
+              return (
+                <img
+                  alt=''
+                  className='module-resource-image'
+                  src={item.imageUrl}
+                />
+              )
+            })}
+          </div>
         </div>
       );
     }

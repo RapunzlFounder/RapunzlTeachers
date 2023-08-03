@@ -233,6 +233,32 @@ path {
     color: gold;
     border-color: gold;
 }
+.modules-resources-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-top: 20px;
+}
+.module-resource-image {
+    max-width: 325px;
+    display: block;
+    margin: 10px;
+    border-radius: 10px;
+}
+@media only screen and (max-width: 1250px) {
+    .module-resource-image {
+        max-width: 300px;
+    }
+}
+@media only screen and (max-width: 1130px) {
+    .module-resource-image {
+        max-width: 262px;
+        display: block;
+        margin: 5px;
+    }
+}
 /* Media Size Updates 500px */
 @media only screen and (max-width: 1000px) {
 	.expand-resource-icon {
