@@ -46,7 +46,7 @@ class ManualEntry extends Component {
         this.setState({
           alertVisible: true,
           alertTitle: 'Error With Name',
-          alertMessage: 'Your first and last name each probably have at least 1 letter... Just type them above!',
+          alertMessage: 'Please fill in a first and last name for the student you are trying to add.',
           onErrorFirstName: true,
           onErrorLastName: true,
           loading: false,
