@@ -138,7 +138,7 @@ class ManualEntry extends Component {
       // Handles getting user inputs
       var inputYear = this.state.birthdate.slice(0, 4);
       var inputMonth = this.state.birthdate.slice(5, 7);
-      var inputDay = this.state.birthdate.slice(9, 11);
+      var inputDay = this.state.birthdate.slice(8, 10);
       // eslint-disable-next-line
       if (inputMonth == '' && inputYear == '' && inputDay == '') {
         this.setState({ monthError: true, dayError: true, yearError: true });
