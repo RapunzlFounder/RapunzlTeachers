@@ -181,24 +181,6 @@ class AddStudents extends Component {
         }
       }
     }
-    // Handles Username, Including Misspellings Or Varying Input Titles
-    // We do not display an error message because the username is optional.
-    let usernameIndex = firstSheetArray[0].indexOf('username');
-    if (usernameIndex === -1) {
-      usernameIndex = firstSheetArray[0].indexOf('Username');
-      if (usernameIndex === -1) {
-        usernameIndex = firstSheetArray[0].indexOf('User Name');
-        if (usernameIndex === -1) {
-          usernameIndex = firstSheetArray[0].indexOf('user name');
-          if (usernameIndex === -1) {
-            usernameIndex = firstSheetArray[0].indexOf('User name');
-            if (usernameIndex === -1) {
-              usernameIndex = firstSheetArray[0].indexOf('user_name');
-            }
-          }
-        }
-      }
-    }
     // If There Is No Error, We Continue Processing The File
     if (!error) {
       // Creates Array Of Objects, With Each Object Representing A Student That Is Included In The Selected File
@@ -206,7 +188,12 @@ class AddStudents extends Component {
       for (var i=1; i < firstSheetArray.length; i++) {
         let uploadReady = true;
         // Check First & Last Name Are Greater Than 1 Character Each
-        if (firstSheetArray[i][firstNameIndex].length < 2 || firstSheetArray[i][lastNameIndex].length < 2) {
+        if (firstSheetArray[i][firstNameIndex] === undefined || 
+            firstSheetArray[i][firstNameIndex].length === undefined  || 
+            firstSheetArray[i][firstNameIndex].length < 2 ||
+            firstSheetArray[i][lastNameIndex] === undefined ||
+            firstSheetArray[i][lastNameIndex].length === undefined ||
+            firstSheetArray[i][lastNameIndex].length < 2) {
           uploadReady = false;
         }
         // Check That Email Is The Correct Format
@@ -217,12 +204,12 @@ class AddStudents extends Component {
         }
         // Once We Have Error Checked First, Last & Email - Add Student Object To Upload Array 
         const studentObject = {
-          username: usernameIndex === -1 ? 'generic' : firstSheetArray[i][usernameIndex],
           firstName: firstSheetArray[i][firstNameIndex],
           lastName: firstSheetArray[i][lastNameIndex],
           email: firstSheetArray[i][emailIndex],
           birthday: this.handleExcelTimestamp(firstSheetArray[i][birthdayIndex]),
           isError: !uploadReady,
+          id: i,
         }
         uploadArray.push(studentObject);
       }
@@ -324,6 +311,7 @@ class AddStudents extends Component {
     let newArray = [];
     for (var i in studentArray) {
       let newObject = {
+        id: i,
         email: studentArray[i].email.toString(),
         firstName: studentArray[i].firstName.toString(),
         lastName: studentArray[i].lastName.toString(),
@@ -418,6 +406,19 @@ class AddStudents extends Component {
     } else {
       this.setState({ progress: "search" });
     }
+  }
+
+  // Pass through arrow function that enables the teacher to remove a student with bad data to proceed with creating the classroom
+  _handleRemoveStudent = (studentArray) => {
+    let newArray = [];
+    for (var i in this.state.uploadArray) {
+      for (var j in studentArray) {
+        if (this.state.uploadArray[i].id !== studentArray[j].id) {
+          newArray.push(this.state.uploadArray[i]);
+        }
+      }
+    }
+    this.setState({ uploadArray: newArray });
   }
 
   render() {
@@ -531,6 +532,7 @@ class AddStudents extends Component {
           />
           <UploadPreview
             handleCreateClassroomClick={this.handleCreateClassroomClick}
+            handleRemoveStudent={this._handleRemoveStudent}
             dismiss={this.toggleUploadPreview}
             visible={this.state.uploadPreview}
             loading={this.state.loading}

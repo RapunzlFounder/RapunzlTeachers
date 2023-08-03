@@ -83,6 +83,27 @@
     padding-left: 7px;
     font-size: 13px;
 }
+.upload-cell-cancel-button {
+    width: 52px;
+}
+.upload-cancel-icon {
+    padding: 13px !important;
+    font-size: 22px !important;
+    padding-top: 7px !important;
+    padding-bottom: 3px !important;
+    fill: #ff3b13 !important;
+    cursor: pointer !important;
+}
+.dropzone-upload-error-text {
+    color: #ff5b00;
+    font-weight: 600;
+    font-size: 13px;
+    text-align: center;
+    width: 300px;
+    margin: auto;
+    margin-bottom: 50px;
+    margin-top: -33px;
+}
 .template-dismiss-button {
     width: fit-content;
     text-align: center;

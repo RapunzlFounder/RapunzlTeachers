@@ -633,7 +633,8 @@ path {
     padding-bottom: 20px;
 }
 .upload-preview-restrict-height {
-    height: 430px;
+    max-height: 610px;
+    margin-bottom: 30px;
     overflow-y: scroll;
 }
 .dropzone-file-picker-button {
@@ -691,6 +692,19 @@ path {
 .dropzone-file-upload-button:hover {
     border-color: #09664e;
     background-color: #09664e;
+}
+.dropzone-file-upload-button-disabled {
+    border: 1px solid #007154;
+    color: #007154;
+    padding: 22px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 5px;
+    transition: 0.2s all;
+    cursor: pointer;
 }
 .submit-class-details-button {
     width: 220px;
