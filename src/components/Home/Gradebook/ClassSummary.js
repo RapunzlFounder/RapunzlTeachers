@@ -15,7 +15,7 @@ class ClassSummary extends Component {
   }
 
   render() {
-    if (false) {
+    if (true) {
       return (
         <div className='gradebook-container' style={{ paddingTop: 18 }}>
           <img alt='' className='gradebook-empty-image' src={ClassSummarySoonGraphic} />
