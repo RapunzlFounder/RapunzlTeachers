@@ -360,10 +360,38 @@ class CreateAccountContainer extends React.PureComponent {
           password: this.state.password,
         };
         this.props.loginUser(loginCredentials).then(jwttoken => {
+          if (!(jwttoken && !('errors' in jwttoken))) {
+            // set the loading state to false as the login attempt failed and the user needs to be able to retry the login
+            this.setState({
+              loading: false,
+              alertVisible: true,
+              alertTitle: 'Invalid Login',
+              alertMessage: 'We created your account but were unable to login to that account. We received the following error message from our server: ' + jwttoken.errors[0].message + '  Please try logging in with the account details you used to create this account and contact support if the problem continues.'
+            });
+          }
           // eslint-disable-next-line
-          if (jwttoken && jwttoken.substring(0,4) == 'JWT ') {
+          else if (jwttoken && jwttoken.substring(0,4) == 'JWT ') {
             this.props.fetchBigQuery(jwttoken).then((res) => {
-              this.setState({ success: true, loading: false });
+              // Handles If There Is An Error Retrieving The Big Query
+              if (!(res && !('errors' in res))) {
+                this.setState({
+                  loginLoading: false,
+                  alertVisible: true,
+                  alertTitle: 'Issue With Login',
+                  alertMessage: res.errors[0].message !== undefined && res.errors[0].message.length > 0 ? res.errors[0].message : 'We were unable to retrieve your account information. The login information you provided was correct, however, something went wrong with our servers. Please contact support to resolve the issue.',
+                })
+              }
+              // Handles If The Big Query Is Successfully Fetched
+              else {
+                this.setState({ success: true, loading: false });
+              }              
+            });
+          } else {
+            this.setState({
+              loading: false,
+              alertVisible: true,
+              alertTitle: 'Invalid Login',
+              alertMessage: 'We created your account but were unable to login to that account. Please try logging in with the account details you used to create this account and contact support if the problem continues.'
             });
           }
         });

@@ -411,7 +411,6 @@ const mapDispatchToProps = (dispatch) => {
       // NOTE:  make sure that the input parameter 'studentsList' is an array of one or more of the following object
       // Make sure that double quotes are used for the string and date format input fileds in each object
       // { email: "welshman@me.edu", firstname: "Chris", lastName: "Thomas", birthDate: "2008-06-06" }
-      // TODO: Handle Adding Students To A Classroom Which The Teacher Has Created
       addStudentsToClassroom: (token, classroomId, studentsList) => dispatch(addStudentsToClassroom(token, classroomId, studentsList)),
    };
 };

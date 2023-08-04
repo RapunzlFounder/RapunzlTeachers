@@ -4,6 +4,36 @@
   height: 100vh;
   overflow-x: hidden;
 }
+.google-slides-button-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #00bb8b;
+  padding: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin-bottom: 15px;
+  border-radius: 15px;
+  transition: 0.2s all;
+  cursor: not-allowed;
+}
+.google-slides-icon {
+  fill: #00bb8b !important;
+  font-size: 18px !important;
+}
+.google-slides-button-text {
+    font-size: 13px;
+    padding-left: 10px;
+    font-weight: 500;
+    color: #00bb8b;
+}
+.pdf-header-flex {
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .pdf-close-flex {
   display: flex;
   flex-direction: row;
@@ -14,6 +44,7 @@
   padding-top: 5px;
   cursor: pointer;
   transition: 0.2s all;
+  width: 100px;
 }
 .pdf-close-icon {
   font-size: 18px !important;

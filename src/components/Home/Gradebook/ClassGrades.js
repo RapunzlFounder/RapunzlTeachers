@@ -51,7 +51,22 @@ class ClassGrades extends Component {
 
   // This Will Create An Object Of Interesting Data Summarizing The Entire Class And It Will Be Displayed In ClassSummary Component
   _getGradesOverview() {
-    
+    let initialObject = {
+      numberOfStudents: 0,
+      percentageFirstTrade: 0,
+    }
+    // FLEXED INTO TOP ROW
+    // Number Of Students In The Classroom
+    // Percentage Of Students Who Have Placed Their First Trade
+    // Average Class Performance
+    // Percentage Of Students Beating S&P 500
+
+    // QUIZ SUMMARY SECTION
+    // Quizzes Completed Percentage With Average Score & Specific Missing Students Array
+    // CLASSROOM LEADERBOARD SECTION
+    // Classroom Leaderboard
+    // CHALLENGING QUESTIONS SECTION
+    // Most Challenging Questions - 10 With Worst Score
   }
 
   // Matches The Classroom With The Appropriate Classroom Course Record To Find The Course Number, Then Finds The Course To Determine Number Of Modules

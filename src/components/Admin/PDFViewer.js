@@ -5,6 +5,7 @@ import '../../styles/Admin/PDF.css';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import LockClockOutlinedIcon from '@mui/icons-material/LockClockOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -70,12 +71,22 @@ const PDFViewer = (props) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       maxWidth={true}
+      style={{ margin: 0 }}
     >
       <div className='pdf-container'>
-        <div onClick={props.dismiss} className='pdf-close-flex'>
-          <HighlightOffIcon className='pdf-close-icon' />
-          <div className='pdf-close-text'>
-            close
+        <div onClick={props.dismiss} className='pdf-header-flex'>
+          <div style={{ width: 100, marginLeft: 30 }} />
+          <div className='google-slides-button-flex'>
+            <LockClockOutlinedIcon className='google-slides-icon' />
+            <div className='google-slides-button-text'>
+              View In Google Slides
+            </div>
+          </div>
+          <div className='pdf-close-flex'>
+            <HighlightOffIcon className='pdf-close-icon' />
+            <div className='pdf-close-text'>
+              close
+            </div>
           </div>
         </div>
         <Document

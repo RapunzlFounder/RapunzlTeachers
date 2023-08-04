@@ -80,7 +80,6 @@ class ResourceItem extends Component {
           </div>
         );
     } else if (this.props.type === 'modules') {
-      console.log(this.props.item);
       return (
         <div key={this.props.item.id}>
           <PDFViewer

@@ -6,11 +6,16 @@ import { updateDashboard } from '../../../ActionTypes/dashboardActions';
 import '../../../styles/Home/Resources.css';
 import SearchResources from './SearchResources';
 import ResourcesContainer from './ResourcesContainer';
+import ModuleButton from './ModuleButton';
+import Alert from '../../Admin/Alert';
 
 class ResourceLibrary extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      alertVisible: false,
+      alertTitle: '',
+      alertMessage: '',
       searchText: '',
       // State Variables For TypeButton To Select Which Types Of Assets We Would Like To Search
       // Defaults All To False, Which Will Search All Asset Types, But This Lets The User Filter Pre-Search
@@ -120,10 +125,30 @@ class ResourceLibrary extends Component {
     this.props.updateDashboard('expandedLibrary', false);
   }
 
+  // Pass Through Arrow Function Which Toggles Visibility Of Alert Dialog
+  toggleAlert = () => {
+    this.setState({ alertVisible: !this.state.alertVisible });
+  }
+
+  searchComingSoon() {
+    this.setState({
+      alertVisible: true,
+      alertTitle: 'Searching Coming Soon!',
+      alertMessage: 'Our developers are hard at work to finalize our Educator Portal and ensure you have easy access to our full financial literacy curriculum.',
+    });
+  }
+
+
   render() {
     if (this.props.visible) {
       return (
         <div className='middle-container'>
+          <Alert
+            dismiss={this.toggleAlert}
+            visible={this.state.alertVisible}
+            title={this.state.alertTitle}
+            message={this.state.alertMessage}
+          />
           <div className='tile search-library-container'>
             <div className='resource-library-header'>
               <div onClick={() => this.setState({ selectedView: 'activities' })} className={`resource-menu-item ${this.state.selectedView === 'activities' ? ' resource-menu-item-selected' : ''}`}>
@@ -136,12 +161,19 @@ class ResourceLibrary extends Component {
                 Modules
               </div>
             </div>
-            {/* <input
-              className='search-bar'
-              value={this.state.searchText}
-              onChange={(event) => this.changeSearchText(event.target.value)}
-              placeholder='Discover By Module, Topic, Or Resource Type'
-            /> */}
+            <div className='search-resources-flex-container'>
+              <input
+                className='search-bar'
+                value={this.state.searchText}
+                onClick={() => this.searchComingSoon()}
+                // onChange={(event) => this.changeSearchText(event.target.value)}
+                placeholder='Discover By Module, Topic, Or Resource Type'
+              />
+              <ModuleButton
+                moduleSearchArray={this.state.moduleSearchArray}
+                selectModule={this.selectModule}
+              />
+            </div>
             <ResourcesContainer
               visible={true}
               loading={this.state.loading}

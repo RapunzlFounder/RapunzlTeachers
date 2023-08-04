@@ -341,11 +341,13 @@ export function loginUser(userLogin) {
         else{
           dispatch(loginUserSuccess('JWT ' + json.data.data.tokenAuth.token));
           dispatch(resetDashboard());
-          return 'JWT ' + json.data.data.tokenAuth.token;
+          return { token: 'JWT ' + json.data.data.tokenAuth.token};
         }
       })
       //.catch(error => dispatch(loginUserFailure(error.message)));
-      .catch(error => console.log(error));
+      .catch(error => {
+        return { errors: [{ message: error.message }]}
+      });
   };
 }
 

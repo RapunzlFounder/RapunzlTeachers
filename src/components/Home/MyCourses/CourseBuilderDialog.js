@@ -473,4 +473,4 @@ const mapDispatchToProps = (dispatch) => {
    };
 };
 
-export default connect(mapStateToProps)(CourseBuilderDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(CourseBuilderDialog);

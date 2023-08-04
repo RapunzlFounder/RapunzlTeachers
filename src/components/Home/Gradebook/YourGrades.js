@@ -87,7 +87,7 @@ class YourGrades extends Component {
               >
                 <InsertChartOutlinedRoundedIcon className='gradebook-export-icon' style={{ fill: this.state.viewType === 'Summary' ? '#ffffff' : '#41d0ac' }} />
                 <div style={{ color: this.state.viewType === 'Summary' ? '#ffffff' : '#41d0ac' }}>
-                  Class Summary
+                  Summary
                 </div>
               </div>
               <div
@@ -97,7 +97,7 @@ class YourGrades extends Component {
               >
                 <FileDownloadIcon className='gradebook-export-icon' style={{ fill: this.state.viewType === 'Details' ? '#ffffff' : '#41d0ac' }} />
                 <div style={{ color: this.state.viewType === 'Details' ? '#ffffff' : '#41d0ac' }}>
-                  Grade Details
+                  Details
                 </div>
               </div>
             </div>

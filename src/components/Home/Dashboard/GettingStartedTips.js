@@ -17,26 +17,26 @@ import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 
 class GettingStartedTips extends Component {
+  // eslint-disable-next-line
   constructor(props) {
     super(props);
     this.state = {
-      progress: 2
     }
   }
 
   // Handles Text For Progress Title & Color For Progress Bar
-  getProgressArray() {
-    if (this.state.progress === 1) {
+  getProgressArray(progress) {
+    if (progress === 1) {
       return ['Getting Started', '#1d9678'];
-    } else if (this.state.progress === 2) {
+    } else if (progress === 2) {
       return ['On Your Way', '#19af89'];
-    } else if (this.state.progress === 3) {
+    } else if (progress === 3) {
       return ['Ready To Go', '#12c698'];
-    } else if (this.state.progress === 4) {
+    } else if (progress === 4) {
       return ['Almost There', '#15e4af'];
-    } else if (this.state.progress === 5) {
+    } else if (progress === 5) {
       return ['Invested', '#13f8bd'];
-    } else if (this.state.progress === 6) {
+    } else if (progress === 6) {
       return ['Expert', '#00ffbd'];
     } else {
       return ['Complete', '#00ffbd'];
@@ -73,9 +73,8 @@ class GettingStartedTips extends Component {
   }
 
   render() {
-    let progressArray = this.getProgressArray();
-    //let progress = this.getProgress();
-    let progress = 1;
+    let progress = this.getProgress();
+    let progressArray = this.getProgressArray(progress);
     return (
       <div className='tile classroom-overview' style={{ paddingBottom: 25 }}>
         <div className='home-header-flex'>

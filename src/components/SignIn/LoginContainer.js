@@ -95,18 +95,27 @@ class LoginContainer extends React.PureComponent {
     // eslint-disable-next-line
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!re.test(this.state.username.toLowerCase())) {
-      this.props.loginUser(loginCredentials).then(jwttoken => {
+      this.props.loginUser(loginCredentials).then(res2 => {
+        if (!(res2 && !('errors' in res2))) {
+          // set the loading state to false as the login attempt failed and the user needs to be able to retry the login
+          this.setState({
+            loginLoading: false,
+            alertVisible: true,
+            alertTitle: 'Invalid Login',
+            alertMessage: 'We were unable to login to your account. We received the following error message from our server: ' + res2.token.errors[0].message
+          });
+        }
         // execute the big query with the response as the jwt token input parameter if the token is a valid token
         // eslint-disable-next-line
-        if (jwttoken && jwttoken.substring(0,4) == 'JWT '){
-          this.props.fetchBigQuery(jwttoken).then(res => {
+        else if (res2 && res2.token && res2.token.substring(0,4) == 'JWT ') {
+          this.props.fetchBigQuery(res2.token).then(res => {
             // Handles Error With Big Query
             if (res !== true && !(res && !('errors' in res))) {
               this.setState({
                 loginLoading: false,
                 alertVisible: true,
                 alertTitle: 'Issue With Login',
-                alertMessage: res.errors[0].message
+                alertMessage: res.errors[0].message !== undefined && res.errors[0].message.length > 0 ? res.errors[0].message : 'We had trouble logging in and retreiving your account information. Please contact support at hello@rapunzl.org so we can help resolve the issue.',
               })
             }
             // Handles Successful Login And Fetching Of The Big Query
@@ -114,13 +123,19 @@ class LoginContainer extends React.PureComponent {
               this.setState({
                 success: true,
                 loginLoading: false,
+                alertVisible: false,
               });
             }
           });
         }
         else {
           // set the loading state to false as the login attempt failed and the user needs to be able to retry the login
-          this.setState({ loginLoading: false, alertVisible: true });
+          this.setState({
+            loginLoading: false,
+            alertVisible: true,
+            alertTitle: 'Invalid Login',
+            alertMessage: 'We were unable to login to your account with the credentials you have provided. Please update the information and try again.'
+          });
         }
       });
     } else {

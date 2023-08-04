@@ -45,6 +45,7 @@ class HomeScreen extends Component {
       alertType: '',
       contactUs: false,
       addingStudents: false,
+      handleLogout: false,
     };
   }
 
@@ -104,9 +105,20 @@ class HomeScreen extends Component {
     // eslint-disable-next-line
     if (this.props.logoutRequired == undefined || this.props.logoutRequired == true) {
       this.setState({ gettingMiniQuery: true });
-      this.props.fetchBigQuery(this.props.jwtToken).then(response => {
-        if (response) {
-          this.setState({ gettingMiniQuery: false });
+      this.props.fetchBigQuery(this.props.jwtToken).then(res => {
+        // Handles If There's An Error With The Big Query
+        if (!(res && !('errors' in res))) {
+          this.setState({
+            handleLogout: true,
+            gettingMiniQuery: false
+          });
+        }
+        // Handles If The Big Query Is Successful
+        else {
+          this.setState({ 
+            alertVisible: false,
+            gettingMiniQuery: false
+          });
         }
       })
     }
@@ -122,7 +134,22 @@ class HomeScreen extends Component {
     // if it has been 30 minutes or more since the last time that the user retrieved the mini query data, retreive it sgsin.  DO NOT CHANGE THIS NUMBER 300!  
     if (secondsDiff >= 1800){      
       this.setState({ gettingMiniQuery: true });
-      this.props.FetchMiniQuery(this.props.jwtToken);
+      this.props.FetchMiniQuery(this.props.jwtToken).then((res) => {
+        // Handles If There's An Error With the Mini Query
+        if (!(res && !('errors' in res))) {
+          this.setState({
+            gettingMiniQuery: false,
+            handleLogout: true,
+          });
+        }
+        // Handles If The Mini Query Is Successful
+        else {
+          this.setState({
+            gettingMiniQuery: false,
+            alertVisible: false
+          });
+        }
+      });
     }
   }
 
@@ -163,7 +190,7 @@ class HomeScreen extends Component {
         this.setState({
           alertVisible: true,
           alertTitle: 'Something Went Wrong...',
-          alertMessage: 'We had trouble retrieving financial literacy standards that align with these resources. Please contact support so that we can help resolve this issue.'
+          alertMessage: 'We had trouble retrieving financial literacy standards to align with these resources. This should not impact your ability to use the platform, but please contact support at your convenience so that we can help resolve this issue.'
         });
       }
     })
@@ -189,7 +216,7 @@ class HomeScreen extends Component {
 
   render() {
     // eslint-disable-next-line
-    if (this.props.jwtToken == null || this.props.jwtToken == undefined) {
+    if (this.props.jwtToken == null || this.props.jwtToken == undefined || this.state.handleLogout) {
       return(
         <Navigate to="/login" replace={true} />
       );
