@@ -81,17 +81,18 @@ path {
 .library-result-title {
     font-size: 15px;
     font-weight: 600;
-    padding-top: 9px;
+    color: #00f8b9;
 }
 .library-result-module {
     font-size: 13px;
     font-weight: 200;
     padding-bottom: 5px;
+    color: #c5d6d1;
 }
 .library-result-summary {
     font-size: 15px;
     font-weight: 200;
-    padding-bottom: 5px;
+    padding-bottom: 20px;
     color: #d6fff5;
 }
 .result-keywords {

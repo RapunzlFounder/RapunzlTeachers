@@ -28,7 +28,10 @@ class ResourcesContainer extends Component {
     let activitiesArray = [];
     for (var i in this.props.publicModules) {
       for (var j in this.props.publicModules[i].activities) {
-        activitiesArray.push(this.props.publicModules[i].activities[j]);
+        let activity = this.props.publicModules[i].activities[j];
+        activity.moduleID = this.props.publicModules[i].id;
+        activity.moduleName = this.props.publicModules[i].name;
+        activitiesArray.push(activity);
       }
     }
     return activitiesArray;
@@ -38,7 +41,10 @@ class ResourcesContainer extends Component {
     let articleArray = [];
     for (var i in this.props.publicModules) {
       for (var j in this.props.publicModules[i].articles) {
-        articleArray.push(this.props.publicModules[i].articles[j]);
+        let article = this.props.publicModules[i].articles[j];
+        article.moduleID = this.props.publicModules[i].id;
+        article.moduleName = this.props.publicModules[i].name;
+        articleArray.push(article);
       }
     }
     return articleArray;

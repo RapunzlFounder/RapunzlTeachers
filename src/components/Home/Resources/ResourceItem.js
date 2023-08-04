@@ -38,17 +38,12 @@ class ResourceItem extends Component {
             <div className='library-result-title'>
               {this.props.item.activityName}
             </div>
-            {/* <div className='library-result-module'>
-              Module {this.props.item.moduleId}
-            </div> */}
+            <div className='library-result-module'>
+              Module {this.props.item.moduleID}: {this.props.item.moduleName}
+            </div>
             <div className='library-result-summary'>
               {this.props.item.description}
             </div>
-            {/* <div className='result-keywords'>
-              <div className='keywords-item'>
-                {this.props.item.assetType.toLowerCase()}
-              </div>
-            </div> */}
           </div>
         </div>
       );
@@ -65,17 +60,12 @@ class ResourceItem extends Component {
               <div className='library-result-title'>
                 {this.props.item.articleName}
               </div>
-              {/* <div className='library-result-module'>
-                Module {this.props.item.moduleId}
-              </div> */}
+              <div className='library-result-module'>
+                Module {this.props.item.moduleID}: {this.props.item.moduleName}
+              </div>
               <div className='library-result-summary'>
                 {this.props.item.description}
               </div>
-              {/* <div className='result-keywords'>
-                <div className='keywords-item'>
-                  {this.props.item.assetType.toLowerCase()}
-                </div>
-              </div> */}
             </div>
           </div>
         );

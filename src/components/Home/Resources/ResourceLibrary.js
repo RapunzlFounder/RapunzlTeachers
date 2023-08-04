@@ -134,7 +134,7 @@ class ResourceLibrary extends Component {
     this.setState({
       alertVisible: true,
       alertTitle: 'Searching Coming Soon!',
-      alertMessage: 'Our developers are hard at work to finalize our Educator Portal and ensure you have easy access to our full financial literacy curriculum.',
+      alertMessage: 'Our developers are hard at work to finalize our Educator Portal and ensure you have easy access to our full financial literacy curriculum. For now we can only display the resources and allow you to filter by module.',
     });
   }
 
