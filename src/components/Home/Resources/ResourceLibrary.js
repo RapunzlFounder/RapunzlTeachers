@@ -141,6 +141,7 @@ class ResourceLibrary extends Component {
 
   render() {
     if (this.props.visible) {
+      console.log(this.state.moduleSearchArray);
       return (
         <div className='middle-container'>
           <Alert
@@ -151,13 +152,13 @@ class ResourceLibrary extends Component {
           />
           <div className='tile search-library-container'>
             <div className='resource-library-header'>
-              <div onClick={() => this.setState({ selectedView: 'activities' })} className={`resource-menu-item ${this.state.selectedView === 'activities' ? ' resource-menu-item-selected' : ''}`}>
+              <div onClick={() => this.setState({ selectedView: 'activities', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'activities' ? ' resource-menu-item-selected' : ''}`}>
                 Activities
               </div>
-              <div onClick={() => this.setState({ selectedView: 'articles' })} className={`resource-menu-item ${this.state.selectedView === 'articles' ? ' resource-menu-item-selected' : ''}`}>
+              <div onClick={() => this.setState({ selectedView: 'articles', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'articles' ? ' resource-menu-item-selected' : ''}`}>
                 Articles
               </div>
-              <div onClick={() => this.setState({ selectedView: 'modules' })} className={`resource-menu-item ${this.state.selectedView === 'modules' ? ' resource-menu-item-selected' : ''}`}>
+              <div onClick={() => this.setState({ selectedView: 'modules', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'modules' ? ' resource-menu-item-selected' : ''}`}>
                 Modules
               </div>
             </div>
@@ -177,6 +178,7 @@ class ResourceLibrary extends Component {
             <ResourcesContainer
               visible={true}
               loading={this.state.loading}
+              moduleSearchArray={this.state.moduleSearchArray}
               isActivities={this.state.selectedView === 'activities'}
               isArticles={this.state.selectedView === 'articles'}
               isModules={this.state.selectedView === 'modules'}

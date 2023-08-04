@@ -122,6 +122,18 @@ class ModuleButton extends Component {
               12. Financial Services Careers
             </div>
           </div>
+          <div onClick={() => this.props.selectModule(13)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(13) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(13) ? '#00ffbe' : 'white' }}>
+              13. Financial Algebra
+            </div>
+          </div>
+          <div onClick={() => this.props.selectModule(14)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(14) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(14) ? '#00ffbe' : 'white' }}>
+              14. Financial Equations
+            </div>
+          </div>
         </Menu>
       </div>
     );

@@ -26,12 +26,25 @@ class ResourcesContainer extends Component {
 
   _getActivities() {
     let activitiesArray = [];
-    for (var i in this.props.publicModules) {
-      for (var j in this.props.publicModules[i].activities) {
-        let activity = this.props.publicModules[i].activities[j];
-        activity.moduleID = this.props.publicModules[i].id;
-        activity.moduleName = this.props.publicModules[i].name;
-        activitiesArray.push(activity);
+    if (this.props.moduleSearchArray.length === 0) {
+      for (var i in this.props.publicModules) {
+        for (var j in this.props.publicModules[i].activities) {
+          let activity = this.props.publicModules[i].activities[j];
+          activity.moduleID = this.props.publicModules[i].id;
+          activity.moduleName = this.props.publicModules[i].name;
+          activitiesArray.push(activity);
+        }
+      }
+    } else if (this.props.moduleSearchArray.length > 0) {
+      for (var i in this.props.publicModules) {
+        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i].id))) {
+          for (var j in this.props.publicModules[i].activities) {
+            let activity = this.props.publicModules[i].activities[j];
+            activity.moduleID = this.props.publicModules[i].id;
+            activity.moduleName = this.props.publicModules[i].name;
+            activitiesArray.push(activity);
+          }
+        }
       }
     }
     return activitiesArray;
@@ -39,14 +52,27 @@ class ResourcesContainer extends Component {
 
   _getArticles() {
     let articleArray = [];
-    for (var i in this.props.publicModules) {
-      for (var j in this.props.publicModules[i].articles) {
-        let article = this.props.publicModules[i].articles[j];
-        article.moduleID = this.props.publicModules[i].id;
-        article.moduleName = this.props.publicModules[i].name;
-        articleArray.push(article);
+    if (this.props.moduleSearchArray.length === 0) {
+      for (var i in this.props.publicModules) {
+        for (var j in this.props.publicModules[i].articles) {
+          let article = this.props.publicModules[i].articles[j];
+          article.moduleID = this.props.publicModules[i].id;
+          article.moduleName = this.props.publicModules[i].name;
+          articleArray.push(article);
+        }
       }
-    }
+    } else if (this.props.moduleSearchArray.length > 0) {
+      for (var i in this.props.publicModules) {
+        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i].id))) {
+          for (var j in this.props.publicModules[i].articles) {
+            let article = this.props.publicModules[i].articles[j];
+            article.moduleID = this.props.publicModules[i].id;
+            article.moduleName = this.props.publicModules[i].name;
+            articleArray.push(article);
+          }
+        }
+      }
+    }    
     return articleArray;
   }
 
