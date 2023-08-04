@@ -141,7 +141,6 @@ class ResourceLibrary extends Component {
 
   render() {
     if (this.props.visible) {
-      console.log(this.state.moduleSearchArray);
       return (
         <div className='middle-container'>
           <Alert

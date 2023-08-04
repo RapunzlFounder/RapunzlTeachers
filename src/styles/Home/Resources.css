@@ -14,7 +14,8 @@ path {
 	color: white;
 }
 .search-library-container {
-    max-height: 800px;
+    max-height: 820px;
+    min-height: 700px;
     overflow-y: scroll;
 }
 .search-bar {

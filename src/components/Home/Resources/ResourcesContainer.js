@@ -77,7 +77,17 @@ class ResourcesContainer extends Component {
   }
 
   _getModules() {
-    return this.props.publicModules;
+    if (this.props.moduleSearchArray.length === 0) {
+      return this.props.publicModules;
+    } else {
+      let moduleArray = [];
+      for (var i in this.props.publicModules) {
+        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i].id))) {
+          moduleArray.push(this.props.publicModules[i]);
+        }
+      }
+      return moduleArray;
+    }
   }
 
   render() {
