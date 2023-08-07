@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../../../styles/Home/Resources.css';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
+import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import ResourceItem from './ResourceItem';
 
 class ResourcesContainer extends Component {
@@ -90,56 +91,82 @@ class ResourcesContainer extends Component {
     }
   }
 
+  _renderEmptySection() {
+    return (
+      <div className='resources-container' style={{ paddingTop: 75 }}>
+        <QuizOutlinedIcon />
+        <div className='resources-container-empty-h1'>
+          No Results To Display
+        </div>
+        <div className='resources-container-empty-p'>
+          Try expanding your search to include additional key words and modules.
+        </div>
+      </div>
+    )
+  }
+
   render() {
     // Handles Activities
     if (this.props.visible && this.props.isActivities) {
       let activitiesArray = this._getActivities();
-      return (
-        <div className='resources-container'>
-          {activitiesArray.map((item) => {
-            return (
-              <ResourceItem
-                item={item}
-                type={'activity'}
-              />
-            );
-          })}
-        </div>
-      );
-    }
-    // Handles Articles
-    else if (this.props.visible && this.props.isArticles) {
-      let articlesArray = this._getArticles();
-      return (
-        <div className='resources-container'>
-          {articlesArray.map((item) => {
-            return (
-              <ResourceItem
-                item={item}
-                type={'article'}
-              />
-            );
-          })}
-        </div>
-      );
-    }
-    // Handles Modules
-    else if (this.props.visible && this.props.isModules) {
-      let modulesArray = this._getModules();
-      return (
-        <div className='resources-container'>
-          <div className='modules-resources-container'>
-            {modulesArray.map((item) => {
+      if (activitiesArray.length === 0) {
+        return this._renderEmptySection();
+      } else {
+        return (
+          <div className='resources-container'>
+            {activitiesArray.map((item) => {
               return (
                 <ResourceItem
                   item={item}
-                  type={'modules'}
+                  type={'activity'}
                 />
               );
             })}
           </div>
-        </div>
-      );
+        );
+      }
+    }
+    // Handles Articles
+    else if (this.props.visible && this.props.isArticles) {
+      let articlesArray = this._getArticles();
+      if (articlesArray.length === 0) {
+        return this._renderEmptySection();
+      } else {
+        return (
+          <div className='resources-container'>
+            {articlesArray.map((item) => {
+              return (
+                <ResourceItem
+                  item={item}
+                  type={'article'}
+                />
+              );
+            })}
+          </div>
+        );
+      }
+    }
+    // Handles Modules
+    else if (this.props.visible && this.props.isModules) {
+      let modulesArray = this._getModules();
+      if (modulesArray.length === 0) {
+        return this._renderEmptySection();
+      } else {
+        return (
+          <div className='resources-container'>
+            <div className='modules-resources-container'>
+              {modulesArray.map((item) => {
+                return (
+                  <ResourceItem
+                    item={item}
+                    type={'modules'}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
     }
     // Handles If Component Is Not Visible
     else {

@@ -257,6 +257,28 @@ path {
     border-radius: 10px;
     cursor: pointer;
 }
+.resource-container-empty-icon {
+    text-align: center !important;
+    display: block !important;
+    margin: auto !important;
+    font-size: 55px !important;
+    fill: #ffd602 !important;
+    padding-bottom: 5px !important;
+}
+.resources-container-empty-h1 {
+    font-size: 16px;
+    text-align: center;
+    font-weight: 600;
+    color: #fed703;
+}
+.resources-container-empty-p {
+    width: 250px;
+    text-align: center;
+    margin: auto;
+    padding-top: 5px;
+    font-size: 15px;
+    font-weight: 200;
+}
 @media only screen and (max-width: 1250px) {
     .module-resource-image {
         max-width: 300px;

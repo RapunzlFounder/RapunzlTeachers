@@ -102,19 +102,24 @@ class ResourceLibrary extends Component {
 
   // Pass Through Arrow Function For ModuleButton To Update moduleSearchArray To Include Module Number
   selectModule = (int) => {
-    let selectedIndex = this.state.moduleSearchArray.indexOf(int);
-    let newArray = this.state.moduleSearchArray;
-    // Checks If Module Has Been Selected, In Which Case, We Remove It From Selected Module Array
-    if (selectedIndex > -1) {
-      newArray = this.state.moduleSearchArray.filter(function(item) {
-        return item !== int;
-      });
+    // Handles If Menu Is Reset Using Null Instead Of Int
+    if (int === null) {
+      this.setState({ moduleSearchArray: [] });
     } else {
-      const updatedValue = [int];
-      newArray = newArray.concat(updatedValue);
+      let selectedIndex = this.state.moduleSearchArray.indexOf(int);
+      let newArray = this.state.moduleSearchArray;
+      // Checks If Module Has Been Selected, In Which Case, We Remove It From Selected Module Array
+      if (selectedIndex > -1) {
+        newArray = this.state.moduleSearchArray.filter(function(item) {
+          return item !== int;
+        });
+      } else {
+        const updatedValue = [int];
+        newArray = newArray.concat(updatedValue);
+      }
+      // If Module Has Not Been Selected, We Add The Module To The Search Array
+      this.setState({ moduleSearchArray: newArray });
     }
-    // If Module Has Not Been Selected, We Add The Module To The Search Array
-    this.setState({ moduleSearchArray: newArray });
   }
 
   _expandLibrary() {

@@ -38,7 +38,7 @@ class ModuleButton extends Component {
           style={{ borderRadius: 100 }}
         >
           <div className={`search-option ${(this.state.open || this.props.moduleSearchArray.length > 0) ? 'selected-search-option' : ''}`}>
-            Filter By Module
+            {this.props.moduleSearchArray.length !== 0 ? 'Filtered' : 'Filter By Module'}
           </div>
         </Button>
         <Menu
@@ -132,6 +132,11 @@ class ModuleButton extends Component {
             {this.props.moduleSearchArray.includes(14) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
             <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(14) ? '#00ffbe' : 'white' }}>
               14. Financial Equations
+            </div>
+          </div>
+          <div onClick={() => this.props.selectModule(null)} className="resource-menu-item-flex">
+            <div className="resource-menu-item-text" style={{ color: '#ff5536', marginLeft: 2 }}>
+              Reset Filter
             </div>
           </div>
         </Menu>
