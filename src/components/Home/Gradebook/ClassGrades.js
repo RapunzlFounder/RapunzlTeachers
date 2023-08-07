@@ -7,6 +7,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import handleGradeColor from '../../../helper_functions/handleGradeColor';
 import ClassSummary from './ClassSummary';
 import DetailedGrades from './DetailedGrades';
+import NoAssignedCourse from '../../../assets/images/Education/NoAssignedCourse.png';
 
 class ClassGrades extends Component {
   constructor(props) {
@@ -105,14 +106,34 @@ class ClassGrades extends Component {
   }
 
   render() {
+    let numberOfModules = this._getNumberOfModules();
+    // Handles If Teacher Has Selected to View A Summary Of The Class Grades. This Is Processed In This Component And Passed Through.
     if (this.props.isSummary) {
       return (
         <ClassSummary
           gradesData={this._getGradesOverview()}
         />
       );
-    } else {
-      let numberOfModules = this._getNumberOfModules();
+    }
+    // Handles If This Class Does Not Have An Assigned Course, Which Is Represented By Having 0 Modules In The Course, Which Is Not Possible
+    else if (parseInt(numberOfModules) === 0) {
+      return (
+        <div className='gradebook-container' style={{ paddingTop: 18 }}>
+          <img
+            alt=''
+            className='gradebook-no-course-image'
+            src={NoAssignedCourse}
+          />
+          <div className='gradebook-no-course-h1'>
+            This Class Is Not Assigned A Course
+          </div>
+          <div className='gradebook-no-course-p'>
+            In order to collect and view classroom grades, you must first assign a course to your students. Go to the Courses Tab, select a course, and assign it to your classroom.
+          </div>
+        </div>
+      );
+    }
+    else {
       return (
         <div className='gradebook-container' style={{ paddingTop: 18 }}>
           {this.props.classroom.studentList.map((student) => {
