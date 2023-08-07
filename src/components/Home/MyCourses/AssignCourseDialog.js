@@ -217,7 +217,7 @@ class AssignCourseDialog extends React.PureComponent {
                     </div>
                   </div>
                 )}
-                {this.props.classArrays[2].length !== 0 && this.props.classArrays[0].length !== 0 && (
+                {(this.props.classArrays[2].length !== 0 || this.props.classArrays[0].length !== 0) && (
                   <div onClick={() => this._handleAssignCourse()} className={`assign-course-save-changes ${this.state.selectedClassroom ? '' : 'assign-course-save-changes-disabled'}`}>
                     Assign Course
                   </div>

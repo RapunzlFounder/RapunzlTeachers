@@ -7,6 +7,7 @@ import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrow
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import LockClockOutlinedIcon from '@mui/icons-material/LockClockOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
+import Alert from './Alert';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -14,12 +15,15 @@ const PDFViewer = (props) => {
   // Allows Us To Determine Current Page Number, Total Number Of Pages & Update These State Values
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  // Allows Us To Toggle Visibility Of The Alert
+  const [alertVisible, toggleAlert] = useState(false);
 
   // Function Component Equivalent Of ComponentDidUpdate Which Resets The State When Visibility Is Toggled
   // This Sets Page Back To 1 To Avoid Going Out Of Bounds On Different Resources.
   useEffect(() => {
     setNumPages(null);
     setPageNumber(1);
+    toggleAlert(false);
   }, [props.visible]);
 
   // Updates The Number Of Pages When The PDF Successfully Loads
@@ -73,16 +77,22 @@ const PDFViewer = (props) => {
       maxWidth={true}
       style={{ margin: 0 }}
     >
+      <Alert
+        visible={alertVisible}
+        dismiss={() => toggleAlert(false)}
+        title={'Google Slides Are Currently Locked'}
+        message={'Your account is not permitted to access Google Slides for individual presentations and activities at this time. Please reach out to your point of contact at Rapunzl to upgrade your account.'}
+      />
       <div className='pdf-container'>
-        <div onClick={props.dismiss} className='pdf-header-flex'>
+        <div className='pdf-header-flex'>
           <div style={{ width: 100, marginLeft: 30 }} />
-          <div className='google-slides-button-flex'>
+          <div onClick={() => toggleAlert(true)} className='google-slides-button-flex'>
             <LockClockOutlinedIcon className='google-slides-icon' />
             <div className='google-slides-button-text'>
               View In Google Slides
             </div>
           </div>
-          <div className='pdf-close-flex'>
+          <div onClick={props.dismiss} className='pdf-close-flex'>
             <HighlightOffIcon className='pdf-close-icon' />
             <div className='pdf-close-text'>
               close
