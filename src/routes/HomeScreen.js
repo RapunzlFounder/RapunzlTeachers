@@ -14,6 +14,7 @@ import {
   toggleAddStudents,
   toggleCourseBuilder,
 } from '../ActionTypes/dashboardActions';
+import { getAllDemoClassroomCourses, getAllDemoClassrooms } from '../selectors/classroomSelectors';
 import { objectToArray } from '../helper_functions/utilities';
 import Container from '@mui/material/Container';
 import Header from '../components/Admin/Header';
@@ -350,8 +351,8 @@ const mapStateToProps = (state) => {
     creatingClassroom: state.dashboard.creatingClassroom,
     selectedClassroom: state.dashboard.selectedClassroom,
     expandedLibrary: state.dashboard.expandedLibrary,
-    demoClassrooms: state.classroom.demoClassrooms,
-    demoCourses: state.classroom.demoClassroomCourses
+    demoCourses: getAllDemoClassroomCourses(state),
+    demoClassrooms: getAllDemoClassrooms(state)
   };
 };
 

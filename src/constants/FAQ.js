@@ -96,6 +96,59 @@
         content2: `At this point in time, international students and non-US residents are unable to redeem prizes on the Rapunzl platform.`,
       },
     ],
+    // BUILDING COURSE
+    buildingCourse: [
+      {
+        title: 'How long does each module take to complete?',
+        content1: 'Understanding the unique pace of every classroom, we designed our modules to be flexible. Typically, each module has a presentation which lasts for 90 minutes, however, it may be completed quicker.',
+        content2: `We also supplement each presentation with in-class activities, group projects, and articles which can provide up to 3 hours of class content per module. Feel free to tailor the content to fit your students' needs.`
+      },
+      {
+        title: 'Is there any way to complete the modules quicker?',
+        content1: `While it's possible to move through the modules at a faster pace, we genuinely believe that investing at least one hour in each module will benefit your students' learning.`,
+        content2: `In the past, when we have condensed knowledge any further, students are able to engage with major concepts, however, they do not fully contextualize the importance of what they’re learning.`
+      },
+      {
+        title: 'What prerequisites and student requirements are necessary to complete these modules?',
+        content1: `We've crafted the modules to be accessible. All that students need to have is a basic understanding of  percentages.`,
+        content2: `Some modules may benefit from knowledge of exponents, because we often cover compound interest, but it's not essential.`
+      },
+      {
+        title: 'Are some modules more challenging than others and what grade levels are they suited for?',
+        content1: `We’ve designed the modules to be suitable for grades 7 through 12, however, some modules are more complex.`,
+        content2: `Modules 13 and 14 center around Financial Equations and Financial Algebra, which have a more rigorous math approach to financial literacy.`
+      },
+      {
+        title: 'How many activities and articles are there for each module?',
+        content1: `We have enriched the modules with over 100 engaging activities and articles.`,
+        content2: `While some modules might have more content than others, rest assured that each one includes at least one activity and article to pair with each presentation.`
+      },
+      {
+        title: 'Do you have teacher guides for the modules?',
+        content1: `Absolutely! Each module comes with a basic teacher guide outlining guiding questions, enduring understandings, and classroom requirements.`,
+        content2: `We're working on a video library and in-depth teacher guides, drawing from our experience teaching in the classroom, and expect to add this to our classrooms soon.`
+      },
+      {
+        title: 'What are the best ways to use the presentations and activities in the classroom?',
+        content1: `Our vision is to make presentations and activities interactive and engaging, which is why we’ve included guiding questions on each Teacher Guide to help engage the classroom.`,
+        content2: 'By incorporating the Rapunzl simulator and students’ portfolios, asking them how they’re stocks are performing, you can bring financial concepts to life. We recommend including at least one in-class activity with each class session and having students work in groups of 3-4.'
+      },
+      {
+        title: 'Some of my students don’t have phones. Is that a problem?',
+        content1: `Not at all! Students without phones can still fully participate using a school Chromebook or computer. Our web platform ensures that everyone has access to the enriching resources available.`,
+        content2: ''
+      },
+      {
+        title: 'How can students view the module resources?',
+        content1: 'Students can comfortably view all course content through the Rapunzl web platform. We’re working on providing some of this content on student’s phones as well, however, the small screen size is a limitation.',
+        content2: ''
+      },
+      {
+        title: 'Is there a way to assign certain articles or activities from a module?',
+        content1: 'Currently, specific assignment of articles or activities is not available. However, we recognize the importance of curating class content and are actively working on this feature.',
+        content2: 'An update is planned soon, which will allow you to tailor the content specifically for your students.'
+      },
+    ],
     // COMPETITION INFO
     competitions: [
       { title: 'How Do I Enter A Competition?',
