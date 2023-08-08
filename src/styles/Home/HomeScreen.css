@@ -1730,6 +1730,9 @@ path {
         width: 100%;
         min-width: 580px;
     }
+    .expand-resource-container {
+        display: none;
+    }
 }
 /* Media Size Updates 500px */
 @media only screen and (max-width: 500px) {

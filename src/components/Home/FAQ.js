@@ -80,7 +80,7 @@ class Menu extends React.PureComponent {
           <div className='tile' style={{ padding: 20, paddingTop: 31, paddingBottom: 31 }}>
             <div className='card-flex-header'>
               <QuizOutlinedIcon />
-              <h2 className='card-header'>
+              <h2 className='card-header' style={{ paddingTop: 2 }}>
                 FAQ & Support
               </h2>
             </div>

@@ -86,7 +86,7 @@ class ResourceItem extends Component {
             alt=''
             className='module-resource-image'
             src={this.props.item.imageUrl}
-            onClick={() => this._handleSelectItem(this.props.item.assetName)}
+            onClick={() => this._handleSelectItem(this.props.item.name)}
           />
         </div>
       );

@@ -4,6 +4,7 @@ import YourCourses from './YourCourses';
 import PreparedCourses from './PreparedCourses';
 import '../../../styles/Home/HomeScreen.css';
 import CourseBuilder from './CourseBuilder';
+import CourseBuilderFAQ from './CourseBuilderFAQ';
 
 class MyCourse extends Component {
   // eslint-disable-next-line
@@ -31,7 +32,10 @@ class MyCourse extends Component {
       );
     } else if (this.props.visible && this.props.courseBuilderVisible) {
       return (
-        <CourseBuilder />
+        <div>
+          <CourseBuilder />
+          <CourseBuilderFAQ />
+        </div>
       )
     } else {
       return <div />
