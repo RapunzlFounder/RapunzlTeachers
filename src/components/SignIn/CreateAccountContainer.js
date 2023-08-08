@@ -355,11 +355,13 @@ class CreateAccountContainer extends React.PureComponent {
       // if the new user account is created then log the user in to get the jwt token
       // eslint-disable-next-line
       if (res == true){
+        console.log('res', res);
         const loginCredentials = {
           username: this.state.username.toLowerCase(),
           password: this.state.password,
         };
         this.props.loginUser(loginCredentials).then(jwttoken => {
+          console.log('token', jwttoken)
           if (!(jwttoken && !('errors' in jwttoken))) {
             // set the loading state to false as the login attempt failed and the user needs to be able to retry the login
             this.setState({
@@ -370,21 +372,21 @@ class CreateAccountContainer extends React.PureComponent {
             });
           }
           // eslint-disable-next-line
-          else if (jwttoken && jwttoken.substring(0,4) == 'JWT ') {
-            this.props.fetchBigQuery(jwttoken).then((res) => {
+          else if (jwttoken && jwttoken.token && jwttoken.token.slice(0,4) == 'JWT ') {
+            this.props.fetchBigQuery(jwttoken.token).then((res) => {
+               // Handles If The Big Query Is Successfully Fetched
+              if (res === true) {
+                this.setState({ success: true, loading: false });
+              }
               // Handles If There Is An Error Retrieving The Big Query
-              if (!(res && !('errors' in res))) {
+              else if (!(res && !('errors' in res))) {
                 this.setState({
                   loginLoading: false,
                   alertVisible: true,
                   alertTitle: 'Issue With Login',
                   alertMessage: res.errors[0].message !== undefined && res.errors[0].message.length > 0 ? res.errors[0].message : 'We were unable to retrieve your account information. The login information you provided was correct, however, something went wrong with our servers. Please contact support to resolve the issue.',
                 })
-              }
-              // Handles If The Big Query Is Successfully Fetched
-              else {
-                this.setState({ success: true, loading: false });
-              }              
+              }          
             });
           } else {
             this.setState({

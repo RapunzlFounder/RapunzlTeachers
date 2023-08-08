@@ -36,13 +36,11 @@ class YourCourses extends Component {
   }
 
   selectDemoCourse(course) {
-    console.log('course', course);
     this.setState({ isDemo: true });
     this.props.selectCourse(course.courseId);
   }
 
   selectCourse(course) {
-    console.log('ocourse', course);
     this.setState({ isDemo: false });
     this.props.selectCourse(course.id);
   }

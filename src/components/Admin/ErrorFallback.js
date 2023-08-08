@@ -132,7 +132,7 @@ class ErrorFallback extends React.PureComponent {
   render() {
     if (this.state.handleLogout) {
       return(
-        <Navigate to="/login" replace={true} />
+        <Navigate to="/" replace={true} />
       );
     } else {
       return (

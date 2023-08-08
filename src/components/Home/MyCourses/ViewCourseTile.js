@@ -397,7 +397,7 @@ class ViewCourseTile extends Component {
   }
 
   getCourse() {
-    if (this.props.currentCourse === undefined) {
+    if (this.props.currentCourse === undefined || this.props.currentCourse.id === undefined) {
       return this.props.demoCourse;
     } else {
       return this.props.currentCourse;
@@ -407,7 +407,6 @@ class ViewCourseTile extends Component {
   render() {
     let currentCourse = this.getCourse();
     let assignedArray = this._getAssignedClasses(currentCourse);
-    console.log(currentCourse);
     return (
       <div className='tile current-course' style={{ paddingBottom: 20 }}>
         <AssignCourseDialog
@@ -454,12 +453,9 @@ class ViewCourseTile extends Component {
               {currentCourse.courseModules[this.state.currentSection - 1].description}
             </div>
             <div>
-              {/*
-              TODO 
               <div className='this-week-standards-button'>
                 View Assessment
               </div> 
-              */}
               <div onClick={() => this.toggleStandardsDialog()} className='this-week-standards-button'>
                 View Standards Covered
               </div>
@@ -557,7 +553,10 @@ class ViewCourseTile extends Component {
           {assignedArray[1].length === 0 ? (
             <div>
               <div className='assigned-text-empty'>
-                This course is not assigned to any classrooms. Assign this course to a class so they can begin accessing course material.
+                {this.props.isDemo ? 
+                'This is an example course and cannot be assigned to a classroom. Get started creating a course and then assign it to your class.'
+                :
+                'This course is not assigned to any classrooms. Assign this course to a class so they can begin accessing course material.'}
               </div>
             </div>
           ) : (
@@ -604,6 +603,7 @@ const mapStateToProps = (state, ownProps) => {
     financialLiteracyStandards: state.coursesmodules.financialLiteracyStandards,
     allClassrooms: getAllTeacherClassrooms(state),
     demoCourse: getDemoCourse(state, ownProps),
+    demoCourses: state.coursesmodules.demoCourses
   };
 };
 

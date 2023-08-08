@@ -1,6 +1,9 @@
 .container {
 	background-color: #caffef;
+    padding-bottom: 10px;
+    padding-right: 20px;
 }
+
 .upload-preview-loading-container {
     width: 540px;
     display: flex;
