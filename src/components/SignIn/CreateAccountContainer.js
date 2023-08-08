@@ -355,13 +355,11 @@ class CreateAccountContainer extends React.PureComponent {
       // if the new user account is created then log the user in to get the jwt token
       // eslint-disable-next-line
       if (res == true){
-        console.log('res', res);
         const loginCredentials = {
           username: this.state.username.toLowerCase(),
           password: this.state.password,
         };
         this.props.loginUser(loginCredentials).then(jwttoken => {
-          console.log('token', jwttoken)
           if (!(jwttoken && !('errors' in jwttoken))) {
             // set the loading state to false as the login attempt failed and the user needs to be able to retry the login
             this.setState({
