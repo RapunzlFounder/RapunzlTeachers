@@ -9,6 +9,8 @@ const rapunzlPublicModulesArraySelector = (state) => objectToArray(state.courses
 const teacherCreatedModulesArraySelector = (state) => objectToArray(state.coursesmodules.teacherCreatedModules);
 // selector for retrieving a specific teacher course
 const teacherCourseSelector = (state, props) => (props.courseId in state.coursesmodules.teacherCourses) ? state.coursesmodules.teacherCourses[props.courseId] : {};
+// selector for retrieving a specific Rapunzl Demo course
+const demoCourseSelector = (state, props) => (props.courseId in state.coursesmodules.demoCourses) ? state.coursesmodules.demoCourses[props.courseId] : {};
 // selector for retrieving a specific Rapunzl publically available Module
 const rapunzlPublicModuleSelector = (state, props) => (props.moduleId in state.coursesmodules.availablePublicModules) ? state.coursesmodules.availablePublicModules[props.moduleId] : {};
 // selector for retrieving a specific Teacher Created Module that may be private
@@ -92,6 +94,41 @@ export const getTeacherCourse = createSelector(
       }
     }
   )
+
+// selector to return a specific Rapnzl Demo Courses
+export const getDemoCourse = createSelector(
+  [demoCourseSelector, rapunzlPublicModulesObjectSelector, teacherCreatedModulesObjectSelector],
+  (demoCourse, rapunzlModules, teacherModules) => {
+    if (demoCourse && demoCourse != null) {
+      let rapunzlModulesCopy = JSON.parse(JSON.stringify(rapunzlModules));
+      let teacherModulesCopy = JSON.parse(JSON.stringify(teacherModules));
+        // create a new object for the demo course that will be returned
+        let newCourseObject = {
+          id: demoCourse.id,
+          courseName: demoCourse.courseName,
+          createdAt: demoCourse.createdAt,
+          lastModifiedAt: demoCourse.lastModifiedAt,
+          isPrivate: demoCourse.isPrivate,
+          courseModules: []
+        };
+        for (var id in demoCourse.courseModules){
+          // first check if the module id is a rapunzl public module
+          if (id in rapunzlModulesCopy){
+            let newModuleObject = populateTeacherModule(rapunzlModulesCopy[id]);
+            newCourseObject.courseModules.push(newModuleObject);
+          }
+          else if (id in teacherModulesCopy){
+            let newModuleObject = populateTeacherModule(teacherModulesCopy[id]);
+            newCourseObject.courseModules.push(newModuleObject);
+          }
+        }
+        return newCourseObject;
+    }
+    else{
+      return {};
+    }
+  }
+)
 
 function populateTeacherModule(module){
   let newModuleObject = {
