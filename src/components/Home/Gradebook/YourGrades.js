@@ -102,7 +102,7 @@ class YourGrades extends Component {
               </div>
             </div>
           )}
-          {this.props.selectedClassroom !== '' && (
+          {this.props.selectedClassroom !== false && (
             <div onClick={this._toggleExportDialog} className='gradebook-class-dropdown gradebook-export-button'>
               <FileDownloadIcon className='gradebook-export-icon' />
               <div className='export-button-text'>

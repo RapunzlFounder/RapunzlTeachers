@@ -39,12 +39,11 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  margin-right: 40px;
   padding-bottom: 7px;
   padding-top: 5px;
   cursor: pointer;
   transition: 0.2s all;
-  width: 100px;
+  width: 255px;
 }
 .pdf-close-icon {
   font-size: 18px !important;
@@ -61,6 +60,15 @@
 }
 .pdf-close-flex:hover .pdf-close-text {
   color: #0ce0ab
+}
+.pdf-flex-no-hover {
+  cursor: auto;
+}
+.pdf-flex-no-hover:hover .pdf-close-icon {
+  fill: white !important;
+}
+.pdf-flex-no-hover:hover .pdf-close-text {
+  color: white;
 }
 .pdf-document {
   width: 100%;
@@ -130,4 +138,10 @@
     .pdf-container {
       display: none;
     }
+}
+.css-15bmo69-MuiPaper-root-MuiDialog-paper {
+  max-height: none !important;
+  max-width: none !important;
+  margin: 0px !important;
+  margin-top: 30px !important;
 }

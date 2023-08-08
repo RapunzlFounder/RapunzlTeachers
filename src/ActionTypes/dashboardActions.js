@@ -5,6 +5,7 @@ export const RESET_DASHBOARD = 'RESET_DASHBOARD';
 export const QUICK_ACCESS_ADD_STUDENTS = 'QUICK_ACCESS_ADD_STUDENTS';
 export const QUICK_ACCESS_COURSE_BUILDER = 'QUICK_ACCESS_COURSE_BUILDER';
 export const SELECT_CLASSROOM = 'SELECT_CLASSROOM';
+export const SELECT_COURSE = 'SELECT_COURSE';
 export const TOGGLE_ADD_STUDENTS = 'TOGGLE_ADD_STUDENTS';
 export const TOGGLE_COURSE_BUILDER = 'TOGGLE_COURSE_BUILDER';
 export const VIEW_ASSIGNED_CLASS = 'VIEW_ASSIGNED_CLASS'
@@ -33,6 +34,11 @@ export const quickAccessCourseBuilder = () => ({
 export const selectClassroom = (classID) => ({
   type: SELECT_CLASSROOM,
   classID
+});
+
+export const selectCourse = (courseID) => ({
+  type: SELECT_COURSE,
+  courseID
 });
 
 export const toggleAddStudents = () => ({

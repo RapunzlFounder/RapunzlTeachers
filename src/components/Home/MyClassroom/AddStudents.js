@@ -105,10 +105,16 @@ class AddStudents extends Component {
             firstNameIndex = firstSheetArray[0].indexOf('firstname');
             if (firstNameIndex === -1) {
               firstNameIndex = firstSheetArray[0].indexOf('first_name');
-              // Handles Error Message If We Cannot Find First Name
               if (firstNameIndex === -1) {
-                error = true;
-                errorMessage = 'We had some trouble finding the column associated with First Name.';
+                firstNameIndex = firstSheetArray[0].indexOf('FN');
+                if (firstNameIndex === -1) {
+                  firstNameIndex = firstSheetArray[0].indexOf('fn');
+                  // Handles Error Message If We Cannot Find First Name
+                  if (firstNameIndex === -1) {
+                    error = true;
+                    errorMessage = 'We had some trouble finding the column associated with First Name.';
+                  }
+                }
               }
             }
           }
@@ -127,10 +133,16 @@ class AddStudents extends Component {
             lastNameIndex = firstSheetArray[0].indexOf('lastname');
             if (lastNameIndex === -1) {
               lastNameIndex = firstSheetArray[0].indexOf('last_name');
-              // Handles Error Message If We Cannot Find Last Name
               if (lastNameIndex === -1) {
-                error = true;
-                errorMessage = 'We had some trouble finding the column associated with Last Name.';
+                lastNameIndex = firstSheetArray[0].indexOf('LN');
+                if (lastNameIndex === -1) {
+                  lastNameIndex = firstSheetArray[0].indexOf('ln');
+                  // Handles Error Message If We Cannot Find Last Name
+                  if (lastNameIndex === -1) {
+                    error = true;
+                    errorMessage = 'We had some trouble finding the column associated with Last Name.';
+                  }
+                }
               }
             }
           }
@@ -149,10 +161,19 @@ class AddStudents extends Component {
             birthdayIndex = firstSheetArray[0].indexOf('birth date');
             if (birthdayIndex === -1) {
               birthdayIndex = firstSheetArray[0].indexOf('Birth Date');
-              // Handles Error Message If We Cannot Find Birthday
               if (birthdayIndex === -1) {
-                error = true;
-                errorMessage = 'We had some trouble finding the column associated with Birthday.';
+                birthdayIndex = firstSheetArray[0].indexOf('BDay');
+                if (birthdayIndex === -1) {
+                  birthdayIndex = firstSheetArray[0].indexOf('bday');
+                  if (birthdayIndex === -1) {
+                    birthdayIndex = firstSheetArray[0].indexOf('Bday');
+                    // Handles Error Message If We Cannot Find Birthday
+                    if (birthdayIndex === -1) {
+                      error = true;
+                      errorMessage = 'We had some trouble finding the column associated with Birthday.';
+                    }
+                  }
+                }
               }
             }
           }

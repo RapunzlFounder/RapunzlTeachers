@@ -108,6 +108,8 @@ path {
     height: 160px;
     border-radius: 7px;
     overflow-y: scroll;
+    -ms-overflow-style: none;  /* Hides Scrollbar on IE and Edge */
+    scrollbar-width: none;  /* Hides Scrollbar on Firefox */
     resize: none;
     padding: 15px;
 }

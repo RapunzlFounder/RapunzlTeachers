@@ -8,6 +8,7 @@ import {
   TOGGLE_ADD_STUDENTS,
   TOGGLE_COURSE_BUILDER,
   SELECT_CLASSROOM,
+  SELECT_COURSE,
   VIEW_ASSIGNED_CLASS,
   RESET_DASHBOARD,
 } from '../ActionTypes/dashboardActions';
@@ -20,7 +21,8 @@ const initialState = {
   creatingClassroom: false,
   selectedClassroom: false,
   expandedLibrary: false,
-  pdfVisible: false
+  pdfVisible: false,
+  selectedCourse: false
 };
 
 const dashboardNavReducer = (state = initialState, action) => {
@@ -40,7 +42,8 @@ const dashboardNavReducer = (state = initialState, action) => {
         courseBuilderVisible: false,
         addingStudents: false,
         creatingClassroom: false,
-        selectedClassroom: null
+        selectedClassroom: false,
+        selectedCourse: false
       }
 
     case QUICK_ACCESS_ADD_STUDENTS:
@@ -51,7 +54,7 @@ const dashboardNavReducer = (state = initialState, action) => {
         courseBuilderVisible: false,
         addingStudents: true,
         creatingClassroom: true,
-        selectedClassroom: null
+        selectedClassroom: false
       }
 
     case QUICK_ACCESS_COURSE_BUILDER:
@@ -62,13 +65,19 @@ const dashboardNavReducer = (state = initialState, action) => {
         courseBuilderVisible: true,
         addingStudents: false,
         creatingClassroom: false,
-        selectedClassroom: null,
+        selectedClassroom: false,
       }
 
     case SELECT_CLASSROOM:
       return {
         ...state,
         selectedClassroom: action.classID
+      }
+
+    case SELECT_COURSE:
+      return {
+        ...state,
+        selectedCourse: action.courseID
       }
 
     case TOGGLE_ADD_STUDENTS: 
@@ -90,7 +99,7 @@ const dashboardNavReducer = (state = initialState, action) => {
         courseBuilderVisible: !state.courseBuilderVisible,
         addingStudents: false,
         creatingClassroom: false,
-        selectedClassroom: null
+        selectedClassroom: false
       }
     
     case VIEW_ASSIGNED_CLASS:

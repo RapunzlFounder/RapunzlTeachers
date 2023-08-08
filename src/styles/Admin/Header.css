@@ -193,7 +193,11 @@ path {
     width: 95%;
     margin: auto;
     max-height: 500px;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden; 
+    -ms-overflow-style: none;  /* Hides Scrollbar on IE and Edge */
+    scrollbar-width: none;  /* Hides Scrollbar on Firefox */
+    scroll-margin-top: 7px;
 }
 .search-loading-icon {
     width: 70px !important;

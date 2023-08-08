@@ -112,7 +112,7 @@ class ExportGradesDialog extends React.PureComponent {
     ];
     let exportArray = [headerArray];
     for (var i = 1; i <= this._getNumberOfModules(); i++) {
-      headerArray.push('Quiz ' + i.toString())
+      headerArray.push('Module ' + i.toString())
     }
     for (var j in this.props.classroom.studentList) {
       let newRow = [

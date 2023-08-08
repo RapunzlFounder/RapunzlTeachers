@@ -75,6 +75,9 @@ path {
 	width: 19%;
     height: 775px;
     overflow-y: scroll;
+    overflow-x: hidden; 
+    -ms-overflow-style: none;  /* Hides Scrollbar on IE and Edge */
+    scrollbar-width: none;  /* Hides Scrollbar on Firefox */
 }
 
 /* LEFT MENU */
@@ -636,6 +639,9 @@ path {
     max-height: 610px;
     margin-bottom: 30px;
     overflow-y: scroll;
+    overflow-x: hidden; 
+    -ms-overflow-style: none;  /* Hides Scrollbar on IE and Edge */
+    scrollbar-width: none;  /* Hides Scrollbar on Firefox */
 }
 .dropzone-file-picker-button {
     display: none;
@@ -856,6 +862,9 @@ path {
     padding-bottom: 30px;
     height: 650px;
     overflow-y: scroll;
+    overflow-x: hidden; 
+    -ms-overflow-style: none;  /* Hides Scrollbar on IE and Edge */
+    scrollbar-width: none;  /* Hides Scrollbar on Firefox */
 }
 .manual-button-flex {
     display: flex;

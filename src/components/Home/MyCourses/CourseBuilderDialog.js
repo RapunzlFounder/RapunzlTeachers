@@ -16,6 +16,7 @@ class CourseBuilderDialog extends React.PureComponent {
     super(props);
     this.state = {
       pdfURL: 'images/M1/M1_Presentation.pdf',
+      pdfName: '',
       PDFVisible: false,
       pdfOrientation: 'landscape',
       standardsVisible: false
@@ -309,9 +310,23 @@ class CourseBuilderDialog extends React.PureComponent {
   }
 
   // Updates State To Display PDF Of Selected Educational Resource
-  viewResource(item) {
+  viewResource(item, type) {
     this.props.updateDashboard('pdfVisible', true);
-    this.setState({ PDFVisible: true, pdfURL: item.pdfUrl, pdfOrientation: 'portrait' });
+    if (type === 'activity') {
+      this.setState({
+        PDFVisible: true,
+        pdfURL: item.pdfUrl,
+        pdfName: item.activityName,
+        pdfOrientation: 'portrait'
+      });
+    } else {
+      this.setState({
+        PDFVisible: true,
+        pdfURL: item.pdfUrl,
+        pdfName: item.articleName,
+        pdfOrientation: 'portrait'
+      });
+    }
   }
 
   // Pass Through Arrow Function To Dismiss PDF Viewer
@@ -341,6 +356,7 @@ class CourseBuilderDialog extends React.PureComponent {
             visible={this.state.PDFVisible}
             dismiss={this.dismissPDFViewer}
             pdfURL={this.state.pdfURL}
+            pdfName={this.state.pdfName}
             orientation={this.state.pdfOrientation}
           />
           <StandardsPopup
@@ -380,7 +396,7 @@ class CourseBuilderDialog extends React.PureComponent {
                   {modulesArray[1].map((item, index) => {
                     if (index < 3) {
                       return (
-                        <div onClick={() => this.viewResource(item)} className='selected-education-confirm-text course-builder-text'>
+                        <div onClick={() => this.viewResource(item, 'article')} className='selected-education-confirm-text course-builder-text'>
                           {item.articleName}
                         </div>
                       );
@@ -401,7 +417,7 @@ class CourseBuilderDialog extends React.PureComponent {
                   {modulesArray[2].map((item, index) => {
                     if (index < 3) {
                       return (
-                        <div onClick={() => this.viewResource(item)} className='selected-education-confirm-text course-builder-text'>
+                        <div onClick={() => this.viewResource(item, 'activity')} className='selected-education-confirm-text course-builder-text'>
                           {item.activityName}
                         </div>
                       );

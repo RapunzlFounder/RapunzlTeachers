@@ -41,7 +41,7 @@ class CourseBuilder extends Component {
 
   // Updates Course Name For User
   changeCourseName(value) {
-    this.setState({ courseName: value, courseNameError: false });
+    this.setState({ courseName: value.toString(), courseNameError: false });
   }
 
   // Allows User To Adjust Length Of Their Desired Course
@@ -93,7 +93,7 @@ class CourseBuilder extends Component {
       }
       // If There Is No Error, Proceed With Creating Teacher Course
       if (!error) {
-        this.props.createTeacherCourse(this.props.jwtToken, this.state.courseName, true, modulesArray).then((res) => {
+        this.props.createTeacherCourse(this.props.jwtToken, this.state.courseName.toString(), true, modulesArray).then((res) => {
           // Handles Error With Creating Teacher Course By Displaying Alert Error To Use
           if (!(res && !('errors' in res))) {
             this.setState({
@@ -197,22 +197,22 @@ class CourseBuilder extends Component {
             sx={{ backgroundColor: '#2e7361', borderRadius: '7px', width: '47%' }}
           >
             <MenuItem value={0}>Select Length</MenuItem>
-            <MenuItem value={3}>3 Sections</MenuItem>
-            <MenuItem value={4}>4 Sections</MenuItem>
-            <MenuItem value={5}>5 Sections</MenuItem>
-            <MenuItem value={6}>6 Sections</MenuItem>
-            <MenuItem value={7}>7 Sections</MenuItem>
-            <MenuItem value={8}>8 Sections</MenuItem>
-            <MenuItem value={9}>9 Sections</MenuItem>
-            <MenuItem value={10}>10 Sections</MenuItem>
-            <MenuItem value={11}>11 Sections</MenuItem>
-            <MenuItem value={12}>12 Sections</MenuItem>
+            <MenuItem value={3}>3 Modules</MenuItem>
+            <MenuItem value={4}>4 Modules</MenuItem>
+            <MenuItem value={5}>5 Modules</MenuItem>
+            <MenuItem value={6}>6 Modules</MenuItem>
+            <MenuItem value={7}>7 Modules</MenuItem>
+            <MenuItem value={8}>8 Modules</MenuItem>
+            <MenuItem value={9}>9 Modules</MenuItem>
+            <MenuItem value={10}>10 Modules</MenuItem>
+            <MenuItem value={11}>11 Modules</MenuItem>
+            <MenuItem value={12}>12 Modules</MenuItem>
           </Select>
         </div>
         <div className='course-sections-header'>
           <div className='course-sections-line' />
           <div className='course-sections-title'>
-            Sections
+            Modules
           </div>
           <div className='course-sections-line' />
         </div>
@@ -223,7 +223,7 @@ class CourseBuilder extends Component {
                 return (
                   <div key={section.id} onClick={() => this.showSectionBuilder(section.id - 1)} className='empty-course-section-item'>
                     <div className='empty-course-section-title' style={{ color: this.state.courseSectionsError ? '#ed2121' : '#ffffff' }}>
-                      New Section
+                      New Module
                     </div>
                     <AddCircleIcon fontSize='small' className='empty-course-icon' />
                   </div>
@@ -235,7 +235,7 @@ class CourseBuilder extends Component {
                       <div className='empty-course-section-title' style={{ fontSize: '14px', fontWeight: '700', paddingBottom: '5px' }}>
                         Module {section.module}
                       </div>
-                      <div className='empty-course-section-title' style={{ fontSize: '18px', fontWeight: '200' }}>
+                      <div className='empty-course-section-title' style={{ fontSize: '18px', fontWeight: '300' }}>
                         {section.name}
                       </div>
                     </div>

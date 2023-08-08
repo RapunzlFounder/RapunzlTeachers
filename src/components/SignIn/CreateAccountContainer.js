@@ -458,18 +458,6 @@ class CreateAccountContainer extends React.PureComponent {
             {!this.state.loading && (
               <FormControl style={{ width: '100%' }} variant="standard">
                 <TextField
-                  label="Username"
-                  placeholder="Username"
-                  type="text"
-                  fullWidth
-                  variant="filled"
-                  autoComplete="new-password"
-                  error={this.state.onErrorUsername}
-                  value={this.state.username}
-                  onChange={(event) => this.changeUsername(event.target.value)}
-                  sx={{ marginBottom: '7px' }}
-                />
-                <TextField
                   id="firstName"
                   label="First Name"
                   placeholder="First Name"
@@ -491,6 +479,18 @@ class CreateAccountContainer extends React.PureComponent {
                   error={this.state.onErrorLastName}
                   value={this.state.lastName}
                   onChange={(event) => this.changeLastName(event.target.value)}
+                  sx={{ marginBottom: '7px' }}
+                />
+                <TextField
+                  label="Username"
+                  placeholder="Username"
+                  type="text"
+                  fullWidth
+                  variant="filled"
+                  autoComplete="new-password"
+                  error={this.state.onErrorUsername}
+                  value={this.state.username}
+                  onChange={(event) => this.changeUsername(event.target.value)}
                   sx={{ marginBottom: '7px' }}
                 />
                 <TextField

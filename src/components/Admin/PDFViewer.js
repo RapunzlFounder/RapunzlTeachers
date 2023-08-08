@@ -74,8 +74,8 @@ const PDFViewer = (props) => {
       onClose={props.dismiss}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      maxWidth={true}
-      style={{ margin: 0 }}
+      maxWidth={false}
+      style={{ margin: 0, maxHeight: 'none', maxWidth: 'none' }}
     >
       <Alert
         visible={alertVisible}
@@ -85,14 +85,21 @@ const PDFViewer = (props) => {
       />
       <div className='pdf-container'>
         <div className='pdf-header-flex'>
-          <div style={{ width: 100, marginLeft: 30 }} />
+          <div className='pdf-close-flex pdf-flex-no-hover' style={{ marginLeft: 40, display: 'block' }}>
+            <div className='pdf-close-text' style={{ color: '#0ce0ab' }}>
+              {props.pdfName}
+            </div>
+            <div className='pdf-close-text'>
+              Page {pageNumber} of {numPages}
+            </div>
+          </div>
           <div onClick={() => toggleAlert(true)} className='google-slides-button-flex'>
             <LockClockOutlinedIcon className='google-slides-icon' />
             <div className='google-slides-button-text'>
               View In Google Slides
             </div>
           </div>
-          <div onClick={props.dismiss} className='pdf-close-flex'>
+          <div onClick={props.dismiss} className='pdf-close-flex' style={{ marginRight: 40 }}>
             <HighlightOffIcon className='pdf-close-icon' />
             <div className='pdf-close-text'>
               close

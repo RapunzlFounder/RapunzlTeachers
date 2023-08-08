@@ -10,7 +10,6 @@ class MyCourse extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedCourse: null,
     }
   }
 
@@ -20,27 +19,12 @@ class MyCourse extends Component {
     }
   }
 
-  // Selects A Course From The Teacher's List Of Courses And Shows That Specific Course
-  selectCourse = (newCourse) => {
-    // Handles Back Button By Not Passing newCourse Parameter & Resets Standards State
-    if (newCourse === null || newCourse === undefined) {
-      this.setState({ selectedCourse: null, standardsVisible: false });
-    }
-    // Handles Selecting A Course From The List Of All Teacher Courses
-    else {
-      this.setState({ selectedCourse: newCourse, standardsVisible: false });
-    }
-  }
-
   render() {
     if (this.props.visible && !this.props.courseBuilderVisible) {
       return(  
         <div className='middle-container'>
-          <YourCourses
-            selectCourse={this.selectCourse}
-            selectedCourse={this.state.selectedCourse}
-          />
-          {this.state.selectedCourse === null && (
+          <YourCourses />
+          {this.props.selectedCourse === false && (
             <PreparedCourses />
           )}
         </div>      
@@ -62,6 +46,7 @@ const mapStateToProps = (state) => {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
     courseBuilderVisible: state.dashboard.courseBuilderVisible,
+    selectedCourse: state.dashboard.selectedCourse,
   };
 };
 

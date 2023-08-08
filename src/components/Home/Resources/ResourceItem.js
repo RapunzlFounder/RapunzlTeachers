@@ -9,6 +9,7 @@ class ResourceItem extends Component {
     super(props);
     this.state = {
       pdfVisible: false,
+      pdfName: ''
     }
   }
 
@@ -19,9 +20,9 @@ class ResourceItem extends Component {
   }
 
   // Handles When User Clicks Resource Item By Displaying PDFViewer With URL Of This Item For User To View
-  _handleSelectItem() {
+  _handleSelectItem(name) {
     this.props.updateDashboard('pdfVisible', true);
-    this.setState({ pdfVisible: true });
+    this.setState({ pdfVisible: true, pdfName: name });
   }
 
   render() {
@@ -32,9 +33,10 @@ class ResourceItem extends Component {
             visible={this.state.pdfVisible}
             dismiss={this.dismissPDFViewer}
             pdfURL={this.props.item.pdfUrl}
+            pdfName={this.state.pdfName}
             orientation={'portrait'}
           />
-          <div onClick={() => this._handleSelectItem()} className='library-result-flex-item'>
+          <div onClick={() => this._handleSelectItem(this.props.item.activityName)} className='library-result-flex-item'>
             <div className='library-result-title'>
               {this.props.item.activityName}
             </div>
@@ -54,9 +56,10 @@ class ResourceItem extends Component {
               visible={this.state.pdfVisible}
               dismiss={this.dismissPDFViewer}
               pdfURL={this.props.item.pdfUrl}
+              pdfName={this.state.pdfName}
               orientation={'portrait'}
             />
-            <div onClick={() => this._handleSelectItem()} className='library-result-flex-item'>
+            <div onClick={() => this._handleSelectItem(this.props.item.articleName)} className='library-result-flex-item'>
               <div className='library-result-title'>
                 {this.props.item.articleName}
               </div>
@@ -76,13 +79,14 @@ class ResourceItem extends Component {
             visible={this.state.pdfVisible}
             dismiss={this.dismissPDFViewer}
             pdfURL={this.props.item.presentationUrl}
+            pdfName={this.state.pdfName}
             orientation={'landscape'}
           />
           <img
             alt=''
             className='module-resource-image'
             src={this.props.item.imageUrl}
-            onClick={() => this._handleSelectItem()}
+            onClick={() => this._handleSelectItem(this.props.item.assetName)}
           />
         </div>
       );
@@ -93,9 +97,10 @@ class ResourceItem extends Component {
             visible={this.state.pdfVisible}
             dismiss={this.dismissPDFViewer}
             pdfURL={this.props.item.documentUrl}
+            pdfName={this.state.pdfName}
             orientation={this.props.item.assetType === 'MODULE' ? 'landscape' : 'portrait'}
           />
-          <div onClick={() => this._handleSelectItem()} className='library-result-flex-item'>
+          <div onClick={() => this._handleSelectItem(this.props.item.assetName)} className='library-result-flex-item'>
             <div className='library-result-title'>
               {this.props.item.assetName}
             </div>

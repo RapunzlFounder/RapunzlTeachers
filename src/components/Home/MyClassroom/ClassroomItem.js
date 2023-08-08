@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBox from '@mui/icons-material/CheckBox';
-import Minimize from '@mui/icons-material/Minimize';
-import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Alert from '../../Admin/Alert';
-import NotificationAddOutlinedIcon from '@mui/icons-material/NotificationAddOutlined';
+//import NotificationAddOutlinedIcon from '@mui/icons-material/NotificationAddOutlined';
 import '../../../styles/Home/HomeScreen.css';
 import NotifyStudentAlert from './NotifyStudentAlert';
 import intHandler from '../../../helper_functions/intHelper';
@@ -117,12 +117,12 @@ class ClassroomItem extends Component {
               <div className='student-item-performance'>
                 {this.handlePerformance()}
               </div>
-              <MoreHoriz className='button' onClick={() => this.toggleExpanded()} />
+              <ChevronRightIcon className='button' onClick={() => this.toggleExpanded()} />
             </div>
           )}
           {!this.props.removing && this.state.expanded && (
             <div className='student-item-right'>
-              <Minimize className='button' onClick={() => this.toggleExpanded()}/>
+              <ExpandMoreIcon className='button' onClick={() => this.toggleExpanded()}/>
             </div>
           )}
           {this.props.removing && this.props.selected && (

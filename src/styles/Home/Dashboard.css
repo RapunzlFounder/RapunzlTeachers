@@ -135,6 +135,10 @@ path {
     height: 600px;
     overflow-y: scroll;
     padding-bottom: 30px;
+    overflow-x: hidden; 
+    -ms-overflow-style: none;  /* Hides Scrollbar on IE and Edge */
+    scrollbar-width: none;  /* Hides Scrollbar on Firefox */
+    scroll-margin-top: 7px;
 }
 .standards-item-flex {
     display: flex;
@@ -320,6 +324,12 @@ path {
     height: 70px;
     background-color: white;
     border-radius: 100px;
+}
+.checklist-item-complete-icon {
+    fill: #ffc300 !important;
+    margin-left: -27px !important;
+    background-color: white !important;
+    border-radius: 100px !important;
 }
 .checklist-text-container {
     width: 400px;

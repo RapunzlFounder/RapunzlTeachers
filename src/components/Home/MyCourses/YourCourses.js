@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { toggleCourseBuilder } from '../../../ActionTypes/dashboardActions';
+import { selectCourse, toggleCourseBuilder } from '../../../ActionTypes/dashboardActions';
 import { getAllTeacherClassroomCourses, getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import Bookmarks from '@mui/icons-material/Bookmarks';
@@ -36,7 +36,7 @@ class YourCourses extends Component {
   }
 
   render() {
-    if (this.props.selectedCourse === null) {
+    if (this.props.selectedCourse === false) {
       return (  
         <div className='tile your-courses'>
           <div className='home-header-flex'>
@@ -65,7 +65,7 @@ class YourCourses extends Component {
                   return (
                     <div key={course.id} onClick={() => this.props.selectCourse(course.id)} className='prepared-course'>
                       <div className='prepared-course-time'>
-                        {course.numberModules === 1 ? '1 Section' : `${course.numberModules} Sections`}
+                        {course.numberModules === 1 ? '1 Module' : `${course.numberModules} Modules`}
                       </div>
                       <div className='prepared-course-title'>
                         {course.courseName}
@@ -103,7 +103,6 @@ class YourCourses extends Component {
       return (
         <ViewCourseTile
           courseId={this.props.selectedCourse}
-          selectCourse={this.props.selectCourse}
         />
       );
     }
@@ -119,6 +118,7 @@ const mapStateToProps = (state) => {
     // Selector Which Handles All Teacher Classroom Courses To Determine Which Classrooms Are Assigned
     classroomCourses: getAllTeacherClassroomCourses(state),
     allClassrooms: getAllTeacherClassrooms(state),
+    selectedCourse: state.dashboard.selectedCourse,
   };
 };
 
@@ -126,7 +126,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   // Action
     return {
-      toggleCourseBuilder: () => dispatch(toggleCourseBuilder())
+      toggleCourseBuilder: () => dispatch(toggleCourseBuilder()),
+      selectCourse: (courseID) => dispatch(selectCourse(courseID)),
    };
 };
 

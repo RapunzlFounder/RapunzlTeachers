@@ -17,7 +17,7 @@ class ProgressBar extends Component {
             </div>
           </div>
           <div className='current-course-progress-title'>
-            Section {this.props.currentSection} Of {this.props.numberOfModules}
+            Module {this.props.currentSection} Of {this.props.numberOfModules}
           </div>
           <div onClick={() => this.props.nextSection(this.props.numberOfModules)} style={{ display: 'flex', alignItems: 'center', width: 100, justifyContent: 'flex-end' }}>
             <div className='course-progress-bar-button' style={{ textAlign: 'right' }}>

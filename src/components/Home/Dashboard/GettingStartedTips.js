@@ -12,6 +12,7 @@ import CreateClassroomBW from '../../../assets/images/ChecklistTips/CreateClassr
 import CreateClassroomColor from '../../../assets/images/ChecklistTips/CreateClassroom_Color.png';
 import ExportCourseBW from '../../../assets/images/ChecklistTips/ExportCourse_BW.png';
 import ExportCourseColor from '../../../assets/images/ChecklistTips/ExportCourse_Color.png';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import '../../../styles/Home/Dashboard.css';
 import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
@@ -102,71 +103,101 @@ class GettingStartedTips extends Component {
           {progress === 6 && (<div className='checklist-progress-ball' style={{ marginRight: '-15px', marginLeft: '-15px', backgroundColor: '#00ffbd' }} />)}
           <div className='checklist-progress-ball' style={{ marginLeft: '-15px', backgroundColor: '#ff9700' }} />
         </div>
-        {progress < 2 && (
-          <div onClick={() => this.props.quickAccessAddStudents()} className={`checklist-item ${progress === 1 ? '' : 'checklist-item-not-selected'}`}>
+        <div onClick={() => this.props.quickAccessAddStudents()} className={`checklist-item ${progress === 1 ? '' : 'checklist-item-not-selected'}`}>
+          {progress >= 2 && (
+            <div className='checklist-item-complete-flex'>
+              <img alt='' className='checklist-item-image' src={progress === 1 ? CreateClassroomColor : CreateClassroomBW} />
+              <CheckCircleIcon className='checklist-item-complete-icon' />
+            </div>
+          )}
+          {progress < 2 && (
             <img alt='' className='checklist-item-image' src={progress === 1 ? CreateClassroomColor : CreateClassroomBW} />
-            <div className='checklist-text-container'>
-              <div className='checklist-item-header' style={{ color: progress === 1 ? '#ffc300' : '#4a9c80' }}>
-                Create A Classroom
-              </div>
-              <div className='checklist-item-text' style={{ color: progress === 1 ? 'white' : '#4a9c80' }}>
-                Get started by to upload students, assign courses, and bring financial literacy into your class.
-              </div>
+          )}
+          <div className='checklist-text-container'>
+            <div className='checklist-item-header' style={{ color: progress === 1 ? '#ffc300' : '#4a9c80' }}>
+              Create A Classroom
+            </div>
+            <div className='checklist-item-text' style={{ color: progress === 1 ? 'white' : '#4a9c80' }}>
+              Get started by to upload students, assign courses, and bring financial literacy into your class.
             </div>
           </div>
-        )}
-        {progress < 3 && (
-          <div onClick={() => this.props.setMenuTab(3)} className={`checklist-item ${progress === 2 ? '' : 'checklist-item-not-selected'}`}>
+        </div>
+        <div onClick={() => this.props.setMenuTab(3)} className={`checklist-item ${progress === 2 ? '' : 'checklist-item-not-selected'}`}>
+          {progress >= 3 && (
+            <div className='checklist-item-complete-flex'>
+              <img alt='' className='checklist-item-image' src={progress === 2 ? AddStudentsColor : AddStudentsBW} />
+              <CheckCircleIcon className='checklist-item-complete-icon' />
+            </div>
+          )}
+          {progress < 3 && (
             <img alt='' className='checklist-item-image' src={progress === 2 ? AddStudentsColor : AddStudentsBW} />
-            <div className='checklist-text-container'>
-              <div className='checklist-item-header' style={{ color: progress === 2 ? '#ffc300' : '#4a9c80' }}>
-                Add Students
-              </div>
-              <div className='checklist-item-text' style={{ color: progress === 2 ? 'white' : '#4a9c80' }}>
-                Begin adding students to your classroom so that they can download Rapunzl and you can track their progress.
-              </div>
+          )}
+          <div className='checklist-text-container'>
+            <div className='checklist-item-header' style={{ color: progress === 2 ? '#ffc300' : '#4a9c80' }}>
+              Add Students
+            </div>
+            <div className='checklist-item-text' style={{ color: progress === 2 ? 'white' : '#4a9c80' }}>
+              Begin adding students to your classroom so that they can download Rapunzl and you can track their progress.
             </div>
           </div>
-        )}
-        {progress < 4 && (
-          <div onClick={() => this.props.quickAccessCourseBuilder()} className={`checklist-item ${progress === 3 ? '' : 'checklist-item-not-selected'}`}>
+        </div>
+        <div onClick={() => this.props.quickAccessCourseBuilder()} className={`checklist-item ${progress === 3 ? '' : 'checklist-item-not-selected'}`}>
+          {progress >= 4 && (
+            <div className='checklist-item-complete-flex'>
+              <img alt='' className='checklist-item-image' src={progress === 3 ? BuildCourseColor : BuildCourseBW} />
+              <CheckCircleIcon className='checklist-item-complete-icon' />
+            </div>
+          )}
+          {progress < 4 && (
             <img alt='' className='checklist-item-image' src={progress === 3 ? BuildCourseColor : BuildCourseBW} />
-            <div className='checklist-text-container'>
-              <div className='checklist-item-header' style={{ color: progress === 3 ? '#ffc300' : '#4a9c80' }}>
-                Build A Course
-              </div>
-              <div className='checklist-item-text' style={{ color: progress === 3 ? 'white' : '#4a9c80' }}>
-                Access our financial literacy resources to create a customized course and assign it to your classroom.
-              </div>
+          )}
+          <div className='checklist-text-container'>
+            <div className='checklist-item-header' style={{ color: progress === 3 ? '#ffc300' : '#4a9c80' }}>
+              Build A Course
+            </div>
+            <div className='checklist-item-text' style={{ color: progress === 3 ? 'white' : '#4a9c80' }}>
+              Access our financial literacy resources to create a customized course and assign it to your classroom.
             </div>
           </div>
-        )}
-        {progress < 5 && (
-          <div onClick={() => this.setMenuTab(5)} className={`checklist-item ${progress === 4 ? '' : 'checklist-item-not-selected'}`}>
+        </div>
+        <div onClick={() => this.setMenuTab(5)} className={`checklist-item ${progress === 4 ? '' : 'checklist-item-not-selected'}`}>
+          {progress >= 5 && (
+            <div className='checklist-item-complete-flex'>
+              <img alt='' className='checklist-item-image' src={progress === 4 ? CollectGradesColor : CollectGradesBW} />
+              <CheckCircleIcon className='checklist-item-complete-icon' />
+            </div>
+          )}
+          {progress < 5 && (
             <img alt='' className='checklist-item-image' src={progress === 4 ? CollectGradesColor : CollectGradesBW} />
-            <div className='checklist-text-container'>
-              <div className='checklist-item-header' style={{ color: progress === 4 ? '#ffc300' : '#4a9c80' }}>
-                Collect Student Grades
-              </div>
-              <div className='checklist-item-text' style={{ color: progress === 4 ? 'white' : '#4a9c80' }}>
-                Finish the first module in your course, assign a quiz to your class & collect grades through Rapunzl's in-app assessments.
-              </div>
+          )}
+          <div className='checklist-text-container'>
+            <div className='checklist-item-header' style={{ color: progress === 4 ? '#ffc300' : '#4a9c80' }}>
+              Collect Student Grades
+            </div>
+            <div className='checklist-item-text' style={{ color: progress === 4 ? 'white' : '#4a9c80' }}>
+              Finish the first module in your course, assign a quiz to your class & collect grades through Rapunzl's in-app assessments.
             </div>
           </div>
-        )}
-        {progress < 6 && (
-          <div onClick={() => this.setMenuTab(5)} className={`checklist-item ${progress === 5 ? '' : 'checklist-item-not-selected'}`}>
+        </div>
+        <div onClick={() => this.setMenuTab(5)} className={`checklist-item ${progress === 5 ? '' : 'checklist-item-not-selected'}`}>
+          {progress >= 6 && (
+            <div className='checklist-item-complete-flex'>
+              <img alt='' className='checklist-item-image' src={progress === 5 ? ExportCourseColor : ExportCourseBW} />
+              <CheckCircleIcon className='checklist-item-complete-icon' />
+            </div>
+          )}
+          {progress < 6 && (
             <img alt='' className='checklist-item-image' src={progress === 5 ? ExportCourseColor : ExportCourseBW} />
-            <div className='checklist-text-container'>
-              <div className='checklist-item-header' style={{ color: progress === 5 ? '#ffc300' : '#4a9c80' }}>
-                Export Course & Grades
-              </div>
-              <div className='checklist-item-text' style={{ color: progress === 5 ? 'white' : '#4a9c80' }}>
-                At any point during the course, export your classrrom and course with grades, standards alignment, and topics covered.
-              </div>
+          )}
+          <div className='checklist-text-container'>
+            <div className='checklist-item-header' style={{ color: progress === 5 ? '#ffc300' : '#4a9c80' }}>
+              Export Course & Grades
+            </div>
+            <div className='checklist-item-text' style={{ color: progress === 5 ? 'white' : '#4a9c80' }}>
+              At any point during the course, export your classrrom and course with grades, standards alignment, and topics covered.
             </div>
           </div>
-        )}
+        </div>
       </div>
     );
   }

@@ -70,7 +70,7 @@ class YourClassroomTile extends Component {
           loading: false,
           alertVisible: true,
           alertTitle: 'You Are All Set!',
-          alertMessage: 'We have successfully removed all of the students from this classroom. To add new students to this classroom, please select the Add Students button and you can either lookup students with existing Rapunzl accounts or add new students.'
+          alertMessage: 'We have successfully removed the students you selected from this classroom. To add new students to this classroom, please select the Add Students button and you can either lookup students with existing Rapunzl accounts or add new students.'
         });
       }
     });
@@ -226,7 +226,7 @@ class YourClassroomTile extends Component {
                       Add Students
                     </div>
                     <div onClick={() => this.toggleRemoveStudents()} className='button remove-students-button' style={{ width: '32%' }}>
-                      Remove
+                      Remove Students
                     </div>
                   </div>
                 )}

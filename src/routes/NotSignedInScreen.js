@@ -10,6 +10,7 @@ import Footer from '../components/Admin/Footer';
 
 import '../styles/AuthLoadingScreen.css';
 import '../styles/NotSignedInScreen.css';
+import { connect } from 'react-redux';
 
 
 class NotSignedInScreen extends Component {
@@ -22,11 +23,13 @@ class NotSignedInScreen extends Component {
   }
 
   handleChange(event, newValue) {
-    // eslint-disable-next-line
-    if (this.state.tab == 0) {
-      this.setState({ tab: 1 });
-    } else {
-      this.setState({ tab: 0 });
+    if (!this.props.loading) {
+      // eslint-disable-next-line
+      if (this.state.tab == 0) {
+        this.setState({ tab: 1 });
+      } else {
+        this.setState({ tab: 0 });
+      }
     }
   };
 
@@ -75,4 +78,13 @@ class NotSignedInScreen extends Component {
    }
 }
 
-export default NotSignedInScreen;
+// Map State To Props (Redux Store Passes State To Component)
+const mapStateToProps = (state) => {
+  // Redux Store --> Component
+  return {
+    // Redux State For Loading To Disable Login/Join Toggle While Loading
+    loading: state.userDetails.loading,
+  };
+};
+
+export default connect(mapStateToProps)(NotSignedInScreen);

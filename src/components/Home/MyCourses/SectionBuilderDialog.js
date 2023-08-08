@@ -19,6 +19,7 @@ class SectionBuilderDialog extends React.PureComponent {
       includeAssessment: false,
       PDFVisible: false,
       pdfURL: false,
+      pdfName: '',
       pdfOrientation: 'portrait'
     }
   }
@@ -246,9 +247,23 @@ class SectionBuilderDialog extends React.PureComponent {
   }
 
   // Updates State To Display PDF Of Selected Educational Resource
-  viewResource(item) {
+  viewResource(item, type) {
     this.props.updateDashboard('pdfVisible', true);
-    this.setState({ PDFVisible: true, pdfURL: item.pdfUrl, pdfOrientation: 'portrait' });
+    if (type === 'article') {
+      this.setState({
+        PDFVisible: true,
+        pdfURL: item.pdfUrl,
+        pdfName: item.articleName,
+        pdfOrientation: 'portrait'
+      });
+    } else {
+      this.setState({
+        PDFVisible: true,
+        pdfURL: item.pdfUrl,
+        pdfName: item.activityName,
+        pdfOrientation: 'portrait'
+      });
+    }
   }
 
   // Pass Through Arrow Function To Dismiss PDF Viewer
@@ -297,14 +312,15 @@ class SectionBuilderDialog extends React.PureComponent {
           visible={this.state.PDFVisible}
           dismiss={this.dismissPDFViewer}
           pdfURL={this.state.pdfURL}
+          pdfName={this.state.pdfName}
           orientation={this.state.pdfOrientation}
         />
         <div className='container'>
           <div className='alert-title' style={{ fontWeight: '800' }}>
-            Section {parseInt(this.props.selectedSection) + 1}
+            Module {parseInt(this.props.selectedSection) + 1}
           </div>
           <div className='upload-template-instructions'>
-            {this.state.status === 'module' ? 'Please select a module to assign to this section.' : 'Save this section to continue building your course.'}
+            {this.state.status === 'module' ? 'Please select a module to assign.' : 'Save this module to continue building your course.'}
           </div>
           <div className='section-builder-container'>
             {this.state.status === 'module' && moduleOptions && moduleOptions.length > 0 && (
@@ -357,7 +373,7 @@ class SectionBuilderDialog extends React.PureComponent {
                     <div>
                       {this.props.publicModules[this.state.selectedModule - 1].activities.map((item) => {
                         return (
-                          <div key={item} onClick={() => this.viewResource(item)} className='selected-education-confirm-text course-builder-text'>
+                          <div key={item} onClick={() => this.viewResource(item, 'activity')} className='selected-education-confirm-text course-builder-text'>
                             • {item.activityName}
                           </div>
                         );
@@ -378,7 +394,7 @@ class SectionBuilderDialog extends React.PureComponent {
                     <div>
                       {this.props.publicModules[this.state.selectedModule - 1].articles.map((item) => {
                         return (
-                          <div key={item} onClick={() => this.viewResource(item)} className='selected-education-confirm-text course-builder-text'>
+                          <div key={item} onClick={() => this.viewResource(item, 'article')} className='selected-education-confirm-text course-builder-text'>
                             • {item.articleName}
                           </div>
                         );
@@ -394,7 +410,7 @@ class SectionBuilderDialog extends React.PureComponent {
               {this.state.status === 'module' ? 'Close' : 'Back'}
             </div>
             <div onClick={() => this.next()} className={`builder-next-button ${this.state.selectedModule !== 0 ? '' : 'builder-next-disabled'}`}>
-              {this.state.status === 'confirm' ? 'Save Section' : 'Next'}
+              {this.state.status === 'confirm' ? 'Save Module' : 'Next'}
             </div>
           </div>
         </div>

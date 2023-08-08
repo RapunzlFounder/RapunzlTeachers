@@ -15,12 +15,13 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import Logout from '@mui/icons-material/Logout';
 import ProfileIcon from '../../../assets/images/Admin/Profile.png';
 import '../../../styles/Home/HomeScreen.css';
+import Alert from '../../Admin/Alert';
 
 class LeftHomeMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      navigateToLogin: false
+      navigateToLogin: false,
     }
   }
 
@@ -28,7 +29,7 @@ class LeftHomeMenu extends Component {
   handleLogout = () => {
     // Handles Logging Out User & Routing To AuthLoadingScreen
     this.props.logout();
-    this.setState({ navigateToLogin: true });
+    this.setState({ navigateToLogin: true, alertVisible: false });
   };
 
   // Handles The Number Of Students Assigned To Any Classroom Of The Current Teacher User
@@ -61,6 +62,11 @@ class LeftHomeMenu extends Component {
     }
   }
 
+  // Pass Through Arrow Function Which Toggles Visibility Of Alert Dialog
+  toggleAlert = () => {
+    this.setState({ alertVisible: !this.state.alertVisible });
+  }
+
   render() {
     // Handles Navigation After User Decides To Logout
     if (this.state.navigateToLogin) {
@@ -70,6 +76,15 @@ class LeftHomeMenu extends Component {
     } else {
       return (
         <div className='tile profile-tile left-home-menu'>
+          <Alert
+            visible={this.state.alertVisible}
+            dismiss={this.toggleAlert}
+            title={'Are You Sure?'}
+            message={'You will need to login again in order to view information about your classroom, courses, and grades that we have collected.'}
+            option={this.handleLogout}
+            optionText={'Logout'}
+            option2Text={'Nevermind'}
+          />
           <img alt='' className='profile-picture' src={ProfileIcon} />
           <div className='profile-name'>
             {this.props.firstName} {this.props.lastName}
@@ -176,7 +191,7 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
-            <div onClick={() => this.handleLogout()} className='profile-menu-item' style={{ borderBottom: 'none' }}>
+            <div onClick={() => this.toggleAlert()} className='profile-menu-item' style={{ borderBottom: 'none' }}>
               <div className='menu-left'>
                 <Logout fontSize="small" style={{ fill: this.props.colors.perfDown }} />
                 <div className='menu-text' style={{ color: this.props.colors.perfDown }}>

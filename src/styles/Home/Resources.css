@@ -17,6 +17,9 @@ path {
     max-height: 820px;
     min-height: 700px;
     overflow-y: scroll;
+    overflow-x: hidden; 
+    -ms-overflow-style: none;  /* Hides Scrollbar on IE and Edge */
+    scrollbar-width: none;  /* Hides Scrollbar on Firefox */
 }
 .search-bar {
     outline: none;

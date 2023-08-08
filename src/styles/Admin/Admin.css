@@ -219,6 +219,9 @@
     align-items: flex-start;
     margin-top: 15px;
     overflow-x: scroll;
+    -ms-overflow-style: none;  /* Hides Scrollbar on IE and Edge */
+    scrollbar-width: none;  /* Hides Scrollbar on Firefox */
+    scroll-margin-top: 7px;
     margin-bottom: 20px;
 }
 .education-asset-icon {

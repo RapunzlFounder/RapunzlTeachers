@@ -94,7 +94,7 @@ class ResourcesContainer extends Component {
   _renderEmptySection() {
     return (
       <div className='resources-container' style={{ paddingTop: 75 }}>
-        <QuizOutlinedIcon />
+        <QuizOutlinedIcon className='resource-container-empty-icon'/>
         <div className='resources-container-empty-h1'>
           No Results To Display
         </div>

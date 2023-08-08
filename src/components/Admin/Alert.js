@@ -59,7 +59,7 @@ class Alert extends React.PureComponent {
               {this.props.optionText ? this.props.optionText : 'Close'}
             </Button>
             {this.props.option2Text && (
-              <Button onClick={() => this.handleOption2()} autoFocus>
+              <Button onClick={() => this.handleOption2()} autoFocus style={{ color: '#7b7b7b' }}>
                 {this.props.option2Text}
               </Button>
             )}
