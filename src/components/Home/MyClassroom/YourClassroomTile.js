@@ -5,6 +5,7 @@ import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import { FetchOtherUserDetails } from '../../../ActionTypes/socialActions';
 import { removeStudentsFromClassroom } from '../../../ActionTypes/classroomActions';
 import { toggleAddStudents, quickAccessAddStudents, selectClassroom } from '../../../ActionTypes/dashboardActions';
+import { getAllDemoClassrooms } from '../../../selectors/classroomSelectors';
 import OtherHouses from '@mui/icons-material/OtherHouses';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClassroomItem from './ClassroomItem';
@@ -121,13 +122,19 @@ class YourClassroomTile extends Component {
   // Once A User Selects A Classroom, We Are Able To Find That Class Using ID In State And Return To Map Students Into List
   _getClassroomInfo() {
     if (this.props.selectedClassroom !== false) {
+      let isDemo = true;
       let classroomObject;
       for (var i in this.props.allClassrooms) {
         if (this.props.allClassrooms[i].id === this.props.selectedClassroom) {
           classroomObject = this.props.allClassrooms[i];
+          isDemo = false;
         }
       }
-      return classroomObject;
+      if (isDemo) {
+        return this.props.demoClassrooms[0];
+      } else {
+        return classroomObject;
+      }
     }
     // Handles If Classroom Has Not Been Selected Yet And Returns Empty Array & Title To Avoid Error
     else {
@@ -177,6 +184,24 @@ class YourClassroomTile extends Component {
               </div>
             )
           })}
+          {this.props.demoClassrooms.map((item) => {
+            return (
+              <div key={item.id} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
+                <div>
+                  <div className='select-classroom-title'>
+                    {item.className}
+                  </div>
+                  <div className='select-classroom-students-text'>
+                    {item.noStudents} {parseInt(item.noStudents) === 1 ? 'student' : 'students'}
+                  </div>
+                  <div className='select-classroom-created-text'>
+                    Created: {moment(item.createdAt).format("l")}
+                  </div>
+                </div>
+                <ArrowCircleRightOutlinedIcon className='select-classroom-arrow-icon'/>
+              </div>
+            )
+          })}
           <div onClick={() => this.props.quickAccessAddStudents()} className='create-new-classroom-button'>
             <AddCircleOutlineOutlinedIcon className='create-new-classroom-plus-icon' />
             <div className='create-new-classroom-button-text'>
@@ -204,14 +229,14 @@ class YourClassroomTile extends Component {
             portfolioUsername={this.state.selectedPortfolioUsername}
             visible={this.state.viewPortfolio}
           />
-          {false && !this.props.addingStudents && classInfo.studentList.length !== 0 && !this.state.viewPortfolio && (
+          {false && !this.props.addingStudents && classInfo.studentList && classInfo.studentList.length !== 0 && !this.state.viewPortfolio && (
             <div className='tile classroom-overview'>
               <ClassroomOverview
                 classroom={classInfo}
               />
             </div>
           )}
-          {classInfo.studentList.length !== 0 && !this.state.viewPortfolio && (
+          {classInfo && classInfo.studentList && classInfo.studentList.length !== 0 && !this.state.viewPortfolio && (
             <div className='tile classroom-all-container'>
               <div className='your-classroom-tile-header'>
                 <div className='classroom-header-flex' style={{ paddingLeft: 12, paddingBottom: 5, paddingTop: this.state.removeStudents ? 12 : 0 }}>
@@ -248,7 +273,7 @@ class YourClassroomTile extends Component {
                     </div>
                   </div>
                 )}
-                {classInfo.studentList.map((item) => {
+                {classInfo && classInfo.studentList && classInfo.studentList.map((item) => {
                   return (
                     <ClassroomItem
                       item={item}
@@ -262,7 +287,7 @@ class YourClassroomTile extends Component {
               </div>
             </div>
           )}
-          {classInfo.studentList.length === 0 && !this.state.viewPortfolio && (
+          {classInfo && classInfo.studentList && classInfo.studentList.length === 0 && !this.state.viewPortfolio && (
             <div className='tile classroom-all-container' style={{ paddingBottom: 350, paddingTop: 80 }}>
               <div className='create-class-name-subtext'>
                 No Students In This Class!
@@ -294,6 +319,7 @@ const mapStateToProps = (state) => {
     jwtToken: state.userDetails.jwtToken,
     selectedClassroom: state.dashboard.selectedClassroom,
     creatingClassroom: state.dashboard.creatingClassroom,
+    demoClassrooms: getAllDemoClassrooms(state)
   };
 };
 

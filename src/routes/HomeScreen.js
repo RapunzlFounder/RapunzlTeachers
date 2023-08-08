@@ -201,8 +201,7 @@ class HomeScreen extends Component {
 
   _handleCheckForDemo(){
     this.props.fetchDemoContent(this.props.jwtToken).then((res) => {
-      console.log('res', res);
-      if (!(res && !('errors' in res))) {
+      if (res === true) {
 
       } else {
 

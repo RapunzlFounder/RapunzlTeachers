@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { viewAssignedClass, updateDashboard, selectCourse } from '../../../ActionTypes/dashboardActions';
-import { getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
+import { getTeacherCourse, getDemoCourse } from '../../../selectors/coursemoduleSelectors';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import { getAllTeacherClassroomCourses, getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import StandardsPopup from '../../Admin/StandardsPopup';
@@ -49,23 +49,23 @@ class ViewCourseTile extends Component {
   }
 
   // Select View Module Updates PDF URL, Orientation & Sets To Visible
-  viewModule() {
+  viewModule(currentCourse) {
     this.props.updateDashboard('pdfVisible', true);
     this.setState({
       PDFVisible: true,
       pdfOrientation: 'landscape',
-      pdfURL: this.props.currentCourse.courseModules[this.state.currentSection - 1].presentationUrl,
-      pdfName: this.props.currentCourse.courseModules[this.state.currentSection - 1].name,
+      pdfURL: currentCourse.courseModules[this.state.currentSection - 1].presentationUrl,
+      pdfName: currentCourse.courseModules[this.state.currentSection - 1].name,
     });
   }
 
   // View Teacher Guide Updates PDF URL, Orientation & Sets To Visible
-  viewTeacherGuide() {
+  viewTeacherGuide(currentCourse) {
     this.props.updateDashboard('pdfVisible', true);
     this.setState({
       PDFVisible: true,
       pdfOrientation: 'portrait',
-      pdfURL: this.props.currentCourse.courseModules[this.state.currentSection - 1].teacherGuides[0].pdfUrl,
+      pdfURL: currentCourse.courseModules[this.state.currentSection - 1].teacherGuides[0].pdfUrl,
       pdfName: 'Teacher Guide'
     })
   }
@@ -95,7 +95,7 @@ class ViewCourseTile extends Component {
   // Each Array Of Standards That Is Returned Is An Array Of Objects With Each Object Corresponding To A Main Standard, Including A Main Standard, Text Description & Substandard array of objects
   // Within The Substandard Array Of Objects, Each Object Includes the Substandard And A Text Description
   // If you search for this function, it is also implented in SectionBuilderDialog, however, that function handles an array of modules.
-  _getModuleStandards() {
+  _getModuleStandards(currentCourse) {
     let allStandardStrings = [];
     let spendingArray = [];
     let savingArray = [];
@@ -103,8 +103,8 @@ class ViewCourseTile extends Component {
     let incomeArray = [];
     let riskArray = [];
     let creditArray = [];
-    if (this.props.currentCourse && this.props.currentCourse.courseModules && this.props.currentCourse.courseModules[this.state.currentSection - 1] && this.props.currentCourse.courseModules[this.state.currentSection - 1].id) {
-      let moduleNumber = this.props.currentCourse.courseModules[this.state.currentSection - 1].id;
+    if (currentCourse && currentCourse.courseModules && currentCourse.courseModules[this.state.currentSection - 1] && currentCourse.courseModules[this.state.currentSection - 1].id) {
+      let moduleNumber = currentCourse.courseModules[this.state.currentSection - 1].id;
       // Converts Financial Literacy Standards To An Array - This Could Be Done In A Selector
       let standardsTableArray = objectToArray(this.props.financialLiteracyStandards);
       // Check If We Have Standards, Otherwise, We Need To Fetch Them
@@ -353,28 +353,31 @@ class ViewCourseTile extends Component {
   }
 
   // Returns An Array Of Classrooms That Are Either Assigned To The Current Course, Other Course, No Course
-  _getAssignedClasses() {
+  _getAssignedClasses(currentCourse) {
+    
     let currentArray = [];
     let otherCourseArray = [];
     let noCourseArray = [];
-    // We Loop Through All Teacher Classrooms First With The Goal Of Determing Which Type
-    for (var i in this.props.allClassrooms) {
-      let noCourse = true;
-      for (var j in this.props.classroomCourses) {
-        // Handles If This Classroom Is Already In A Teacher Class Course
-        // This Handles If It Is The Current Course
-        if (this.props.classroomCourses[j].courseId == this.props.currentCourse.id && this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
-          noCourse = false;
-          currentArray.push({ classroom: this.props.allClassrooms[i], type: 'current' });
+    if (!this.props.isDemo) {
+      // We Loop Through All Teacher Classrooms First With The Goal Of Determing Which Type
+      for (var i in this.props.allClassrooms) {
+        let noCourse = true;
+        for (var j in this.props.classroomCourses) {
+          // Handles If This Classroom Is Already In A Teacher Class Course
+          // This Handles If It Is The Current Course
+          if (this.props.classroomCourses[j].courseId == currentCourse.id && this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
+            noCourse = false;
+            currentArray.push({ classroom: this.props.allClassrooms[i], type: 'current' });
+          }
+          // This Handles A Different Course
+          else if (this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
+            noCourse = false;
+            otherCourseArray.push({ classroom: this.props.allClassrooms[i], type: 'assigned' });
+          }
         }
-        // This Handles A Different Course
-        else if (this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
-          noCourse = false;
-          otherCourseArray.push({ classroom: this.props.allClassrooms[i], type: 'assigned' });
+        if (noCourse) {
+          noCourseArray.push({ classroom: this.props.allClassrooms[i], type: 'noCourse' });
         }
-      }
-      if (noCourse) {
-        noCourseArray.push({ classroom: this.props.allClassrooms[i], type: 'noCourse' });
       }
     }
     return [otherCourseArray, currentArray, noCourseArray];
@@ -393,12 +396,22 @@ class ViewCourseTile extends Component {
     this.setState({ PDFVisible: false });
   }
 
+  getCourse() {
+    if (this.props.currentCourse === undefined) {
+      return this.props.demoCourse;
+    } else {
+      return this.props.currentCourse;
+    }
+  }
+
   render() {
-    let assignedArray = this._getAssignedClasses();
+    let currentCourse = this.getCourse();
+    let assignedArray = this._getAssignedClasses(currentCourse);
+    console.log(currentCourse);
     return (
       <div className='tile current-course' style={{ paddingBottom: 20 }}>
         <AssignCourseDialog
-          course={this.props.currentCourse}
+          course={currentCourse}
           visible={this.state.assigningCourse}
           dismiss={this.toggleAssignCourse}
           classArrays={assignedArray}
@@ -406,7 +419,7 @@ class ViewCourseTile extends Component {
         <StandardsPopup
           visible={this.state.standardsVisible}
           dismiss={this.toggleStandardsDialog}
-          data={this._getModuleStandards()}
+          data={this._getModuleStandards(currentCourse)}
           type='Section'
         />
         <PDFViewer
@@ -422,23 +435,23 @@ class ViewCourseTile extends Component {
         <div className='home-header-flex' style={{ justifyContent: 'center', padding: 0 }}>
           <PublishedWithChanges />
           <div className='home-header'>
-            {this.props.currentCourse.courseName}
+            {currentCourse.courseName}
           </div>
         </div>
         <ProgressBar
-          numberOfModules={this.props.currentCourse.courseModules.length}
+          numberOfModules={currentCourse.courseModules.length}
           currentSection={this.state.currentSection}
           nextSection={this.nextSection}
           backSection={this.backSection}
         />
         <div className='this-week-flex-module' style={{ marginTop: 15 }}>
-          <img alt='' src={this.props.currentCourse.courseModules[this.state.currentSection - 1].imageUrl} className='this-week-icon' />
+          <img alt='' src={currentCourse.courseModules[this.state.currentSection - 1].imageUrl} className='this-week-icon' />
           <div style={{ width: '52%', paddingLeft: 12 }}>
             <div className='this-week-module-title'>
-              {this.props.currentCourse.courseModules[this.state.currentSection - 1].name}
+              {currentCourse.courseModules[this.state.currentSection - 1].name}
             </div>
             <div className='this-week-module-text'>
-              {this.props.currentCourse.courseModules[this.state.currentSection - 1].description}
+              {currentCourse.courseModules[this.state.currentSection - 1].description}
             </div>
             <div>
               {/*
@@ -455,17 +468,17 @@ class ViewCourseTile extends Component {
         </div>
         <div className='this-week-flex-buttons' style={{ marginTop: 0 }}>
           <div className='this-week-flex-buttons' style={{ marginLeft: 0 }}>
-            <div onClick={() => this.viewModule()} className='this-week-button module-button' style={{ marginRight: 10 }}>
+            <div onClick={() => this.viewModule(currentCourse)} className='this-week-button module-button' style={{ marginRight: 10 }}>
               View Module
             </div>
-            <div onClick={() => this.viewTeacherGuide()} className='this-week-button teacher-guide-button'>
+            <div onClick={() => this.viewTeacherGuide(currentCourse)} className='this-week-button teacher-guide-button'>
               Teacher Guide
             </div>
           </div>
         </div>
         <div className='current-course-flex' style={{ justifyContent: 'flex-start' }}>
           <div className='current-course-articles'>
-            {this.props.currentCourse.courseModules[this.state.currentSection - 1].articles.length === 0 ? (
+            {currentCourse.courseModules[this.state.currentSection - 1].articles.length === 0 ? (
               <div className='current-course-empty-articles'>
                 <div className='current-course-articles-flex'>
                   <ArticleOutlinedIcon className='current-course-flex-icon' />
@@ -486,7 +499,7 @@ class ViewCourseTile extends Component {
                     Articles
                   </div>
                 </div>
-                {this.props.currentCourse.courseModules[this.state.currentSection - 1].articles.map((item) => {
+                {currentCourse.courseModules[this.state.currentSection - 1].articles.map((item) => {
                   return (
                     <div onClick={() => this.viewResource(item, 'article')} key={item.id} className='current-course-item'>
                       <div className='current-course-item-title'>
@@ -499,7 +512,7 @@ class ViewCourseTile extends Component {
             )}
           </div>
           <div className='current-course-activities'>
-            {this.props.currentCourse.courseModules[this.state.currentSection - 1].activities.length === 0 ? (
+            {currentCourse.courseModules[this.state.currentSection - 1].activities.length === 0 ? (
                 <div className='current-course-empty-articles'>
                   <div className='current-course-articles-flex'>
                     <ConstructionOutlinedIcon className='current-course-flex-icon' />
@@ -520,7 +533,7 @@ class ViewCourseTile extends Component {
                       Activities
                     </div>
                   </div>
-                  {this.props.currentCourse.courseModules[this.state.currentSection - 1].activities.map((item) => {
+                  {currentCourse.courseModules[this.state.currentSection - 1].activities.map((item) => {
                     return (
                       <div onClick={() => this.viewResource(item, 'activity')} key={item.id} className='current-course-item'>
                         <div className='current-course-item-title'>
@@ -566,9 +579,11 @@ class ViewCourseTile extends Component {
               })}
             </div>
           )}
-          <div onClick={() => this.toggleAssignCourse()} className='assign-class-to-course-button'>
-            Assign To Classroom
-          </div>
+          {!this.props.isDemo && (
+            <div onClick={() => this.toggleAssignCourse()} className='assign-class-to-course-button'>
+              Assign To Classroom
+            </div>
+          )}
         </div>
       </div>
     )
@@ -588,6 +603,7 @@ const mapStateToProps = (state, ownProps) => {
     classroomCourses: getAllTeacherClassroomCourses(state),
     financialLiteracyStandards: state.coursesmodules.financialLiteracyStandards,
     allClassrooms: getAllTeacherClassrooms(state),
+    demoCourse: getDemoCourse(state),
   };
 };
 

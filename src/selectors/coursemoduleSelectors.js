@@ -10,7 +10,7 @@ const teacherCreatedModulesArraySelector = (state) => objectToArray(state.course
 // selector for retrieving a specific teacher course
 const teacherCourseSelector = (state, props) => (props.courseId in state.coursesmodules.teacherCourses) ? state.coursesmodules.teacherCourses[props.courseId] : {};
 // selector for retrieving a specific Rapunzl Demo course
-const demoCourseSelector = (state, props) => (props.courseId in state.coursesmodules.demoCourses) ? state.coursesmodules.demoCourses[props.courseId] : {};
+const demoCourseSelector = (state, props) => (props.courseId in state.classroom.demoCourses) ? state.classroom.demoCourses[props.courseId] : {};
 // selector for retrieving a specific Rapunzl publically available Module
 const rapunzlPublicModuleSelector = (state, props) => (props.moduleId in state.coursesmodules.availablePublicModules) ? state.coursesmodules.availablePublicModules[props.moduleId] : {};
 // selector for retrieving a specific Teacher Created Module that may be private
