@@ -1,5 +1,5 @@
 
-export const GET_DEMO_CONTENT = () => `
+export const GET_DEMO_CONTENT = `
   query{
     getDemoContent {
       courses {

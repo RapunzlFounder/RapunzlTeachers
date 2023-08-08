@@ -32,7 +32,8 @@ export const fetchDemoContentFailure = error => ({
 export function fetchDemoContent(token) {
     return function (dispatch) {
       dispatch(fetchDemoContentBegin());
-      return axios.post(GRAPHQL_URL, { query: GET_DEMO_CONTENT }, {
+      const graphqlText = GET_DEMO_CONTENT;
+      return axios.post(GRAPHQL_URL, { query: graphqlText }, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: token,
