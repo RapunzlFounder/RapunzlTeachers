@@ -33,10 +33,10 @@ class YourPlan extends Component {
             <div className='upgrade-plan-container'>
               <img className='upgrade-plan-image' alt='' src={NoUpgradeGraphic} />
               <div className='upgrade-plan-title'>
-                There's Nothing To Update!
+                There's Nothing To Update<br/>At This Time.
               </div>
               <div className='upgrade-plan-text'>
-                As an early user of Rapunzl's Teacher Portal, you will never need to upgrade your Rapunzl plan. Please continue to provide us with feedback and we'll continue to improve our financial literacy portal.
+                Thank you for being an early user of Rapunzl's Teacher Portal. Please continue to provide us with feedback and we'll continue to improve our financial literacy portal for your classroom.
               </div>
             </div>
           )}

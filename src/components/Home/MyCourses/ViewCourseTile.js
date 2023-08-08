@@ -453,9 +453,9 @@ class ViewCourseTile extends Component {
               {currentCourse.courseModules[this.state.currentSection - 1].description}
             </div>
             <div>
-              <div className='this-week-standards-button'>
+              {/* <div className='this-week-standards-button'>
                 View Assessment
-              </div> 
+              </div>  */}
               <div onClick={() => this.toggleStandardsDialog()} className='this-week-standards-button'>
                 View Standards Covered
               </div>

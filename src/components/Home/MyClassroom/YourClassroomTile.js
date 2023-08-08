@@ -248,10 +248,10 @@ class YourClassroomTile extends Component {
                 {!this.state.removeStudents && (
                   <div className='classroom-button-flex'>
                     <div onClick={() => this.props.toggleAddStudents()} className='button add-students-button'>
-                      Add Students
+                      Add<br/>Students
                     </div>
                     <div onClick={() => this.toggleRemoveStudents()} className='button remove-students-button' style={{ width: '32%' }}>
-                      Remove Students
+                      Remove<br/>Students
                     </div>
                   </div>
                 )}
