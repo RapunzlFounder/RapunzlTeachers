@@ -603,7 +603,7 @@ const mapStateToProps = (state, ownProps) => {
     classroomCourses: getAllTeacherClassroomCourses(state),
     financialLiteracyStandards: state.coursesmodules.financialLiteracyStandards,
     allClassrooms: getAllTeacherClassrooms(state),
-    demoCourse: getDemoCourse(state),
+    demoCourse: getDemoCourse(state, ownProps),
   };
 };
 

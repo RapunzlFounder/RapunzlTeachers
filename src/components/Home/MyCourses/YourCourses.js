@@ -38,7 +38,7 @@ class YourCourses extends Component {
   selectDemoCourse(course) {
     console.log('course', course);
     this.setState({ isDemo: true });
-    this.props.selectCourse(course.id);
+    this.props.selectCourse(course.courseId);
   }
 
   selectCourse(course) {
