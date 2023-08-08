@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { fetchBigQuery, fetchMiniQuery } from '../ActionTypes/userDataActions';
 import { resetNotificationErrors } from '../ActionTypes/notificationActions';
 import { getFinancialLiteracyStandards } from '../ActionTypes/coursemoduleActions';
+import { fetchDemoContent } from '../ActionTypes/demoDataActions';
 import {
   setMenuTab,
   quickAccessAddStudents,
@@ -64,7 +65,8 @@ class HomeScreen extends Component {
     // Checks if current redux store is in alignment with latest release, otherwise calls the big query
     this._handleUpdate();
     this._handleCheckForStandards();
-  }
+    this._handleCheckForDemo();
+  }fetchDemoContent
 
   componentDidUpdate(prevProps) {
     // Handle Errors Related to Saving Notification Token & Update Notification Types
@@ -192,6 +194,17 @@ class HomeScreen extends Component {
           alertTitle: 'Something Went Wrong...',
           alertMessage: 'We had trouble retrieving financial literacy standards to align with these resources. This should not impact your ability to use the platform, but please contact support at your convenience so that we can help resolve this issue.'
         });
+      }
+    })
+  }
+
+  _handleCheckForDemo(){
+    this.props.fetchDemoContent(this.props.jwtToken).then((res) => {
+      console.log('res', res);
+      if (!(res && !('errors' in res))) {
+
+      } else {
+
       }
     })
   }
@@ -336,7 +349,9 @@ const mapStateToProps = (state) => {
     addingStudents: state.dashboard.addingStudents,
     creatingClassroom: state.dashboard.creatingClassroom,
     selectedClassroom: state.dashboard.selectedClassroom,
-    expandedLibrary: state.dashboard.expandedLibrary
+    expandedLibrary: state.dashboard.expandedLibrary,
+    demoClassrooms: state.classroom.demoClassrooms,
+    demoCourses: state.classroom.demoClassroomCourses
   };
 };
 
@@ -357,7 +372,8 @@ const mapDispatchToProps = (dispatch) => {
       quickAccessAddStudents: () => dispatch(quickAccessAddStudents()),
       quickAccessCourseBuilder: () => dispatch(quickAccessCourseBuilder()),
       toggleAddStudents: () => dispatch(toggleAddStudents()),
-      toggleCourseBuilder: () => dispatch(toggleCourseBuilder())
+      toggleCourseBuilder: () => dispatch(toggleCourseBuilder()),
+      fetchDemoContent: (token) => dispatch(fetchDemoContent(token)),
    };
 };
 
