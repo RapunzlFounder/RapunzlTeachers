@@ -5,7 +5,8 @@ const teacherClassroomsArraySelector = (state) => objectToArray(state.classroom.
 const demoClassroomsArraySelector = (state) => objectToArray(state.classroom.demoClassrooms);
 // selector for retrieving a specific teacher classroom
 const teacherClassroomSelector = (state, props) => (props.classroomId in state.classroom.classrooms) ? state.classroom.classrooms[props.classroomId] : {};
-
+// selector for retrieving a specific demo classroom
+const demoClassroomSelector = (state, props) => (props.classroomId in state.classroom.demoClassrooms) ? state.classroom.demoClassrooms[props.classroomId] : {};
 // Used In Get All Teacher Classroom Courses
 const teacherClassroomCoursesArraySelector = (state) => objectToArray(state.classroom.classroomCourses);
 const demoClassroomCoursesArraySelector = (state) => objectToArray(state.classroom.demoClassroomCourses);
@@ -87,6 +88,32 @@ export const getTeacherClassroom = createSelector(
       }
     }
   )
+
+// selector to return a specific Demo Teacher Classroom
+export const getDemoClassroom = createSelector(
+  [demoClassroomSelector],
+  (demoClassroom) => {
+    if (demoClassroom && demoClassroom != null) {
+      let demoClassroomCopy = JSON.parse(JSON.stringify(demoClassroom));
+      demoClassroomCopy.studentList = objectToArray(demoClassroomCopy.studentList);
+      for (var a in demoClassroomCopy.studentList){
+        demoClassroomCopy.studentList[a].stockCompetitionsEntered = objectToArray(demoClassroomCopy.studentList[a].stockCompetitionsEntered);
+        demoClassroomCopy.studentList[a].cryptoCompetitionsEntered  = objectToArray(demoClassroomCopy.studentList[a].cryptoCompetitionsEntered);
+        // convert the classroom object of student Module Assessment or Quiz Scores into an array of objects
+        demoClassroomCopy.studentList[a].moduleAssessmentScores = objectToArray(demoClassroomCopy.studentList[a].moduleAssessmentScores);
+        // convert the student list module assessment score question results into an array of objects
+        for (var b in demoClassroomCopy.studentList[a].moduleAssessmentScores){
+          demoClassroomCopy.studentList[a].moduleAssessmentScores[b].questionResults = objectToArray(demoClassroomCopy.studentList[a].moduleAssessmentScores[b].questionResults);
+        }
+      }
+          
+      return demoClassroomCopy;
+    }
+    else{
+      return [];
+    }
+  }
+)
 
 // Selector For Retrieving All Teacher Classroom Courses
 export const getAllTeacherClassroomCourses = createSelector(
