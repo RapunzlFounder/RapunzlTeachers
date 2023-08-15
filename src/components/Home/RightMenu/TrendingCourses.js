@@ -81,7 +81,7 @@ class TrendingCourses extends Component {
         </div>
         {PrebuiltCourses.map((item) => {
           return (
-            <div key={item.courseID} onClick={() => this.selectCourse(item.courseID)} className='trend-course-item'>
+            <div title="View Course Summary" key={item.courseID} onClick={() => this.selectCourse(item.courseID)} className='trend-course-item'>
               <div className='trend-course-time-text'>
                 {item.duration}
               </div>

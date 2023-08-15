@@ -126,12 +126,12 @@ class ClassroomItem extends Component {
             </div>
           )}
           {this.props.removing && this.props.selected && (
-            <div onClick={() => this.props.select(this.props.item.userId)} className='student-item-right'>
+            <div title="Click To No Longer Remove Student" onClick={() => this.props.select(this.props.item.userId)} className='student-item-right'>
               <CheckBox className='button' style={{ fill: this.props.colors.perfDown }} />
             </div>
           )}
           {this.props.removing && !this.props.selected && (
-            <div onClick={() => this.props.select(this.props.item.userId)} className='student-item-right'>
+            <div title="Click To Remove Student" onClick={() => this.props.select(this.props.item.userId)} className='student-item-right'>
               <CheckBoxOutlineBlank className='button'style={{ fill: this.props.colors.perfDown }} />
             </div>
           )}
@@ -140,10 +140,10 @@ class ClassroomItem extends Component {
           <div className='student-item-expanded'>
             <div className='student-item-expanded-flex-header'>
             <div className='expanded-student-toggle'>
-              <div onClick={() => this.selectStocks()} className={`expanded-student-toggle-button ${this.state.tab === 'stocks' ? 'expanded-student-toggle-selected' : ''}`} style={{ marginRight: 10 }}>
+              <div title="View Student Stock Portfolio" onClick={() => this.selectStocks()} className={`expanded-student-toggle-button ${this.state.tab === 'stocks' ? 'expanded-student-toggle-selected' : ''}`} style={{ marginRight: 10 }}>
                 Stocks
               </div>
-              <div onClick={() => this.selectCrypto()} className={`expanded-student-toggle-button ${this.state.tab === 'crypto' ? 'expanded-student-toggle-selected' : ''}`}>
+              <div title="View Student Crypto Portfolio" onClick={() => this.selectCrypto()} className={`expanded-student-toggle-button ${this.state.tab === 'crypto' ? 'expanded-student-toggle-selected' : ''}`}>
                 Crypto
               </div>
             </div>
@@ -195,10 +195,10 @@ class ClassroomItem extends Component {
               </div>
             </div>
             <div className='flex-button'>
-              <div onClick={() => this.props.viewPortfolio(this.props.item.username, this.props.item.firstName + ' ' + this.props.item.lastName)} className='classroom-item-button view-portfolio-button'>
+              <div title="View Selected Student Portfolio" onClick={() => this.props.viewPortfolio(this.props.item.username, this.props.item.firstName + ' ' + this.props.item.lastName)} className='classroom-item-button view-portfolio-button'>
                 View Portfolio
               </div>
-              <div onClick={() => this.pressResetAccount()} className='classroom-item-button reset-account-button'>
+              <div title="Resets Student Account To $10,000" onClick={() => this.pressResetAccount()} className='classroom-item-button reset-account-button'>
                 Reset Account
               </div>
             </div>

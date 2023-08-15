@@ -63,7 +63,7 @@ class YourCourses extends Component {
             <div className='empty-your-course-text'>
               Create a course using our course builder or pick from one of our prepared courses below.
             </div>
-            <div onClick={() => this.props.toggleCourseBuilder()} className='empty-course-button'>
+            <div title="Get Started Creating A Course" onClick={() => this.props.toggleCourseBuilder()} className='empty-course-button'>
               Create Course
             </div>
           </div> */}
@@ -71,7 +71,7 @@ class YourCourses extends Component {
             <div className='prepared-courses-flex'>
               {this.props.teacherCourses && this.props.teacherCourses.length !== 0 && this.props.teacherCourses.map((course) => {
                 return (
-                  <div key={course.id} onClick={() => this.selectCourse(course)} className='prepared-course'>
+                  <div key={course.id} title="View Individual Course Resources" onClick={() => this.selectCourse(course)} className='prepared-course'>
                     <div className='prepared-course-time'>
                       {course.numberModules === 1 ? '1 Module' : `${course.numberModules} Modules`}
                     </div>
@@ -98,7 +98,7 @@ class YourCourses extends Component {
               })}
               {this.props.demoCourses && this.props.demoCourses.length !== 0 && this.props.demoCourses.map((course) => {
                 return (
-                  <div key={course.id} onClick={() => this.selectDemoCourse(course)} className='prepared-course'>
+                  <div title="View Individual Course Resources" key={course.id} onClick={() => this.selectDemoCourse(course)} className='prepared-course'>
                     <div className='prepared-course-time'>
                       DEMO
                     </div>
@@ -124,7 +124,7 @@ class YourCourses extends Component {
                 );
               })}
             </div>
-            <div onClick={() => this.props.toggleCourseBuilder()} className='create-new-course-flex'>
+            <div title="Get Started Creating A New Course" onClick={() => this.props.toggleCourseBuilder()} className='create-new-course-flex'>
               <AddCircleOutlineOutlinedIcon className='create-new-course-icon' />
               <div className='create-new-course-text'>
                 Create New Course

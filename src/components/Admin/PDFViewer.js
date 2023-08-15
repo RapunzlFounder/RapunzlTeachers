@@ -93,13 +93,13 @@ const PDFViewer = (props) => {
               Page {pageNumber} of {numPages}
             </div>
           </div>
-          <div onClick={() => toggleAlert(true)} className='google-slides-button-flex'>
+          <div title="Feature Disabled On Demo Accounts" onClick={() => toggleAlert(true)} className='google-slides-button-flex'>
             <LockClockOutlinedIcon className='google-slides-icon' />
             <div className='google-slides-button-text'>
               View In Google Slides
             </div>
           </div>
-          <div onClick={props.dismiss} className='pdf-close-flex' style={{ marginRight: 40 }}>
+          <div title="Dismiss PDF" onClick={props.dismiss} className='pdf-close-flex' style={{ marginRight: 40 }}>
             <HighlightOffIcon className='pdf-close-icon' />
             <div className='pdf-close-text'>
               close
@@ -132,12 +132,12 @@ const PDFViewer = (props) => {
         </div>
         <div className='pdf-button-flex'>
           {pageNumber !== 1 && (
-            <div onClick={() => _previousPDFPage()} className='pdf-button'>
+            <div title="View Previous Page" onClick={() => _previousPDFPage()} className='pdf-button'>
               <KeyboardDoubleArrowLeftIcon className='pdf-button-icon' />
             </div>
           )}
           {pageNumber !== numPages && (
-            <div onClick={() => _nextPDFPage()} className='pdf-button'>
+            <div title="View Next Page" onClick={() => _nextPDFPage()} className='pdf-button'>
               <KeyboardDoubleArrowRightIcon className='pdf-button-icon' />
             </div>
           )}

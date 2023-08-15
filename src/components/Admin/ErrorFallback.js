@@ -153,14 +153,14 @@ class ErrorFallback extends React.PureComponent {
                 Something went wrong which caused Rapunzl to crash and become disconnected from the server. Please login to Rapunzl again in order to access your account. {this.props.jwtToken !== null && this.props.jwtToken !== undefined && this.props.jwtToken !== false && !this.state.contacted ? 'If the problem continues, please contact support.' : ''}
               </div>
               <div>
-                <div onClick={() => this._handleLogout()} className='fallback-button-flex'>
+                <div title="Return To Login Screen" onClick={() => this._handleLogout()} className='fallback-button-flex'>
                   <LogoutIcon className='fallback-button-icon' />
                   <div className='fallback-button-text' style={{ fontWeight: '500' }}>
                     Logout
                   </div>
                 </div>
                 {this.props.jwtToken !== null && this.props.jwtToken !== undefined && this.props.jwtToken !== false && !this.state.contacted && (
-                  <div onClick={() => this._toggleContactSupport()} className='fallback-button-flex fallback-support-button'>
+                  <div title="Get In Touch With Us" onClick={() => this._toggleContactSupport()} className='fallback-button-flex fallback-support-button'>
                     <CommentOutlinedIcon className='fallback-button-icon' style={{ fill: '#c5c5c5', fontSize: '14px' }} />
                     <div className='fallback-button-text' style={{ color: '#c5c5c5', fontWeight: '300', fontSize: '13px', marginLeft: 3 }}>
                       Contact Support
@@ -172,7 +172,7 @@ class ErrorFallback extends React.PureComponent {
           )}
           {this.state.status === 'contact' && (
             <div className='fallback-contact-container'>
-              <div onClick={() => this._toggleContactSupport()} className='fallback-contact-back-button-flex'>
+              <div title="Return To Error Screen" onClick={() => this._toggleContactSupport()} className='fallback-contact-back-button-flex'>
                 <ArrowCircleLeftOutlinedIcon className='fallback-back-button-icon'/>
                 <div className='fallback-back-button-text'>
                   Go Back
@@ -211,7 +211,7 @@ class ErrorFallback extends React.PureComponent {
                 style={{ backgroundColor: this.state.messageError ? '#bc2e2ea1' : '#0e5845' }}
               />
               {!this.state.loading && (
-                <div onClick={() => this.contactSupport()} className='fallback-contact-button-flex'>
+                <div title="Send Your Message To Support" onClick={() => this.contactSupport()} className='fallback-contact-button-flex'>
                   <SendIcon className='fallback-contact-button-icon' />
                   <div className='fallback-contact-button-text'>
                     Send Message

@@ -82,7 +82,7 @@ class PreparedCourses extends Component {
           <div className='prepared-courses-flex'>
             {PrebuiltCourses.map((item) => {
               return (
-                <div key={item.courseID} onClick={() => this.selectCourse(item.courseID)} className='prepared-course'>
+                <div title="View Prebuilt Course Summary" key={item.courseID} onClick={() => this.selectCourse(item.courseID)} className='prepared-course'>
                   <div className='prepared-course-time'>
                     {item.duration}
                   </div>

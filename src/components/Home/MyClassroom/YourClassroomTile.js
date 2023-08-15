@@ -168,7 +168,7 @@ class YourClassroomTile extends Component {
           </div>
           {this.props.allClassrooms.map((item) => {
             return (
-              <div key={item.id} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
+              <div title="View Classroom & Students" key={item.id} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
                 <div>
                   <div className='select-classroom-title'>
                     {item.className}
@@ -186,7 +186,7 @@ class YourClassroomTile extends Component {
           })}
           {this.props.demoClassrooms.map((item) => {
             return (
-              <div key={item.id} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
+              <div title="View Classroom & Students" key={item.id} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
                 <div>
                   <div className='select-classroom-title'>
                     {item.className}
@@ -247,10 +247,10 @@ class YourClassroomTile extends Component {
                 </div>
                 {!this.state.removeStudents && (
                   <div className='classroom-button-flex'>
-                    <div onClick={() => this.props.toggleAddStudents()} className='button add-students-button'>
+                    <div title="Add Students Manually Or By Uploading" onClick={() => this.props.toggleAddStudents()} className='button add-students-button'>
                       Add<br/>Students
                     </div>
-                    <div onClick={() => this.toggleRemoveStudents()} className='button remove-students-button' style={{ width: '32%' }}>
+                    <div title="Remove Students From Classroom" onClick={() => this.toggleRemoveStudents()} className='button remove-students-button' style={{ width: '32%' }}>
                       Remove<br/>Students
                     </div>
                   </div>
@@ -262,10 +262,10 @@ class YourClassroomTile extends Component {
               <div className='classroom-all-students'>
                 {this.state.removeStudents && (
                   <div className='classroom-button-flex'>
-                    <div onClick={() => this.confirmRemoveStudents(classInfo)} className='button remove-button'>
-                      Remove Students
+                    <div title="Removes Selected Students From Class" onClick={() => this.confirmRemoveStudents(classInfo)} className='button remove-button'>
+                      Confirm Remove
                     </div>
-                    <div onClick={() => this.selectAllRemoving(classInfo)} className='button remove-all-button'>
+                    <div title="Select All Studnets To Remove" onClick={() => this.selectAllRemoving(classInfo)} className='button remove-all-button'>
                       Select All
                     </div>
                     <div onClick={() => this.toggleRemoveStudents()} className='button remove-students-button'>
@@ -295,10 +295,10 @@ class YourClassroomTile extends Component {
               <div className='create-class-name-header'>
                 Let's Get Started<br/>Adding Students...
               </div>
-              <div onClick={() => this.props.toggleAddStudents()} className='class-name-next-button next-class-true'>
+              <div title="Add Students Manually Or By Uploading" onClick={() => this.props.toggleAddStudents()} className='class-name-next-button next-class-true'>
                 Add Students
               </div>
-              <div onClick={() => this.props.selectClassroom(false)} className='back-to-class-list-button'>
+              <div title="Return To List Of Classrooms" onClick={() => this.props.selectClassroom(false)} className='back-to-class-list-button'>
                 Back To Class List
               </div>
             </div>

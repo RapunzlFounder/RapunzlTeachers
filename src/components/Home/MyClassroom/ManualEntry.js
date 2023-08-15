@@ -367,7 +367,7 @@ class ManualEntry extends Component {
           </div>
           {!this.state.loading && (
             <div className='manual-button-flex'>
-              <div onClick={() => this.validateInputs()} className='manual-add-another'>
+              <div title="Confirms Student Info & Adds To Your Clasroom" onClick={() => this.validateInputs()} className='manual-add-another'>
                 Add Student
               </div>
             </div>

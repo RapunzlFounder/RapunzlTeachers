@@ -41,7 +41,7 @@ class ClassroomSupport extends Component {
           <br/><br/>
           It typically takes us 2-3 days to upload a classroom and is much easier for us to deal with if you're having issues with the template.
         </div>
-        <div onClick={() => this.props.setMenuTab(7)} className='button contact-button'>
+        <div title="Send Rapunzl A Message To Get In Touch" onClick={() => this.props.setMenuTab(7)} className='button contact-button'>
           Contact Us
         </div>
       </div>

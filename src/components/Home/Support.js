@@ -143,7 +143,7 @@ class Support extends Component {
                 </div>
                 <div className='support-issues-container'>
                   <div className='support-issue-column'>
-                    <div onClick={() => this.selectSupportIssue(1)} className='support-issue-flex'>
+                    <div title="Having Issues Uploading Your Classroom" onClick={() => this.selectSupportIssue(1)} className='support-issue-flex'>
                       {this.state.issueSelected !== 1 ? (
                         <CheckBoxOutlineBlank fontSize="small" />
                       ) : (
@@ -153,7 +153,7 @@ class Support extends Component {
                         Class Upload
                       </div>
                     </div>
-                    <div onClick={() => this.selectSupportIssue(2)} className='support-issue-flex'>
+                    <div title="Having Problems With The Portal" onClick={() => this.selectSupportIssue(2)} className='support-issue-flex'>
                       {this.state.issueSelected !== 2 ? (
                         <CheckBoxOutlineBlank fontSize="small" />
                       ) : (
@@ -163,7 +163,7 @@ class Support extends Component {
                         Technical Issue
                       </div>
                     </div>
-                    <div onClick={() => this.selectSupportIssue(3)} className='support-issue-flex'>
+                    <div title="Having Issue Creating Or Assigning Courses" onClick={() => this.selectSupportIssue(3)} className='support-issue-flex'>
                       {this.state.issueSelected !== 3 ? (
                         <CheckBoxOutlineBlank fontSize="small" />
                       ) : (
@@ -174,7 +174,7 @@ class Support extends Component {
                       </div>
                     </div>
                   </div>
-                  <div className='support-issue-column'>
+                  <div title="Questions Or Issues With Rapunzl Curriculum" className='support-issue-column'>
                     <div onClick={() => this.selectSupportIssue(4)} className='support-issue-flex'>
                       {this.state.issueSelected !== 4 ? (
                         <CheckBoxOutlineBlank fontSize="small" />
@@ -185,7 +185,7 @@ class Support extends Component {
                         Curriculum Question
                       </div>
                     </div>
-                    <div onClick={() => this.selectSupportIssue(5)} className='support-issue-flex'>
+                    <div title="Having Issues Finding Resources" onClick={() => this.selectSupportIssue(5)} className='support-issue-flex'>
                       {this.state.issueSelected !== 5 ? (
                         <CheckBoxOutlineBlank fontSize="small" />
                       ) : (
@@ -195,7 +195,7 @@ class Support extends Component {
                         Missing Resources
                       </div>
                     </div>
-                    <div onClick={() => this.selectSupportIssue(6)} className='support-issue-flex'>
+                    <div title="Other Issues Not Listed" onClick={() => this.selectSupportIssue(6)} className='support-issue-flex'>
                       {this.state.issueSelected !== 5 ? (
                         <CheckBoxOutlineBlank fontSize="small" />
                       ) : (
@@ -235,7 +235,7 @@ class Support extends Component {
                   className='support-message-input'
                 />
                 {!this.state.loading && (
-                  <div onClick={() => this.contactSupport()} className='support-submit-button'>
+                  <div title="Send Message To Rapunzl Support Team" onClick={() => this.contactSupport()} className='support-submit-button'>
                     Submit Message
                   </div>
                 )}

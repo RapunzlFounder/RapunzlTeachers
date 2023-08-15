@@ -536,7 +536,7 @@ class Settings extends Component {
                 {!this.state.loading && (
                   <div>
                     {!this.state.refreshedContent && (
-                      <div onClick={() => this._handleRefreshContent()} className='refresh-modules-button-flex'>
+                      <div title="Resync Education Content With Rapunzl Servers" onClick={() => this._handleRefreshContent()} className='refresh-modules-button-flex'>
                         <RefreshIcon className='refresh-modules-icon' />
                         <div className='refresh-modules-text'>
                           Refresh Rapunzl Resources

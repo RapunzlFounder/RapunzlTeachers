@@ -22,7 +22,7 @@ class EmptyGrades extends Component {
         <div className='manual-student-empty-text' style={{ fontSize: 16 }}>
           It looks like you haven't created a classroom yet! Get started by creating a classroom and course to track student grades.
         </div>
-        <div onClick={() => this.props.quickAccessAddStudents()} className='empty-grades-class-button'>
+        <div title="Get Started By Creating A Classroom" onClick={() => this.props.quickAccessAddStudents()} className='empty-grades-class-button'>
           Create Classroom
         </div>
       </div>

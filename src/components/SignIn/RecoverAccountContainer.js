@@ -213,10 +213,10 @@ class RecoverAccountContainer extends React.PureComponent {
         <div className='recover-container'>
           {!this.state.success && !this.state.getUsername && !this.state.resetPassword && (
             <div className='recover-options-container'>
-              <button className='recover-option-button' onClick={() => this.goToGetUsername()}>
+              <button className='recover-option-button' onClick={() => this.goToGetUsername()} title="Find Your Username With Your Account Email Or Phone">
                 Find Username
               </button>
-              <button className='recover-option-button' onClick={() => this.goToResetPassword()}>
+              <button className='recover-option-button' onClick={() => this.goToResetPassword()} title="Reset Your Password With Account Email Or Phone">
                 Reset Password
               </button>
             </div>
@@ -241,6 +241,7 @@ class RecoverAccountContainer extends React.PureComponent {
             <div className='recover-flex-buttons'>
               <button
                 className='recover-button recover-email-button'
+                title="Recover Account With Email"
                 style={this.state.phoneNumberSelected ? { backgroundColor: '#91c1b4' } : { backgroundColor: '#007154', cursor: 'auto', fontWeight: '500' }}
                 onClick={() => this.setState({ phoneNumberSelected: false, emailAddressSelected: true, email: '', phoneNumber: '' })}
                 disabled={this.state.emailAddressSelected}
@@ -249,6 +250,7 @@ class RecoverAccountContainer extends React.PureComponent {
               </button>
               <button
                 className='recover-button recover-phone-button'
+                title="Recover Account With Phone Number"
                 style={this.state.emailAddressSelected ? { backgroundColor: '#91c1b4' } : { backgroundColor: '#007154', cursor: 'auto', fontWeight: '500' }}
                 onClick={() => this.setState({ phoneNumberSelected: true, emailAddressSelected: false, email: '', phoneNumber: '' })}
                 disabled={this.state.phoneNumberSelected}
@@ -259,7 +261,7 @@ class RecoverAccountContainer extends React.PureComponent {
           )}
           {(this.state.getUsername || this.state.resetPassword) && !this.state.loading && !this.state.success && (
             <div className='recover-buttons-container'>
-              <button className='recover-account-button' onClick={() => this.send()}>
+              <button className='recover-account-button' title="You Will Receive An Email With Login Details" onClick={() => this.send()}>
                 Submit
               </button>
               <button className='dismiss-recover-button' onClick={() => this.handleGoBack()}>
@@ -271,7 +273,7 @@ class RecoverAccountContainer extends React.PureComponent {
             <CircularProgress />
           )}
           {(this.state.success || (!this.state.getUsername && !this.state.resetPassword)) && (
-            <button className='recover-account-button' onClick={() => this.dismissRecover()}>
+            <button className='recover-account-button' title="Return To Login Screen" onClick={() => this.dismissRecover()}>
               Back To Login
             </button>
           )}

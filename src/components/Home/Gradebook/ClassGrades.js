@@ -139,7 +139,7 @@ class ClassGrades extends Component {
           {this.props.classroom.studentList.map((student) => {
             return (
               <div key={student.userId} className='student-grade-item'>
-                <div onClick={() => this._handleExpandGrades(student.userId)} className='student-grade-name-container'>
+                <div title="View More Info About This Student" onClick={() => this._handleExpandGrades(student.userId)} className='student-grade-name-container'>
                   <div>
                     <div className='student-grade-name-flex'>
                       <div className='student-grade-name-text' style={{ paddingRight: 5 }}>
@@ -171,7 +171,7 @@ class ClassGrades extends Component {
                   <div className='student-grades-overview'>
                     {student.moduleAssessmentScores.map((item) => {
                       return (
-                        <div key={item.moduleId} onClick={() => this._handleExpandDetails(student.userId, item.moduleId)} className='overview-grade-container'>
+                        <div key={item.moduleId} title="View Individual Question Scores" onClick={() => this._handleExpandDetails(student.userId, item.moduleId)} className='overview-grade-container'>
                           <div className='overview-grade-circle' style={{ borderColor: handleGradeColor(item.percentCorrect), backgroundColor: item.moduleId === this.state.moduleExpanded ? handleGradeColor(item.percentCorrect) : '' }}>
                             <div className='grade-circle-number' style={{ color: item.moduleId === this.state.moduleExpanded ? '#FFFFFF' : handleGradeColor(item.percentCorrect) }}>
                               {item.percentCorrect.toFixed(0)}

@@ -221,7 +221,7 @@ class CourseBuilder extends Component {
             {this.state.courseSections.map((section) => {
               if (section.module === null) {
                 return (
-                  <div key={section.id} onClick={() => this.showSectionBuilder(section.id - 1)} className='empty-course-section-item'>
+                  <div key={section.id} title="Add A New Module For This Course" onClick={() => this.showSectionBuilder(section.id - 1)} className='empty-course-section-item'>
                     <div className='empty-course-section-title' style={{ color: this.state.courseSectionsError ? '#ed2121' : '#ffffff' }}>
                       New Module
                     </div>
@@ -239,7 +239,7 @@ class CourseBuilder extends Component {
                         {section.name}
                       </div>
                     </div>
-                    <EditIcon onClick={() => this.showSectionBuilder(section.id)} fontSize='small' className='empty-course-icon' />
+                    <EditIcon title="Edit The Selected Module" onClick={() => this.showSectionBuilder(section.id)} fontSize='small' className='empty-course-icon' />
                   </div>
                 )
               }

@@ -95,6 +95,7 @@ class StandardsPopup extends React.PureComponent {
             <div className='standards-popup-container'>
               <div
                 onClick={() => this.copyStandards()}
+                title="Copy List Of Standards To Clipboard"
                 className='upload-template-instructions'
                 style={{ cursor: 'pointer', paddingBottom: 5, width: 'auto' }}
               >

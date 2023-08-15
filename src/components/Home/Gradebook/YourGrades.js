@@ -81,6 +81,7 @@ class YourGrades extends Component {
           {!!this.props.selectedClassroom && (
             <div className='gradebook-class-option-flex'>
               <div
+                title="View A Summary Of Your Class Grades"
                 onClick={() => this._handleChangeViewType('Summary')}
                 className={`gradebook-class-option-button ${this.state.viewType === 'Summary' ? 'gradebook-class-option-selected' : 'gradebook-class-option-unselected'}`}
                 style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
@@ -91,6 +92,7 @@ class YourGrades extends Component {
                 </div>
               </div>
               <div
+                title="View Individual Student Scores & Grades"
                 onClick={() => this._handleChangeViewType('Details')}
                 className={`gradebook-class-option-button ${this.state.viewType === 'Details' ? 'gradebook-class-option-selected' : 'gradebook-class-option-unselected'}`}
                 style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
@@ -103,7 +105,7 @@ class YourGrades extends Component {
             </div>
           )}
           {this.props.selectedClassroom !== false && (
-            <div onClick={this._toggleExportDialog} className='gradebook-class-dropdown gradebook-export-button'>
+            <div title="Export Your Grades In XLSX Or CSV" onClick={this._toggleExportDialog} className='gradebook-class-dropdown gradebook-export-button'>
               <FileDownloadIcon className='gradebook-export-icon' />
               <div className='export-button-text'>
                 Export Grades

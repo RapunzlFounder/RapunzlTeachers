@@ -156,13 +156,13 @@ class ResourceLibrary extends Component {
           />
           <div className='tile search-library-container'>
             <div className='resource-library-header'>
-              <div onClick={() => this.setState({ selectedView: 'activities', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'activities' ? ' resource-menu-item-selected' : ''}`}>
+              <div title="Search For Different Activities" onClick={() => this.setState({ selectedView: 'activities', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'activities' ? ' resource-menu-item-selected' : ''}`}>
                 Activities
               </div>
-              <div onClick={() => this.setState({ selectedView: 'articles', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'articles' ? ' resource-menu-item-selected' : ''}`}>
+              <div title="Search For Different Articles" onClick={() => this.setState({ selectedView: 'articles', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'articles' ? ' resource-menu-item-selected' : ''}`}>
                 Articles
               </div>
-              <div onClick={() => this.setState({ selectedView: 'modules', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'modules' ? ' resource-menu-item-selected' : ''}`}>
+              <div title="Search For Different Modules" onClick={() => this.setState({ selectedView: 'modules', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'modules' ? ' resource-menu-item-selected' : ''}`}>
                 Modules
               </div>
             </div>

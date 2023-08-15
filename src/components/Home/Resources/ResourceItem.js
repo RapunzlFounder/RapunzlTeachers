@@ -36,7 +36,7 @@ class ResourceItem extends Component {
             pdfName={this.state.pdfName}
             orientation={'portrait'}
           />
-          <div onClick={() => this._handleSelectItem(this.props.item.activityName)} className='library-result-flex-item'>
+          <div title="View Activity PDF" onClick={() => this._handleSelectItem(this.props.item.activityName)} className='library-result-flex-item'>
             <div className='library-result-title'>
               {this.props.item.activityName}
             </div>
@@ -59,7 +59,7 @@ class ResourceItem extends Component {
               pdfName={this.state.pdfName}
               orientation={'portrait'}
             />
-            <div onClick={() => this._handleSelectItem(this.props.item.articleName)} className='library-result-flex-item'>
+            <div title="View Article PDF" onClick={() => this._handleSelectItem(this.props.item.articleName)} className='library-result-flex-item'>
               <div className='library-result-title'>
                 {this.props.item.articleName}
               </div>
@@ -87,6 +87,7 @@ class ResourceItem extends Component {
             className='module-resource-image'
             src={this.props.item.imageUrl}
             onClick={() => this._handleSelectItem(this.props.item.name)}
+            title="View Module PDF"
           />
         </div>
       );
@@ -100,7 +101,7 @@ class ResourceItem extends Component {
             pdfName={this.state.pdfName}
             orientation={this.props.item.assetType === 'MODULE' ? 'landscape' : 'portrait'}
           />
-          <div onClick={() => this._handleSelectItem(this.props.item.assetName)} className='library-result-flex-item'>
+          <div title="View Resource PDF" onClick={() => this._handleSelectItem(this.props.item.assetName)} className='library-result-flex-item'>
             <div className='library-result-title'>
               {this.props.item.assetName}
             </div>

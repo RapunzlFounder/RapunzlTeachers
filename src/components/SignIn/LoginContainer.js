@@ -109,6 +109,7 @@ class LoginContainer extends React.PureComponent {
         // eslint-disable-next-line
         else if (res2 && res2.token && res2.token.substring(0,4) == 'JWT ') {
           this.props.fetchBigQuery(res2.token).then(res => {
+            console.log('here', res, res2.token);
             // Handles Error With Big Query
             if (res !== true && !(res && !('errors' in res))) {
               this.setState({
@@ -219,10 +220,10 @@ class LoginContainer extends React.PureComponent {
                   onChange={(event) => this.changePasswordText(event.target.value)}
                   sx={{ marginBottom: '35px' }}
                 />
-                  <button className='main-button login-button' onClick={(e) => {e.preventDefault();this._handleLogin();}}>
+                  <button title="Login To Access Your Account" className='main-button login-button' onClick={(e) => {e.preventDefault();this._handleLogin();}}>
                     Login
                   </button>
-                  <button className='main-button help-button' onClick={() => this._toggleRecoverAccount()}>
+                  <button title="Get Help Logging Into Your Account" className='main-button help-button' onClick={() => this._toggleRecoverAccount()}>
                     Need Help?
                   </button>
               </FormControl>

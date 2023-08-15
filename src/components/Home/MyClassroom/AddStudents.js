@@ -480,10 +480,10 @@ class AddStudents extends Component {
             className='class-name-input'
             style={{ borderColor: this.props.newClassName.length > 20 ? this.props.colors.perfDown : this.props.colors.white}}
           />
-          <div onClick={() => this.handleNextClassClick()} className={`class-name-next-button ${this.validateClassName() ? 'next-class-true' : 'next-class-false'}`}>
+          <div title="Go To Add Students" onClick={() => this.handleNextClassClick()} className={`class-name-next-button ${this.validateClassName() ? 'next-class-true' : 'next-class-false'}`}>
             Next
           </div>
-          <div onClick={() => this.props.toggleAddStudents()} className='back-to-class-list-button'>
+          <div title="Stop Creating New Classroom" onClick={() => this.props.toggleAddStudents()} className='back-to-class-list-button'>
             Go Back
           </div>
         </div>
@@ -506,10 +506,10 @@ class AddStudents extends Component {
           <div className='add-students-result-text'>
             Rapunzl was able to add the students into your classroom. If students did not have an existing Rapunzl account, they should receive an email with instructions on how to login.
           </div>
-          <div onClick={() => this.props.toggleAddStudents()} className='add-students-result-button'>
+          <div title="View New Classroom You Created" onClick={() => this.props.toggleAddStudents()} className='add-students-result-button'>
             View Classroom
           </div>
-          <div onClick={() => this.props.toggleManualEntry()} className='add-students-result-button manual-add-result-button'>
+          <div title="Add More Students To Your Classroom" onClick={() => this.props.toggleManualEntry()} className='add-students-result-button manual-add-result-button'>
             Manually Add More Students
           </div>
         </div>
@@ -569,7 +569,7 @@ class AddStudents extends Component {
             Upload your classroom to Rapunzl and each student will receive an email with a username and password to access their account. You will still have access to view all of their accounts. Please use the template below for the best upload experience and we'll get your class started!
           </div>
           <div className='classroom-upload-flex'>
-            <div onClick={() => this.toggleTemplate()} className='classroom-upload-button template-button'>
+            <div title="View Example XLSX For Upload" onClick={() => this.toggleTemplate()} className='classroom-upload-button template-button'>
               View Template
             </div>
             {/* 
@@ -584,7 +584,7 @@ class AddStudents extends Component {
             
             */}
             {!this.props.creatingClassroom && (
-              <div onClick={() => this.props.toggleManualEntry()} className='classroom-upload-button manual-upload'>
+              <div title="Allows You To Enter Student Information Manually" onClick={() => this.props.toggleManualEntry()} className='classroom-upload-button manual-upload'>
                 Enter Students Manually  
               </div>
             )}
@@ -595,6 +595,7 @@ class AddStudents extends Component {
           {!this.state.loading && (
             <div
               className={`class-upload-container ${this.state.files.length === 0 ? 'class-upload-container-no-file' : ''}`}
+              title="Drag & Drop A File To Start Your Upload"
               onClick={this.handleDropzoneClick}
               onDragOver={this.handleDropzoneDragOver}
               onDrop={this.handleDropzoneDrop}
@@ -625,10 +626,10 @@ class AddStudents extends Component {
                     </div>
                   </div>
                   <div className='dropzone-uploaded-file-flex'>
-                    <div className='dropzone-file-remove-button' onClick={this.removeFile}>
+                    <div className='dropzone-file-remove-button' title="Removes File From Our System" onClick={this.removeFile}>
                       Remove File
                     </div>
-                    <div className='dropzone-file-upload-button' onClick={() => this.toggleUploadPreview()}>
+                    <div className='dropzone-file-upload-button' title="Processes File To Upload" onClick={() => this.toggleUploadPreview()}>
                       Preview Upload
                     </div>
                   </div>
@@ -637,7 +638,7 @@ class AddStudents extends Component {
             </div>
           )}
           {!!this.props.newClassName && !this.state.loading && (
-            <div onClick={() => this.handleCreateClassroomClick(this.state.uploadArray)} className='submit-class-details-button'>
+            <div title="Creates Your New Classroom" onClick={() => this.handleCreateClassroomClick(this.state.uploadArray)} className='submit-class-details-button'>
               Create Classroom
             </div>
           )}

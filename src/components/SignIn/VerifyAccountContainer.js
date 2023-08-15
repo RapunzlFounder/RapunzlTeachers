@@ -210,7 +210,7 @@ class VerifyAccountContainer extends React.PureComponent {
                 <div className="verification-email-subtext">
                   Your Email Address
                 </div>
-                <button className='change-email-button' onClick={() => this.submitEmail()}>
+                <button className='change-email-button' title="Change The Email Associated With Your Account" onClick={() => this.submitEmail()}>
                   Change Email
                 </button>
                 <button className='go-back-button' onClick={() => this.toggleChangeEmail()}>
@@ -221,14 +221,14 @@ class VerifyAccountContainer extends React.PureComponent {
             {!this.state.changeEmail && !this.state.loading && !this.props.loading && (
               <div className='verification-buttons-container'>
                 <div className='verification-buttons-flex'>
-                  <button className='verification-button resend-email-button' onClick={() => this.resendVerification()}>
+                  <button className='verification-button resend-email-button' title="Request A New Verification Link" onClick={() => this.resendVerification()}>
                     Resend Email
                   </button>
-                  <button className='verification-button refresh-status-button' onClick={() => this.updateVerificationStatus()}>
+                  <button className='verification-button refresh-status-button' title="Refresh Verification Status & Confirming" onClick={() => this.updateVerificationStatus()}>
                     Refresh Status
                   </button>
                 </div>
-                <button className='verification-logout-button' onClick={() => this.handleLogout()}>
+                <button className='verification-logout-button' title="Logout & Return To Login Screen" onClick={() => this.handleLogout()}>
                   Logout
                 </button>
               </div>

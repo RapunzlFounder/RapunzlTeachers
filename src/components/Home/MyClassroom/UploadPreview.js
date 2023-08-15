@@ -79,7 +79,7 @@ class UploadPreview extends React.PureComponent {
                       {item.birthday !== undefined && item.birthday !== null && item.birthday.length !== undefined && item.birthday.length > 1 ? item.birthday : ''}
                     </div>
                     {item.isError && (
-                      <div onClick={() => this.props.handleRemoveStudent([item])} className='upload-cell-cancel-button'>
+                      <div title="Remove Student From Upload" onClick={() => this.props.handleRemoveStudent([item])} className='upload-cell-cancel-button'>
                         <CancelOutlinedIcon className='upload-cancel-icon' />
                       </div>
                     )}
@@ -91,7 +91,7 @@ class UploadPreview extends React.PureComponent {
               <div className='dropzone-file-remove-button' onClick={this.props.dismiss}>
                 Cancel
               </div>
-              <div className={!isError ? 'dropzone-file-upload-button' : 'dropzone-file-upload-button-disabled'} onClick={() => this._handleUploadClick()}>
+              <div title="Send List Of Students To Rapunzl To Add" className={!isError ? 'dropzone-file-upload-button' : 'dropzone-file-upload-button-disabled'} onClick={() => this._handleUploadClick()}>
                 Upload Students
               </div>
             </div>

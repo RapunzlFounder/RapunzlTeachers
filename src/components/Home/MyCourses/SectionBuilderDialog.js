@@ -327,7 +327,7 @@ class SectionBuilderDialog extends React.PureComponent {
               <div className='module-flex-container'>
                 {moduleOptions.map((item) => {
                   return (
-                    <div onClick={() => this.selectModule(item.id)} key={item.id} className='module-flex-item'>
+                    <div title="Select Module To Add To Course" onClick={() => this.selectModule(item.id)} key={item.id} className='module-flex-item'>
                       <img
                         src={item.imageUrl}
                         alt=''
@@ -373,7 +373,7 @@ class SectionBuilderDialog extends React.PureComponent {
                     <div>
                       {this.props.publicModules[this.state.selectedModule - 1].activities.map((item) => {
                         return (
-                          <div key={item} onClick={() => this.viewResource(item, 'activity')} className='selected-education-confirm-text course-builder-text'>
+                          <div title="View Activity PDF" key={item} onClick={() => this.viewResource(item, 'activity')} className='selected-education-confirm-text course-builder-text'>
                             • {item.activityName}
                           </div>
                         );
@@ -394,7 +394,7 @@ class SectionBuilderDialog extends React.PureComponent {
                     <div>
                       {this.props.publicModules[this.state.selectedModule - 1].articles.map((item) => {
                         return (
-                          <div key={item} onClick={() => this.viewResource(item, 'article')} className='selected-education-confirm-text course-builder-text'>
+                          <div title="View Article PDF" key={item} onClick={() => this.viewResource(item, 'article')} className='selected-education-confirm-text course-builder-text'>
                             • {item.articleName}
                           </div>
                         );

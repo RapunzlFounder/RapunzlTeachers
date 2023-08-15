@@ -93,7 +93,7 @@ class AssignCourseDialog extends React.PureComponent {
               You must create a classroom in order to assign this course and ensure that students can access learning materials. Create a classroom using the button below and then you'll be able to assign this course.
             </div>
             <div onClick={() => this.props.quickAccessAddStudents()} className='assign-course-no-classroom-button'>
-              Create Classroom
+              Create A Classroom
             </div>
             <div onClick={this.props.dismiss} className='assign-course-no-classroom-back'>
               Go Back
@@ -218,7 +218,7 @@ class AssignCourseDialog extends React.PureComponent {
                   </div>
                 )}
                 {(this.props.classArrays[2].length !== 0 || this.props.classArrays[0].length !== 0) && (
-                  <div onClick={() => this._handleAssignCourse()} className={`assign-course-save-changes ${this.state.selectedClassroom ? '' : 'assign-course-save-changes-disabled'}`}>
+                  <div title="Assign This Course To Selected Classrooms" onClick={() => this._handleAssignCourse()} className={`assign-course-save-changes ${this.state.selectedClassroom ? '' : 'assign-course-save-changes-disabled'}`}>
                     Assign Course
                   </div>
                 )}

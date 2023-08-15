@@ -92,7 +92,7 @@ class LeftHomeMenu extends Component {
           <div className='profile-username'>
             @{this.props.username}
           </div>
-          <div onClick={() => this.props.setMenuTab(7)} className='profile-contact-button'>
+          <div title="Get In Touch With Us If You Have Issues" onClick={() => this.props.setMenuTab(7)} className='profile-contact-button'>
             Get Support
           </div>
           <div className='profile-flex'>
@@ -114,7 +114,7 @@ class LeftHomeMenu extends Component {
             </div>
           </div>
           <div className='profile-menu'>
-            <div onClick={() => this.props.setMenuTab(1)} className={`profile-menu-item ${this.props.tab === 1 ? 'selected-menu-item' : ''}`}>
+            <div title="Return To Dashboard" onClick={() => this.props.setMenuTab(1)} className={`profile-menu-item ${this.props.tab === 1 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
                   <House fontSize="small" />
@@ -125,7 +125,7 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
-            <div onClick={() => this.props.setMenuTab(2)} className={`profile-menu-item ${this.props.tab === 2 ? 'selected-menu-item' : ''}`}>
+            <div title="View All Your Courses" onClick={() => this.props.setMenuTab(2)} className={`profile-menu-item ${this.props.tab === 2 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
                   <LibraryBooks fontSize="small" />
@@ -136,7 +136,7 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
-            <div onClick={() => this.props.setMenuTab(3)} className={`profile-menu-item ${this.props.tab === 3 ? 'selected-menu-item' : ''}`}>
+            <div title="View All Your Classrooms" onClick={() => this.props.setMenuTab(3)} className={`profile-menu-item ${this.props.tab === 3 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
                   <Class fontSize="small" />
@@ -147,7 +147,7 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
-            <div onClick={() => this.props.setMenuTab(4)} className={`profile-menu-item ${this.props.tab === 4 ? 'selected-menu-item' : ''}`}>
+            <div title="Discover Financial Literacy Resources" onClick={() => this.props.setMenuTab(4)} className={`profile-menu-item ${this.props.tab === 4 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
                   <MenuBook fontSize="small" />
@@ -158,7 +158,7 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
-            <div onClick={() => this.props.setMenuTab(5)} className={`profile-menu-item ${this.props.tab === 5 ? 'selected-menu-item' : ''}`}>
+            <div title="View Your Classroom Grades" onClick={() => this.props.setMenuTab(5)} className={`profile-menu-item ${this.props.tab === 5 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
                   <AutoGraphIcon fontSize="small" />
@@ -169,7 +169,7 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
-            <div onClick={() => this.props.setMenuTab(6)} className={`profile-menu-item ${this.props.tab === 6 ? 'selected-menu-item' : ''}`}>
+            <div title="Adjust Your Account Settings" onClick={() => this.props.setMenuTab(6)} className={`profile-menu-item ${this.props.tab === 6 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
                   <Settings fontSize="small" />
@@ -180,7 +180,7 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
-            <div onClick={() => this.props.setMenuTab(9)} className={`profile-menu-item ${this.props.tab === 9 ? 'selected-menu-item' : ''}`}>
+            <div title="View Frequently Asked Questions" onClick={() => this.props.setMenuTab(9)} className={`profile-menu-item ${this.props.tab === 9 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
                   <QuizIcon fontSize="small" />
@@ -191,7 +191,7 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
-            <div onClick={() => this.toggleAlert()} className='profile-menu-item' style={{ borderBottom: 'none' }}>
+            <div title="Logout & Return To Login Screen" onClick={() => this.toggleAlert()} className='profile-menu-item' style={{ borderBottom: 'none' }}>
               <div className='menu-left'>
                 <Logout fontSize="small" style={{ fill: this.props.colors.perfDown }} />
                 <div className='menu-text' style={{ color: this.props.colors.perfDown }}>

@@ -74,7 +74,7 @@ class NotifyStudentAlert extends React.PureComponent {
               placeholder='Write your message here...'
             />
             {!this.state.loading && (
-              <div onClick={() => this._handleOnSubmit()} className='notify-student-button-flex'>
+              <div title="Student Will Receive An Email With Your Message" onClick={() => this._handleOnSubmit()} className='notify-student-button-flex'>
                 <SendIcon className='notify-student-button-icon'/>
                 <div className='notify-student-button-text'>
                   Send Message

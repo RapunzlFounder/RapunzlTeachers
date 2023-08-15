@@ -351,7 +351,7 @@ class CreateAccountContainer extends React.PureComponent {
     };
     // userDetails { username: "asd", lastName: "afaf", email: "abc@ert.com", password: "asfaf2525", birthDate: "YYYY-MM-DD"}
     // invitationCode is an integer
-    this.props.createUser(userDetails, parseInt(this.state.teacherCode)).then((res) => {
+    this.props.createUser(userDetails, this.state.teacherCode).then((res) => {
       // if the new user account is created then log the user in to get the jwt token
       // eslint-disable-next-line
       if (res == true){
@@ -556,7 +556,7 @@ class CreateAccountContainer extends React.PureComponent {
                   onChange={(event) => this.changeTeacherCode(event.target.value)}
                   sx={{ marginBottom: '7px' }}
                 />
-                <button className='main-button login-button' style={{ marginTop: '35px' }} onClick={(e) => this._handleButtonPress(e)}>
+                <button title="Sends Information To Rapunzl To Create Account" className='main-button login-button' style={{ marginTop: '35px' }} onClick={(e) => this._handleButtonPress(e)}>
                   Create Account
                 </button>
               </FormControl>

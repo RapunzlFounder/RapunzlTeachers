@@ -25,11 +25,6 @@ class HeaderMenu extends Component {
     }
   }
 
-  setMenuTab(int) {
-    this.setState({ open: false });
-    this.props.setMenuTab(int);
-  }
-
   handleMenuButtonClick = (e) => {
     if (this.state.open) {
       this.setState({ anchor: null, open: false });
@@ -64,6 +59,7 @@ class HeaderMenu extends Component {
             aria-haspopup="true"
             aria-expanded={this.state.open ? 'true' : undefined}
             onClick={this.handleMenuButtonClick}
+            title="View Menu"
             style={{ marginTop: 15, marginRight: 9 }}
           >
             <MenuIcon />
@@ -77,37 +73,37 @@ class HeaderMenu extends Component {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <div onClick={() => this.setMenuTab(1)} className="menu-item-flex">
+            <div onClick={() => this.props.setMenuTab(1)} className="menu-item-flex">
               <House fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
                 Dashboard
               </div>
             </div>
-            <div onClick={() => this.setMenuTab(2)} className="menu-item-flex">
+            <div onClick={() => this.props.setMenuTab(2)} className="menu-item-flex">
               <LibraryBooks fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
                 My Courses
               </div>
             </div>
-            <div onClick={() => this.setMenuTab(3)} className="menu-item-flex">
+            <div onClick={() => this.props.setMenuTab(3)} className="menu-item-flex">
               <Class fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
                 My Classroom
               </div>
             </div>
-            <div onClick={() => this.setMenuTab(4)} className="menu-item-flex">
+            <div onClick={() => this.props.setMenuTab(4)} className="menu-item-flex">
               <MenuBook fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
                 Resources
               </div>
             </div>
-            <div onClick={() => this.setMenuTab(6)} className="menu-item-flex">
+            <div onClick={() => this.props.setMenuTab(6)} className="menu-item-flex">
               <Settings fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
                 Settings
               </div>
             </div>
-            <div onClick={() => this.setMenuTab(9)} className="menu-item-flex">
+            <div onClick={() => this.props.setMenuTab(9)} className="menu-item-flex">
               <QuizIcon fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
                 FAQ

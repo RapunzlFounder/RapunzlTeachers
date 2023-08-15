@@ -24,7 +24,7 @@ class ToggleExpandButton extends Component {
   render() {
     if (this.props.expandedLibrary) {
       return (
-        <div onClick={() => this._shrinkLibrary()} className={'expand-resource-container expand-resource-container-shrink'}>
+        <div title="Return To Normal View" onClick={() => this._shrinkLibrary()} className={'expand-resource-container expand-resource-container-shrink'}>
           <CloseFullscreenIcon className='expand-resource-icon expand-resource-icon-shrink' />
           <div className='expand-resource-text expand-resource-text-shrink'>
             Shrink View
@@ -33,7 +33,7 @@ class ToggleExpandButton extends Component {
       )
     } else {
       return (
-        <div onClick={() => this._expandLibrary()} className='expand-resource-container'>
+        <div title="Expand & Hide Side Menus" onClick={() => this._expandLibrary()} className='expand-resource-container'>
           <OpenWithIcon className='expand-resource-icon' />
           <div className='expand-resource-text'>
             Expand View

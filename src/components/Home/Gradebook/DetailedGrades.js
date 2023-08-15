@@ -68,7 +68,7 @@ class DetailedGrades extends Component {
               let questionObject = this._getQuestionFromRedux(item.moduleQuestionNumber);
               return (  
                 <div key={item.quizQuestionId} className='question-item'>
-                  <div className='question-main' onClick={() => this._handleExpandQuestion(item.quizQuestionId)} style={{ marginBottom: this.state.questionExpanded === item.quizQuestionId ? 0 : 5 }}>
+                  <div className='question-main' title="View Studnet Answer & Correct Answer" onClick={() => this._handleExpandQuestion(item.quizQuestionId)} style={{ marginBottom: this.state.questionExpanded === item.quizQuestionId ? 0 : 5 }}>
                     <div className='question-main-flex'>
                       <div className='question-number'>
                         {item.moduleQuestionNumber}

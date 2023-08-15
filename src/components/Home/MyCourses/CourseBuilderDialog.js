@@ -396,7 +396,7 @@ class CourseBuilderDialog extends React.PureComponent {
                   {modulesArray[1].map((item, index) => {
                     if (index < 3) {
                       return (
-                        <div onClick={() => this.viewResource(item, 'article')} className='selected-education-confirm-text course-builder-text'>
+                        <div title="View Article PDF" onClick={() => this.viewResource(item, 'article')} className='selected-education-confirm-text course-builder-text'>
                           {item.articleName}
                         </div>
                       );
@@ -417,7 +417,7 @@ class CourseBuilderDialog extends React.PureComponent {
                   {modulesArray[2].map((item, index) => {
                     if (index < 3) {
                       return (
-                        <div onClick={() => this.viewResource(item, 'activity')} className='selected-education-confirm-text course-builder-text'>
+                        <div title="View Activity PDF" onClick={() => this.viewResource(item, 'activity')} className='selected-education-confirm-text course-builder-text'>
                           {item.activityName}
                         </div>
                       );
@@ -457,7 +457,7 @@ class CourseBuilderDialog extends React.PureComponent {
               <div onClick={() => this.props.dismiss()} className='builder-dismiss-button'>
                 Close
               </div>
-              <div onClick={() => this.next()} className={`builder-next-button ${this.state.selectedModule !== 0 ? '' : 'builder-next-disabled'}`}>
+              <div title="Add This Module To Your Course" onClick={() => this.next()} className={`builder-next-button ${this.state.selectedModule !== 0 ? '' : 'builder-next-disabled'}`}>
                 Add To Your Courses
               </div>
             </div>

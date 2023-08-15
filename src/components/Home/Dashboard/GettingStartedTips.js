@@ -73,6 +73,41 @@ class GettingStartedTips extends Component {
     }
   }
 
+  // Function To Handle Clicking The First Getting Started Tip - Only Active If Progress Matches
+  handleCreateClassroom() {
+    if (this.getProgress() === 1) {
+      this.props.quickAccessAddStudents();
+    }
+  }
+
+  // Function To Handle Clicking The Second Getting Started Tip - Only Active If Progress Matches
+  handleAddStudents() {
+    if (this.getProgress() === 2) {
+      this.props.setMenuTab(3);
+    }
+  }
+
+  // Function To Handle Clicking The Third Getting Started Tip - Only Active If Progress Matches
+  handleBuildCourse() {
+    if (this.getProgress() === 3) {
+      this.props.quickAccessCourseBuilder();
+    }
+  }
+
+  // Function To Handle Clicking The Fourth Getting Started Tip - Only Active If Progress Matches
+  handleCollectGrades() {
+    if (this.getProgress() === 4) {
+      this.props.setMenuTab(5);
+    }
+  }
+
+  // Function To Handle Clicking The Fifth Getting Started Tip - Only Active If Progress Matches
+  handleExportGrades() {
+    if (this.getProgress() === 5) {
+      this.props.setMenuTab(5);
+    }
+  }
+  
   render() {
     let progress = this.getProgress();
     let progressArray = this.getProgressArray(progress);
@@ -103,7 +138,7 @@ class GettingStartedTips extends Component {
           {progress === 6 && (<div className='checklist-progress-ball' style={{ marginRight: '-15px', marginLeft: '-15px', backgroundColor: '#00ffbd' }} />)}
           <div className='checklist-progress-ball' style={{ marginLeft: '-15px', backgroundColor: '#ff9700' }} />
         </div>
-        <div onClick={() => this.props.quickAccessAddStudents()} className={`checklist-item ${progress === 1 ? '' : 'checklist-item-not-selected'}`}>
+        <div title="Get Startd Creating A Classroom" onClick={() => this.handleCreateClassroom()} className={`checklist-item ${progress === 1 ? '' : 'checklist-item-not-selected'}`}>
           {progress >= 2 && (
             <div className='checklist-item-complete-flex'>
               <img alt='' className='checklist-item-image' src={progress === 1 ? CreateClassroomColor : CreateClassroomBW} />
@@ -122,7 +157,7 @@ class GettingStartedTips extends Component {
             </div>
           </div>
         </div>
-        <div onClick={() => this.props.setMenuTab(3)} className={`checklist-item ${progress === 2 ? '' : 'checklist-item-not-selected'}`}>
+        <div title="Add Students To Your Classroom" onClick={() => this.handleAddStudents()} className={`checklist-item ${progress === 2 ? '' : 'checklist-item-not-selected'}`}>
           {progress >= 3 && (
             <div className='checklist-item-complete-flex'>
               <img alt='' className='checklist-item-image' src={progress === 2 ? AddStudentsColor : AddStudentsBW} />
@@ -141,7 +176,7 @@ class GettingStartedTips extends Component {
             </div>
           </div>
         </div>
-        <div onClick={() => this.props.quickAccessCourseBuilder()} className={`checklist-item ${progress === 3 ? '' : 'checklist-item-not-selected'}`}>
+        <div title="Go To Build Your First Course" onClick={() => this.handleBuildCourse()} className={`checklist-item ${progress === 3 ? '' : 'checklist-item-not-selected'}`}>
           {progress >= 4 && (
             <div className='checklist-item-complete-flex'>
               <img alt='' className='checklist-item-image' src={progress === 3 ? BuildCourseColor : BuildCourseBW} />
@@ -160,7 +195,7 @@ class GettingStartedTips extends Component {
             </div>
           </div>
         </div>
-        <div onClick={() => this.setMenuTab(5)} className={`checklist-item ${progress === 4 ? '' : 'checklist-item-not-selected'}`}>
+        <div title="Begin Collecting Student Grades From Your Course" onClick={() => this.handleCollectGrades()} className={`checklist-item ${progress === 4 ? '' : 'checklist-item-not-selected'}`}>
           {progress >= 5 && (
             <div className='checklist-item-complete-flex'>
               <img alt='' className='checklist-item-image' src={progress === 4 ? CollectGradesColor : CollectGradesBW} />
@@ -179,7 +214,7 @@ class GettingStartedTips extends Component {
             </div>
           </div>
         </div>
-        <div onClick={() => this.setMenuTab(5)} className={`checklist-item ${progress === 5 ? '' : 'checklist-item-not-selected'}`}>
+        <div title="Export Your Student Grades & Course Outcomes" onClick={() => this.handleExportGrades()} className={`checklist-item ${progress === 5 ? '' : 'checklist-item-not-selected'}`}>
           {progress >= 6 && (
             <div className='checklist-item-complete-flex'>
               <img alt='' className='checklist-item-image' src={progress === 5 ? ExportCourseColor : ExportCourseBW} />
