@@ -365,11 +365,13 @@ class ViewCourseTile extends Component {
         for (var j in this.props.classroomCourses) {
           // Handles If This Classroom Is Already In A Teacher Class Course
           // This Handles If It Is The Current Course
+          // eslint-disable-next-line
           if (this.props.classroomCourses[j].courseId == currentCourse.id && this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
             noCourse = false;
             currentArray.push({ classroom: this.props.allClassrooms[i], type: 'current' });
           }
           // This Handles A Different Course
+          // eslint-disable-next-line
           else if (this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
             noCourse = false;
             otherCourseArray.push({ classroom: this.props.allClassrooms[i], type: 'assigned' });
@@ -443,13 +445,23 @@ class ViewCourseTile extends Component {
           nextSection={this.nextSection}
           backSection={this.backSection}
         />
-        <div className='this-week-flex-module' style={{ marginTop: 15 }}>
-          <img alt='' src={currentCourse.courseModules[this.state.currentSection - 1].imageUrl} className='this-week-icon' />
-          <div style={{ width: '52%', paddingLeft: 12 }}>
-            <div className='this-week-module-title'>
+        <div className='this-week-flex-module' style={{ marginTop: this.props.expandedLibrary ? 15 : 25, justifyContent: this.props.expandedLibrary ? 'center' : 'space-between' }}>
+          <div>
+            <img alt='' src={currentCourse.courseModules[this.state.currentSection - 1].imageUrl} className='this-week-icon' />
+            <div className='this-week-flex-buttons' style={{ marginLeft: 0, justifyContent: 'flex-start' }}>
+              <div onClick={() => this.viewModule(currentCourse)} className='this-week-button module-button' style={{ marginRight: 10 }}>
+                View Module
+              </div>
+              <div onClick={() => this.viewTeacherGuide(currentCourse)} className='this-week-button teacher-guide-button'>
+                Teacher Guide
+              </div>
+            </div>
+          </div>
+          <div style={{ width: this.props.expandedLibrary ? '40%' : '52%', paddingLeft: 12 }}>
+            <div className='this-week-module-title' style={{ fontSize: this.props.expandedLibrary ? 20 : 17 }}>
               {currentCourse.courseModules[this.state.currentSection - 1].name}
             </div>
-            <div className='this-week-module-text'>
+            <div className='this-week-module-text' style={{ fontSize: this.props.expandedLibrary ? 17 : 15}}>
               {currentCourse.courseModules[this.state.currentSection - 1].description}
             </div>
             <div>
@@ -462,17 +474,7 @@ class ViewCourseTile extends Component {
             </div>
           </div>
         </div>
-        <div className='this-week-flex-buttons' style={{ marginTop: 0 }}>
-          <div className='this-week-flex-buttons' style={{ marginLeft: 0 }}>
-            <div onClick={() => this.viewModule(currentCourse)} className='this-week-button module-button' style={{ marginRight: 10 }}>
-              View Module
-            </div>
-            <div onClick={() => this.viewTeacherGuide(currentCourse)} className='this-week-button teacher-guide-button'>
-              Teacher Guide
-            </div>
-          </div>
-        </div>
-        <div className='current-course-flex' style={{ justifyContent: 'flex-start' }}>
+        <div className='current-course-flex' style={{ justifyContent: this.props.expandedLibrary ? 'center' : 'flex-start' }}>
           <div className='current-course-articles'>
             {currentCourse.courseModules[this.state.currentSection - 1].articles.length === 0 ? (
               <div className='current-course-empty-articles'>
@@ -497,7 +499,7 @@ class ViewCourseTile extends Component {
                 </div>
                 {currentCourse.courseModules[this.state.currentSection - 1].articles.map((item) => {
                   return (
-                    <div onClick={() => this.viewResource(item, 'article')} key={item.id} className='current-course-item'>
+                    <div title="View Article PDF" onClick={() => this.viewResource(item, 'article')} key={item.id} className='current-course-item'>
                       <div className='current-course-item-title'>
                         {item.articleName}
                       </div>
@@ -531,7 +533,7 @@ class ViewCourseTile extends Component {
                   </div>
                   {currentCourse.courseModules[this.state.currentSection - 1].activities.map((item) => {
                     return (
-                      <div onClick={() => this.viewResource(item, 'activity')} key={item.id} className='current-course-item'>
+                      <div title="View Activity PDF" onClick={() => this.viewResource(item, 'activity')} key={item.id} className='current-course-item'>
                         <div className='current-course-item-title'>
                           {item.activityName}
                         </div>
@@ -603,7 +605,8 @@ const mapStateToProps = (state, ownProps) => {
     financialLiteracyStandards: state.coursesmodules.financialLiteracyStandards,
     allClassrooms: getAllTeacherClassrooms(state),
     demoCourse: getDemoCourse(state, ownProps),
-    demoCourses: state.coursesmodules.demoCourses
+    demoCourses: state.coursesmodules.demoCourses,
+    expandedLibrary: state.dashboard.expandedLibrary
   };
 };
 
