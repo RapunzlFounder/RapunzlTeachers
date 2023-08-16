@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { updateDashboard } from '../../../ActionTypes/dashboardActions';
 import '../../../styles/Home/Resources.css';
 import PDFViewer from '../../Admin/PDFViewer';
+import AssessmentsDialog from '../../Admin/AssessmentsDialog';
 
 class ResourceItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
       pdfVisible: false,
-      pdfName: ''
+      pdfName: '',
+      assessmentVisible: false
     }
   }
 
@@ -23,6 +25,11 @@ class ResourceItem extends Component {
   _handleSelectItem(name) {
     this.props.updateDashboard('pdfVisible', true);
     this.setState({ pdfVisible: true, pdfName: name });
+  }
+
+  // Pass Through Arrow Function Which Handles Toggling Visibility Of Dialog To View Assessment Questions & Answers
+  toggleAssessmentDialog = () => {
+    this.setState({ assessmentVisible: !this.state.assessmentVisible });
   }
 
   render() {
@@ -94,25 +101,33 @@ class ResourceItem extends Component {
       );
     } else if (this.props.type === 'assessments') {
       return (
-        <div key={this.props.item.id} className='resource-assessment-container'>
-          <img
-            alt=''
-            className='module-resource-image'
-            src={this.props.item.moduleImage}
-            title="View Module PDF"
+        <div key={this.props.item.id}>
+          <AssessmentsDialog
+            visible={this.state.assessmentVisible}
+            dismiss={this.toggleAssessmentDialog}
+            // This component is used in View Course Tile And Prop Must Be Structured This Way To Work In Both Fiels
+            data={{ assessments: this.props.item }}
           />
-          <div className='resource-quiz-details'>
-            <div className='resource-quiz-module'>
-              Module {this.props.item.moduleID}
-            </div>
-            <div className='resource-quiz-title'>
-              {this.props.item.moduleName} Quiz
-            </div>
-            <div className='resource-quiz-question-number'>
-              {this.props.item.questions.length} {this.props.item.questions.length === 1 ? 'Question' : 'Questions'}
-            </div>
-            <div className='resource-quiz-text'>
-              {this.props.item.description.split('.')[0]}.
+          <div onClick={() => this.toggleAssessmentDialog()} className='resource-assessment-container'>
+            <img
+              alt=''
+              className='module-resource-image'
+              src={this.props.item.moduleImage}
+              title="View Module PDF"
+            />
+            <div className='resource-quiz-details'>
+              <div className='resource-quiz-module'>
+                Module {this.props.item.moduleID}
+              </div>
+              <div className='resource-quiz-title'>
+                {this.props.item.moduleName} Quiz
+              </div>
+              <div className='resource-quiz-question-number'>
+                {this.props.item.questions.length} {this.props.item.questions.length === 1 ? 'Question' : 'Questions'}
+              </div>
+              <div className='resource-quiz-text'>
+                {this.props.item.description.split('.')[0]}.
+              </div>
             </div>
           </div>
         </div>

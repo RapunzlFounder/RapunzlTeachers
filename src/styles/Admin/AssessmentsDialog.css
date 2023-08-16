@@ -1,0 +1,95 @@
+.assessments-dialog-container {
+	overflow-y: scroll;
+    overflow-x: hidden; 
+    -ms-overflow-style: none;  /* Hides Scrollbar on IE and Edge */
+    scrollbar-width: none;  /* Hides Scrollbar on Firefox */
+    scroll-margin-top: 7px;
+	scroll-margin-bottom: 25px;
+	padding-bottom: 45px;
+}
+.quiz-preview-text {
+	color: black;
+	padding-left: 24px;
+	padding-right: 24px;
+	padding-bottom: 7px;
+	padding-top: 8px;
+	font-size: 15.5px;
+    font-weight: 300;
+}
+.quiz-preview-question-container {
+	padding-left: 5px;
+	padding-right: 5px;
+	border-bottom: 1px solid #007154;
+	margin-right: 25px;
+	margin-left: 25px;
+}
+.quiz-preview-question-flex {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+}
+.quiz-preview-initial {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	cursor: pointer;
+	transition: 0.2s all;
+}
+.quiz-preview-question-number {
+	color: #067458;
+    font-size: 18px;
+    font-weight: 900;
+    padding-right: 22px;
+}
+.quiz-preview-question-text {
+	color: #04251c;
+    font-size: 24px;
+    font-weight: 300;
+}
+.quiz-preview-expanded {
+	padding-left: 24px;
+	padding-right: 24px;
+	padding-bottom: 18px;
+}
+.quiz-preview-explanation-title {
+	color: #005e46;
+	padding-bottom: 2px;
+	font-size: 14px;
+	font-weight: 800;
+}
+.quiz-preview-explanation-text {
+	color: black;
+	padding-bottom: 15px;
+}
+.google-slides-button-flex {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: fit-content;
+    margin-left: 24px;
+    margin-top: 10px;
+    border: 2px solid #007154;
+	padding: 10px;
+	padding-left: 25px;
+	padding-right: 25px;
+	margin-bottom: 15px;
+	border-radius: 15px;
+	transition: 0.2s all;
+	cursor: not-allowed;
+  }
+  .google-slides-icon {
+	fill: #007154 !important;
+	font-size: 18px !important;
+  }
+  .google-slides-button-text {
+	  font-size: 13px;
+	  padding-left: 10px;
+	  font-weight: 700;
+	  color: #007154;
+  }

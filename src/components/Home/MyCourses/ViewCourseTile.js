@@ -15,6 +15,7 @@ import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import '../../../styles/Home/Courses.css'
+import AssessmentsDialog from '../../Admin/AssessmentsDialog';
 
 class ViewCourseTile extends Component {
   constructor(props) {
@@ -27,7 +28,8 @@ class ViewCourseTile extends Component {
       PDFVisible: false,
       pdfName: '',
       pdfOrientation: 'landscape',
-      navigateToClassroom: false
+      navigateToClassroom: false,
+      assessmentVisible: false,
     }
   }
 
@@ -385,11 +387,14 @@ class ViewCourseTile extends Component {
     return [otherCourseArray, currentArray, noCourseArray];
   }
 
-  // Handles When User Selects An Assigned Classroom By Updating Dashboard Redux State
-
   // Pass Through Arrow Function Which Handles Toggling Visibilty Of Alert To Assign A Selected Course To A Classroom
   toggleAssignCourse = () => {
     this.setState({ assigningCourse: !this.state.assigningCourse });
+  }
+
+  // Pass Through Arrow Function Which Handles Toggling Visibility Of Dialog To View Assessment Questions & Answers
+  toggleAssessmentDialog = () => {
+    this.setState({ assessmentVisible: !this.state.assessmentVisible });
   }
 
   // Pass Through Arrow Function To Dismiss PDF Viewer
@@ -422,6 +427,11 @@ class ViewCourseTile extends Component {
           dismiss={this.toggleStandardsDialog}
           data={this._getModuleStandards(currentCourse)}
           type='Section'
+        />
+        <AssessmentsDialog
+          visible={this.state.assessmentVisible}
+          dismiss={this.toggleAssessmentDialog}
+          data={currentCourse.courseModules[this.state.currentSection - 1]}
         />
         <PDFViewer
           visible={this.state.PDFVisible}
@@ -465,9 +475,9 @@ class ViewCourseTile extends Component {
               {currentCourse.courseModules[this.state.currentSection - 1].description}
             </div>
             <div>
-              {/* <div className='this-week-standards-button'>
+              <div onClick={this.toggleAssessmentDialog} className='this-week-standards-button'>
                 View Assessment
-              </div>  */}
+              </div> 
               <div onClick={() => this.toggleStandardsDialog()} className='this-week-standards-button'>
                 View Standards Covered
               </div>
