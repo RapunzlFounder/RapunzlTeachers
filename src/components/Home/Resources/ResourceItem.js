@@ -86,6 +86,7 @@ class ResourceItem extends Component {
             alt=''
             className='module-resource-image'
             src={this.props.item.imageUrl}
+            style={{ cursor: 'pointer' }}
             onClick={() => this._handleSelectItem(this.props.item.name)}
             title="View Module PDF"
           />

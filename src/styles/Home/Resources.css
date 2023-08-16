@@ -292,6 +292,11 @@ path {
     margin-left: 15px;
     margin-right: 15px;
     border-bottom: 1px solid #196351;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+.resource-assessment-container:hover {
+    background-color: #ffffff0d;
 }
 .module-resource-image {
     max-width: 200px;
