@@ -9,7 +9,7 @@ import Device from 'react-device'
 import '../../styles/SignIn/CreateAccountContainer.css';
 import SignUpGraphic from '../../assets/images/NotSignedIn/SignUpGraphic.png';
 import Blocked from '../../constants/Blocked';
-
+import Logo from '../../assets/images/Admin/Logo.png';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
@@ -446,14 +446,7 @@ class CreateAccountContainer extends React.PureComponent {
             visible={this.state.alertVisible}
             dismiss={this.toggleAlert}
           />
-          <img
-            alt="rapunzl sign up create account graphic"
-            src={SignUpGraphic}
-            className="sign-up-graphic"
-          />
-          <div className="sign-up-title">
-            Welcome To Rapunzl!
-          </div>
+          
           <Box style={{ width: '90%', maxWidth: '500px', margin: 'auto' }} component="form">
             {!this.state.loading && (
               <FormControl style={{ width: '100%' }} variant="standard">

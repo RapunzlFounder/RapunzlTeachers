@@ -7,7 +7,7 @@
 .background {
 	width: 100vw;
 	height: 100vh;
-	background-color: #013024;
+	background-color: #0f3a30;
 }
 .sign-container {
 	display: flex;
@@ -24,7 +24,7 @@
 	width: 100%;
 }
 .text-container {
-	background-color: #002c1e;
+	background-color: #0f3a30;
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -32,7 +32,8 @@
 	justify-content: center;
 	font-size: calc(10px + 2vmin);
 	color: black;
-	width: 40%;
+	width: 45%;
+	padding-top: 35px;
 }
 .login-contanier {
 	justify-content: flex-start;
@@ -55,8 +56,8 @@
 }
 .leftImage {
 	width: 30%;
-    height: 100vh;
-    object-fit: cover;
+	height: 100vh;
+	object-fit: cover;
 }
 .rightImage {
 	width: 30%;
@@ -100,11 +101,18 @@
 }
 
 /* Media Size Updates 1200px */
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1400px) {
 	.rightImage {
-	  	display: none;
+	  	width: 60%;
 	}
 	.leftImage {
+		display: none;
+	}
+}
+
+/* Media Size Updates 1200px */
+@media only screen and (max-width: 1200px) {
+	.rightImage {
 	  	width: 50%;
 	}
 	.text-container {
@@ -115,9 +123,6 @@
 /* Media Size Updates 820px */
 @media only screen and (max-width: 820px) {
 	.rightImage {
-	  	display: none;
-	}
-	.leftImage {
 	  	display: none;
 	}
 	.text-container {

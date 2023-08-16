@@ -184,15 +184,6 @@ class LoginContainer extends React.PureComponent {
             visible={this.state.alertVisible}
             dismiss={this.toggleAlert}
           />
-          <img
-            alt="rapunzl sign up create account graphic"
-            src={LoginGraphic}
-            className="sign-up-graphic"
-            style={{ marginBottom: '20px' }}
-          />
-          <div className="sign-up-title">
-            Login
-          </div>
           <Box style={{ width: '90%', maxWidth: '500px', margin: 'auto' }} component="form">
             {!this.state.loginLoading && (
               <FormControl style={{ width: '100%' }} variant="standard">

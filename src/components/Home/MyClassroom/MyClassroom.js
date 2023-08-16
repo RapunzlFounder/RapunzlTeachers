@@ -55,6 +55,7 @@ class MyClassroom extends Component {
               className={this.state.className}
               changeClassName={this.changeClassName}
               visible={this.props.visible}
+              classroomId={this.props.selectedClassroom}
             />
           )}
           {this.props.addingStudents && !this.state.viewPortfolio && (
@@ -83,7 +84,8 @@ const mapStateToProps = (state) => {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
     allClassrooms: getAllTeacherClassrooms(state),
-    addingStudents: state.dashboard.addingStudents
+    addingStudents: state.dashboard.addingStudents,
+    selectedClassroom: state.dashboard.selectedClassroom,
   };
 };
 

@@ -7,6 +7,8 @@ import Tab from '@mui/material/Tab';
 import LoginContainer from '../components/SignIn/LoginContainer';
 import CreateAccountContainer from '../components/SignIn/CreateAccountContainer';
 import Footer from '../components/Admin/Footer';
+import Logo from '../assets/images/Admin/Logo.png';
+
 
 import '../styles/AuthLoadingScreen.css';
 import '../styles/NotSignedInScreen.css';
@@ -39,7 +41,7 @@ class NotSignedInScreen extends Component {
         <Container
           disableGutters={true}
           fixed={false}
-          maxWidth={'xl'}
+          maxWidth={false}
         >
           <div className="sign-container">
             <div className="sign-in-container">
@@ -49,11 +51,24 @@ class NotSignedInScreen extends Component {
                 className="leftImage"
               />
               <div className="text-container login-contanier">
+                <div className='signup-logo-flex'>
+                  <img
+                    alt="rapunzl logo"
+                    src={Logo}
+                    className="sign-up-graphic"
+                  />
+                  <div className='sign-up-title'>
+                    Rapunzl
+                  </div>
+                </div>
+                <div className="sign-up-subtext">
+                  Educator Portal
+                </div>
                 <Tabs value={this.state.tab} onChange={() => this.handleChange()} aria-label="toggles create account and login" centered>
                   <Tab label="Login" />
                   <Tab label="Join" />
                 </Tabs>
-                <div className="sign-in-container" style={{ justifyContent: 'column' }}>
+                <div className="sign-in-container" style={{ justifyContent: 'column', paddingTop: 25 }}>
                   {// eslint-disable-next-line
                   this.state.tab == 1 && (
                     <CreateAccountContainer />

@@ -20,19 +20,28 @@
 .css-gjbq6i-MuiInputBase-root-MuiFilledInput-root:after {
 	border-bottom: 2px solid #007154 !important;
 }
+.signup-logo-flex {
+	display: flex;
+    margin-bottom: 0px;
+    justify-content: center;
+    align-items: center;
+}
 .sign-up-graphic {
-	display: block;
-	width: 45%;
-	margin: auto;
-	margin-bottom: 0px;
-	margin-top: 40px;
+	width: 45px;
 }
 .sign-up-title {
-	text-align: center;
-	padding-bottom: 17px;
-	font-size: 22px;
-	color: #b0ffea;
-	font-weight: 600;
+	font-size: 45px;
+    color: white;
+    font-weight: 500;
+    padding-left: 13px;
+    margin-bottom: -2px;
+}
+.sign-up-subtext {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 100;
+    padding-top: 2px;
+    padding-bottom: 15px;
 }
 .sign-up-label-container {
 	width: 90%;

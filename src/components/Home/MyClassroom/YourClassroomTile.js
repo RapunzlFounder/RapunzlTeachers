@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
+import { getAllTeacherClassrooms, getDemoClassroom, getTeacherClassroom } from '../../../selectors/classroomSelectors';
 import { FetchOtherUserDetails } from '../../../ActionTypes/socialActions';
 import { removeStudentsFromClassroom } from '../../../ActionTypes/classroomActions';
 import { toggleAddStudents, quickAccessAddStudents, selectClassroom } from '../../../ActionTypes/dashboardActions';
@@ -131,7 +131,7 @@ class YourClassroomTile extends Component {
         }
       }
       if (isDemo) {
-        return this.props.demoClassrooms[0];
+        return this.props.getDemoClassroom;
       } else {
         return classroomObject;
       }
@@ -310,7 +310,7 @@ class YourClassroomTile extends Component {
 }
 
 // Map State To Props (Redux Store Passes State To Component)
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   // Redux Store --> Component
   return {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
@@ -319,7 +319,9 @@ const mapStateToProps = (state) => {
     jwtToken: state.userDetails.jwtToken,
     selectedClassroom: state.dashboard.selectedClassroom,
     creatingClassroom: state.dashboard.creatingClassroom,
-    demoClassrooms: getAllDemoClassrooms(state)
+    demoClassrooms: getAllDemoClassrooms(state),
+    getDemoClassroom: getDemoClassroom(state, ownProps),
+    getTeacherClassroom: getTeacherClassroom(state, ownProps),
   };
 };
 

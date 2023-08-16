@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getTeacherClassroom, getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
-import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
+import { getAllTeacherCourses, getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import handleGradeColor from '../../../helper_functions/handleGradeColor';
@@ -54,20 +54,56 @@ class ClassGrades extends Component {
   _getGradesOverview() {
     let initialObject = {
       numberOfStudents: 0,
-      percentageFirstTrade: 0,
+      numberVerified: 0,
+      numberPlacedFirstTrade: 0,
+      numberBeatingSPY: 0,
+      averageClassPerformance: 0,
+      classStockLeaderboard: [],
+      classCryptoLeaderboard: [],
+      quizScoreSummary: [],
+      challengingQuestions: [],
     }
     // FLEXED INTO TOP ROW
     // Number Of Students In The Classroom
+    // Students Who Have Verified Account
     // Percentage Of Students Who Have Placed Their First Trade
-    // Average Class Performance
+    // Average Class Portfolio Performance
     // Percentage Of Students Beating S&P 500
+
+    // CLASSROOM LEADERBOARD SECTION
+    // Classroom Leaderboard
+    // {
+    //   Name,
+    //   Username,
+    //   NumberOfStockTrades,
+    //   NumberOfCryptoTrades,
+    //   NumberOfStockPositions,
+    //   NumberOfCryptoPositions
+    //   StockPortfolioPerf
+    //   CryptoPortfolioPerf
+    // }
 
     // QUIZ SUMMARY SECTION
     // Quizzes Completed Percentage With Average Score & Specific Missing Students Array
-    // CLASSROOM LEADERBOARD SECTION
-    // Classroom Leaderboard
     // CHALLENGING QUESTIONS SECTION
     // Most Challenging Questions - 10 With Worst Score
+    // {
+    //   quizID,
+    //   quizName,
+    //   quizQuestionsNumber,
+    //   numberStarted
+    //   numberCompleted
+    //   completedAverageScore
+    // },
+    // {
+    //   quizID,
+    //   quizName,
+    //   quizQuestionNumber,
+    //   question,
+    //   answer,
+    //   incorrectStudentsNumber,
+    //   completedStudentsNumber,
+    // }
   }
 
   // Matches The Classroom With The Appropriate Classroom Course Record To Find The Course Number, Then Finds The Course To Determine Number Of Modules
@@ -109,6 +145,9 @@ class ClassGrades extends Component {
     let numberOfModules = this._getNumberOfModules();
     // Handles If Teacher Has Selected to View A Summary Of The Class Grades. This Is Processed In This Component And Passed Through.
     if (this.props.isSummary) {
+      console.log('all teacher classroom courses', this.props.classCourse);
+      console.log('specific classroom', this.props.classroom);
+      console.log('all courses', this.props.allCourses);
       return (
         <ClassSummary
           gradesData={this._getGradesOverview()}
