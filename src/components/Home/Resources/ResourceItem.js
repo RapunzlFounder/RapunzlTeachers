@@ -91,6 +91,31 @@ class ResourceItem extends Component {
           />
         </div>
       );
+    } else if (this.props.type === 'assessments') {
+      return (
+        <div key={this.props.item.id} className='resource-assessment-container'>
+          <img
+            alt=''
+            className='module-resource-image'
+            src={this.props.item.moduleImage}
+            title="View Module PDF"
+          />
+          <div className='resource-quiz-details'>
+            <div className='resource-quiz-module'>
+              Module {this.props.item.moduleID}
+            </div>
+            <div className='resource-quiz-title'>
+              {this.props.item.moduleName} Quiz
+            </div>
+            <div className='resource-quiz-question-number'>
+              {this.props.item.questions.length} {this.props.item.questions.length === 1 ? 'Question' : 'Questions'}
+            </div>
+            <div className='resource-quiz-text'>
+              {this.props.item.description.split('.')[0]}.
+            </div>
+          </div>
+        </div>
+      )
     } else {
       return (
         <div key={this.props.item.assetId}>

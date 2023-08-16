@@ -94,11 +94,11 @@ class ResourceLibrary extends Component {
   }
 
   // Pass Through Arrow Functions For TypeButton To Update Which Types Of Assets We Are Searching
-  selectActivities = () => { this.setState({ activitiesSelected: !this.state.activitiesSelected }) }
-  selectArticles = () => { this.setState({ articlesSelected: !this.state.articlesSelected }) }
-  selectAssessments = () => { this.setState({ assessmentsSelected: !this.state.assessmentsSelected }) }
-  selectPresentations = () => { this.setState({ presentationsSelected: !this.state.presentationsSelected }) }
-  selectGuides = () => { this.setState({ guidesSelected: !this.state.guidesSelected }) }
+  // selectActivities = () => { this.setState({ activitiesSelected: !this.state.activitiesSelected }) }
+  // selectArticles = () => { this.setState({ articlesSelected: !this.state.articlesSelected }) }
+  // selectAssessments = () => { this.setState({ assessmentsSelected: !this.state.assessmentsSelected }) }
+  // selectPresentations = () => { this.setState({ presentationsSelected: !this.state.presentationsSelected }) }
+  // selectGuides = () => { this.setState({ guidesSelected: !this.state.guidesSelected }) }
 
   // Pass Through Arrow Function For ModuleButton To Update moduleSearchArray To Include Module Number
   selectModule = (int) => {
@@ -162,18 +162,14 @@ class ResourceLibrary extends Component {
               <div title="Search For Different Articles" onClick={() => this.setState({ selectedView: 'articles', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'articles' ? ' resource-menu-item-selected' : ''}`}>
                 Articles
               </div>
+              <div title="Search For Different Assessments" onClick={() => this.setState({ selectedView: 'assessments', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'assessments' ? ' resource-menu-item-selected' : ''}`}>
+                Assessments
+              </div>
               <div title="Search For Different Modules" onClick={() => this.setState({ selectedView: 'modules', moduleSearchArray: [] })} className={`resource-menu-item ${this.state.selectedView === 'modules' ? ' resource-menu-item-selected' : ''}`}>
                 Modules
               </div>
             </div>
             <div className='search-resources-flex-container'>
-              <input
-                className='search-bar'
-                value={this.state.searchText}
-                onClick={() => this.searchComingSoon()}
-                // onChange={(event) => this.changeSearchText(event.target.value)}
-                placeholder='Discover By Module, Topic, Or Resource Type'
-              />
               <ModuleButton
                 moduleSearchArray={this.state.moduleSearchArray}
                 selectModule={this.selectModule}
@@ -183,8 +179,10 @@ class ResourceLibrary extends Component {
               visible={true}
               loading={this.state.loading}
               moduleSearchArray={this.state.moduleSearchArray}
+              // TODO: These Props Are Unnecessary And Stupid. Should Be Consolidated To Reduce Non-Enum String Equivalencies
               isActivities={this.state.selectedView === 'activities'}
               isArticles={this.state.selectedView === 'articles'}
+              isAssessments={this.state.selectedView === 'assessments'}
               isModules={this.state.selectedView === 'modules'}
             />
             {/* <SearchResources

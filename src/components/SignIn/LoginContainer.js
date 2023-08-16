@@ -109,7 +109,6 @@ class LoginContainer extends React.PureComponent {
         // eslint-disable-next-line
         else if (res2 && res2.token && res2.token.substring(0,4) == 'JWT ') {
           this.props.fetchBigQuery(res2.token).then(res => {
-            console.log('here', res, res2.token);
             // Handles Error With Big Query
             if (res !== true && !(res && !('errors' in res))) {
               this.setState({

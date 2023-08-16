@@ -145,9 +145,9 @@ class ClassGrades extends Component {
     let numberOfModules = this._getNumberOfModules();
     // Handles If Teacher Has Selected to View A Summary Of The Class Grades. This Is Processed In This Component And Passed Through.
     if (this.props.isSummary) {
-      console.log('all teacher classroom courses', this.props.classCourse);
-      console.log('specific classroom', this.props.classroom);
-      console.log('all courses', this.props.allCourses);
+      // console.log('all teacher classroom courses', this.props.classCourse);
+      // console.log('specific classroom', this.props.classroom);
+      // console.log('all courses', this.props.allCourses);
       return (
         <ClassSummary
           gradesData={this._getGradesOverview()}

@@ -282,6 +282,46 @@ path {
     font-size: 15px;
     font-weight: 200;
 }
+.resource-assessment-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-bottom: 1px solid #196351;
+}
+.module-resource-image {
+    max-width: 200px;
+    cursor: auto;
+}
+.resource-quiz-details {
+    padding-left: 15px;
+}
+.resource-quiz-module {
+    font-size: 12px;
+    font-weight: 600;
+    color: #31ffca;
+}
+.resource-quiz-title {
+    font-size: 18px;
+    font-weight: 300;
+    padding-top: 2px;
+    padding-bottom: 4px;
+}
+.resource-quiz-question-number {
+    font-size: 14px;
+    color: #73b9a7;
+    font-weight: 400;
+    padding-bottom: 6px;
+}
+.resource-quiz-text {
+    font-size: 15px;
+    font-weight: 300;
+}
+
 @media only screen and (max-width: 1250px) {
     .module-resource-image {
         max-width: 300px;

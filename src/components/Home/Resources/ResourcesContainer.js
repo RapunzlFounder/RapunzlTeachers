@@ -77,6 +77,30 @@ class ResourcesContainer extends Component {
     return articleArray;
   }
 
+  _getAssessments() {
+    let assessmentArray = [];
+    if (this.props.moduleSearchArray.length === 0) {
+      for (var i in this.props.publicModules) {
+        let assessment = this.props.publicModules[i].assessments;
+        assessment.moduleID = this.props.publicModules[i].id;
+        assessment.moduleName = this.props.publicModules[i].name;
+        assessment.moduleImage = this.props.publicModules[i].imageUrl;
+        assessmentArray.push(assessment);
+      }
+    } else if (this.props.moduleSearchArray.length > 0) {
+      for (var i in this.props.publicModules) {
+        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i].id))) {
+          let assessment = this.props.publicModules[i].assessments;
+          assessment.moduleID = this.props.publicModules[i].id;
+          assessment.moduleName = this.props.publicModules[i].name;
+          assessment.moduleImage = this.props.publicModules[i].imageUrl;
+          assessmentArray.push(assessment);
+        }
+      }
+    }    
+    return assessmentArray;
+  }
+
   _getModules() {
     if (this.props.moduleSearchArray.length === 0) {
       return this.props.publicModules;
@@ -160,6 +184,28 @@ class ResourcesContainer extends Component {
                   <ResourceItem
                     item={item}
                     type={'modules'}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
+    }
+    // Handles Assessments/Quizzes
+    else if (this.props.visible && this.props.isAssessments) {
+      let modulesArray = this._getAssessments();
+      if (modulesArray.length === 0) {
+        return this._renderEmptySection();
+      } else {
+        return (
+          <div className='resources-container'>
+            <div className='modules-resources-container'>
+              {modulesArray.map((item) => {
+                return (
+                  <ResourceItem
+                    item={item}
+                    type={'assessments'}
                   />
                 );
               })}
