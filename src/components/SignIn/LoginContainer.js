@@ -5,7 +5,6 @@ import { fetchBigQuery, resetUserDetailsErrors } from '../../ActionTypes/userDat
 import { updateFirstVisitState } from '../../ActionTypes/firstVisitActions';
 import { Navigate } from "react-router-dom";
 import '../../styles/SignIn/LoginContainer.css';
-import LoginGraphic from '../../assets/images/NotSignedIn/MoneyHeaderGraphic.png';
 import Alert from '../Admin/Alert';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
@@ -109,6 +108,7 @@ class LoginContainer extends React.PureComponent {
         // eslint-disable-next-line
         else if (res2 && res2.token && res2.token.substring(0,4) == 'JWT ') {
           this.props.fetchBigQuery(res2.token).then(res => {
+            console.log(res);
             // Handles Error With Big Query
             if (res !== true && !(res && !('errors' in res))) {
               this.setState({

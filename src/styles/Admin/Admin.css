@@ -64,6 +64,8 @@
     font-size: 14px;
     font-weight: 600;
     margin-top: 20px;
+    padding-left: 3.5px;
+    padding-right: 3.5px;
 }
 .upload-template-instructions {
     padding-left: 24px;
