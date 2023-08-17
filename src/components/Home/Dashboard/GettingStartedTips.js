@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { setMenuTab, quickAccessAddStudents, quickAccessCourseBuilder } from '../../../ActionTypes/dashboardActions';
 import PollIcon from '@mui/icons-material/Poll';
+import GetStartedBW from '../../../assets/images/ChecklistTips/GetStarted_BW.png';
 import AddStudentsBW from '../../../assets/images/ChecklistTips/AddStudents_BW.png';
 import AddStudentsColor from '../../../assets/images/ChecklistTips/AddStudents_Color.png';
 import BuildCourseBW from '../../../assets/images/ChecklistTips/BuildCourse_BW.png';
@@ -28,15 +29,15 @@ class GettingStartedTips extends Component {
   // Handles Text For Progress Title & Color For Progress Bar
   getProgressArray(progress) {
     if (progress === 1) {
-      return ['Getting Started', '#1d9678'];
+      return ['Create A Classroom', '#1d9678'];
     } else if (progress === 2) {
-      return ['On Your Way', '#19af89'];
+      return ['Add Students', '#19af89'];
     } else if (progress === 3) {
-      return ['Ready To Go', '#12c698'];
+      return ['Build A Course', '#12c698'];
     } else if (progress === 4) {
-      return ['Almost There', '#15e4af'];
+      return ['Collect Grades', '#15e4af'];
     } else if (progress === 5) {
-      return ['Invested', '#13f8bd'];
+      return ['Export Course', '#13f8bd'];
     } else if (progress === 6) {
       return ['Expert', '#00ffbd'];
     } else {
@@ -116,11 +117,11 @@ class GettingStartedTips extends Component {
         <div className='home-header-flex'>
           <PollIcon />
           <div className='home-header'>
-            Profile Checklist
+            Profile Progress
           </div>
         </div>
         <div className='checklist-progress-bar-title'>
-          Your Progress: <div style={{ fontWeight: '700', color: progressArray[1], marginLeft: 7 }}>{progressArray[0]}</div>
+          Next Step: <div style={{ fontWeight: '700', color: progressArray[1], marginLeft: 7 }}>{progressArray[0]}</div>
         </div>
         <div className='checklist-progress-bar'>
           <div className='checklist-progress-ball' style={{ marginRight: '-15px', backgroundColor: '#0a5340' }} />
@@ -137,6 +138,20 @@ class GettingStartedTips extends Component {
           <div className='checklist-progress-item' style={{ backgroundColor: progress > 5 ? '#00ffbd' : '#354541' }} />
           {progress === 6 && (<div className='checklist-progress-ball' style={{ marginRight: '-15px', marginLeft: '-15px', backgroundColor: '#00ffbd' }} />)}
           <div className='checklist-progress-ball' style={{ marginLeft: '-15px', backgroundColor: '#ff9700' }} />
+        </div>
+        <div className={`checklist-item checklist-item-not-selected`}>
+          <div className='checklist-item-complete-flex'>
+            <img alt='' className='checklist-item-image' src={GetStartedBW} />
+            <CheckCircleIcon className='checklist-item-complete-icon' />
+          </div>
+          <div className='checklist-text-container'>
+            <div className='checklist-item-header' style={{ color: '#4a9c80' }}>
+              Get Started
+            </div>
+            <div className='checklist-item-text' style={{ color: '#4a9c80' }}>
+              Create an account and login to access Rapunzl's Educator Portal and Financial Literacy Curriculum.
+            </div>
+          </div>
         </div>
         <div title="Get Startd Creating A Classroom" onClick={() => this.handleCreateClassroom()} className={`checklist-item ${progress === 1 ? '' : 'checklist-item-not-selected'}`}>
           {progress >= 2 && (
