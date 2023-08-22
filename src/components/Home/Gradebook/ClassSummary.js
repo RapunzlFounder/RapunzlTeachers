@@ -17,12 +17,12 @@ class ClassSummary extends Component {
   render() {
     if (true) {
       return (
-        <div className='gradebook-container' style={{ paddingTop: 18 }}>
+        <div className='gradebook-container' style={{ paddingTop: 0 }}>
           <img alt='' className='gradebook-empty-image' style={{ width: 200 }} src={ClassSummarySoonGraphic} />
           <div className='gradebook-empty-header'>
             Coming Soon!
           </div>
-          <div className='gradebook-empty-text' style={{ width: 400, fontSize: 16 }}>
+          <div className='gradebook-empty-text' style={{ width: 400, fontSize: 16, paddingBottom: 170 }}>
             We're still building a Class Summary dashboard which will give you insights into the classroom's understanding of learning material and performance both in the app and on module assessments.
             <br/><br/>
             If there's any information you'd like to see, reach out to us through support. We'd love to hear from you.

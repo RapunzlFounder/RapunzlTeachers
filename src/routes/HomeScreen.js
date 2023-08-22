@@ -24,7 +24,6 @@ import MyCourse from '../components/Home/MyCourses/MyCourse';
 import ResourceLibrary from '../components/Home/Resources/ResourceLibrary';
 import QuickAccess from '../components/Home/RightMenu/QuickAccess';
 import MyClassroom from '../components/Home/MyClassroom/MyClassroom';
-import GradebookTile from '../components/Home/Gradebook/GradebookTile';
 import TrendingCourses from '../components/Home/RightMenu/TrendingCourses';
 import Support from '../components/Home/Support';
 import Settings from '../components/Home/Settings';
@@ -32,6 +31,7 @@ import YourPlan from '../components/Home/YourPlan';
 import FAQ from '../components/Home/FAQ';
 import TooNarrowIcon from '../assets/images/Admin/TooNarrow.png';
 import '../styles/Home/HomeScreen.css';
+import YourGrades from '../components/Home/Gradebook/YourGrades';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -272,7 +272,7 @@ class HomeScreen extends Component {
               <ResourceLibrary
                 visible={this.props.visibleTab === 4}
               />
-              <GradebookTile
+              <YourGrades
                 visible={this.props.visibleTab === 5}
               />
               <Settings

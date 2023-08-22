@@ -22,7 +22,7 @@ const initialState = {
   selectedClassroom: false,
   expandedLibrary: false,
   pdfVisible: false,
-  selectedCourse: false
+  selectedCourse: false,
 };
 
 const dashboardNavReducer = (state = initialState, action) => {

@@ -86,6 +86,39 @@ body {
 .export-button-text {
     color: #41d0ac;
 }
+.gradebook-back-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 13px;
+    padding-right: 13px;
+    color: #ff7000;
+    border-color: #ff7000;
+    transition: 0.2s all;
+    cursor: pointer;
+    height: 20px;
+    background: none;
+}
+.gradebook-back-button:hover {
+    color: white;
+    background-color: #ff7000;
+}
+.gradebook-back-icon {
+    font-size: 18px !important;
+    margin-right: 7px;
+    fill: #ff7000;
+    transition: 0.2s all;
+}
+.gradebook-back-button:hover .gradebook-back-icon {
+    fill: white;
+}
+.export-back-text {
+    color: #ff7000;
+}
+.gradebook-back-button:hover .export-back-text {
+    color: white;
+}
 .gradebook-class-option {
     color: #000000;
 }
@@ -159,8 +192,28 @@ body {
     margin: auto;
     font-size: 18px;
     font-weight: 200;
-    padding-bottom: 220px;
+    padding-bottom: 40px;
     text-align: center;
+}
+.gradebook-view-example-button {
+    width: fit-content;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 140px;
+    font-size: 12px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    border: 1px solid #14a27f;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s all;
+    color: #14a27f;
+}
+.gradebook-view-example-button:hover {
+    background-color: #14a27f;
+    color: white;
 }
 .student-grade-item {
     border-bottom: 1px solid #007154;

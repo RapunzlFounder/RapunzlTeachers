@@ -141,6 +141,11 @@ class ClassGrades extends Component {
     }
   }
 
+  // Handles Retrieving The Student List Depending Upon If This Is The Demo Or An Actual Classroom
+  _getStudentList() {
+
+  }
+
   render() {
     let numberOfModules = this._getNumberOfModules();
     // Handles If Teacher Has Selected to View A Summary Of The Class Grades. This Is Processed In This Component And Passed Through.
@@ -297,6 +302,9 @@ const mapStateToProps = (state, ownProps) => {
     classroom: getTeacherClassroom(state, ownProps),
     // Selector For Teacher Courses
     allCourses: getAllTeacherCourses(state),
+    // Selector For Demo Classrooms
+    // Selector For Demo Courses
+    // Selector For Demo Classroom Courses
     // Selector For Classroom Courses
     classCourse: getAllTeacherClassroomCourses(state),
   };
