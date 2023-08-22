@@ -5,6 +5,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ClassSummarySoonGraphic from '../../../assets/images/Home/Competitions.png';
 import handleGradeColor from '../../../helper_functions/handleGradeColor';
+import { getDemoCourse } from '../../../selectors/coursemoduleSelectors';
 
 class ClassSummary extends Component {
   // eslint-disable-next-line
@@ -14,7 +15,36 @@ class ClassSummary extends Component {
     }
   }
 
+  // Handle Quiz Questions
+  handleQuizQuestions() {
+    // QUIZ SUMMARY SECTION
+      // Quizzes Completed Percentage With Average Score & Specific Missing Students Array
+      // {
+      //   quizID,
+      //   quizName,
+      //   quizQuestionsNumber,
+      //   numberStarted
+      //   numberCompleted
+      //   completedAverageScore
+      // },
+
+      // Loop Through Students For Each Assessment Score
+
+      // CHALLENGING QUESTIONS SECTION
+      // Most Challenging Questions - 10 With Worst Score
+      // {
+      //   quizID,
+      //   quizName,
+      //   quizQuestionNumber,
+      //   question,
+      //   answer,
+      //   incorrectStudentsNumber,
+      //   completedStudentsNumber,
+  }
+
   render() {
+    console.log('grades data', this.props.gradesData);
+    console.log('demo course', this.props.demoCourse);
     if (true) {
       return (
         <div className='gradebook-container' style={{ paddingTop: 0 }}>
@@ -147,7 +177,8 @@ const mapStateToProps = (state, ownProps) => {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
     // Selector For Selected Classroom Grades
-    classroom: getTeacherClassroom(state, ownProps)
+    classroom: getTeacherClassroom(state, ownProps),
+    demoCourse: getDemoCourse(state, ownProps),
   };
 };
 

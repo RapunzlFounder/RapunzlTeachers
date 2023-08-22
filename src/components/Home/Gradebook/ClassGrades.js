@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getTeacherClassroom, getAllTeacherClassroomCourses, getAllDemoClassrooms } from '../../../selectors/classroomSelectors';
-import { getAllTeacherCourses, getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
+import { getTeacherClassroom, getAllTeacherClassroomCourses, getAllDemoClassrooms, getAllDemoClassroomCourses } from '../../../selectors/classroomSelectors';
+import { getAllDemoCourses, getAllTeacherCourses, getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import handleGradeColor from '../../../helper_functions/handleGradeColor';
@@ -25,53 +25,52 @@ class ClassGrades extends Component {
       numberVerified: 0,
       numberPlacedFirstTrade: 0,
       numberBeatingSPY: 0,
-      averageClassPerformance: 0,
-      classStockLeaderboard: [],
-      classCryptoLeaderboard: [],
-      quizScoreSummary: [],
-      challengingQuestions: [],
+      averageClassStockPerformance: 0,
+      averageClassCryptoPerformance: 0,
     }
-    // FLEXED INTO TOP ROW
-    // Number Of Students In The Classroom
-    // Students Who Have Verified Account
-    // Percentage Of Students Who Have Placed Their First Trade
-    // Average Class Portfolio Performance
-    // Percentage Of Students Beating S&P 500
+    // Handles Creating Object If We Are Displaying Example Grades
+    if (this.props.selectedClassroom === true || this.props.isDemo === true) {
+      // ------- FLEXED INTO TOP ROW -----------
 
-    // CLASSROOM LEADERBOARD SECTION
-    // Classroom Leaderboard
-    // {
-    //   Name,
-    //   Username,
-    //   NumberOfStockTrades,
-    //   NumberOfCryptoTrades,
-    //   NumberOfStockPositions,
-    //   NumberOfCryptoPositions
-    //   StockPortfolioPerf
-    //   CryptoPortfolioPerf
-    // }
+      // Number Of Students In The Classroom
+      initialObject.numberOfStudents = this.props.demoClassrooms[0].studentList.length;
+      // Students Who Have Verified Account
 
-    // QUIZ SUMMARY SECTION
-    // Quizzes Completed Percentage With Average Score & Specific Missing Students Array
-    // CHALLENGING QUESTIONS SECTION
-    // Most Challenging Questions - 10 With Worst Score
-    // {
-    //   quizID,
-    //   quizName,
-    //   quizQuestionsNumber,
-    //   numberStarted
-    //   numberCompleted
-    //   completedAverageScore
-    // },
-    // {
-    //   quizID,
-    //   quizName,
-    //   quizQuestionNumber,
-    //   question,
-    //   answer,
-    //   incorrectStudentsNumber,
-    //   completedStudentsNumber,
-    // }
+      // Average Class Stock & Crypto Portfolio Performance
+      let allClassStockPerformance = 0;
+      let allClassCryptoPerformance = 0;
+      // Percentage Of Students Who Have Placed Their First Trade
+      let firstTrade = 0;
+      // Percentage Of Students Beating Historical S&P 500 (10%)
+      let beatingSPY = 0;
+
+      for (var i2 in this.props.demoClassrooms[0].studentList) {
+        // Increments Stock & Crypto Performance While Looping Through Students, Then Divides By Number Of Students After Looping
+        allClassStockPerformance = allClassStockPerformance + (this.props.demoClassrooms[0].studentList[i2].stockPortfolioPerformance - 100);
+        allClassCryptoPerformance = allClassCryptoPerformance + (this.props.demoClassrooms[0].studentList[i2].cryptoPortfolioPerformance - 100);
+        // Checks For Each Student If They Have Placed Either A Stock Or Crypto Trade
+        if (this.props.demoClassrooms[0].studentList[i2].numberOfStockTrades + this.props.demoClassrooms[0].studentList[i2].numberOfCryptoTrades !== 0) {
+          firstTrade = firstTrade + 1;
+        }
+        // Checks For Each Student If Their Stock Portfolio Is Beating S&P Historical Performance of 10%
+        // TODO: Use Actual S&P For The Duration As Students Have Accounts
+        if (this.props.demoClassrooms[0].studentList[i2].stockPortfolioPerformance > 110) {
+          beatingSPY = beatingSPY + 1;
+        }
+      }
+
+      // Updates Object That Is Returned And Passed To Class Summary Component
+      initialObject.averageClassStockPerformance = allClassStockPerformance / initialObject.numberOfStudents;
+      initialObject.averageClassCryptoPerformance = allClassCryptoPerformance / initialObject.numberOfStudents;
+      initialObject.numberPlacedFirstTrade = firstTrade;
+      initialObject.numberBeatingSPY = beatingSPY;
+    }
+    // Handles If These Are Real Grades For A Classroom
+    // TODO: Update using live grades data
+    else {
+
+    }
+    return initialObject;
   }
 
   // Matches The Classroom With The Appropriate Classroom Course Record To Find The Course Number, Then Finds The Course To Determine Number Of Modules
@@ -79,7 +78,7 @@ class ClassGrades extends Component {
     let courseID = null;
     let numberOfCourses = 0;
     if (this.props.selectedClassroom === true || this.props.isDemo === true) {
-      return 6;
+      return this.props.demoCourses[0].numberModules;
     }
     for (var i in this.props.classCourse) {
       if (this.props.classCourse[i].classId === this.props.classroomId) {
@@ -107,16 +106,23 @@ class ClassGrades extends Component {
     }
   }
 
+  _getCourseID() {
+    if (this.props.selectedClassroom === true || this.props.isDemo === true) {
+      return this.props.demoClassroomCourses[0].courseId;
+    } else {
+      // TODO: This needs to find the correct course ID for Class Summary to work
+      return this.props.classroom;
+    }
+  }
+
   render() {
     let numberOfModules = this._getNumberOfModules();
     // Handles If Teacher Has Selected to View A Summary Of The Class Grades. This Is Processed In This Component And Passed Through.
     if (this.props.isSummary) {
-      // console.log('all teacher classroom courses', this.props.classCourse);
-      // console.log('specific classroom', this.props.classroom);
-      // console.log('all courses', this.props.allCourses);
       return (
         <ClassSummary
           gradesData={this._getGradesOverview()}
+          courseId={this._getCourseID()}
         />
       );
     }
@@ -162,7 +168,9 @@ const mapStateToProps = (state, ownProps) => {
     // Selector For Demo Classrooms
     demoClassrooms: getAllDemoClassrooms(state),
     // Selector For Demo Courses
+    demoCourses: getAllDemoCourses(state),
     // Selector For Demo Classroom Courses
+    demoClassroomCourses: getAllDemoClassroomCourses(state),
     // Selector For Classroom Courses
     classCourse: getAllTeacherClassroomCourses(state),
     selectedClassroom: state.dashboard.selectedClassroom,
