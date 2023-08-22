@@ -266,7 +266,7 @@ class ManualEntry extends Component {
   // Updates Value of Last Name From Text Area to State
   changeLastName(text) {
     this.setState({
-      lastName: text.replace(/\s/g, '').replace(/[^A-Za-z]+-+'/g, ''),
+      lastName: text.replace(/[^A-Za-z]+-+'/g, ''),
       onErrorLastName: false,
     });
   }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { FetchOtherUserDetails } from '../../../ActionTypes/socialActions';
 import '../../../styles/Home/HomeScreen.css';
@@ -7,6 +8,7 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import { objectToArray } from '../../../helper_functions/utilities';
 import EmptyPositions from '../../../assets/images/Search/SearchEmpty.png';
 import CircularProgress from '@mui/material/CircularProgress';
+import intHandler from '../../../helper_functions/intHelper';
 
 class PortfolioPreview extends Component {
   // eslint-disable-next-line
@@ -52,6 +54,7 @@ class PortfolioPreview extends Component {
         const cryptoPositions = objectToArray(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].positions);
         this.setState({
           loading: false,
+          error: false,
           userData: {
             stocks: stockPositions,
             crypto: cryptoPositions,
@@ -80,10 +83,64 @@ class PortfolioPreview extends Component {
     }
   }
 
+  handleBackgroundColor(float) {
+    if (float < 0) {
+      return '#ed3232';
+    } else {
+      return '#007154';
+    }
+  }
+
+  // Handles Finding The Time Difference From When The User Opened A Position Up Until Present
+  // Start is Passed Through From item in map. End is a new moment instance created when function is called.
+  getDiff(start, end) {
+    try {
+      const diffDuration = moment.duration(end.diff(start));
+      const str = [];
+      let plural = 's';
+      if (diffDuration.months() > 0) {
+        // eslint-disable-next-line
+        if (diffDuration.months() == 1) {
+          plural = '';
+        }
+        str.push(`${diffDuration.months()} month${plural}`);
+      }
+
+      if (diffDuration.days() > 0) {
+        // eslint-disable-next-line
+        if (diffDuration.days() == 1) {
+          plural = '';
+        }
+        str.push(`${diffDuration.days()} day${plural}`);
+      }
+      if (diffDuration.hours() > 0) {
+        // eslint-disable-next-line
+        if (diffDuration.hours() == 1) {
+          plural = '';
+        }
+        str.push(`${diffDuration.hours()} hour${plural}`);
+      }
+      if (diffDuration.minutes() > 0) {
+        // eslint-disable-next-line
+        if (diffDuration.minutes() == 1) {
+          plural = '';
+        }
+        str.push(`${diffDuration.minutes()} minute${plural}`);
+      }
+      // eslint-disable-next-line
+      if (str.length == 0) {
+        return 'Less Than 1 Minute';
+      }
+      return str[0];
+    } catch {
+      return 'Less Than 1 Minute';
+    }
+  }
+
   render() {
     if (this.props.visible) {
       return (
-        <div className='tile classroom-overview'>
+        <div className='tile classroom-overview' style={{ minHeight: 700 }}>
           <div className='classroom-header-flex' style={{ paddingTop: 25, paddingLeft: 12, paddingBottom: 15 }}>
             <QueryStatsIcon />
             <div className='classroom-title' style={{ paddingLeft: 10 }}>
@@ -141,7 +198,7 @@ class PortfolioPreview extends Component {
             </div>
           )}
           {// Empty Positions For Selected Portfolio
-          ((this.state.userData.stocks.length === 0 && this.state.portfolioSelected === 'stock') || (this.state.userData.crypto.length === 0 && this.state.portfolioSelected)) && !this.state.loading && !this.state.error && (
+          ((this.state.userData.stocks.length === 0 && this.state.portfolioSelected === 'stock') || (this.state.userData.crypto.length === 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && (
             <div className='view-portfolio-positions-container' style={{ paddingTop: '45px', paddingBottom: '210px' }}>
               <img alt='' className='view-portfolio-positions-image' src={EmptyPositions} />
               <div className='portfolio-positions-h1'>
@@ -157,18 +214,18 @@ class PortfolioPreview extends Component {
             <div className='view-portfolio-position-flex'>
               {this._getPortfolioData().map((item) => {
                 return (
-                  <div key={item} className='view-portfolio-position'>
+                  <div key={item} className='view-portfolio-position' style={{ backgroundColor: this.handleBackgroundColor(item.profitLoss)}}>
                     <div className='portfolio-position-symbol'>
-                      AAPL
+                      {item.symbol}
                     </div>
                     <div className='portfolio-position-name'>
-                      Apple Inc.
+                      {item.symbolName}
                     </div>
                     <div className='portfolio-position-performance'>
-                      +6.7%
+                      {intHandler(item.profitLoss / item.costBasis, 'percent', 2, true)}
                     </div>
                     <div className='portfolio-position-time'>
-                      Purchased<br/>7 Weeks Ago
+                      Purchased<br/>{this.getDiff(moment(item.openedAt), moment(new Date()))} Ago
                     </div>
                   </div>
                 )

@@ -496,7 +496,6 @@ path {
     padding-left: 15px;
     font-size: 13px;
     font-weight: 600;
-    background-color: #007154;
     border-radius: 5px;
     text-align: center;
     margin-right: 10px;
@@ -1480,6 +1479,10 @@ path {
     font-size: 14px;
     font-weight: 200;
     padding-bottom: 10px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 .portfolio-position-percentage {
     font-size: 20px;

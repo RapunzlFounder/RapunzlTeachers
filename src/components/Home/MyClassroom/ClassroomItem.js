@@ -84,6 +84,23 @@ class ClassroomItem extends Component {
     }
   }
 
+  // Handles Color Of Performance Thumbnail Background Between Green & Red
+  handlePerformanceColor() {
+    if (this.state.tab === 'stocks') {
+      if (parseFloat(this.props.item.stockPortfolioPerformance - 100) < 0) {
+        return '#ed3232';
+      } else {
+        return '#007154';
+      }
+    } else {
+      if (parseFloat(this.props.item.cryptoPortfolioPerformance - 100) < 0) {
+        return '#ed3232';
+      } else {
+        return '#007154';
+      }
+    }
+  }
+
   render() {
     return (
       <div key={this.props.item.userId} className='classroom-student-item'>
@@ -114,7 +131,7 @@ class ClassroomItem extends Component {
           </div>
           {!this.props.removing && !this.state.expanded && (
             <div className='student-item-right'>
-              <div className='student-item-performance'>
+              <div className='student-item-performance' style={{ backgroundColor: this.handlePerformanceColor() }}>
                 {this.handlePerformance()}
               </div>
               <ChevronRightIcon className='button' onClick={() => this.toggleExpanded()} />
@@ -186,7 +203,7 @@ class ClassroomItem extends Component {
                 </div>
               </div>
               <div className='expanded-student-item'>
-                <div className='expanded-student-stat'>
+                <div className='expanded-student-stat' style={{ color: this.handlePerformanceColor() }}>
                   {this.handlePerformance()}
                 </div>
                 <div className='expanded-student-title'>
