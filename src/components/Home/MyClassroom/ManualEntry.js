@@ -5,10 +5,8 @@ import { addStudentsToClassroom } from '../../../ActionTypes/classroomActions';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import '../../../styles/Home/HomeScreen.css';
-import HighlightOff from '@mui/icons-material/HighlightOff';
 import GroupAdd from '@mui/icons-material/GroupAdd';
 import Alert from '../../Admin/Alert';
-import EmptyIcon from '../../../assets/images/ChecklistTips/AddStudents_Color.png';
 
 class ManualEntry extends Component {
   constructor(props) {
