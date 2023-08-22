@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import handleGradeColor from '../../../helper_functions/handleGradeColor';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import DetailedGrades from './DetailedGrades';
 
 class ClassDetails extends Component {
@@ -12,6 +13,7 @@ class ClassDetails extends Component {
       gradesExpanded: null,
       detailsExpanded: null,
       moduleExpanded: null,
+      sortType: 'First Name (A-Z)',
     }
   }
 
@@ -60,10 +62,43 @@ class ClassDetails extends Component {
     }
   }
 
+  // Allows The User To Toggle Between A-Z, Z-A, Progress (High To Low), Progress (Low To High)
+  toggleSortType() {
+    if (this.state.sortType === 'Last Name (A-Z)') {
+      this.setState({ sortType: 'Last Name (Z-A)' });
+    } else if (this.state.sortType === 'Last Name (Z-A)') {
+      this.setState({ sortType: 'First Name (A-Z)' });
+    } else if (this.state.sortType === 'First Name (A-Z)') {
+      this.setState({ sortType: 'First Name (Z-A)' });
+    } else if (this.state.sortType === 'First Name (Z-A)') {
+      this.setState({ sortType: 'Last Name (A-Z)' });
+    }
+  }
+
+  handleSortedData() {
+    if (this.state.sortType === 'Last Name (A-Z)') {
+      return this.props.data.studentList.sort((a, b) => a.lastName.localeCompare(b.lastName));
+    } else if (this.state.sortType === 'Last Name (Z-A)') {
+      return this.props.data.studentList.sort((a, b) => a.lastName.localeCompare(b.lastName)).reverse();
+    } else if (this.state.sortType === 'First Name (A-Z)') {
+      return this.props.data.studentList.sort((a, b) => a.firstName.localeCompare(b.firstName));
+    } else if (this.state.sortType === 'First Name (Z-A)') {
+      return this.props.data.studentList.sort((a, b) => a.firstName.localeCompare(b.firstName)).reverse();
+    } else {
+      return [];
+    }
+  }
+
   render() {
     return (
       <div className='gradebook-container' style={{ paddingTop: 18 }}>
-        {this.props.data.studentList.map((student) => {
+        <div onClick={() => this.toggleSortType()} className='gradebook-details-sort-flex'>
+          <FilterAltOutlinedIcon className='gradebook-sort-icon' />
+          <div className='gradebook-details-sort-text'>
+            Sort: <span className='sort-subtext'>{this.state.sortType}</span>
+          </div>
+        </div>
+        {this.handleSortedData().map((student) => {
           return (
             <div key={student.userId} className='student-grade-item'>
               <div title="View More Info About This Student" onClick={() => this._handleExpandGrades(student.userId)} className='student-grade-name-container'>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getTeacherClassroom, getAllTeacherClassroomCourses } from '../../../selectors/classroomSelectors';
+import { getTeacherClassroom, getAllTeacherClassroomCourses, getAllDemoClassrooms } from '../../../selectors/classroomSelectors';
 import { getAllTeacherCourses, getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -78,6 +78,9 @@ class ClassGrades extends Component {
   _getNumberOfModules() {
     let courseID = null;
     let numberOfCourses = 0;
+    if (this.props.selectedClassroom === true || this.props.isDemo === true) {
+      return 6;
+    }
     for (var i in this.props.classCourse) {
       if (this.props.classCourse[i].classId === this.props.classroomId) {
         courseID = this.props.classCourse[i].courseId
@@ -97,7 +100,11 @@ class ClassGrades extends Component {
 
   // Handles Retrieving The Student List Depending Upon If This Is The Demo Or An Actual Classroom
   _getStudentList() {
-    return this.props.classroom;
+    if (this.props.selectedClassroom === true || this.props.isDemo === true) {
+      return this.props.demoClassrooms[0];
+    } else {
+      return this.props.classroom;
+    }
   }
 
   render() {
@@ -153,10 +160,12 @@ const mapStateToProps = (state, ownProps) => {
     // Selector For Teacher Courses
     allCourses: getAllTeacherCourses(state),
     // Selector For Demo Classrooms
+    demoClassrooms: getAllDemoClassrooms(state),
     // Selector For Demo Courses
     // Selector For Demo Classroom Courses
     // Selector For Classroom Courses
     classCourse: getAllTeacherClassroomCourses(state),
+    selectedClassroom: state.dashboard.selectedClassroom,
   };
 };
 

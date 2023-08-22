@@ -318,6 +318,34 @@ body {
 .quiz-questions {
 	margin-bottom: 100px;
 }
+.gradebook-details-sort-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.gradebook-sort-icon {
+    font-size: 15px;
+    fill: #39ffcc;
+    margin-right: 2px;
+}
+.gradebook-details-sort-text {
+    color: #39ffcc;
+    font-size: 12px;
+    font-weight: 500;
+    padding-right: 5px;
+}
+.sort-subtext {
+    font-weight: 700;
+    margin-bottom: -1px;
+    color: #c9fff1;
+}
+.gradebook-details-sort-flex:hover .sort-subtext {
+    text-decoration: underline;
+}
 .detailed-grades-flex {
     display: flex;
     flex-direction: row;
