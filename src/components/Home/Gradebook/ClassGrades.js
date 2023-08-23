@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getTeacherClassroom, getAllTeacherClassroomCourses, getAllDemoClassrooms, getAllDemoClassroomCourses } from '../../../selectors/classroomSelectors';
-import { getAllDemoCourses, getAllTeacherCourses, getTeacherCourse } from '../../../selectors/coursemoduleSelectors';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import handleGradeColor from '../../../helper_functions/handleGradeColor';
+import { getAllDemoCourses, getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 import ClassSummary from './ClassSummary';
-import DetailedGrades from './DetailedGrades';
 import NoAssignedCourse from '../../../assets/images/Education/NoAssignedCourse.png';
 import ClassDetails from './ClassDetails';
 

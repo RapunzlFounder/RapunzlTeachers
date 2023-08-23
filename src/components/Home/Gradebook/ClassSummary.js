@@ -24,9 +24,11 @@ class ClassSummary extends Component {
     for (var i in this.props.classroom.studentList) {
       studentStarted = false;
       for (var j in this.props.classroom.studentList[i].moduleAssessmentScores) {
+        // eslint-disable-next-line
         if (this.props.classroom.studentList[i].moduleAssessmentScores[j].moduleId == moduleID) { 
           studentStarted = true; 
           // Only Students Who Have Finished Are Included In The Average
+          // eslint-disable-next-line
           if (this.props.classroom.studentList[i].moduleAssessmentScores[j].percentComplete == 100) {
             quizAverage = quizAverage + this.props.classroom.studentList[i].moduleAssessmentScores[j].percentCorrect;
             let finishedObject = {
@@ -37,6 +39,7 @@ class ClassSummary extends Component {
             quizFinishedArray.push(finishedObject);
           }        
           // Handles Tracking Number Of Students Who Have At Least Started
+          // eslint-disable-next-line
           else if (this.props.classroom.studentList[i].moduleAssessmentScores[j].percentComplete != 0) {
             let incompleteObject = {
               firstName: this.props.classroom.studentList[i].firstName,
