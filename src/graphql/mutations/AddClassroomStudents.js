@@ -20,6 +20,7 @@ export const ADD_CLASSROOM_STUDENTS = (classroomId, studentsToAddList) => `mutat
 				username
 				numberOfFriends
 				lastUpdated
+				emailVerified
 				numberOfStockTrades
 				numberOfStockPositions
 				defaultStockPortfolioID

@@ -169,6 +169,7 @@ query{
 				username
 				numberOfFriends
 				lastUpdated
+				emailVerified
 				numberOfStockTrades
 				numberOfStockPositions
 				defaultStockPortfolioID	

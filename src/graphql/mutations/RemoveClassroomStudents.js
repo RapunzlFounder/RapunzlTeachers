@@ -16,6 +16,7 @@ export const REMOVE_CLASSROOM_STUDENTS = (classroomId, studentsToRemoveList) => 
 				username
 				numberOfFriends
 				lastUpdated
+				emailVerified
 				numberOfStockTrades
 				numberOfStockPositions
 				defaultStockPortfolioID

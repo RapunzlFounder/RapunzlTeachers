@@ -13,6 +13,7 @@ export const MINI_USER_DETAILS = `query {
       username
       numberOfFriends
       lastUpdated
+      emailVerified
       numberOfStockTrades
       numberOfStockPositions
       defaultStockPortfolioID

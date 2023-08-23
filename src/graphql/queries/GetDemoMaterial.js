@@ -30,6 +30,7 @@ export const GET_DEMO_CONTENT = `
           username
           numberOfFriends
           lastUpdated
+          emailVerified
           numberOfStockTrades
           numberOfStockPositions
           defaultStockPortfolioID

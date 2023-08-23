@@ -30,8 +30,9 @@ class ClassGrades extends Component {
 
       // Number Of Students In The Classroom
       initialObject.numberOfStudents = this.props.demoClassrooms[0].studentList.length;
-      // Students Who Have Verified Account
 
+      // Students Who Have Verified Account
+      let verifiedStudentCount = 0;
       // Average Class Stock & Crypto Portfolio Performance
       let allClassStockPerformance = 0;
       let allClassCryptoPerformance = 0;
@@ -53,6 +54,10 @@ class ClassGrades extends Component {
         if (this.props.demoClassrooms[0].studentList[i2].stockPortfolioPerformance > 110) {
           beatingSPY = beatingSPY + 1;
         }
+        // Handles Checking Email Verification
+        if (this.props.demoClassrooms[0].studentList[i2].emailVerified) {
+          verifiedStudentCount = verifiedStudentCount + 1;
+        }
       }
 
       // Updates Object That Is Returned And Passed To Class Summary Component
@@ -60,6 +65,7 @@ class ClassGrades extends Component {
       initialObject.averageClassCryptoPerformance = allClassCryptoPerformance / initialObject.numberOfStudents;
       initialObject.numberPlacedFirstTrade = firstTrade;
       initialObject.numberBeatingSPY = beatingSPY;
+      initialObject.numberVerified = verifiedStudentCount;
     }
     // Handles If These Are Real Grades For A Classroom
     // TODO: Update using live grades data
@@ -112,7 +118,11 @@ class ClassGrades extends Component {
   }
 
   _getClassroom() {
-    return this.props.demoClassrooms[0];
+    if (this.props.selectedClassroom === true || this.props.isDemo === true) {
+      return this.props.demoClassrooms[0];
+    } else {
+      return this.props.classroom;
+    }
   }
 
   render() {

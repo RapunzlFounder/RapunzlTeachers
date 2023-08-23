@@ -15,6 +15,7 @@ export const REMOVE_TEACHER_CLASSROOM = (classroomId) => `mutation {
 				username
 				numberOfFriends
 				lastUpdated
+				emailVerified
 				numberOfStockTrades
 				numberOfStockPositions
 				defaultStockPortfolioID

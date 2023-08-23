@@ -20,6 +20,7 @@ export const CREATE_TEACHER_CLASSROOM = (classroomName, studentsToAddList, class
 				username
 				numberOfFriends
 				lastUpdated
+				emailVerified
 				numberOfStockTrades
 				numberOfStockPositions
 				defaultStockPortfolioID
