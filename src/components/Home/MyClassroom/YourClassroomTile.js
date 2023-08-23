@@ -14,6 +14,7 @@ import PortfolioPreview from './PortfolioPreview';
 import EmptyGrades from '../Gradebook/EmptyGrades';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import Alert from '../../Admin/Alert';
+import SortByButton from './SortByButton';
 
 class YourClassroomTile extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class YourClassroomTile extends Component {
       portfolioID: 0,
       portfolioData: [],
       removingArray: [],
+      sortType: 0,
     }
   }
 
@@ -147,6 +149,53 @@ class YourClassroomTile extends Component {
     this.setState({ alertVisible: false });
   }
 
+  selectSort = (int) => {
+    if (this.state.sortType !== int) {
+      this.setState({ sortType: int });
+    }
+  }
+
+  sortStudentList(studentList) {
+    let returnArray = [];
+    if (studentList !== undefined) {
+      for (var i in studentList) {
+        returnArray.push(studentList[i]);
+      }
+      // Handles If sortType is equal to 1 which is sorting by last name a-z
+      if (this.state.sortType === 1) {
+        return returnArray.sort((a, b) => {
+          return a.lastName.localeCompare(b.lastName);
+        })
+      }
+      // Handles if sortType is equal to 2 which is sorting by first name a-z
+      else if (this.state.sortType === 2) {
+        return returnArray.sort((a, b) => {
+          return a.firstName.localeCompare(b.firstName);
+        })
+      }
+      // Handles if sortType is equal to 3 which is sorting by stock portfolio %
+      else if (this.state.sortType === 3) {
+        return returnArray.sort((a, b) => {
+          return b.stockPortfolioPerformance - a.stockPortfolioPerformance;
+        })
+      }
+      // Handles if sortType is equal to 4 which is sorting by crypto portfolio %
+      else if (this.state.sortType === 4) {
+        return returnArray.sort((a, b) => {
+          return b.cryptoPortfolioPerformance - a.cryptoPortfolioPerformance;
+        })
+      }
+      // Handles Error Cases Or Code Issue
+      else {
+        return returnArray;
+      }
+    }
+    // Handles Error Cases Or Code Issue
+    else {
+      return [];
+    }
+  }
+
   render() {
     // Handles If The Teacher User Has Not Created Any Classrooms Yet
     if (this.props.allClassrooms.length === 0 && this.props.demoClassrooms.length === 0 && !this.props.creatingClassroom) {
@@ -214,6 +263,7 @@ class YourClassroomTile extends Component {
     // Handles If User Only Has One Classroom Or User Has Selected The Classroom To View
     else {
       const classInfo = this._getClassroomInfo();
+      const classList = this.sortStudentList(classInfo.studentList);
       return (
         <div>
           <Alert
@@ -229,14 +279,14 @@ class YourClassroomTile extends Component {
             portfolioUsername={this.state.selectedPortfolioUsername}
             visible={this.state.viewPortfolio}
           />
-          {false && !this.props.addingStudents && classInfo.studentList && classInfo.studentList.length !== 0 && !this.state.viewPortfolio && (
+          {false && !this.props.addingStudents && classList.length !== 0 && !this.state.viewPortfolio && (
             <div className='tile classroom-overview'>
               <ClassroomOverview
                 classroom={classInfo}
               />
             </div>
           )}
-          {classInfo && classInfo.studentList && classInfo.studentList.length !== 0 && !this.state.viewPortfolio && (
+          {classList.length !== 0 && !this.state.viewPortfolio && (
             <div className='tile classroom-all-container'>
               <div className='your-classroom-tile-header'>
                 <div className='classroom-header-flex' style={{ paddingLeft: 12, paddingBottom: 5, paddingTop: this.state.removeStudents ? 12 : 0 }}>
@@ -273,7 +323,13 @@ class YourClassroomTile extends Component {
                     </div>
                   </div>
                 )}
-                {classInfo && classInfo.studentList && classInfo.studentList.map((item) => {
+                {!this.state.removeStudents && (
+                  <SortByButton 
+                    selectSearchOption={this.selectSort}
+                    sortType={this.state.sortType}
+                  />
+                )}
+                {classList.length !== 0 && classList.map((item) => {
                   return (
                     <ClassroomItem
                       item={item}
@@ -281,13 +337,14 @@ class YourClassroomTile extends Component {
                       removing={this.state.removeStudents}
                       select={this.selectRemoving}
                       selected={this.state.removingArray.includes(parseInt(item.userId))}
+                      sortType={this.state.sortType}
                     />
                   )
                 })}
               </div>
             </div>
           )}
-          {classInfo && classInfo.studentList && classInfo.studentList.length === 0 && !this.state.viewPortfolio && (
+          {classList.length === 0 && !this.state.viewPortfolio && (
             <div className='tile classroom-all-container' style={{ paddingBottom: 350, paddingTop: 80 }}>
               <div className='create-class-name-subtext'>
                 No Students In This Class!

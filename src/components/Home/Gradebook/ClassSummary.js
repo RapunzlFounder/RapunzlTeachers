@@ -139,7 +139,6 @@ class ClassSummary extends Component {
     } else {
       const courseData = this._getCourseData();
       let studentLeaderboardArrays = this._getStudentLeaderboard();
-      console.log(this.props.gradesData.numberVerified);
       return (
         <div className='gradebook-container' style={{ paddingTop: 30, paddingBottom: 40 }}>
           <div className='class-summary-title-flex'>

@@ -75,18 +75,18 @@ class ClassroomItem extends Component {
   // Handles Performance Formatting, Depending Upon Which Tab Is Selected
   handlePerformance() {
     // Handles If Stocks Are Selected By The User - Default
-    if (this.state.tab === 'stocks') {
-      return intHandler((this.props.item.stockPortfolioPerformance - 100) / 100, 'percent', 2, true);
+    if (this.state.tab === 'stocks' && this.props.sortType !== 4) {
+      return intHandler(this.props.item.stockPortfolioPerformance - 100, 'percent', 2, true);
     }
     // Handles If Crypto Is Selected By The User
     else {
-      return intHandler((this.props.item.cryptoPortfolioPerformance - 100) / 100, 'percent', 2, true);
+      return intHandler(this.props.item.cryptoPortfolioPerformance - 100, 'percent', 2, true);
     }
   }
 
   // Handles Color Of Performance Thumbnail Background Between Green & Red
   handlePerformanceColor() {
-    if (this.state.tab === 'stocks') {
+    if (this.state.tab === 'stocks' && this.props.sortType !== 4) {
       if (parseFloat(this.props.item.stockPortfolioPerformance - 100) < 0) {
         return '#ed3232';
       } else {
