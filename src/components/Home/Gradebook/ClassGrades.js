@@ -115,6 +115,10 @@ class ClassGrades extends Component {
     }
   }
 
+  _getClassroom() {
+    return this.props.demoClassrooms[0];
+  }
+
   render() {
     let numberOfModules = this._getNumberOfModules();
     // Handles If Teacher Has Selected to View A Summary Of The Class Grades. This Is Processed In This Component And Passed Through.
@@ -123,6 +127,8 @@ class ClassGrades extends Component {
         <ClassSummary
           gradesData={this._getGradesOverview()}
           courseId={this._getCourseID()}
+          classroom={this._getClassroom()}
+          isDemo={this.props.selectedClassroom === true || this.props.isDemo === true}
         />
       );
     }

@@ -467,3 +467,134 @@ body {
     font-weight: 200;
     padding-bottom: 260px;
 }
+.class-summary-title-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding-bottom: 15px;
+}
+.class-summary-title-icon {
+    fill: #b3ffeb;
+}
+.class-summary-title-text {
+    font-size: 17px;
+    font-weight: 600;
+    color: #b3ffeb;
+}
+.class-summary-header-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 17px;
+    border-bottom: 1px solid white;
+    margin-bottom: 17px;
+}
+.class-summary-item {
+
+}
+.class-summary-number {
+    font-size: 20px;
+    font-weight: 700;
+    padding-bottom: 4px;
+}
+.class-summary-text {
+    font-size: 10px;
+    font-weight: 700;
+    color: #07e2aa;
+}
+.class-summary-quiz-container {
+
+}
+.summary-quiz-item {
+
+}
+.summary-quiz-item-main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s all;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #ffffff2b;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.summary-quiz-item-main:hover {
+    background-color: #ffffff17;
+}
+.summary-quiz-left {
+
+}
+.summary-left-flex {
+    display: flex;
+    padding-bottom: 2px;
+}
+.summary-quiz-number {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffb900;
+    padding-right: 8px;
+}
+.summary-quiz-title {
+    font-size: 18px;
+    font-weight: 300;
+}
+.summary-quiz-subtext {
+    font-size: 13px;
+    font-weight: 200;
+    font-style: italic;
+    color: #ffffff6e;
+}
+.summary-quiz-right {
+    display: flex;
+}
+.summary-quiz-right-item {
+    margin-left: 30px;
+}
+.summary-quiz-right-subtitle {
+    font-size: 10px;
+    font-weight: 700;
+    color: #07e2aa;
+}
+.summary-quiz-score {
+
+}
+.summary-quiz-item-expanded {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-bottom: 20px;
+}
+.summary-item-column {
+    width: 33%;
+}
+.summary-column-title { 
+    font-size: 13px;
+    font-weight: 500;
+    padding-top: 8px;
+    padding-bottom: 5px;
+    width: 100%;
+    border-bottom: 1px solid;
+    margin-bottom: 10px;
+}
+.summary-column-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    overflow-x: hidden;
+    padding-bottom: 7px;
+}
+.column-name {
+    font-size: 13px;
+    font-weight: 400;
+}
+.column-score {
+    font-size: 13px;
+    font-weight: 400;
+}

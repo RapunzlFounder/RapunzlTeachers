@@ -22,6 +22,7 @@ class LeftHomeMenu extends Component {
     super(props);
     this.state = {
       navigateToLogin: false,
+      alertVisible: false,
     }
   }
 

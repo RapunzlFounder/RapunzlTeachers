@@ -57,6 +57,7 @@ class YourGrades extends Component {
 
   _handleBackToGrades() {
     this.props.selectClassroom(false);
+    this.setState({ viewType: 'Details', exportVisible: false, selected: '' });
   }
 
   render() {
