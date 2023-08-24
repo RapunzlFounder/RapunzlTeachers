@@ -47,14 +47,14 @@ class CourseBuilderDialog extends React.PureComponent {
     // Retrieves A List Of Activities Associated With The Modules In This Course So We Can Display 5 And The Total Activity Count
     let courseActivities = [];
     if (this.props.selectedCourse !== null && this.props.selectedCourse !== undefined && PrebuiltCourses[this.props.selectedCourse] !== undefined) {
-      for (var i = 0; i < PrebuiltCourses[this.props.selectedCourse].moduleIDList.length; i++) {
+      for (var i in PrebuiltCourses[this.props.selectedCourse].moduleIDList) {
         modulesString = modulesString + PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] + ', ';
         // Loop Through Articles For Each Module And Add To Array
-        for (var j = 0; j < this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].articles.length; j++) {
+        for (var j in this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].articles) {
           courseArticles.push(this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].articles[j]);
         }
         // Loop Through Activities For Each Module And Add To Array
-        for (var k = 0; k < this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].activities.length; k++) {
+        for (var k in this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].activities) {
           courseActivities.push(this.props.publicModules[PrebuiltCourses[this.props.selectedCourse].moduleIDList[i] - 1].activities[k]);
         }
       }
@@ -80,23 +80,25 @@ class CourseBuilderDialog extends React.PureComponent {
     // Converts Financial Literacy Standards To An Array - This Could Be Done In A Selector
     let standardsTableArray = objectToArray(this.props.financialLiteracyStandards);
     // Loop Through The Array Of Module IDs
-    for (var i = 0; i < modulesArray.length; i++) {
+    for (var i in modulesArray) {
       // When We Split The Modules Array, There Is An Empty String As The Final Element, So We Check To Ensure That Module ID Is An Int
       if (parseInt(modulesArray[i]) > 0) {
         // Loop Through All Of The Presentation Standards For A Specific Module
-        for (var j = 0; j < this.props.publicModules[modulesArray[i] - 1].presentationStandards.length; j++) {
+        for (var j in this.props.publicModules[modulesArray[i] - 1].presentationStandards) {
           // Uses The Standard ID From Presentation Standards In PublicModules To Find Information About The Standard In StandardsTableArray
           // We Then Check what type the standard is to determine which array the standard should be considered for.
           // This Handles If The Standard Type Is Spending
           if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Spending') {
             // This Is The Index Of The Main Standard Inside Of Spending Array, Which We Use To Determine If the Main Standard Has Already Been Added (Lines 110 - 123)
+            // eslint-disable-next-line
             let searchSpendingIndex = spendingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
             // Checks To See If Main Standard Is Already In The Array. This Handles If The Main Standard Is Already Present
+            // eslint-disable-next-line
             if (searchSpendingIndex !== -1 && spendingArray[searchSpendingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
               // Multiple Modules Satisfy The Same Standards So We Need To Check That The Substandard Is Not Already Included In the Resulting Array
               let duplicateSpendingSubstandard = false;
               // Loop Through The Substandards That Have Been Added. If The Substandard is Present, Set The Flag to True and we will not add a duplicate substandard
-              for (var k = 0; k < spendingArray[searchSpendingIndex].subStandards.length; k++) {
+              for (var k in spendingArray[searchSpendingIndex].subStandards) {
                 if (spendingArray[searchSpendingIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
                   duplicateSpendingSubstandard = true;
                 }
@@ -127,11 +129,14 @@ class CourseBuilderDialog extends React.PureComponent {
           }
           // This Handles If The Standard Type Is Saving - Logic is similar to Lines 89-124.
           else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Saving') {
+            // eslint-disable-next-line
             let searchSavingIndex = savingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
             // Main Standard Is Already In Saving Array
+            // eslint-disable-next-line
             if (searchSavingIndex !== -1 && savingArray[searchSavingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
               let duplicateSavingSubstandard = false;
-              for (var k = 0; k < savingArray[searchSavingIndex].subStandards.length; k++) {
+              // eslint-disable-next-line
+              for (var k in savingArray[searchSavingIndex].subStandards) {
                 if (savingArray[searchSavingIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
                   duplicateSavingSubstandard = true;
                 }
@@ -161,11 +166,14 @@ class CourseBuilderDialog extends React.PureComponent {
           }
           // This Handles If The Standard Type Is Investing - Logic is similar to Lines 89-124.
           else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Investing') {
+            // eslint-disable-next-line
             let searchInvestingIndex = investingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
             // Main Standard Is Already In Investing Array
+            // eslint-disable-next-line
             if (searchInvestingIndex !== -1 && investingArray[searchInvestingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
               let duplicateInvestingStandard = false;
-              for (var k = 0; k < investingArray[searchInvestingIndex].subStandards.length; k++) {
+              // eslint-disable-next-line
+              for (var k in investingArray[searchInvestingIndex].subStandards) {
                 if (investingArray[searchInvestingIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
                   duplicateInvestingStandard = true;
                 }
@@ -195,11 +203,14 @@ class CourseBuilderDialog extends React.PureComponent {
           }
           // This Handles If The Standard Type Is Earned Income - Logic is similar to Lines 89-124.
           else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Earning Income') {
+            // eslint-disable-next-line
             let searchIncomeIndex = incomeArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
             // Main Standard Is Already In Spending Array
+            // eslint-disable-next-line
             if (searchIncomeIndex !== -1 && incomeArray[searchIncomeIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
               let duplicateIncomeStandard = false;
-              for (var k = 0; k < incomeArray[searchIncomeIndex].subStandards.length; k++) {
+              // eslint-disable-next-line
+              for (var k in incomeArray[searchIncomeIndex].subStandards) {
                 if (incomeArray[searchIncomeIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
                   duplicateIncomeStandard = true;
                 }
@@ -229,11 +240,14 @@ class CourseBuilderDialog extends React.PureComponent {
           }
           // This Handles If The Standard Type Is Risk - Logic is similar to Lines 89-124.
           else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Risk') {
+            // eslint-disable-next-line
             let searchRiskIndex = riskArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
             // Main Standard Is Already In Spending Array
+            // eslint-disable-next-line
             if (searchRiskIndex !== -1 && riskArray[searchRiskIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
               let duplicateRiskStandard = false;
-              for (var k = 0; k < riskArray[searchRiskIndex].subStandards.length; k++) {
+              // eslint-disable-next-line
+              for (var k in riskArray[searchRiskIndex].subStandards) {
                 if (riskArray[searchRiskIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
                   duplicateRiskStandard = true;
                 }
@@ -263,11 +277,14 @@ class CourseBuilderDialog extends React.PureComponent {
           }
           // This Handles If The Standard Type Is Credit - Logic is similar to Lines 89-124.
           else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Credit') {
+            // eslint-disable-next-line
             let searchCreditIndex = creditArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
             // Main Standard Is Already In Spending Array
+            // eslint-disable-next-line
             if (searchCreditIndex !== -1 && creditArray[searchCreditIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
               let duplicateCreditStandard = false;
-              for (var k = 0; k < creditArray[searchCreditIndex].subStandards.length; k++) {
+              // eslint-disable-next-line
+              for (var k in creditArray[searchCreditIndex].subStandards) {
                 if (creditArray[searchCreditIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
                   duplicateCreditStandard = true;
                 }

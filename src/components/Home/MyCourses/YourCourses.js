@@ -27,6 +27,7 @@ class YourCourses extends Component {
       for (var j in this.props.classroomCourses) {
         // Handles If This Classroom Is Already In A Teacher Class Course
         // This Handles If It Is The Current Course
+        // eslint-disable-next-line
         if (this.props.classroomCourses[j].courseId == courseID && this.props.allClassrooms[i].id == this.props.classroomCourses[j].classId) {
           assignedCourses = assignedCourses + 1
         }
@@ -55,18 +56,17 @@ class YourCourses extends Component {
               Your Courses
             </div>
           </div>
-          {/* <div className='empty-your-courses-container'>
-            <img src={EmptyCoursesIcon} alt='' className='empty-your-courses-icon' />
-            <div className='empty-your-courses-title'>
-              You Don't Have Any Courses!
+          {!(this.props.teacherCourses && this.props.teacherCourses.length !== 0) && !(this.props.demoCourses && this.props.demoCourses.length !== 0) && (
+            <div className='empty-your-courses-container'>
+              <img src={EmptyCoursesIcon} alt='' className='empty-your-courses-icon' />
+              <div className='empty-your-courses-title'>
+                You Don't Have Any Courses!
+              </div>
+              <div className='empty-your-course-text'>
+                Create a course using our course builder or pick from one of our prepared courses below.
+              </div>
             </div>
-            <div className='empty-your-course-text'>
-              Create a course using our course builder or pick from one of our prepared courses below.
-            </div>
-            <div title="Get Started Creating A Course" onClick={() => this.props.toggleCourseBuilder()} className='empty-course-button'>
-              Create Course
-            </div>
-          </div> */}
+          )}
           <div>
             <div className='prepared-courses-flex'>
               {this.props.teacherCourses && this.props.teacherCourses.length !== 0 && this.props.teacherCourses.map((course) => {

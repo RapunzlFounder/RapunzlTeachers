@@ -37,12 +37,12 @@ class ResourcesContainer extends Component {
         }
       }
     } else if (this.props.moduleSearchArray.length > 0) {
-      for (var i in this.props.publicModules) {
-        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i].id))) {
-          for (var j in this.props.publicModules[i].activities) {
-            let activity = this.props.publicModules[i].activities[j];
-            activity.moduleID = this.props.publicModules[i].id;
-            activity.moduleName = this.props.publicModules[i].name;
+      for (var i1 in this.props.publicModules) {
+        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i1].id))) {
+          for (var j1 in this.props.publicModules[i1].activities) {
+            let activity = this.props.publicModules[i1].activities[j1];
+            activity.moduleID = this.props.publicModules[i1].id;
+            activity.moduleName = this.props.publicModules[i1].name;
             activitiesArray.push(activity);
           }
         }
@@ -63,12 +63,12 @@ class ResourcesContainer extends Component {
         }
       }
     } else if (this.props.moduleSearchArray.length > 0) {
-      for (var i in this.props.publicModules) {
-        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i].id))) {
-          for (var j in this.props.publicModules[i].articles) {
-            let article = this.props.publicModules[i].articles[j];
-            article.moduleID = this.props.publicModules[i].id;
-            article.moduleName = this.props.publicModules[i].name;
+      for (var i2 in this.props.publicModules) {
+        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i2].id))) {
+          for (var j2 in this.props.publicModules[i2].articles) {
+            let article = this.props.publicModules[i2].articles[j2];
+            article.moduleID = this.props.publicModules[i2].id;
+            article.moduleName = this.props.publicModules[i2].name;
             articleArray.push(article);
           }
         }
@@ -88,12 +88,12 @@ class ResourcesContainer extends Component {
         assessmentArray.push(assessment);
       }
     } else if (this.props.moduleSearchArray.length > 0) {
-      for (var i in this.props.publicModules) {
-        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i].id))) {
-          let assessment = this.props.publicModules[i].assessments;
-          assessment.moduleID = this.props.publicModules[i].id;
-          assessment.moduleName = this.props.publicModules[i].name;
-          assessment.moduleImage = this.props.publicModules[i].imageUrl;
+      for (var i2 in this.props.publicModules) {
+        if (this.props.moduleSearchArray.includes(parseInt(this.props.publicModules[i2].id))) {
+          let assessment = this.props.publicModules[i2].assessments;
+          assessment.moduleID = this.props.publicModules[i2].id;
+          assessment.moduleName = this.props.publicModules[i2].name;
+          assessment.moduleImage = this.props.publicModules[i2].imageUrl;
           assessmentArray.push(assessment);
         }
       }

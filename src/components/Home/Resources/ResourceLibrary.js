@@ -4,7 +4,7 @@ import { SearchPortalAssets } from '../../../ActionTypes/searchActions';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import { updateDashboard } from '../../../ActionTypes/dashboardActions';
 import '../../../styles/Home/Resources.css';
-import SearchResources from './SearchResources';
+// import SearchResources from './SearchResources';
 import ResourcesContainer from './ResourcesContainer';
 import ModuleButton from './ModuleButton';
 import Alert from '../../Admin/Alert';

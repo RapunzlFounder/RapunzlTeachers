@@ -7,9 +7,7 @@ import { fetchBigQuery, resetUserDetailsErrors } from '../../ActionTypes/userDat
 import axios from 'axios';
 import Device from 'react-device'
 import '../../styles/SignIn/CreateAccountContainer.css';
-import SignUpGraphic from '../../assets/images/NotSignedIn/SignUpGraphic.png';
 import Blocked from '../../constants/Blocked';
-import Logo from '../../assets/images/Admin/Logo.png';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';

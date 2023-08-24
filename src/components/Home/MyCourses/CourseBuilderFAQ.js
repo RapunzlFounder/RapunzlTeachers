@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
