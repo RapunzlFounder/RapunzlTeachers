@@ -10,12 +10,12 @@ import GroupAdd from '@mui/icons-material/GroupAdd';
 import UploadTemplate from './UploadTemplate';
 import Alert from '../../Admin/Alert';
 import '../../../styles/Home/HomeScreen.css';
-import UploadPreview from './UploadPreview';
 import ManualEntry from './ManualEntry';
 import SearchStudents from './SearchStudents';
 import SuccessImage from '../../../assets/images/AddStudents/SuccessAddStudents.png';
 import ErrorImage from '../../../assets/images/AddStudents/ErrorAddStudents.png';
 import { CircularProgress } from '@mui/material';
+import UploadHelper from './UploadHelper';
 
 class AddStudents extends Component {
   constructor(props) {
@@ -90,174 +90,21 @@ class AddStudents extends Component {
     const firstSheetArray = XLSX.utils.sheet_to_json(firstSheet, { header: 1 }).filter(function(value) {
       return value.length !== 0;
     });
-    // Checks Index Of Each Required Input: First Name, Last Name, Birthday, Email, Username (optional)
-    let error = false;
-    let errorMessage = '';
-    // Handles First Name, Including Misspellings Or Varying Input Titles
-    let firstNameIndex = firstSheetArray[0].indexOf('First Name');
-    if (firstNameIndex === -1) {
-      firstNameIndex = firstSheetArray[0].indexOf('first name');
-      if (firstNameIndex === -1) {
-        firstNameIndex = firstSheetArray[0].indexOf('First');
-        if (firstNameIndex === -1) {
-          firstNameIndex = firstSheetArray[0].indexOf('FirstName');
-          if (firstNameIndex === -1) {
-            firstNameIndex = firstSheetArray[0].indexOf('firstname');
-            if (firstNameIndex === -1) {
-              firstNameIndex = firstSheetArray[0].indexOf('first_name');
-              if (firstNameIndex === -1) {
-                firstNameIndex = firstSheetArray[0].indexOf('FN');
-                if (firstNameIndex === -1) {
-                  firstNameIndex = firstSheetArray[0].indexOf('fn');
-                  // Handles Error Message If We Cannot Find First Name
-                  if (firstNameIndex === -1) {
-                    error = true;
-                    errorMessage = 'We had some trouble finding the column associated with First Name.';
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    // Check There Is An Upload Array To Save In Order To Display Preview, Otherwise Show An Error
+    if (firstSheetArray && firstSheetArray.length && firstSheetArray.length !== 0  && firstSheetArray[0].length !== 0) {
+      this.setState({
+        uploadArray: firstSheetArray,
+        uploadProgress: 0,
+        uploadStarted: false,
+      });
     }
-    // Handles Last Name, Including Misspellings Or Varying Input Titles
-    let lastNameIndex = firstSheetArray[0].indexOf('Last Name');
-    if (lastNameIndex === -1) {
-      lastNameIndex = firstSheetArray[0].indexOf('last name');
-      if (lastNameIndex === -1) {
-        lastNameIndex = firstSheetArray[0].indexOf('Last');
-        if (lastNameIndex === -1) {
-          lastNameIndex = firstSheetArray[0].indexOf('LastName');
-          if (lastNameIndex === -1) {
-            lastNameIndex = firstSheetArray[0].indexOf('lastname');
-            if (lastNameIndex === -1) {
-              lastNameIndex = firstSheetArray[0].indexOf('last_name');
-              if (lastNameIndex === -1) {
-                lastNameIndex = firstSheetArray[0].indexOf('LN');
-                if (lastNameIndex === -1) {
-                  lastNameIndex = firstSheetArray[0].indexOf('ln');
-                  // Handles Error Message If We Cannot Find Last Name
-                  if (lastNameIndex === -1) {
-                    error = true;
-                    errorMessage = 'We had some trouble finding the column associated with Last Name.';
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    // Handles Birthday, Including Misspellings Or Varying Input Titles
-    let birthdayIndex = firstSheetArray[0].indexOf('Birthday');
-    if (birthdayIndex === -1) {
-      birthdayIndex = firstSheetArray[0].indexOf('birthday');
-      if (birthdayIndex === -1) {
-        birthdayIndex = firstSheetArray[0].indexOf('birthdate');
-        if (birthdayIndex === -1) {
-          birthdayIndex = firstSheetArray[0].indexOf('Birthdate');
-          if (birthdayIndex === -1) {
-            birthdayIndex = firstSheetArray[0].indexOf('birth date');
-            if (birthdayIndex === -1) {
-              birthdayIndex = firstSheetArray[0].indexOf('Birth Date');
-              if (birthdayIndex === -1) {
-                birthdayIndex = firstSheetArray[0].indexOf('BDay');
-                if (birthdayIndex === -1) {
-                  birthdayIndex = firstSheetArray[0].indexOf('bday');
-                  if (birthdayIndex === -1) {
-                    birthdayIndex = firstSheetArray[0].indexOf('Bday');
-                    // Handles Error Message If We Cannot Find Birthday
-                    if (birthdayIndex === -1) {
-                      error = true;
-                      errorMessage = 'We had some trouble finding the column associated with Birthday.';
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    // Handles Email, Including Misspellings Or Varying Input Titles
-    let emailIndex = firstSheetArray[0].indexOf('Email');
-    if (emailIndex === -1) {
-      emailIndex = firstSheetArray[0].indexOf('email');
-      if (emailIndex === -1) {
-        emailIndex = firstSheetArray[0].indexOf('email address');
-        if (emailIndex === -1) {
-          emailIndex = firstSheetArray[0].indexOf('Email Address');
-          if (emailIndex === -1) {
-            emailIndex = firstSheetArray[0].indexOf('student email');
-            if (emailIndex === -1) {
-              emailIndex = firstSheetArray[0].indexOf('Student Email');
-              // Handles Error Message If We Cannot Find Email
-              if (emailIndex === -1) {
-                error = true;
-                errorMessage = 'We had some trouble finding the column associated with Email.';
-              }
-            }
-          }
-        }
-      }
-    }
-    // If There Is No Error, We Continue Processing The File
-    if (!error) {
-      // Creates Array Of Objects, With Each Object Representing A Student That Is Included In The Selected File
-      let uploadArray = [];
-      for (var i=1; i < firstSheetArray.length; i++) {
-        let uploadReady = true;
-        // Check First & Last Name Are Greater Than 1 Character Each
-        if (firstSheetArray[i][firstNameIndex] === undefined || 
-            firstSheetArray[i][firstNameIndex].length === undefined  || 
-            firstSheetArray[i][firstNameIndex].length < 2 ||
-            firstSheetArray[i][lastNameIndex] === undefined ||
-            firstSheetArray[i][lastNameIndex].length === undefined ||
-            firstSheetArray[i][lastNameIndex].length < 2) {
-          uploadReady = false;
-        }
-        // Check That Email Is The Correct Format
-        // eslint-disable-next-line
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(firstSheetArray[i][emailIndex])) {
-          uploadReady = false;
-        }
-        // Once We Have Error Checked First, Last & Email - Add Student Object To Upload Array 
-        const studentObject = {
-          firstName: firstSheetArray[i][firstNameIndex],
-          lastName: firstSheetArray[i][lastNameIndex],
-          email: firstSheetArray[i][emailIndex],
-          birthday: this.handleExcelTimestamp(firstSheetArray[i][birthdayIndex]),
-          isError: !uploadReady,
-          id: i,
-        }
-        uploadArray.push(studentObject);
-      }
-      // Check There Is An Upload Array To Save In Order To Display Preview, Otherwise Show An Error
-      if (uploadArray.length > 0) {
-        this.setState({
-          uploadArray,
-          uploadProgress: 0,
-          uploadStarted: false,
-        });
-      }
-      // Handles If There Was An Error Creating The Upload Array
-      else {
-        this.setState({
-          alertVisible: true,
-          alertTitle: 'Something Went Wrong...',
-          alertMessage: 'We could not find any students to upload to your classroom. Please ensure that the file you select to upload matches the format of the template that we have provided and resubmit. If you continue having problems, please email us your spreadsheet at hello@rapunzl.org'
-        })
-      }
-    }
-    // Handles If There Was An Error Finding The Column Headings
+    // Handles If There Was An Error Creating The Upload Array
     else {
       this.setState({
         alertVisible: true,
-        alertTitle: 'Something Went Wrong...',
-        alertMessage: errorMessage + ' Please ensure that the file you select to upload matches the format of the template that we have provided and resubmit. If you continue having problems, please email us your spreadsheet at hello@rapunzl.org'
-      });
+        alertTitle: 'Failed To Process File',
+        alertMessage: 'Please ensure that the file you select to upload matches the format of the template that we have provided and resubmit. If you continue having problems, please email us your spreadsheet at hello@rapunzl.org'
+      })
     }
   }
 
@@ -306,16 +153,6 @@ class AddStudents extends Component {
       uploadProgress: 0,
       uploadComplete: false,
     })
-  }
-
-  // Updates The Value For Birthday Read From Excel, Which Is A Serial Number Representing The Number Of Days Since January 1, 1900
-  handleExcelTimestamp(serialTime) {
-    // Creates Initial Moment Instance For Starting Point, Defined By Excel Serialization Of Date
-    let initialTime = moment("Jan 1, 1900");
-    // Adds The Serial Time Value To The Initial Date, Specifying That We Are Adding Days
-    let birthday = initialTime.add(parseInt(serialTime), "days");
-    // Returns Birthday Formatted In Readable Form: mm/dd/yyyy. This is manipulated before sending to the server.
-    return birthday.format("l");
   }
 
   // Toggles Visibility Of Alert Dialog When User Tries To Upload More Than One File
@@ -429,19 +266,6 @@ class AddStudents extends Component {
     }
   }
 
-  // Pass through arrow function that enables the teacher to remove a student with bad data to proceed with creating the classroom
-  _handleRemoveStudent = (studentArray) => {
-    let newArray = [];
-    for (var i in this.state.uploadArray) {
-      for (var j in studentArray) {
-        if (this.state.uploadArray[i].id !== studentArray[j].id) {
-          newArray.push(this.state.uploadArray[i]);
-        }
-      }
-    }
-    this.setState({ uploadArray: newArray });
-  }
-
   render() {
     // Handles If User Selects Manual Entry
     if (this.props.manualAdd) {
@@ -551,9 +375,8 @@ class AddStudents extends Component {
             dismiss={this.toggleTemplate}
             visible={this.state.templateVisible}
           />
-          <UploadPreview
+          <UploadHelper
             handleCreateClassroomClick={this.handleCreateClassroomClick}
-            handleRemoveStudent={this._handleRemoveStudent}
             dismiss={this.toggleUploadPreview}
             visible={this.state.uploadPreview}
             loading={this.state.loading}
