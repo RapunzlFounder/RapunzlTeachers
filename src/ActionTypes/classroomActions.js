@@ -8,6 +8,7 @@ import { arrayToObjectID, arrayToObjectUserID, arrayToObjectModuleID, arrayToObj
 import { CREATE_TEACHER_CLASSROOM_COURSE } from '../graphql/mutations/CreateTeacherClassroomCourse';
 import { REMOVE_TEACHER_CLASSROOM_COURSE } from '../graphql/mutations/RemoveTeacherClassroomCourse';
 import { stringifyIntArray } from '../helper_functions/utilities';
+import { RESET_STUDENT_PASSWORD } from '../graphql/mutations/ResetStudentPassword';
 
 export const CREATE_TEACHER_NO_CLASSROOMS = 'CREATE_TEACHER_NO_CLASSROOMS';
 export const UPDATE_ALL_CLASSROOMS = 'UPDATE_ALL_CLASSROOMS';
@@ -33,6 +34,10 @@ export const ADD_STUDENTS_BEGIN = 'ADD_STUDENTS_BEGIN';
 export const ADD_STUDENTS_SUCCESS = 'ADD_STUDENTS_SUCCESS';
 export const ADD_STUDENTS_FAILURE = 'ADD_STUDENTS_FAILURE';
 export const ADD_STUDENTS_ERROR = 'ADD_STUDENTS_ERROR';
+export const RESET_STUDENT_PASSWORD_BEGIN = 'RESET_STUDENT_PASSWORD_BEGIN';
+export const RESET_STUDENT_PASSWORD_SUCCESS = 'RESET_STUDENT_PASSWORD_SUCCESS';
+export const RESET_STUDENT_PASSWORD_FAILURE = 'RESET_STUDENT_PASSWORD_FAILURE';
+export const RESET_STUDENT_PASSWORD_ERROR = 'RESET_STUDENT_PASSWORD_ERROR';
 export const UPDATE_STUDENT_BEGIN = 'UPDATE_STUDENT_BEGIN';
 export const UPDATE_STUDENT_SUCCESS = 'UPDATE_STUDENT_SUCCESS';
 export const UPDATE_STUDENT_FAILURE = 'UPDATE_STUDENT_FAILURE';
@@ -99,6 +104,23 @@ export const removeClassroomError = error => ({
   type: REMOVE_CLASSROOM_ERROR,
   payload: { error },
 });
+
+// Handles Resetting A Student's Password
+export const resetStudentPasswordBegin = () => ({
+  type: RESET_STUDENT_PASSWORD_BEGIN,
+});
+export const resetStudentPasswordSuccess = () => ({
+  type: REMOVE_CLASSROOM_SUCCESS,
+});
+export const resetStudentPasswordFailure = error => ({
+  type: REMOVE_CLASSROOM_FAILURE,
+  payload: { error },
+});
+export const resetStudentPasswordError = error => ({
+  type: REMOVE_CLASSROOM_ERROR,
+  payload: { error },
+});
+
 // Create a teacher classroom Course
 export const createClassroomCourseBegin = () => ({
   type: CREATE_CLASSROOM_COURSE_BEGIN,
@@ -410,6 +432,36 @@ export function createTeacherClassroomCourse(token, classroomId, courseId) {
       })
       .catch(error => {
         dispatch(createClassroomCourseFailure(error.message));
+        return { errors: [{ message: error.message }]};
+      });
+  };
+}
+
+// This allows a teacher to reset one of their students' passwords and obtain the new password.
+// This will allow teachers to handle students who are unable to login in real-time during class, rather
+// than relying upon Support to reset student passwords when students are unable to receive external emails.
+// The only required input is the student username and graphql returns the new password
+export function resetStudentPassword(token, username) {
+  return function(dispatch){
+    dispatch(resetStudentPasswordBegin());
+    return axios.post(GRAPHQL_URL, { query: RESET_STUDENT_PASSWORD(username) }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(resetStudentPasswordError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else{
+          dispatch(resetStudentPasswordSuccess());
+          return json.data.data.teacherChangestudentpassword;
+        }
+      })
+      .catch(error => {
+        dispatch(resetStudentPasswordFailure(error.message));
         return { errors: [{ message: error.message }]};
       });
   };

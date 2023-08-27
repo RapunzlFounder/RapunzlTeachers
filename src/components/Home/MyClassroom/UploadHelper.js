@@ -258,7 +258,7 @@ class UploadHelper extends React.PureComponent {
         maxWidth="xl"
         fullWidth
       >
-          <div className='container'>
+          <div className='upload-container'>
             <div className='upload-helper-flex'>
               <div className='upload-helper-flex-right'>
                 <div className='upload-helper-p'>

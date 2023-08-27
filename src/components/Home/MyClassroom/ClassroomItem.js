@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { resetStudentPassword } from '../../../ActionTypes/classroomActions';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBox from '@mui/icons-material/CheckBox';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -18,7 +19,10 @@ class ClassroomItem extends Component {
       expanded: false,
       alertVisible: false,
       alertTitle: 'Are You Sure?',
-      alertMessage: 'Resetting an account is permanent. Once you reset a student account, it cannot be undone. The student will be removed from all competitions and their portfolio will go to zero.',
+      alertMessage: '',
+      alertOption: null,
+      alertOptionText: '',
+      resetPassword: '',
       tab: 'stocks',
       notifyAlertVisible: false,
     }
@@ -41,9 +45,26 @@ class ClassroomItem extends Component {
 
   }
 
-  // Sets Visibility of Native Alert To True When User Selects To Reset A Students Account
-  pressResetAccount() {
-    this.setState({ alertVisible: true });
+  // Handles Dispatch To GraphQL To Reset Student Password
+  resetPassword = () => {
+    this.setState({ loadingResetPassword: true })
+    this.props.resetStudentPassword(this.props.jwtToken, this.props.item.username).then((res) => {
+      console.log('res', res);
+      if (!(res && !('errors' in res))) {
+        this.setState({
+          loadingResetPassword: false,
+          resetPassword: '',
+          alertOption: null,
+          alertTitle: 'Failed To Reset Password',
+          alertMessage: 'Something went wrong trying to connect to the server and reset the student account. ' + res.errors[0].message,
+        })
+      } else {
+        this.setState({
+          loadingResetPassword: false,
+          resetPassword: '',
+        })
+      }
+    });
   }
 
   // Hides Native Alert Which Is Used To Display Message Regarding Resetting Account
@@ -101,6 +122,27 @@ class ClassroomItem extends Component {
     }
   }
 
+  // Sets Visibility of Native Alert To True When User Selects To Reset A Students Account
+  pressResetAccount() {
+    this.setState({
+      alertTitle: 'Are You Sure?',
+      alertMessage: 'Resetting an account is permanent. Once you reset a student account, it cannot be undone. The student will be removed from all competitions and their portfolio will go to zero.',
+      alertOptionText: 'Reset Account',
+      alertVisible: true,
+      alertOption: this.resetAccount,
+    });
+  }
+
+  handleResetPassword() {
+    this.setState({
+      alertTitle: 'Are You Sure?',
+      alertMessage: `Once you reset the student's password, Rapunzl will update the password for the student's account and show it to you so that you can help the student login.`,
+      alertOptionText: 'Reset Password',
+      alertVisible: true,
+      alertOption: this.resetPassword,
+    })
+  }
+
   render() {
     return (
       <div key={this.props.item.userId} className='classroom-student-item'>
@@ -109,8 +151,8 @@ class ClassroomItem extends Component {
           message={this.state.alertMessage}
           visible={this.state.alertVisible}
           dismiss={this.dismissAlert}
-          option={this.resetAccount}
-          optionText={'Reset Account'}
+          option={this.state.alertOption}
+          optionText={this.state.alertOptionText}
           option2Text={'Nevermind'}
         />
         <NotifyStudentAlert
@@ -215,7 +257,15 @@ class ClassroomItem extends Component {
               <div title="View Selected Student Portfolio" onClick={() => this.props.viewPortfolio(this.props.item.username, this.props.item.firstName + ' ' + this.props.item.lastName)} className='classroom-item-button view-portfolio-button'>
                 View Portfolio
               </div>
-              <div title="Resets Student Account To $10,000" onClick={() => this.pressResetAccount()} className='classroom-item-button reset-account-button'>
+              <div title="Resets Student Password" onClick={() => this.handleResetPassword()} className='classroom-item-button reset-account-button'>
+                Reset Password
+              </div>
+              <div
+                title="Resets Student Account To $10,000"
+                onClick={() => this.pressResetAccount()}
+                className='classroom-item-button reset-account-button'
+                style={{ color: '#ff3434', backgroundColor: '#012b22' }}
+              >
                 Reset Account
               </div>
             </div>
@@ -232,7 +282,17 @@ const mapStateToProps = (state) => {
   return {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
+    // Token used For Resetting Student Password and Resetting Account
+    jwtToken: state.userDetails.jwtToken,
   };
 };
 
-export default connect(mapStateToProps)(ClassroomItem);
+// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      resetStudentPassword: (token, username) => dispatch(resetStudentPassword(token, username)),
+   };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClassroomItem);

@@ -23,6 +23,10 @@ import {
   REMOVE_STUDENTS_SUCCESS,
   REMOVE_STUDENTS_FAILURE,
   REMOVE_STUDENTS_ERROR,
+  RESET_STUDENT_PASSWORD_BEGIN,
+  RESET_STUDENT_PASSWORD_SUCCESS,
+  RESET_STUDENT_PASSWORD_FAILURE,
+  RESET_STUDENT_PASSWORD_ERROR,
   CREATE_TEACHER_NO_CLASSROOMS,
   CREATE_CLASSROOM_COURSE_BEGIN,
   CREATE_CLASSROOM_COURSE_SUCCESS,
@@ -344,6 +348,37 @@ const classroomReducer = (state = initialState, action) => {
         // graphqlError: 'There was an error connecting to our servers to remove your Classroom. Please contact support.'
         errorTitle: 'Error Removing Teacher Classroom',
       };
+    // HANDLES TEACHER RESETTING A STUDENTS PASSWORD
+    case RESET_STUDENT_PASSWORD_BEGIN: 
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+      }
+    case RESET_STUDENT_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+      }
+    case RESET_STUDENT_PASSWORD_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        errorTitle: 'Failed To Reset Student Password',
+      }
+    case RESET_STUDENT_PASSWORD_ERROR:
+      return {
+        ...state,
+        loading: false,
+        graphqlError: action.payload.error,
+        errorTitle: 'Error Resetting Student Password',
+      }
     // HANDLES CREATING A TEACHER CLASSROOM COURSE
     case CREATE_CLASSROOM_COURSE_BEGIN:
       return {
