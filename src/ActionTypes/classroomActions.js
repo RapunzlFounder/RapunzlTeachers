@@ -110,14 +110,14 @@ export const resetStudentPasswordBegin = () => ({
   type: RESET_STUDENT_PASSWORD_BEGIN,
 });
 export const resetStudentPasswordSuccess = () => ({
-  type: REMOVE_CLASSROOM_SUCCESS,
+  type: RESET_STUDENT_PASSWORD_SUCCESS,
 });
 export const resetStudentPasswordFailure = error => ({
-  type: REMOVE_CLASSROOM_FAILURE,
+  type: RESET_STUDENT_PASSWORD_FAILURE,
   payload: { error },
 });
 export const resetStudentPasswordError = error => ({
-  type: REMOVE_CLASSROOM_ERROR,
+  type: RESET_STUDENT_PASSWORD_ERROR,
   payload: { error },
 });
 

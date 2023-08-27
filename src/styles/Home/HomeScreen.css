@@ -484,6 +484,13 @@ path {
     font-size: 13px;
     font-weight: 500;
 }
+.student-updated-password {
+    font-size: 13.5px;
+    font-weight: 700;
+    padding-top: 7px;
+    padding-bottom: 3px;
+    color: #ffc100;
+}
 .student-item-right {
     display: flex;
     justify-content: center;

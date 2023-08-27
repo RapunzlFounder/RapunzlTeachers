@@ -22,6 +22,7 @@ class ClassroomItem extends Component {
       alertMessage: '',
       alertOption: null,
       alertOptionText: '',
+      alertOptionText2: '',
       resetPassword: '',
       tab: 'stocks',
       notifyAlertVisible: false,
@@ -49,20 +50,28 @@ class ClassroomItem extends Component {
   resetPassword = () => {
     this.setState({ loadingResetPassword: true })
     this.props.resetStudentPassword(this.props.jwtToken, this.props.item.username).then((res) => {
-      console.log('res', res);
       if (!(res && !('errors' in res))) {
         this.setState({
           loadingResetPassword: false,
           resetPassword: '',
-          alertOption: null,
+          alertOption: false,
+          alertOptionText: '',
           alertTitle: 'Failed To Reset Password',
           alertMessage: 'Something went wrong trying to connect to the server and reset the student account. ' + res.errors[0].message,
-        })
+          alertVisible: true,
+          alertOptionText2: false
+        });
       } else {
         this.setState({
           loadingResetPassword: false,
-          resetPassword: '',
-        })
+          resetPassword: res.studentlogin.password,
+          alertOption: false,
+          alertOptionText: '',
+          alertTitle: 'Reset Password Successful',
+          alertMessage: 'The new password for the student is: ' + res.studentlogin.password + `  Please note that the password is case-sensitive. If you continue experiencing issues, don't hestiate to contact support`,
+          alertVisible: true,
+          alertOptionText2: false
+        });
       }
     });
   }
@@ -130,6 +139,7 @@ class ClassroomItem extends Component {
       alertOptionText: 'Reset Account',
       alertVisible: true,
       alertOption: this.resetAccount,
+      alertOptionText2: 'Nevermind'
     });
   }
 
@@ -140,6 +150,7 @@ class ClassroomItem extends Component {
       alertOptionText: 'Reset Password',
       alertVisible: true,
       alertOption: this.resetPassword,
+      alertOptionText2: 'Nevermind'
     })
   }
 
@@ -153,7 +164,7 @@ class ClassroomItem extends Component {
           dismiss={this.dismissAlert}
           option={this.state.alertOption}
           optionText={this.state.alertOptionText}
-          option2Text={'Nevermind'}
+          option2Text={this.state.alertOptionText2}
         />
         <NotifyStudentAlert
           visible={this.state.notifyAlertVisible}
@@ -170,6 +181,11 @@ class ClassroomItem extends Component {
             <div className='student-item-username'>
               @{this.props.item.username}
             </div>
+            {this.state.resetPassword.length !== 0 && this.state.expanded && (
+              <div className='student-updated-password'>
+                <span style={{ color: 'white', fontWeight: '300' }}>Student's updated password is: </span>{this.state.resetPassword}
+              </div>
+            )}
           </div>
           {!this.props.removing && !this.state.expanded && (
             <div className='student-item-right'>
@@ -257,9 +273,11 @@ class ClassroomItem extends Component {
               <div title="View Selected Student Portfolio" onClick={() => this.props.viewPortfolio(this.props.item.username, this.props.item.firstName + ' ' + this.props.item.lastName)} className='classroom-item-button view-portfolio-button'>
                 View Portfolio
               </div>
-              <div title="Resets Student Password" onClick={() => this.handleResetPassword()} className='classroom-item-button reset-account-button'>
-                Reset Password
-              </div>
+              {this.state.resetPassword.length === 0 && (
+                <div title="Resets Student Password" onClick={() => this.handleResetPassword()} className='classroom-item-button reset-account-button'>
+                  Reset Password
+                </div>
+              )}
               <div
                 title="Resets Student Account To $10,000"
                 onClick={() => this.pressResetAccount()}
