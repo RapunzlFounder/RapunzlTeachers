@@ -14,14 +14,17 @@ class HelperItem extends React.PureComponent {
     }
   }
 
+  // Handles the skip button
   handleSkip() {
     this.props.toggleSkip(this.props.index);
   }
 
+  // Handles the dropdown selection
   handleDropdown(int) {
     this.props.selectDropdown(int, this.props.index);
   }
 
+  // Checks the index of the column to see if it matches with any of the fields
   getSelectValue() {
     if (this.props.firstName === this.props.index) {
       return 0;

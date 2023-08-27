@@ -235,6 +235,8 @@ class AddStudents extends Component {
     }
   }
 
+// Generate documentation for the functions below to explain what they do and how they work
+
   validateClassName() {
     if (this.props.newClassName.length > 20) {
       return false;
@@ -244,15 +246,19 @@ class AddStudents extends Component {
   }
 
   handleNextClassClick() {
+    // Handles If The Class Name Is Valid
     if (this.validateClassName()) {
       this.setState({ progress: 'upload' });
     }
   }
 
   handleBackButton() {
+    // If We Are Creating A New Classroom, We Go Back To The Classroom List
     if (this.props.creatingClassroom) {
       this.setState({ progress: 'name' });
-    } else {
+    }
+    // Else we toggle Add Students To Go Back To The Classroom List
+    else {
       this.props.toggleAddStudents();
     }
   }

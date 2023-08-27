@@ -24,6 +24,7 @@ class UploadHelper extends React.PureComponent {
     }
   }
 
+  // When the component's visibility is toggled, reset the state
   componentDidUpdate(prevProps) {
     if (this.props.visible !== prevProps.visible) {
       this.setState({
@@ -47,6 +48,7 @@ class UploadHelper extends React.PureComponent {
     return previewArray;
   }
 
+  // Toggles The Skip Array And Adds Or Removes Elements
   toggleSkip = (x) => {
     // Clone the current skipArray from the state
     let newSkipArray = this.state.skipArray.slice();
@@ -99,6 +101,7 @@ class UploadHelper extends React.PureComponent {
     }
   }
 
+  // Determines the color of the column cell
   handleColor = (x) => {
     // Handles If User Has Selected To Skip This Column
     if (this.checkIfSkipped(x)) {
@@ -126,6 +129,7 @@ class UploadHelper extends React.PureComponent {
     }
   }
 
+  // Function that is called in selectDropdown to remove the value from the other selections
   removeFromOtherSelections(value) {
     if (this.state.firstName === value) {
       this.setState({ firstName: false });
@@ -138,6 +142,7 @@ class UploadHelper extends React.PureComponent {
     }
   }
 
+  // Handles the dropdown selection
   selectDropdown = (int, value) => {
     // Handles First Name
     if (parseInt(int) === 0) {
@@ -168,6 +173,7 @@ class UploadHelper extends React.PureComponent {
     }
   }
 
+  // This function verifies that the user has selected a value for each of the four columns
   verifyNext() {
     if (this.state.status === 'matching') {
       // Checks First That First Name, Last Name, Email & Birthday Have All Been Selected
@@ -192,6 +198,7 @@ class UploadHelper extends React.PureComponent {
     }
   }
 
+  // This function handles the next button and creates an array of students to be uploaded
   next() {
     if (this.state.status === 'matching' && this.verifyNext()) {
       let newStudentArray = [];

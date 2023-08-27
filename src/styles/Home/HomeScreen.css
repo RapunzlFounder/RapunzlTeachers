@@ -466,6 +466,7 @@ path {
     background-color: #1c755d;
     border: 1px solid #1c755d;
 }
+/* .reset-account-button should include a dark shadow */
 .reset-account-button {
     background-color: #ff3434;
     border: 1px solid #ff3434;
