@@ -3,7 +3,10 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { WS_URL } from "../../constants";
 import { updateIsVisible, updateWebsocketConnected } from "../../ActionTypes/gameSettingsActions";
-
+import SymbolType from '../../graphql/enums/SymbolTypes';
+import { websocketPortfolioUpdate} from "../../ActionTypes/portfolioActions";
+import { websocketCompetitionUpdate } from "../../ActionTypes/competitionActions";
+import { websocketQuizScoreUpdate } from "../../ActionTypes/classroomActions";
 export const SocketContext = React.createContext({
   prices: {}
 });
@@ -39,6 +42,8 @@ export class WrappedSocketManager extends React.Component {
         //this.subscibeToClassroomStudents();
         // update the redux state that the websocket is connected
         this.props.updateWebsocketConnected(true);
+        // subscribe to the pub/sub channels for Classroom Student portfolio performance, competition and quiz scores updates which are sent to the webapp
+        this.subscibeToStudentEvents();
         //}
       });
     this.socket.on("connect_error", () => {
@@ -65,19 +70,65 @@ export class WrappedSocketManager extends React.Component {
       }
       // else the socket will automatically try to reconnect
     });
-      // this is for processing classroom student assessment score updates
-    this.socket.on('message', (res) => {
+      // this is for processing classroom student assessment quiz score updates
+    this.socket.on('studentQuizScore', (res) => {
         //console.log('Websocket price update received')
         // eslint-disable-next-line
         const resjson = typeof (res) == 'object' ? res : JSON.parse(res);
         // eslint-disable-next-line
         if (resjson != null) {
-          // update the stocksSymDict in the instrument state with the new price object fpr the symbol
-          this.props.getLastPriceSuccess(resjson, resjson.I, true);
+          // update the quiz score for the student
+          this.props.updateStudentQuizScore(resjson.studentUserID, resjson.moduleID, resjson.moduleName, resjson.percentComplete, resjson.percentCorrect,
+            resjson.quizQuestionId, resjson.moduleQuestionNumber, resjson.studentAnswer, resjson.answerCorrect, resjson.noAttempts, resjson.lastAttemptAt);
         }
       });
+    // this is for processing classroom student portfolio updates for US Stocks 
+    this.socket.on('stockPortPerf', (res) => {
+      //console.log('Websocket Stock portfolio update received')
+      // eslint-disable-next-line
+      const resjson = typeof (res) == 'object' ? res : JSON.parse(res);
+      // eslint-disable-next-line
+      if (resjson != null) {
+        var timestamp = resjson.Date + " " + resjson.Time;
+        // update the portfolio state with the new portfolio performance information 
+        this.props.updateStudentPortfolioPerformance(resjson.PortfolioId, resjson.Performance, SymbolType.US_Stock);
+      }
+    });
+    // this is for processing classroom student portfolio updates for Crypto
+    this.socket.on('cryptoPortPerf', (res) => {
+      //console.log('Websocket Crypto portfolio update received')
+      // eslint-disable-next-line
+      const resjson = typeof (res) == 'object' ? res : JSON.parse(res);
+      // eslint-disable-next-line
+      if (resjson != null) {
+        var timestamp = resjson.Date + " " + resjson.Time;
+        // update the portfolio state with the new crypto portfolio performance information 
+        this.props.updateStudentPortfolioPerformance(resjson.PortfolioId, resjson.CurrentValue, resjson.Performance, SymbolType.Crypto);
+      }
+    });
+      // this is for processing student competition updates for US Stocks 
+    this.socket.on('stockComp', (res) => {
+        //console.log('Websocket US Stock Competition update received')
+        // eslint-disable-next-line
+        const resjson = typeof (res) == 'object' ? res : JSON.parse(res);
+        // eslint-disable-next-line
+        if (resjson != null) {
+          // update the competition state with the new competition participant information 
+          this.props.updateStudentCompetitionRankInfo(resjson, SymbolType.US_Stock);
+        }
+    });
+    this.socket.on('cryptoComp', (res) => {
+        //console.log('Websocket Crypto Competition update received')
+        // eslint-disable-next-line
+        const resjson = typeof (res) == 'object' ? res : JSON.parse(res);
+        // eslint-disable-next-line
+        if (resjson != null) {
+          // update the competition state with the new crypto competition participant information 
+          this.props.updateStudentCompetitionRankInfo(resjson, SymbolType.Crypto);
+        }
+    });
   }
-
+  
   componentDidUpdate(prevProps) {
     // the WebApp visibility has changed
     if (this.props.visible !== prevProps.visible){
@@ -103,7 +154,6 @@ export class WrappedSocketManager extends React.Component {
         if (this.socket.connected){
           try {
             this.socket.disconnect();
-            this.unsubscibeAllStudents();
             this.props.updateWebsocketConnected(false);
           } catch (e) {
             //console.log("Websocket disconnect error");
@@ -122,29 +172,11 @@ export class WrappedSocketManager extends React.Component {
     if (!this.socket.connected){
       try {
         this.socket.disconnect();
-        this.unsubscibeAllStudents();
         this.props.updateWebsocketConnected(false);
       } catch (e) {
         //console.log("Websocket disconnect error");
         //console.error(e);
       }
-    }
-  }
-
-
-  // get the last prices for the symbols in the symdict from the socket io server
-  getSymbolPrices = () => {
-    var symArray = [];
-    // get the last prices for the US Stock Indices and the US Stock symbols in the stock symArray
-    for (let i = 0; i < this.props.stocksSymArray.length; i++) {
-      symArray.push(`nasdaq_last/${this.props.stocksSymArray[i]}`);
-    }
-    // get the last prices for the Crypto symbols in the Crypto symArray if any exist
-    for (let i = 0; i < this.props.cryptoSymArray.length; i++) {
-      symArray.push(`crypto_last/${this.props.cryptoSymArray[i]}`);
-    }
-    if (symArray.length > 0) {
-      this.socket.emit('get-lasttrade', symArray);
     }
   }
 
@@ -159,147 +191,43 @@ export class WrappedSocketManager extends React.Component {
     this.socket.emit('add-symbol', symArray);
   }
 
-  subscribeToFriendRequestsReceived = () => {
-    var friendArray = [`friend_request_received/${this.props.userId}`];
-    this.socket.emit('add-symbol', friendArray);
-  }
 
-  subscribeToFriendRequestsAccepted = () => {
-    var friendArray = [`friend_request_accepted/${this.props.userId}`];
-    this.socket.emit('add-symbol', friendArray);
-  }
-
-  subscibeToInitialSymbols = () => {
-    var symArray = [];
-    // subscribe to the price updates for the US Stock symbols in the stock symArray if any exist
-    for (let i = 0; i < this.props.stocksSymArray.length; i++) {
-      symArray.push(`nasdaq_last/${this.props.stocksSymArray[i]}`);
-    }
-    // subscribe to the price updates for the Crypto symbols in the Crypto symArray if any exist
-    for (let i = 0; i < this.props.cryptoSymArray.length; i++) {
-      symArray.push(`crypto_last/${this.props.cryptoSymArray[i]}`);
-    }
-    if (symArray.length > 0){
-      //console.log(symArray);
-      this.socket.emit('add-symbol', symArray);
-      //console.log("Websocket initial symbol subscription complete");
-    }
-    else{
-      //console.log("No initial symbols were subscribed to as the SymArray is empty");
-    }
-  }
-
-  //  Subscribe to Websocket Portfolio performance updates
-  subscibeToPortfolios = () => {
+  //  Subscribe to Websocket Classroom Student Portfolio performance updates
+  subscibeToStudentEvents = () => {
     var portArray = [];
-    // subscribe to US Stock Portfolio updates if one exists
-    if (this.props.defaultStockPortfolioID > 0){
-      portArray.push(`stock_port_perf/${this.props.defaultStockPortfolioID}`);
+    var compArray = [];
+    var quizScoreArray = [];
+    // first iterate through all of the classroom that the teacher has registered on the Teacher Portal
+    for (const classId in this.props.classrooms){
+      // next iterate through the studentList for the classroom
+      for (const studentId in this.props.classrooms[classId].studentList){
+        if (this.props.classrooms[classId].studentList[studentId].defaultStockPortfolioID > 0){
+          portArray.push(`stock_port_perf/${this.props.classrooms[classId].studentList[studentId].defaultStockPortfolioID}`);
+          compArray.push(`stock_comp/${this.props.classrooms[classId].studentList[studentId].defaultStockPortfolioID}`);
+        }
+        // subscribe to Crypto Portfolio updates if one exists
+        if (this.props.classrooms[classId].studentList[studentId].defaultCryptoPortfolioID > 0){
+          portArray.push(`crypto_port_perf/${this.props.classrooms[classId].studentList[studentId].defaultCryptoPortfolioID}`);
+          compArray.push(`crypto_comp/${this.props.classrooms[classId].studentList[studentId].defaultCryptoPortfolioID}`);
+        }
+
+        // subscribe to the module quiz scores for the student
+        quizScoreArray.push(`student_quiz_score/${studentId}`); 
+        
     }
-    // subscribe to Crypto Portfolio updates if one exists
-    if (this.props.defaultCryptoPortfolioID > 0){
-      portArray.push(`crypto_port_perf/${this.props.defaultCryptoPortfolioID}`);
     }
     if (portArray.length > 0){
       this.socket.emit('add-symbol', portArray);
-      //console.log("Websocket initial US Stock Portfolio subscription complete");
-    }
-    else{
-      //console.log("No US Stock Portfolios were subscribed to as the default portfolio was not found");
-    }
-  }
-
-  //  Subscribe to Websocket Competition performance and rank updates
-  subscibeToCompetitions = () => {
-    var compArray = [];
-    // subscribe to US Stock Competition updates if a US Stock Portfolio exists
-    if (this.props.defaultStockPortfolioID > 0){
-      compArray.push(`stock_comp/${this.props.defaultStockPortfolioID}`);
-    }
-    // subscribe to Crypto Competition updates if a Crypto portfolio exists
-    if (this.props.defaultCryptoPortfolioID > 0){
-      compArray.push(`crypto_comp/${this.props.defaultCryptoPortfolioID}`);
+      console.log("Websocket Student Portfolios subscription complete");
     }
     if (compArray.length > 0){
       this.socket.emit('add-symbol', compArray);
+      console.log("Websocket Student Competitions subscription complete");
     }
-  }
-
-  //  Subscribe to Websocket New Available Competitions
-  subscibeToNewCompetitions = () => {
-    var compArray = [];
-    // subscribe to new US Stock Competitions if a US Stock Portfolio exists
-    if (this.props.defaultStockPortfolioID > 0){
-      compArray.push(`stock_comp_start`);
+    if (quizScoreArray.length > 0){
+      this.socket.emit('add-symbol', quizScoreArray);
+      console.log("Websocket Student QuizScores subscription complete");
     }
-    // subscribe to new Crypto Competitions if a Crypto portfolio exists
-    if (this.props.defaultCryptoPortfolioID > 0){
-      compArray.push(`crypto_comp_start`);
-    }
-    if (compArray.length > 0){
-      this.socket.emit('add-symbol', compArray);
-    }
-  }
-
-  //  Subscribe to Websocket Ended Competitions that the user has entered
-  subscibeToCompetitionEnds = () => {
-    var compArray = [];
-    // subscribe to new US Stock Competitions if a US Stock Portfolio exists
-    if (this.props.defaultStockPortfolioID > 0){
-      let stock_id_array = this.props.stocksEnteredLiveIdArray;
-      for (let i = 0; i < stock_id_array.length; i++) {
-        compArray.push(`stock_comp_end/${stock_id_array[i]}`);
-      }
-    }
-    // subscribe to new Crypto Competitions if a Crypto portfolio exists
-    if (this.props.defaultCryptoPortfolioID > 0){
-      let crypto_id_array = this.props.cryptoEnteredLiveIdArray;
-      for (let i = 0; i < crypto_id_array.length; i++) {
-        compArray.push(`crypto_comp_end/${crypto_id_array[i]}`);
-      }
-    }
-    if (compArray.length > 0){
-      this.socket.emit('add-symbol', compArray);
-    }
-  }
-
-  //  Subscribe to Websocket Portfolio fills
-  subscibeToFills = () => {
-    var fillArray = [];
-    // subscribe to US Stock Portfolio fills if one exists
-    if (this.props.defaultStockPortfolioID > 0){
-      fillArray.push(`fills/${this.props.defaultStockPortfolioID}`);
-    }
-    if (fillArray.length > 0){
-      this.socket.emit('add-symbol', fillArray);
-    }
-  }
-
-  subscibeToNewSymbols(symbolType) {
-    var symArray = [];
-    // eslint-disable-next-line
-    if (symbolType == SymbolType.US_Stock){
-      // if this is the US Stocks screen then add the symbol to the stocks sym array
-      for (let i = 0; i < this.props.stocksSymToAddArray.length; i++) {
-        symArray.push(`nasdaq_last/${this.props.stocksSymToAddArray[i]}`);
-      }
-    }
-    // eslint-disable-next-line
-    else if (symbolType == SymbolType.Crypto){
-      for (let i = 0; i < this.props.cryptoSymToAddArray.length; i++) {
-        symArray.push(`crypto_last/${this.props.cryptoSymToAddArray[i]}`);
-      }
-    }
-    if (symArray.length > 0){
-      this.socket.emit('add-symbol', symArray);
-    }
-    // clear the SymToAddArray array in the redux store instrument state for either stocks or crypto
-    this.props.clearSymAdd(symbolType);
-  }
-
-  unsubscibeStudents() {
-    // var studentArray = [];
-  
   }
 
   render () {
@@ -320,6 +248,7 @@ const mapStateToProps = (state) => {
     return {
       // Handles if markets are open or closed, updated with big & miniquery and the Websocket
       jwtToken: state.userDetails.jwtToken,
+      classrooms: state.classroom.classrooms
     };
   };
   
@@ -327,6 +256,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     // Action
     return {
+        // update a student portfolio performance with the information received over the Websocket
+        updateStudentPortfolioPerformance: (portfolioID, totalPercentChange, portfolioType) => dispatch(websocketPortfolioUpdate(portfolioID, totalPercentChange, portfolioType)),
+        // update an open competition with the student participant information received over the Websocket
+        updateStudentCompetitionRankInfo: (myParticipantInfo, portfolioType ) => dispatch(websocketCompetitionUpdate(myParticipantInfo, portfolioType)),
+        // update a classroom Student Module Assessement quiz score and question answer
+        updateStudentQuizScore: (studentUserID, moduleID, moduleName, percentComplete, percentCorrect, quizQuestionId, moduleQuestionNumber, 
+          studentAnswer, answerCorrect, noAttempts, lastAttemptAt ) => dispatch(websocketQuizScoreUpdate(studentUserID, moduleID, moduleName, percentComplete, percentCorrect, quizQuestionId, moduleQuestionNumber, 
+          studentAnswer, answerCorrect, noAttempts, lastAttemptAt)),
         // update the Redux store as to whether or not the WebApp is visible
         updateIsVisible: (appVisible) => dispatch(updateIsVisible(appVisible)),
         // update the Redux store as to whether or not the Websocket is connected

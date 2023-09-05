@@ -36,9 +36,14 @@ import {
   REMOVE_CLASSROOM_COURSE_SUCCESS,
   REMOVE_CLASSROOM_COURSE_FAILURE,
   REMOVE_CLASSROOM_COURSE_ERROR,
+  WEBSOCKET_QUIZSCORE_UPDATE,
 } from '../ActionTypes/classroomActions';
+
+import { WEBSOCKET_PORTFOLIO_UPDATE } from '../ActionTypes/portfolioActions';
+import { WEBSOCKET_COMPETITION_UPDATE } from '../ActionTypes/competitionActions';
 import { persistReducer } from 'redux-persist';
 import { removeKey } from '../helper_functions/utilities';
+import SymbolType from '../graphql/enums/SymbolTypes';
 
 const initialState = {
   loading: false,
@@ -217,6 +222,7 @@ const initialState = {
     }
   }
 };
+
 
 const classroomReducer = (state = initialState, action) => {
   switch(action.type) {
@@ -546,6 +552,104 @@ const classroomReducer = (state = initialState, action) => {
           error: null,
           errorTitle: null,
         };
+    // this updates the Stock portfolio performance for a student in the classroom when a websocket portfolio performance update is received.
+    case WEBSOCKET_PORTFOLIO_UPDATE:
+      originalClassroomsObject = JSON.parse(JSON.stringify(state.classrooms));
+      // need to iterate through all of the classrooms that the teacher has registered on the Teacher Portal in order to update the portfolio performance
+      perf_loops:
+      for (const classId in originalClassroomsObject){
+        // next iterate through the studentList for the classroom
+        for (const studentId in originalClassroomsObject[classId].studentList){
+          if (action.portfolioType == SymbolType.US_Stock && action.portfolioID == originalClassroomsObject[classId].studentList[studentId].defaultStockPortfolioID){
+            originalClassroomsObject[classId].studentList[studentId].stockPortfolioPerformance = action.totalPercentChange;
+            break perf_loops;
+          }
+          else if (action.portfolioType == SymbolType.Crypto && action.portfolioID == originalClassroomsObject[classId].studentList[studentId].defaultCryptoPortfolioID){
+            originalClassroomsObject[classId].studentList[studentId].cryptoPortfolioPerformance = action.totalPercentChange;
+            break perf_loops;
+          }  
+        }
+      }
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+        classrooms: originalClassroomsObject,
+      }
+    // this updates the Stock competition performance for a student in the classroom when a websocket competition update is received.
+    case WEBSOCKET_COMPETITION_UPDATE:
+      originalClassroomsObject = JSON.parse(JSON.stringify(state.classrooms));
+      // need to iterate through all of the classrooms that the teacher has registered on the Teacher Portal in order to update the competition performance
+      comp_loops:
+      for (const classId in originalClassroomsObject){   
+        // iterate through the students in the classroom 
+        for (const studentId in originalClassroomsObject[classId].studentList){
+          if (action.portfolioType == SymbolType.US_Stock){
+            for (const compId in originalClassroomsObject[classId].studentList[studentId].stockCompetitionsEntered){
+              if (compId == action.participantInfo.competitionID){
+                originalClassroomsObject[classId].studentList[studentId].stockCompetitionsEntered[compId].compRank = action.participantInfo.myRank;
+                originalClassroomsObject[classId].studentList[studentId].stockCompetitionsEntered[compId].compPerformance = action.participantInfo.myPerformance;
+                break comp_loops;
+              }
+            }
+          }
+          if (action.portfolioType == SymbolType.Crypto){
+            for (const compId in originalClassroomsObject[classId].studentList[studentId].cryptoCompetitionsEntered){
+              if (compId == action.participantInfo.competitionID){
+                originalClassroomsObject[classId].studentList[studentId].cryptoCompetitionsEntered[compId].compRank = action.participantInfo.myRank;
+                originalClassroomsObject[classId].studentList[studentId].cryptoCompetitionsEntered[compId].compPerformance = action.participantInfo.myPerformance;
+                break comp_loops;
+              }
+            }
+          }
+        }
+      }
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+        classrooms: originalClassroomsObject,
+      }  
+    // this updates the Module assessment quiz scores for a student in the classroom when a websocket quiz score update is received.
+    case WEBSOCKET_QUIZSCORE_UPDATE:
+      originalClassroomsObject = JSON.parse(JSON.stringify(state.classrooms));
+      // need to iterate through all of the classrooms that the teacher has registered on the Teacher Portal in order to update the competition performance
+      quizscore_loops:
+      for (const classId in originalClassroomsObject){   
+        // iterate through the students in the classroom 
+        for (const studentId in originalClassroomsObject[classId].studentList){
+          if (action.studentUserID == studentId){
+            for (const moduleId in originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores){
+              if (action.moduleID == moduleId){
+                originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].percentComplete = action.percentComplete;
+                originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].percentCorrect = action.percentCorrect;
+                for (const quizQuestionId in originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults){
+                  if (action.quizQuestionId == quizQuestionId){
+                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].moduleQuestionNumber = action.moduleQuestionNumber;
+                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].studentAnswer = action.studentAnswer;
+                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].answerCorrect = action.answerCorrect;
+                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].noAttempts = action.noAttempts;
+                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].lastAttemptAt = action.lastAttemptAt;
+                    break quizscore_loops;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+        classrooms: originalClassroomsObject,
+      }
     case LOGOUT_USER_CLASSROOM:
       // reset the portfolio state to it's initial state and remove the persisted data from disk
       storage.removeItem('persist:root.classroom');

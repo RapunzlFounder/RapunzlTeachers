@@ -50,7 +50,24 @@ export const RESET_CLASSROOM_STATE = 'RESET_CLASSROOM_STATE';
 export const RESET_CLASSROOM_ERRORS = 'RESET_CLASSROOM_ERRORS'
 export const LOGOUT_USER_CLASSROOM = 'LOGOUT_USER_CLASSROOM';
 export const UPDATE_CLASSROOM_DATA_STATE = 'UPDATE_CLASSROOM_DATA_STATE';
+export const WEBSOCKET_QUIZSCORE_UPDATE = 'WEBSOCKET_QUIZSCORE_UPDATE';
 
+// this updates the quizscores for classroom students that are rteceived through the websocket connection
+export const websocketQuizScoreUpdate = (studentUserID, moduleID, moduleName, percentComplete, percentCorrect, quizQuestionId, moduleQuestionNumber, 
+                                          studentAnswer, answerCorrect, noAttempts, lastAttemptAt) => ({
+    type: WEBSOCKET_QUIZSCORE_UPDATE,
+    studentUserID, 
+    moduleID, 
+    moduleName, 
+    percentComplete, 
+    percentCorrect, 
+    quizQuestionId, 
+    moduleQuestionNumber,                                   
+    studentAnswer, 
+    answerCorrect, 
+    noAttempts, 
+    lastAttemptAt
+  });
 // this creates empty teacher classrooms and classroomCourses objects and is only called when the Teacher user is first created 
 export const createTeacherEmptyClassrooms = () => ({
   type: CREATE_TEACHER_NO_CLASSROOMS,

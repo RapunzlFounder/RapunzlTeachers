@@ -133,8 +133,8 @@ class HomeScreen extends Component {
     // calculate the time difference in seconds between the current time and the last time that the teacher's classrooms details were retrieved from the server
     const classroomRetrievedTime= moment(this.props.classroomLastRetrievedTime);
     const secondsDiff = currentTime.diff(classroomRetrievedTime, 'seconds');
-    // if it has been 30 minutes or more since the last time that the user retrieved the mini query data, retreive it sgsin.  DO NOT CHANGE THIS NUMBER 300!  
-    if (secondsDiff >= 1800){      
+    // if it has been 1 minute or more since the last time that the user retrieved the mini query data, retreive it sgsin.  DO NOT CHANGE THIS NUMBER 60!  
+    if (secondsDiff >= 60){      
       this.setState({ gettingMiniQuery: true });
       this.props.FetchMiniQuery(this.props.jwtToken).then((res) => {
         // Handles If There's An Error With the Mini Query
