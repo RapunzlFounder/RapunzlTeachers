@@ -554,18 +554,18 @@ const classroomReducer = (state = initialState, action) => {
         };
     // this updates the Stock portfolio performance for a student in the classroom when a websocket portfolio performance update is received.
     case WEBSOCKET_PORTFOLIO_UPDATE:
-      originalClassroomsObject = JSON.parse(JSON.stringify(state.classrooms));
+      let originalClassroomsObject4 = JSON.parse(JSON.stringify(state.classrooms));
       // need to iterate through all of the classrooms that the teacher has registered on the Teacher Portal in order to update the portfolio performance
       perf_loops:
-      for (const classId in originalClassroomsObject){
+      for (const classId in originalClassroomsObject4){
         // next iterate through the studentList for the classroom
-        for (const studentId in originalClassroomsObject[classId].studentList){
-          if (action.portfolioType == SymbolType.US_Stock && action.portfolioID == originalClassroomsObject[classId].studentList[studentId].defaultStockPortfolioID){
-            originalClassroomsObject[classId].studentList[studentId].stockPortfolioPerformance = action.totalPercentChange;
+        for (const studentId in originalClassroomsObject4[classId].studentList){
+          if (action.portfolioType == SymbolType.US_Stock && action.portfolioID == originalClassroomsObject4[classId].studentList[studentId].defaultStockPortfolioID){
+            originalClassroomsObject4[classId].studentList[studentId].stockPortfolioPerformance = action.totalPercentChange;
             break perf_loops;
           }
-          else if (action.portfolioType == SymbolType.Crypto && action.portfolioID == originalClassroomsObject[classId].studentList[studentId].defaultCryptoPortfolioID){
-            originalClassroomsObject[classId].studentList[studentId].cryptoPortfolioPerformance = action.totalPercentChange;
+          else if (action.portfolioType == SymbolType.Crypto && action.portfolioID == originalClassroomsObject4[classId].studentList[studentId].defaultCryptoPortfolioID){
+            originalClassroomsObject4[classId].studentList[studentId].cryptoPortfolioPerformance = action.totalPercentChange;
             break perf_loops;
           }  
         }
@@ -576,30 +576,30 @@ const classroomReducer = (state = initialState, action) => {
         error: null,
         graphqlError: null,
         errorTitle: null,
-        classrooms: originalClassroomsObject,
+        classrooms: originalClassroomsObject4,
       }
     // this updates the Stock competition performance for a student in the classroom when a websocket competition update is received.
     case WEBSOCKET_COMPETITION_UPDATE:
-      originalClassroomsObject = JSON.parse(JSON.stringify(state.classrooms));
+      let originalClassroomsObject5 = JSON.parse(JSON.stringify(state.classrooms));
       // need to iterate through all of the classrooms that the teacher has registered on the Teacher Portal in order to update the competition performance
       comp_loops:
-      for (const classId in originalClassroomsObject){   
+      for (const classId in originalClassroomsObject5){   
         // iterate through the students in the classroom 
-        for (const studentId in originalClassroomsObject[classId].studentList){
+        for (const studentId in originalClassroomsObject5[classId].studentList){
           if (action.portfolioType == SymbolType.US_Stock){
-            for (const compId in originalClassroomsObject[classId].studentList[studentId].stockCompetitionsEntered){
+            for (const compId in originalClassroomsObject5[classId].studentList[studentId].stockCompetitionsEntered){
               if (compId == action.participantInfo.competitionID){
-                originalClassroomsObject[classId].studentList[studentId].stockCompetitionsEntered[compId].compRank = action.participantInfo.myRank;
-                originalClassroomsObject[classId].studentList[studentId].stockCompetitionsEntered[compId].compPerformance = action.participantInfo.myPerformance;
+                originalClassroomsObject5[classId].studentList[studentId].stockCompetitionsEntered[compId].compRank = action.participantInfo.myRank;
+                originalClassroomsObject5[classId].studentList[studentId].stockCompetitionsEntered[compId].compPerformance = action.participantInfo.myPerformance;
                 break comp_loops;
               }
             }
           }
           if (action.portfolioType == SymbolType.Crypto){
-            for (const compId in originalClassroomsObject[classId].studentList[studentId].cryptoCompetitionsEntered){
+            for (const compId in originalClassroomsObject5[classId].studentList[studentId].cryptoCompetitionsEntered){
               if (compId == action.participantInfo.competitionID){
-                originalClassroomsObject[classId].studentList[studentId].cryptoCompetitionsEntered[compId].compRank = action.participantInfo.myRank;
-                originalClassroomsObject[classId].studentList[studentId].cryptoCompetitionsEntered[compId].compPerformance = action.participantInfo.myPerformance;
+                originalClassroomsObject5[classId].studentList[studentId].cryptoCompetitionsEntered[compId].compRank = action.participantInfo.myRank;
+                originalClassroomsObject5[classId].studentList[studentId].cryptoCompetitionsEntered[compId].compPerformance = action.participantInfo.myPerformance;
                 break comp_loops;
               }
             }
@@ -612,28 +612,28 @@ const classroomReducer = (state = initialState, action) => {
         error: null,
         graphqlError: null,
         errorTitle: null,
-        classrooms: originalClassroomsObject,
+        classrooms: originalClassroomsObject5,
       }  
     // this updates the Module assessment quiz scores for a student in the classroom when a websocket quiz score update is received.
     case WEBSOCKET_QUIZSCORE_UPDATE:
-      originalClassroomsObject = JSON.parse(JSON.stringify(state.classrooms));
+      let originalClassroomsObject6 = JSON.parse(JSON.stringify(state.classrooms));
       // need to iterate through all of the classrooms that the teacher has registered on the Teacher Portal in order to update the competition performance
       quizscore_loops:
-      for (const classId in originalClassroomsObject){   
+      for (const classId in originalClassroomsObject6){   
         // iterate through the students in the classroom 
-        for (const studentId in originalClassroomsObject[classId].studentList){
+        for (const studentId in originalClassroomsObject6[classId].studentList){
           if (action.studentUserID == studentId){
-            for (const moduleId in originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores){
+            for (const moduleId in originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores){
               if (action.moduleID == moduleId){
-                originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].percentComplete = action.percentComplete;
-                originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].percentCorrect = action.percentCorrect;
-                for (const quizQuestionId in originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults){
+                originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].percentComplete = action.percentComplete;
+                originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].percentCorrect = action.percentCorrect;
+                for (const quizQuestionId in originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults){
                   if (action.quizQuestionId == quizQuestionId){
-                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].moduleQuestionNumber = action.moduleQuestionNumber;
-                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].studentAnswer = action.studentAnswer;
-                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].answerCorrect = action.answerCorrect;
-                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].noAttempts = action.noAttempts;
-                    originalClassroomsObject[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].lastAttemptAt = action.lastAttemptAt;
+                    originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].moduleQuestionNumber = action.moduleQuestionNumber;
+                    originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].studentAnswer = action.studentAnswer;
+                    originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].answerCorrect = action.answerCorrect;
+                    originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].noAttempts = action.noAttempts;
+                    originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].lastAttemptAt = action.lastAttemptAt;
                     break quizscore_loops;
                   }
                 }
@@ -648,7 +648,7 @@ const classroomReducer = (state = initialState, action) => {
         error: null,
         graphqlError: null,
         errorTitle: null,
-        classrooms: originalClassroomsObject,
+        classrooms: originalClassroomsObject6,
       }
     case LOGOUT_USER_CLASSROOM:
       // reset the portfolio state to it's initial state and remove the persisted data from disk
