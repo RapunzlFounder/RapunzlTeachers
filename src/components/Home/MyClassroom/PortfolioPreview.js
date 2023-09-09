@@ -28,21 +28,46 @@ class PortfolioPreview extends Component {
       error: false,
       userData: {
         stocks: [],
-        crypto: []
+        crypto: [],
+        stockTrades: 0,
+        cryptoTrades: 0
       },
       resetPassword: '',
     }
   }
 
   componentDidMount() {
+    // Only fetches user details if there are no positions present in state and the component is visible
     if (this.state.userData.stocks.length === 0 && this.state.userData.crypto.length === 0 && this.props.visible === true) {
       this._fetchUserDetails();
     }
   }
 
   componentDidUpdate(prevProps) {
+    // Fetches User Details When Component Becomes Visible
     if (prevProps.visible !== this.props.visible && this.props.visible === true) {
       this._fetchUserDetails();
+    }
+    // Handles Resetting State When Component Is No Longer Visible
+    if (prevProps.visible !== this.props.visible && this.props.visible === false) {
+      this.setState({
+        portfolioSelected: 'stock',
+        alertVisible: false,
+        alertTitle: '',
+        alertMessage: '',
+        alertOption: null,
+        alertOptionText: '',
+        alertOptionText2: '',
+        loading: true,
+        error: false,
+        userData: {
+          stocks: [],
+          crypto: [],
+          stockTrades: 0,
+          cryptoTrades: 0
+        },
+        resetPassword: '',
+      })
     }
   }
 
@@ -73,6 +98,8 @@ class PortfolioPreview extends Component {
           userData: {
             stocks: stockPositions,
             crypto: cryptoPositions,
+            stockTrades: stockPositions.length + Object.keys(res.stockPortfolios[Object.keys(res.stockPortfolios)].closedPositions).length,
+            cryptoTrades: cryptoPositions.length + Object.keys(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].closedPositions).length,
           },
         })
       }
@@ -98,6 +125,7 @@ class PortfolioPreview extends Component {
     }
   }
 
+  // Handles determining color based on if value is less than 0 or not
   handleBackgroundColor(float) {
     if (float < 0) {
       return '#ed3232';
@@ -152,6 +180,7 @@ class PortfolioPreview extends Component {
     }
   }
 
+  // This updates the Alert State To Display A Native Alert When User Selects To Reset A Students Password
   handleResetPassword() {
     this.setState({
       alertTitle: 'Are You Sure?',
@@ -289,7 +318,7 @@ class PortfolioPreview extends Component {
           <div className='expanded-student-flex'>
             <div className='expanded-student-item'>
               <div className='expanded-student-stat'>
-                {this.state.portfolioSelected === 'stock' ? this.props.user.numberOfStockTrades : this.props.user.numberOfCryptoTrades}
+                {this.state.portfolioSelected === 'stock' ? this.state.userData.stockTrades : this.state.userData.cryptoTrades}
               </div>
               <div className='expanded-student-title'>
                 # Of Trades
@@ -297,7 +326,7 @@ class PortfolioPreview extends Component {
             </div>
             <div className='expanded-student-item'>
               <div className='expanded-student-stat'>
-                {this.state.portfolioSelected === 'stock' ? this.props.user.numberOfStockPositions : this.props.user.numberOfCryptoPositions}
+                {this.state.portfolioSelected === 'stock' ? this.state.userData.stocks.length : this.state.userData.crypto.length}
               </div>
               <div className='expanded-student-title'>
                 # Of Positions
