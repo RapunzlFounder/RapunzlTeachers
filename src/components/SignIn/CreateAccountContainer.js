@@ -41,6 +41,7 @@ class CreateAccountContainer extends React.PureComponent {
       onErrorEmail: false,
       onErrorPassword: false,
       onErrorBirthday: false,
+      onErrorCode: false,
       modalVisible: false,
       // Handles Information Related To Alerts
       alertTitle: '',
@@ -307,6 +308,15 @@ class CreateAccountContainer extends React.PureComponent {
           loading: false,
         });
       }
+      else if (this.state.teacherCode.length === 0) {
+        this.setState({
+          alertVisible: true,
+          alertTitle: 'Missing Invitation Code',
+          alertMessage: 'You must include an invitation code to create an account with Rapunzl Teachers. Please contact us at teachers@rapunzl.com to receive an invitation code.',
+          onErrorCode: true,
+          loading: false,
+        });
+      }
   // -------------- VALIDATION SUCCESS OKAY TO CREATE ACCOUNT --------------
       else {
         this.createAccount();
@@ -544,6 +554,7 @@ class CreateAccountContainer extends React.PureComponent {
                   variant="filled"
                   autoComplete="new-password"
                   value={this.state.teacherCode}
+                  error={this.state.onErrorCode}
                   onChange={(event) => this.changeTeacherCode(event.target.value)}
                   sx={{ marginBottom: '7px' }}
                 />

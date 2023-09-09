@@ -15,6 +15,11 @@ import ArticleScreen from "./routes/ArticleScreen";
 const NotSignedInScreen = lazy(() => import('./routes/NotSignedInScreen'));
 const HomeScreen = lazy(() => import( "./routes/HomeScreen"));
 
+// Handles Initializing Google Analytics So That We Can Track User Session & Pages Visited With Time Spent
+// import ReactGA from 'react-ga';
+// const TRACKING_ID = "G-65H72VYV57"; // OUR_TRACKING_ID
+// ReactGA.initialize(TRACKING_ID);
+
 const logError = (error, info) => {
   console.log('Rapunzl error message: ' + error.message + 'Error Detail: ' + info.componentStack);
 };

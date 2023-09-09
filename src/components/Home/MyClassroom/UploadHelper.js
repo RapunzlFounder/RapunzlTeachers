@@ -203,10 +203,12 @@ class UploadHelper extends React.PureComponent {
     if (this.state.status === 'matching' && this.verifyNext()) {
       let newStudentArray = [];
       for (var i = 1; i < this.props.data.length; i++) {
+        let firstName = this.props.data[i][this.state.firstName].charAt(0).toUpperCase() + this.props.data[i][this.state.firstName].slice(1);
+        let lastName = this.props.data[i][this.state.lastName].charAt(0).toUpperCase() + this.props.data[i][this.state.lastName].slice(1);
         let newStudent = {
           id: i,
-          firstName: this.props.data[i][this.state.firstName],
-          lastName: this.props.data[i][this.state.lastName],
+          firstName,
+          lastName,
           email: this.props.data[i][this.state.email],
           birthday: this.handleExcelTimestamp(this.props.data[i][this.state.birthday]),
           isError: !(this.props.data[i][this.state.firstName] !== null && 

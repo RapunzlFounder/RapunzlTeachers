@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { FetchOtherUserDetails } from '../../../ActionTypes/socialActions';
-import '../../../styles/Home/HomeScreen.css';
+import { resetStudentPassword } from '../../../ActionTypes/classroomActions';
 import ProfileIcon from '../../../assets/images/School/BlankProfile.png';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import { objectToArray } from '../../../helper_functions/utilities';
 import EmptyPositions from '../../../assets/images/Search/SearchEmpty.png';
 import CircularProgress from '@mui/material/CircularProgress';
 import intHandler from '../../../helper_functions/intHelper';
+import Alert from '../../Admin/Alert';
+import '../../../styles/Home/HomeScreen.css';
 
 class PortfolioPreview extends Component {
   // eslint-disable-next-line
@@ -19,12 +21,22 @@ class PortfolioPreview extends Component {
       alertVisible: false,
       alertTitle: '',
       alertMessage: '',
+      alertOption: null,
+      alertOptionText: '',
+      alertOptionText2: '',
       loading: true,
       error: false,
       userData: {
         stocks: [],
         crypto: []
-      }
+      },
+      resetPassword: '',
+    }
+  }
+
+  componentDidMount() {
+    if (this.state.userData.stocks.length === 0 && this.state.userData.crypto.length === 0 && this.props.visible === true) {
+      this._fetchUserDetails();
     }
   }
 
@@ -37,13 +49,16 @@ class PortfolioPreview extends Component {
   // Handles Dispatch To Fetch Other User Details & Stores Result In State
   _fetchUserDetails() {
     this.setState({ loading: true, error: false });
-    this.props.fetchOtherUserDetails(this.props.jwtToken, this.props.portfolioUsername).then((res) => {
+    this.props.fetchOtherUserDetails(this.props.jwtToken, this.props.user.username).then((res) => {
       // Handles If There Is An Error With The Dispatch By Displaying Alert Modal & Setting Loading To False
       if (!(res && !('errors' in res))) {
         this.setState({
           alertVisible: true,
           alertTitle: 'Something Went Wrong...',
           alertMessage: 'We had an issue retrieving the portfolio information from our servers. ' + res.errors[0].message + ' Please try again in a few minutes or contact support.',
+          alertOption: null,
+          alertOptionText: '',
+          alertOptionText2: '',
           loading: false,
           error: true,
         })
@@ -137,10 +152,120 @@ class PortfolioPreview extends Component {
     }
   }
 
+  handleResetPassword() {
+    this.setState({
+      alertTitle: 'Are You Sure?',
+      alertMessage: `Once you reset the student's password, Rapunzl will update the password for the student's account and show it to you so that you can help the student login.`,
+      alertOptionText: 'Reset Password',
+      alertVisible: true,
+      alertOption: this.resetPassword,
+      alertOptionText2: 'Nevermind'
+    })
+  }
+
+  // Handles Dispatch To GraphQL To Reset Student Password
+  resetPassword = () => {
+    this.setState({ loadingResetPassword: true })
+    this.props.resetStudentPassword(this.props.jwtToken, this.props.user.username).then((res) => {
+      if (!(res && !('errors' in res))) {
+        this.setState({
+          loadingResetPassword: false,
+          resetPassword: '',
+          alertOption: false,
+          alertOptionText: '',
+          alertTitle: 'Failed To Reset Password',
+          alertMessage: 'Something went wrong trying to connect to the server and reset the student account. ' + res.errors[0].message,
+          alertVisible: true,
+          alertOptionText2: false
+        });
+      } else {
+        this.setState({
+          loadingResetPassword: false,
+          resetPassword: res.studentlogin.password,
+          alertOption: false,
+          alertOptionText: '',
+          alertTitle: 'Reset Password Successful',
+          alertMessage: 'The new password for the student is: ' + res.studentlogin.password + `  Please note that the password is case-sensitive. If you continue experiencing issues, don't hestiate to contact support`,
+          alertVisible: true,
+          alertOptionText2: false
+        });
+      }
+    });
+  }
+
+  // Sets Visibility of Native Alert To True When User Selects To Reset A Students Account
+  pressResetAccount() {
+    this.setState({
+      alertTitle: 'Are You Sure?',
+      alertMessage: 'Resetting an account is permanent. Once you reset a student account, it cannot be undone. The student will be removed from all competitions and their portfolio will go to zero.',
+      alertOptionText: 'Reset Account',
+      alertVisible: true,
+      alertOption: this.resetAccount,
+      alertOptionText2: 'Nevermind'
+    });
+  }
+
+  // Handles Dispatch To GraphQL To Reset Student Account. This Will Set Account As If It Was Just Created And Student Will Receive Email
+  resetAccount = () => {
+    this.setState({
+      alertVisible: true,
+      alertTitle: 'Cannot Complete Request',
+      alertMessage: 'You are unable to reset a student account through Rapunzl For Teachers at this time. Please contact support for assistance in resetting a student portfolio. Please note this will make the student ineligible for any competitions they are currently in.',
+      alertOption: null,
+      alertOptionText: '',
+      alertOptionText2: '',
+      loading: false,
+      error: false,
+    })
+  }
+
+  // Hides Native Alert Which Is Used To Display Message Regarding Resetting Account
+  dismissAlert = () => {
+    this.setState({ alertVisible: false });
+  }
+
+  // Handles Performance Formatting, Depending Upon Which Tab Is Selected
+  handlePerformance() {
+    // Handles If Stocks Are Selected By The User - Default
+    if (this.state.portfolioSelected === 'stock') {
+      return intHandler(this.props.user.stockPortfolioPerformance - 100, 'percent', 2, true);
+    }
+    // Handles If Crypto Is Selected By The User
+    else {
+      return intHandler(this.props.user.cryptoPortfolioPerformance - 100, 'percent', 2, true);
+    }
+  }
+
+  // Handles Color Of Performance Thumbnail Background Between Green & Red
+  handlePerformanceColor() {
+    if (this.state.portfolioSelected === 'stock') {
+      if (parseFloat(this.props.user.stockPortfolioPerformance - 100) < 0) {
+        return '#ed3232';
+      } else {
+        return '#00ffbe';
+      }
+    } else {
+      if (parseFloat(this.props.user.cryptoPortfolioPerformance - 100) < 0) {
+        return '#ed3232';
+      } else {
+        return '#00ffbe';
+      }
+    }
+  }
+
   render() {
     if (this.props.visible) {
       return (
         <div className='tile classroom-overview' style={{ minHeight: 700 }}>
+          <Alert
+            title={this.state.alertTitle}
+            message={this.state.alertMessage}
+            visible={this.state.alertVisible}
+            dismiss={this.dismissAlert}
+            option={this.state.alertOption}
+            optionText={this.state.alertOptionText}
+            option2Text={this.state.alertOptionText2}
+          />
           <div className='classroom-header-flex' style={{ paddingTop: 25, paddingLeft: 12, paddingBottom: 15 }}>
             <QueryStatsIcon />
             <div className='classroom-title' style={{ paddingLeft: 10 }}>
@@ -154,25 +279,68 @@ class PortfolioPreview extends Component {
             <img alt='' className='view-portfolio-profile-image' src={ProfileIcon} />
             <div className='view-portfolio-text-container'>
               <div className='view-portfolio-name'>
-                {this.props.portfolioName}
+                {this.props.user.firstName.charAt(0).toUpperCase() + this.props.user.firstName.slice(1)} {this.props.user.lastName.charAt(0).toUpperCase() + this.props.user.lastName.slice(1)}
               </div>
               <div className='view-portfolio-username'>
-                @{this.props.portfolioUsername}
+                @{this.props.user.username}
               </div>
             </div>
           </div>
-          <div className='view-portfolio-toggle-container'>
-            <div title="View Student Stock Portfolio" onClick={() => this.selectPortfolioType('stock')} className={`view-portfolio-toggle-button toggle-button-left ${this.state.portfolioSelected === 'stock' ? 'toggle-button-selected' : ''}`}>
-              Stock Portfolio
+          <div className='expanded-student-flex'>
+            <div className='expanded-student-item'>
+              <div className='expanded-student-stat'>
+                {this.state.portfolioSelected === 'stock' ? this.props.user.numberOfStockTrades : this.props.user.numberOfCryptoTrades}
+              </div>
+              <div className='expanded-student-title'>
+                # Of Trades
+              </div>
             </div>
-            <div title="View Student Crypto Portfolio" onClick={() => this.selectPortfolioType('crypto')} className={`view-portfolio-toggle-button toggle-button-right ${this.state.portfolioSelected !== 'stock' ? 'toggle-button-selected' : ''}`}>
-              Crypto Portfolio
+            <div className='expanded-student-item'>
+              <div className='expanded-student-stat'>
+                {this.state.portfolioSelected === 'stock' ? this.props.user.numberOfStockPositions : this.props.user.numberOfCryptoPositions}
+              </div>
+              <div className='expanded-student-title'>
+                # Of Positions
+              </div>
+            </div>
+            <div className='expanded-student-item'>
+              <div className='expanded-student-stat' style={{ color: this.handlePerformanceColor() }}>
+                {this.handlePerformance()}
+              </div>
+              <div className='expanded-student-title'>
+                Performance
+              </div>
+            </div>
+          </div>
+          {this.state.resetPassword.length !== 0 && (
+            <div className='student-updated-password'>
+              <span style={{ color: 'white', fontWeight: '300' }}>Student's updated password is: </span>{this.state.resetPassword}
+            </div>
+          )}
+          <div className='view-portfolio-options-flex'>
+            {this.state.resetPassword.length === 0 && (
+              <div title="Resets Student Password" onClick={() => this.handleResetPassword()} className='classroom-item-button reset-account-button'>
+                Reset Password
+              </div>
+            )}
+            <div
+              title="Resets Student Account To $10,000"
+              onClick={() => this.pressResetAccount()}
+              className='classroom-item-button reset-account-button'
+              style={{ color: '#ff3434', backgroundColor: '#012b22' }}
+            >
+              Reset Account
             </div>
           </div>
           <div className='view-portfolio-header'>
             <div className='view-portfolio-line' />
-            <div className='view-portfolio-title'>
-              Current Positions
+            <div className='view-portfolio-toggle-container'>
+              <div title="View Student Stock Portfolio" onClick={() => this.selectPortfolioType('stock')} className={`view-portfolio-toggle-button toggle-button-left ${this.state.portfolioSelected === 'stock' ? 'toggle-button-selected' : ''}`}>
+                Stock Portfolio
+              </div>
+              <div title="View Student Crypto Portfolio" onClick={() => this.selectPortfolioType('crypto')} className={`view-portfolio-toggle-button toggle-button-right ${this.state.portfolioSelected !== 'stock' ? 'toggle-button-selected' : ''}`}>
+                Crypto Portfolio
+              </div>
             </div>
             <div className='view-portfolio-line' />
           </div>
@@ -205,7 +373,7 @@ class PortfolioPreview extends Component {
                 No Positions To Display
               </div>
               <div className='portfolio-positions-text'>
-                It does not seem like {this.props.portfolioName} has any current positions. They need to place a trade in order to add a position to their portfolio.
+                It does not seem like {this.props.user.username} has any current positions. They need to place a trade in order to add a position to their portfolio.
               </div>
             </div>
           )}
@@ -214,7 +382,7 @@ class PortfolioPreview extends Component {
             <div className='view-portfolio-position-flex'>
               {this._getPortfolioData().map((item) => {
                 return (
-                  <div key={item} className='view-portfolio-position' style={{ backgroundColor: this.handleBackgroundColor(item.profitLoss)}}>
+                  <div key={item.id} className='view-portfolio-position' style={{ backgroundColor: this.handleBackgroundColor(item.profitLoss)}}>
                     <div className='portfolio-position-symbol'>
                       {item.symbol}
                     </div>
@@ -226,6 +394,9 @@ class PortfolioPreview extends Component {
                     </div>
                     <div className='portfolio-position-time'>
                       Purchased<br/>{this.getDiff(moment(item.openedAt), moment(new Date()))} Ago
+                    </div>
+                    <div className='portfolio-position-side'>
+                      {item.side}
                     </div>
                   </div>
                 )
@@ -257,6 +428,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
       // Dispatch To Fetch Portfolio Information For The Selected User. Result Is Not Stored In Redux.
       fetchOtherUserDetails: (token, userName) => dispatch(FetchOtherUserDetails(token, userName)),
+      // Handles resetting a student's password by dispatching to GraphQL
+      resetStudentPassword: (token, username) => dispatch(resetStudentPassword(token, username)),
    };
 };
 

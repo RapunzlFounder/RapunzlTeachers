@@ -46,23 +46,6 @@ class LeftHomeMenu extends Component {
     }
   }
 
-  // Handles The Number Of Trades Placed By All Of The Students In Any Of The Teacher User's Classrooms
-  handleNumberOfTrades() {
-    if (this.props.allTeacherClassrooms.length === 0) {
-      return 0;
-    } else {
-      let numberOfTrades = 0;
-      for (var i in this.props.allTeacherClassrooms) {
-        if (this.props.allTeacherClassrooms[i].studentList.length !== 0) {
-          for (var j in this.props.allTeacherClassrooms[i].studentList) {
-            numberOfTrades = numberOfTrades + this.props.allTeacherClassrooms[i].studentList[j].numberOfStockTrades + this.props.allTeacherClassrooms[i].studentList[j].numberOfCryptoTrades;
-          }
-        }
-      }
-      return numberOfTrades;
-    }
-  }
-
   // Pass Through Arrow Function Which Toggles Visibility Of Alert Dialog
   toggleAlert = () => {
     this.setState({ alertVisible: !this.state.alertVisible });
@@ -107,10 +90,10 @@ class LeftHomeMenu extends Component {
             </div>
             <div className='profile-flex-item'>
               <div className='profile-flex-text'>
-                {this.handleNumberOfTrades()}
+                {this.props.allTeacherClassrooms.length}
               </div>
               <div className='profile-flex-subtext'>
-                Trades
+                Class{this.props.allTeacherClassrooms.length === 1 ? '' : 'es'}
               </div>
             </div>
           </div>

@@ -4,28 +4,22 @@ import { resetStudentPassword } from '../../../ActionTypes/classroomActions';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBox from '@mui/icons-material/CheckBox';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Alert from '../../Admin/Alert';
 //import NotificationAddOutlinedIcon from '@mui/icons-material/NotificationAddOutlined';
 import '../../../styles/Home/HomeScreen.css';
 import NotifyStudentAlert from './NotifyStudentAlert';
 import intHandler from '../../../helper_functions/intHelper';
-import moment from 'moment';
 
 class ClassroomItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
       alertVisible: false,
       alertTitle: 'Are You Sure?',
       alertMessage: '',
       alertOption: null,
       alertOptionText: '',
       alertOptionText2: '',
-      resetPassword: '',
-      tab: 'stocks',
-      notifyAlertVisible: false,
     }
   }
 
@@ -34,61 +28,6 @@ class ClassroomItem extends Component {
     if (this.props.removing !== prevProps.removing) {
       this.setState({ selected: false, expanded: false });
     }
-  }
-
-  // Toggles The Visibility Of Additional Student Information, Including Portfolio Performance & App Activity
-  toggleExpanded() {
-    this.setState({ expanded: !this.state.expanded });
-  }
-
-  // Handles Dispatch To GraphQL To Reset Student Account. This Will Set Account As If It Was Just Created And Student Will Receive Email
-  resetAccount = () => {
-
-  }
-
-  // Handles Dispatch To GraphQL To Reset Student Password
-  resetPassword = () => {
-    this.setState({ loadingResetPassword: true })
-    this.props.resetStudentPassword(this.props.jwtToken, this.props.item.username).then((res) => {
-      if (!(res && !('errors' in res))) {
-        this.setState({
-          loadingResetPassword: false,
-          resetPassword: '',
-          alertOption: false,
-          alertOptionText: '',
-          alertTitle: 'Failed To Reset Password',
-          alertMessage: 'Something went wrong trying to connect to the server and reset the student account. ' + res.errors[0].message,
-          alertVisible: true,
-          alertOptionText2: false
-        });
-      } else {
-        this.setState({
-          loadingResetPassword: false,
-          resetPassword: res.studentlogin.password,
-          alertOption: false,
-          alertOptionText: '',
-          alertTitle: 'Reset Password Successful',
-          alertMessage: 'The new password for the student is: ' + res.studentlogin.password + `  Please note that the password is case-sensitive. If you continue experiencing issues, don't hestiate to contact support`,
-          alertVisible: true,
-          alertOptionText2: false
-        });
-      }
-    });
-  }
-
-  // Hides Native Alert Which Is Used To Display Message Regarding Resetting Account
-  dismissAlert = () => {
-    this.setState({ alertVisible: false });
-  }
-
-  // Toggles Student Portfolio To Stocks From Crypto. Stocks Is The Default.
-  selectStocks() {
-    this.setState({ tab: 'stocks' });
-  }
-
-  // Toggles Student Portfolio To Crypto From Stocks
-  selectCrypto() {
-    this.setState({ tab: 'crypto' });
   }
 
   // Shows Alert To Notify A Student, Which Presents Teacher With Text Input To Draft Message To Student
@@ -102,56 +41,24 @@ class ClassroomItem extends Component {
     this.setState({ notifyAlertVisible: false });
   }
 
-  // Handles Performance Formatting, Depending Upon Which Tab Is Selected
+  // Handles Performance Formatting And Only Displays Stock Performance
   handlePerformance() {
-    // Handles If Stocks Are Selected By The User - Default
-    if (this.state.tab === 'stocks' && this.props.sortType !== 4) {
-      return intHandler(this.props.item.stockPortfolioPerformance - 100, 'percent', 2, true);
-    }
-    // Handles If Crypto Is Selected By The User
-    else {
-      return intHandler(this.props.item.cryptoPortfolioPerformance - 100, 'percent', 2, true);
-    }
+    return intHandler(this.props.item.stockPortfolioPerformance - 100, 'percent', 2, true);
   }
 
   // Handles Color Of Performance Thumbnail Background Between Green & Red
   handlePerformanceColor() {
-    if (this.state.tab === 'stocks' && this.props.sortType !== 4) {
-      if (parseFloat(this.props.item.stockPortfolioPerformance - 100) < 0) {
-        return '#ed3232';
-      } else {
-        return '#007154';
-      }
+    if (parseFloat(this.props.item.stockPortfolioPerformance - 100) < 0) {
+      return '#ed3232';
     } else {
-      if (parseFloat(this.props.item.cryptoPortfolioPerformance - 100) < 0) {
-        return '#ed3232';
-      } else {
-        return '#007154';
-      }
+      return '#007154';
     }
   }
 
-  // Sets Visibility of Native Alert To True When User Selects To Reset A Students Account
-  pressResetAccount() {
-    this.setState({
-      alertTitle: 'Are You Sure?',
-      alertMessage: 'Resetting an account is permanent. Once you reset a student account, it cannot be undone. The student will be removed from all competitions and their portfolio will go to zero.',
-      alertOptionText: 'Reset Account',
-      alertVisible: true,
-      alertOption: this.resetAccount,
-      alertOptionText2: 'Nevermind'
-    });
-  }
-
-  handleResetPassword() {
-    this.setState({
-      alertTitle: 'Are You Sure?',
-      alertMessage: `Once you reset the student's password, Rapunzl will update the password for the student's account and show it to you so that you can help the student login.`,
-      alertOptionText: 'Reset Password',
-      alertVisible: true,
-      alertOption: this.resetPassword,
-      alertOptionText2: 'Nevermind'
-    })
+  formatName() {
+    const firstName = this.props.item.firstName.charAt(0).toUpperCase() + this.props.item.firstName.slice(1);
+    const lastName = this.props.item.lastName.charAt(0).toUpperCase() + this.props.item.lastName.slice(1);
+    return firstName + ' ' + lastName;
   }
 
   render() {
@@ -176,28 +83,19 @@ class ClassroomItem extends Component {
         <div className='student-item-collapsed'>
           <div className='student-item-left'>
             <div className='student-item-name'>
-              {this.props.item.firstName} {this.props.item.lastName}
+              {this.formatName()}
             </div>
             <div className='student-item-username'>
               @{this.props.item.username}
             </div>
-            {this.state.resetPassword.length !== 0 && this.state.expanded && (
-              <div className='student-updated-password'>
-                <span style={{ color: 'white', fontWeight: '300' }}>Student's updated password is: </span>{this.state.resetPassword}
-              </div>
-            )}
+            
           </div>
           {!this.props.removing && !this.state.expanded && (
             <div className='student-item-right'>
               <div className='student-item-performance' style={{ backgroundColor: this.handlePerformanceColor() }}>
                 {this.handlePerformance()}
               </div>
-              <ChevronRightIcon className='button' onClick={() => this.toggleExpanded()} />
-            </div>
-          )}
-          {!this.props.removing && this.state.expanded && (
-            <div className='student-item-right'>
-              <ExpandMoreIcon className='button' onClick={() => this.toggleExpanded()}/>
+              <ChevronRightIcon className='button' onClick={() => this.props.viewPortfolio(this.props.item)} />
             </div>
           )}
           {this.props.removing && this.props.selected && (
@@ -211,84 +109,6 @@ class ClassroomItem extends Component {
             </div>
           )}
         </div>
-        {this.state.expanded && (
-          <div className='student-item-expanded'>
-            <div className='student-item-expanded-flex-header'>
-            <div className='expanded-student-toggle'>
-              <div title="View Student Stock Portfolio" onClick={() => this.selectStocks()} className={`expanded-student-toggle-button ${this.state.tab === 'stocks' ? 'expanded-student-toggle-selected' : ''}`} style={{ marginRight: 10 }}>
-                Stocks
-              </div>
-              <div title="View Student Crypto Portfolio" onClick={() => this.selectCrypto()} className={`expanded-student-toggle-button ${this.state.tab === 'crypto' ? 'expanded-student-toggle-selected' : ''}`}>
-                Crypto
-              </div>
-            </div>
-            {/*
-            NotifyStudentAlert 
-            <div onClick={() => this.selectNotify()} className='message-student-button'>
-              <NotificationAddOutlinedIcon className='message-student-icon' />
-              <div className='message-student-text'>
-                Notify
-              </div>
-            </div> */}
-            </div>
-            <div className='expanded-student-flex'>
-              <div className='expanded-student-item'>
-                <div className='expanded-student-stat'>
-                  {this.state.tab === 'stocks' ? this.props.item.numberOfStockTrades : this.props.item.numberOfCryptoTrades}
-                </div>
-                <div className='expanded-student-title'>
-                  # Of Trades
-                </div>
-                <div className='expanded-student-stat'>
-                  {moment(this.props.item.lastUpdated).format("l")}
-                </div>
-                <div className='expanded-student-title'>
-                  Last Active
-                </div>
-              </div>
-              <div className='expanded-student-item'>
-                <div className='expanded-student-stat'>
-                  {this.state.tab === 'stocks' ? this.props.item.numberOfStockPositions : this.props.item.numberOfCryptoPositions}
-                </div>
-                <div className='expanded-student-title'>
-                  # Of Positions
-                </div>
-                <div className='expanded-student-stat'>
-                  {this.props.item.numberOfFriends}
-                </div>
-                <div className='expanded-student-title'>
-                  # Of Friends
-                </div>
-              </div>
-              <div className='expanded-student-item'>
-                <div className='expanded-student-stat' style={{ color: this.handlePerformanceColor() }}>
-                  {this.handlePerformance()}
-                </div>
-                <div className='expanded-student-title'>
-                  Performance
-                </div>
-              </div>
-            </div>
-            <div className='flex-button'>
-              <div title="View Selected Student Portfolio" onClick={() => this.props.viewPortfolio(this.props.item.username, this.props.item.firstName + ' ' + this.props.item.lastName)} className='classroom-item-button view-portfolio-button'>
-                View Portfolio
-              </div>
-              {this.state.resetPassword.length === 0 && (
-                <div title="Resets Student Password" onClick={() => this.handleResetPassword()} className='classroom-item-button reset-account-button'>
-                  Reset Password
-                </div>
-              )}
-              <div
-                title="Resets Student Account To $10,000"
-                onClick={() => this.pressResetAccount()}
-                className='classroom-item-button reset-account-button'
-                style={{ color: '#ff3434', backgroundColor: '#012b22' }}
-              >
-                Reset Account
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
@@ -305,12 +125,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-// Map Dispatch To Props (Dispatch Actions to Reducers. Reducers then modify the redux store state.
-const mapDispatchToProps = (dispatch) => {
-  // Action
-    return {
-      resetStudentPassword: (token, username) => dispatch(resetStudentPassword(token, username)),
-   };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ClassroomItem);
+export default connect(mapStateToProps)(ClassroomItem);

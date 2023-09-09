@@ -23,8 +23,7 @@ class YourClassroomTile extends Component {
       removeStudents: false,
       manualAdd: false,
       viewPortfolio: false,
-      selectedPortfolioUsername: false,
-      selectedPortfolioName: false,
+      selectedUser: false,
       portfolioName: 'Brian Curcio',
       portfolioUsername: 'briancurcio',
       portfolioID: 0,
@@ -40,7 +39,7 @@ class YourClassroomTile extends Component {
         removeStudents: false,
         manualAdd: false,
         viewPortfolio: false,
-        selectedPortfolioUsername: false,
+        selectedUser: false,
         portfolioID: 0,
         portfolioData: [],
         removingArray: [],
@@ -80,14 +79,14 @@ class YourClassroomTile extends Component {
   }
 
   // Handles toggling portfolio visibility when user selects a student's portfolio to view
-  togglePortfolio = (username, name) => {
+  togglePortfolio = (user) => {
     // If Portfolio Is Not Visible, We Set To Visible And Update SelectedPortfolioID In State
     if (!this.state.viewPortfolio) {
-      this.setState({ viewPortfolio: true, selectedPortfolioUsername: username, selectedPortfolioName: name });
+      this.setState({ viewPortfolio: true, selectedUser: user });
     }
     // If Portfolio Is Visible, Then We Want To Hide The Portfolio And Remove SelectedPortfolioID In State
     else {
-      this.setState({ viewPortfolio: false, selectedPortfolioUsername: false, selectedPortfolioName: false });
+      this.setState({ viewPortfolio: false, selectedUser: false });
     }
   }
 
@@ -275,8 +274,9 @@ class YourClassroomTile extends Component {
           {/* Handles If Portfolio Preview Is Selected From Classroom Item To View Student Portfolio */}
           <PortfolioPreview
             dismissPortfolio={this.togglePortfolio}
-            portfolioName={this.state.selectedPortfolioName}
-            portfolioUsername={this.state.selectedPortfolioUsername}
+            user={this.state.selectedUser}
+            portfolioUsername={''}
+            portfolioName={''}
             visible={this.state.viewPortfolio}
           />
           {false && !this.props.addingStudents && classList.length !== 0 && !this.state.viewPortfolio && (

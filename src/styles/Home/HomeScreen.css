@@ -424,11 +424,9 @@ path {
 }
 .expanded-student-flex {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     flex-direction: row;
-    margin-bottom: 7px;
-    margin-top: 10px;
     padding-right: 20px;
 }
 .expanded-student-stat {
@@ -436,20 +434,22 @@ path {
     font-weight: 700;
 }
 .expanded-student-title {
-    font-size: 13px;
-    font-weight: 200;
+    font-size: 12px;
+    font-weight: 300;
     margin-bottom: 15px;
 }
 .expanded-student-item {
-    margin-right: 100px;
+    margin-right: 20px;
+    margin-left: 20px;
+    text-align: center;
 }
 .classroom-item-button {
-    font-size: 11.5px;
+    font-size: 9.5px;
     font-weight: 300;
     padding-left: 20px;
     padding-right: 20px;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 9px;
+    padding-bottom: 9px;
     border: 1px solid white;
     width: fit-content;
     border-radius: 7px;
@@ -486,11 +486,11 @@ path {
     font-weight: 500;
 }
 .student-updated-password {
-    font-size: 13.5px;
+    font-size: 12px;
     font-weight: 700;
-    padding-top: 7px;
-    padding-bottom: 3px;
+    padding-bottom: 13px;
     color: #ffc100;
+    text-align: center;
 }
 .student-item-right {
     display: flex;
@@ -1426,12 +1426,18 @@ path {
     align-items: center;
     margin-left: 12px;
     margin-top: -25px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 .view-portfolio-profile-image {
     width: 60px;
     height: 60px;
     margin-right: 10px;
+}
+.view-portfolio-options-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
 }
 .view-portfolio-name {
     font-size: 25px;
@@ -1446,6 +1452,7 @@ path {
     justify-content: center;
     align-items: center;
     margin-bottom: 15px;
+    margin-top: 30px;
 }
 .view-portfolio-line {
     width: 180px;
@@ -1502,12 +1509,17 @@ path {
     padding-top: 10px;
     font-weight: 200;
 }
+.portfolio-position-side {
+    font-size: 11px;
+    font-weight: 700;
+    padding-top: 12px;
+    text-align: center;
+}
 .view-portfolio-toggle-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px;
 }
 .view-portfolio-toggle-button {
     font-size: 12px;
@@ -1516,13 +1528,16 @@ path {
     padding-right: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
-    border: 1px solid white;
+    border-bottom: 2px solid white;
     cursor: pointer;
     transition: 0.2s all;
     background-color: #002b21;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 .view-portfolio-toggle-button:hover {
-    background-color: #0e4236;
+    color: #1fa885;
 }
 .view-portfolio-positions-container {
     display: flex;
@@ -1553,19 +1568,12 @@ path {
     font-size: 15px;
     font-weight: 200;
 }
-.toggle-button-left {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-.toggle-button-right {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
 .toggle-button-selected {
-    background-color: #1fa885;
+    border-color: #1fa885;
+    border-bottom-width: 5px;
 }
 .toggle-button-selected:hover {
-    background-color: #1fa885;
+    border-color: #1fa885;
 }
 .your-courses {
     padding-bottom: 45px;
