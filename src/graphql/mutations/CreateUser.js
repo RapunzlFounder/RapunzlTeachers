@@ -24,8 +24,10 @@ export const CREATE_USER = (username, firstName, lastName, email, password, birt
         description
         imageUrl
         presentationUrl
+        presentationGoogleURL
         moduleLevel
         vocabUrl
+        vocabGoogleURL
         isPrivate
         isRapunzlModule
         teacherId
@@ -35,6 +37,7 @@ export const CREATE_USER = (username, firstName, lastName, email, password, birt
 					description
 					imageUrl
 					pdfUrl
+          googleURL
         }
         articles {
           id
@@ -42,6 +45,7 @@ export const CREATE_USER = (username, firstName, lastName, email, password, birt
 					description
 					imageUrl
 					pdfUrl
+          googleURL
         }
         activities {
           id
@@ -49,6 +53,7 @@ export const CREATE_USER = (username, firstName, lastName, email, password, birt
 					description
 					imageUrl
 					pdfUrl
+          googleURL
         }
         assessments {
           id
