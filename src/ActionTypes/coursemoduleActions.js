@@ -359,21 +359,46 @@ export function getModules(token, getPublicModules, getTeacherModules, modulesLi
           mainReturnedObj.getTeacherModules = returnedModules;
           for (var property1 in mainReturnedObj.getTeacherModules){
               // convert the teacher guides array of objects into an objects of objects
-              const moduleGuides = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].teacherGuides);
-              mainReturnedObj.getTeacherModules[property1].teacherGuides = moduleGuides;
-              // convert the module articles array of objects into an objects of objects
-              const moduleArticles = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].articles);
-              mainReturnedObj.getTeacherModules[property1].articles = moduleArticles;
-              // convert the module activities array of objects into an objects of objects
-              const moduleActivities = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].activities);
-              mainReturnedObj.getTeacherModules[property1].activities = moduleActivities;
-              // convert the module assessment questions into an object of objects
-              const moduleAssessmentQuestions = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].assessments.questions);
-              mainReturnedObj.getTeacherModules[property1].assessments.questions = moduleAssessmentQuestions;
-              // convert the module videos array of objects into an objects of objects
-              const moduleVideos = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].videos);
-              mainReturnedObj.getTeacherModules[property1].videos = moduleVideos;
+              if (mainReturnedObj.getTeacherModules[property1].teacherGuides && mainReturnedObj.getTeacherModules[property1].teacherGuides != null){
+                const moduleGuides = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].teacherGuides);
+                mainReturnedObj.getTeacherModules[property1].teacherGuides = moduleGuides;
               }
+              else{
+                mainReturnedObj.getTeacherModules[property1].teacherGuides = {};
+              }
+              // convert the module articles array of objects into an objects of objects
+              if (mainReturnedObj.getTeacherModules[property1].articles && mainReturnedObj.getTeacherModules[property1].articles != null){
+                const moduleArticles = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].articles);
+                mainReturnedObj.getTeacherModules[property1].articles = moduleArticles;
+              }
+              else{
+                mainReturnedObj.getTeacherModules[property1].articles = {};
+              }
+              // convert the module activities array of objects into an objects of objects
+              if (mainReturnedObj.getTeacherModules[property1].activities && mainReturnedObj.getTeacherModules[property1].activities != null){
+                const moduleActivities = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].activities);
+                mainReturnedObj.getTeacherModules[property1].activities = moduleActivities;
+              }
+              else{
+                mainReturnedObj.getTeacherModules[property1].activities = {};
+              }
+              // convert the module assessment questions into an object of objects
+              if (mainReturnedObj.getTeacherModules[property1].assessments && mainReturnedObj.getTeacherModules[property1].assessments.questions != null){
+                const moduleAssessmentQuestions = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].assessments.questions);
+                mainReturnedObj.getTeacherModules[property1].assessments.questions = moduleAssessmentQuestions;
+              }
+              else{
+                mainReturnedObj.getTeacherModules[property1].assessments = {};              
+              }
+              // convert the module videos array of objects into an objects of objects
+              if (mainReturnedObj.getTeacherModules[property1].videos && mainReturnedObj.getTeacherModules[property1].videos != null){
+                const moduleVideos = arrayToObjectID(mainReturnedObj.getTeacherModules[property1].videos);
+                mainReturnedObj.getTeacherModules[property1].videos = moduleVideos;
+              }
+              else{
+                mainReturnedObj.getTeacherModules[property1].videos = {};
+              }
+          }
           
           dispatch(getModulesSuccess(mainReturnedObj.getTeacherModules));
           return json.data.data.getTeacherModules;

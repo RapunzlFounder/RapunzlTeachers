@@ -291,21 +291,43 @@ export function createUser(userDetail, invitationCode) {
           mainReturnedObj.createTeacheruser.newUser.availablePublicModules = publicModules;
           for (var property in mainReturnedObj.createTeacheruser.newUser.availablePublicModules){
             // convert the available public module teacher guides array of objects into an objects of objects
-            const publicModuleGuides = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].teacherGuides);
-            mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].teacherGuides = publicModuleGuides;
+            if (mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].teacherGuides && mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].teacherGuides != null){
+              const publicModuleGuides = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].teacherGuides);
+              mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].teacherGuides = publicModuleGuides;
+            }
+            else{
+              mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].teacherGuides = {};
+            }
             // convert the available public module articles array of objects into an objects of objects
-            const publicModuleArticles = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].articles);
-            mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].articles = publicModuleArticles;
+            if (mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].articles && mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].articles != null){
+              const publicModuleArticles = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].articles);
+              mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].articles = publicModuleArticles;
+            }
+            else{
+              mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].articles = {};
+            }
             // convert the available public module activities array of objects into an objects of objects
-            const publicModuleActivities = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].activities);
-            mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].activities = publicModuleActivities;
+            if(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].activities && mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].activities != null){
+              const publicModuleActivities = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].activities);
+              mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].activities = publicModuleActivities;
+            }
+            else{
+              mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].activities = {};
+            }
             // convert the available public module assessment questions into an object of objects
-            const publicModuleAssessmentQuestions = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].assessments.questions);
-            mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].assessments.questions = publicModuleAssessmentQuestions;
+            if (mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].assessments && mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].assessments.questions != null){
+              const publicModuleAssessmentQuestions = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].assessments.questions);
+              mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].assessments.questions = publicModuleAssessmentQuestions;
+            }
+            else{
+              mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].assessments = {};
+            }
             // convert the available public module videos array of objects into an objects of objects
-            const publicModuleVideos = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].videos);
-            mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].videos = publicModuleVideos;
-            //
+            if(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].videos && mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].videos != null){
+              const publicModuleVideos = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].videos);
+              mainReturnedObj.createTeacheruser.newUser.availablePublicModules[property].videos = publicModuleVideos;
+            }
+              //
           }
           dispatch(updateAllPublicModules(mainReturnedObj.createTeacheruser.newUser.availablePublicModules));
           dispatch(createUserSuccess(mainReturnedObj.createTeacheruser.newUser, userDetail.password));
