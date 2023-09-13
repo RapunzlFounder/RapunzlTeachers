@@ -43,9 +43,11 @@ query{
 			description
 			imageUrl
 			presentationUrl
+			presentationGoogleURL
 			presentationStandards
 			moduleLevel
 			vocabUrl
+			vocabGoogleURL
 			isPrivate
 			isRapunzlModule
 			teacherId
@@ -54,6 +56,7 @@ query{
 				guideName
 				description
 				imageUrl
+				googleURL
 				pdfUrl
 			}
 			articles {
@@ -61,6 +64,7 @@ query{
 				articleName
 				description
 				imageUrl
+				googleURL
 				pdfUrl
 				standards
 			}
@@ -69,6 +73,7 @@ query{
 				activityName
 				description
 				imageUrl
+				googleURL
 				pdfUrl
 				standards
 			}

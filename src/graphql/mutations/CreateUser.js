@@ -36,6 +36,7 @@ export const CREATE_USER = (username, firstName, lastName, email, password, birt
 					guideName
 					description
 					imageUrl
+          googleURL
 					pdfUrl
           googleURL
         }
@@ -44,6 +45,7 @@ export const CREATE_USER = (username, firstName, lastName, email, password, birt
 					articleName
 					description
 					imageUrl
+          googleURL
 					pdfUrl
           googleURL
         }
@@ -52,6 +54,7 @@ export const CREATE_USER = (username, firstName, lastName, email, password, birt
 					activityName
 					description
 					imageUrl
+          googleURL
 					pdfUrl
           googleURL
         }
