@@ -16,7 +16,7 @@
   margin-bottom: 15px;
   border-radius: 15px;
   transition: 0.2s all;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 .google-slides-icon {
   fill: #00bb8b !important;
@@ -27,6 +27,15 @@
     padding-left: 10px;
     font-weight: 500;
     color: #00bb8b;
+}
+.google-slides-button-flex:hover {
+  background-color: #00bb8b;
+}
+.google-slides-button-flex:hover .google-slides-icon {
+  fill: white !important;
+}
+.google-slides-button-flex:hover .google-slides-button-text {
+  color: white;
 }
 .pdf-header-flex {
   flex-direction: row;

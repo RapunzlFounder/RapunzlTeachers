@@ -19,6 +19,7 @@ class SectionBuilderDialog extends React.PureComponent {
       includeAssessment: false,
       PDFVisible: false,
       pdfURL: false,
+      googleURL: false,
       pdfName: '',
       pdfOrientation: 'portrait'
     }
@@ -34,7 +35,9 @@ class SectionBuilderDialog extends React.PureComponent {
         selectedActivites: [],
         includeAssessment: false,
         selectedArticle: 0,
-        selectedActivity: 0
+        selectedActivity: 0,
+        googleURL: false,
+        pdfURL: false,
       });
     }
   }
@@ -265,6 +268,7 @@ class SectionBuilderDialog extends React.PureComponent {
       this.setState({
         PDFVisible: true,
         pdfURL: item.pdfUrl,
+        googleURL: item.googleURL,
         pdfName: item.articleName,
         pdfOrientation: 'portrait'
       });
@@ -272,6 +276,7 @@ class SectionBuilderDialog extends React.PureComponent {
       this.setState({
         PDFVisible: true,
         pdfURL: item.pdfUrl,
+        googleURL: item.googleURL,
         pdfName: item.activityName,
         pdfOrientation: 'portrait'
       });
@@ -323,6 +328,7 @@ class SectionBuilderDialog extends React.PureComponent {
         <PDFViewer
           visible={this.state.PDFVisible}
           dismiss={this.dismissPDFViewer}
+          googleURL={this.state.googleURL}
           pdfURL={this.state.pdfURL}
           pdfName={this.state.pdfName}
           orientation={this.state.pdfOrientation}

@@ -15,6 +15,7 @@ class CourseBuilderDialog extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      googleURL: false,
       pdfURL: 'images/M1/M1_Presentation.pdf',
       pdfName: '',
       PDFVisible: false,
@@ -27,6 +28,7 @@ class CourseBuilderDialog extends React.PureComponent {
   componentDidUpdate(prevProps) {
     if (this.props.visible !== prevProps.visible && this.props.visible) {
       this.setState({
+        googleURL: false,
         pdfURL: 'images/M1/M1_Presentation.pdf',
         PDFVisible: false,
         pdfOrientation: 'landscape',
@@ -332,6 +334,7 @@ class CourseBuilderDialog extends React.PureComponent {
     if (type === 'activity') {
       this.setState({
         PDFVisible: true,
+        googleURL: item.googleURL,
         pdfURL: item.pdfUrl,
         pdfName: item.activityName,
         pdfOrientation: 'portrait'
@@ -339,6 +342,7 @@ class CourseBuilderDialog extends React.PureComponent {
     } else {
       this.setState({
         PDFVisible: true,
+        googleURL: item.googleURL,
         pdfURL: item.pdfUrl,
         pdfName: item.articleName,
         pdfOrientation: 'portrait'
@@ -372,6 +376,7 @@ class CourseBuilderDialog extends React.PureComponent {
           <PDFViewer
             visible={this.state.PDFVisible}
             dismiss={this.dismissPDFViewer}
+            googleURL={this.state.googleURL}
             pdfURL={this.state.pdfURL}
             pdfName={this.state.pdfName}
             orientation={this.state.pdfOrientation}

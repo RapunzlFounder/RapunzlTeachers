@@ -40,6 +40,7 @@ class ResourceItem extends Component {
             visible={this.state.pdfVisible}
             dismiss={this.dismissPDFViewer}
             pdfURL={this.props.item.pdfUrl}
+            googleURL={this.props.item.googleURL}
             pdfName={this.state.pdfName}
             orientation={'portrait'}
           />
@@ -63,6 +64,7 @@ class ResourceItem extends Component {
               visible={this.state.pdfVisible}
               dismiss={this.dismissPDFViewer}
               pdfURL={this.props.item.pdfUrl}
+              googleURL={this.props.item.googleURL}
               pdfName={this.state.pdfName}
               orientation={'portrait'}
             />
@@ -86,6 +88,7 @@ class ResourceItem extends Component {
             visible={this.state.pdfVisible}
             dismiss={this.dismissPDFViewer}
             pdfURL={this.props.item.presentationUrl}
+            googleURL={this.props.item.presentationGoogleURL}
             pdfName={this.state.pdfName}
             orientation={'landscape'}
           />

@@ -24,6 +24,7 @@ class ViewCourseTile extends Component {
       standardsVisible: false,
       assigningCourse: false,
       currentSection: 1,
+      googleURL: '',
       pdfURL: 'images/M1/M1_Presentation.pdf',
       PDFVisible: false,
       pdfName: '',
@@ -56,6 +57,7 @@ class ViewCourseTile extends Component {
     this.setState({
       PDFVisible: true,
       pdfOrientation: 'landscape',
+      googleURL: currentCourse.courseModules[this.state.currentSection - 1].presentationGoogleURL,
       pdfURL: currentCourse.courseModules[this.state.currentSection - 1].presentationUrl,
       pdfName: currentCourse.courseModules[this.state.currentSection - 1].name,
     });
@@ -67,6 +69,7 @@ class ViewCourseTile extends Component {
     this.setState({
       PDFVisible: true,
       pdfOrientation: 'portrait',
+      googleURL: currentCourse.courseModules[this.state.currentSection - 1].googleURL,
       pdfURL: currentCourse.courseModules[this.state.currentSection - 1].teacherGuides[0].pdfUrl,
       pdfName: 'Teacher Guide'
     })
@@ -79,6 +82,7 @@ class ViewCourseTile extends Component {
       this.setState({
         PDFVisible: true,
         pdfOrientation: 'portrait',
+        googleURL: item.googleURL,
         pdfURL: item.pdfUrl,
         pdfName: item.activityName
       });
@@ -86,6 +90,7 @@ class ViewCourseTile extends Component {
       this.setState({
         PDFVisible: true,
         pdfOrientation: 'portrait',
+        googleURL: item.googleURL,
         pdfURL: item.pdfUrl,
         pdfName: item.articleName
       });
@@ -438,6 +443,7 @@ class ViewCourseTile extends Component {
           dismiss={this.dismissPDFViewer}
           pdfURL={this.state.pdfURL}
           pdfName={this.state.pdfName}
+          googleURL={this.state.googleURL}
           orientation={this.state.pdfOrientation}
         />
         <div onClick={() => this.props.selectCourse(false)} className='back-to-all-courses-button'>
