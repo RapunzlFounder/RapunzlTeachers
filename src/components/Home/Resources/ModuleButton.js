@@ -134,6 +134,36 @@ class ModuleButton extends Component {
               14. Financial Equations
             </div>
           </div>
+          <div onClick={() => this.props.selectModule(15)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(15) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(15) ? '#00ffbe' : 'white' }}>
+              15. Paying For College
+            </div>
+          </div>
+          <div onClick={() => this.props.selectModule(16)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(16) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(16) ? '#00ffbe' : 'white' }}>
+              16. Opposite Of Buying: Shorting
+            </div>
+          </div>
+          <div onClick={() => this.props.selectModule(17)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(17) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(17) ? '#00ffbe' : 'white' }}>
+              17. It Starts With The Financials
+            </div>
+          </div>
+          <div onClick={() => this.props.selectModule(18)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(18) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(18) ? '#00ffbe' : 'white' }}>
+              18. Buying Your First Home
+            </div>
+          </div>
+          <div onClick={() => this.props.selectModule(19)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(19) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(19) ? '#00ffbe' : 'white' }}>
+              19. Business Of Buildings & Ownership
+            </div>
+          </div>
           <div onClick={() => this.props.selectModule(null)} className="resource-menu-item-flex">
             <div className="resource-menu-item-text" style={{ color: '#ff5536', marginLeft: 2 }}>
               Reset Filter

@@ -74,7 +74,7 @@ export const getTeacherCourse = createSelector(
             createdAt: teacherCourse.createdAt,
             lastModifiedAt: teacherCourse.lastModifiedAt,
             isPrivate: teacherCourse.isPrivate,
-            courseModules: []
+            courseModules: [],
           };
           for (var id in teacherCourse.courseModules){
             // first check if the module id is a rapunzl public module
