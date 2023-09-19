@@ -37,6 +37,10 @@ import {
   REMOVE_CLASSROOM_COURSE_FAILURE,
   REMOVE_CLASSROOM_COURSE_ERROR,
   WEBSOCKET_QUIZSCORE_UPDATE,
+  REMOVE_STUDENT_QUIZSCORES_BEGIN,
+  REMOVE_STUDENT_QUIZSCORES_SUCCESS,
+  REMOVE_STUDENT_QUIZSCORES_FAILURE,
+  REMOVE_STUDENT_QUIZSCORES_ERROR,
 } from '../ActionTypes/classroomActions';
 
 import { WEBSOCKET_PORTFOLIO_UPDATE } from '../ActionTypes/portfolioActions';
@@ -535,7 +539,43 @@ const classroomReducer = (state = initialState, action) => {
         // graphqlError: 'There was an error connecting to our servers to remove students from your classroom. Please contact support.'
         errorTitle: 'Error Removing Students from Classroom',
       };
-    
+    // HANDLES REMOVING STUDENT QUIZ SCORES FOR A MODULE
+    case REMOVE_STUDENT_QUIZSCORES_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null
+      }
+    case REMOVE_STUDENT_QUIZSCORES_SUCCESS:
+      let originalClassroomsObject7 = JSON.parse(JSON.stringify(state.classrooms));
+      // remove the quizscores for the module from the student      
+      delete originalClassroomsObject7.studentList[action.payload.studentUserId].moduleAssessmentScores[action.payload.moduleId];
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+        classrooms: originalClassroomsObject7,
+      }
+    case REMOVE_STUDENT_QUIZSCORES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        // graphqlError: 'There was a failure connecting to our servers to remove Student Module Quiz Scores. Please contact support.'
+        errorTitle: 'Failure Removing Student Module Quiz Scores',
+      };
+    case REMOVE_STUDENT_QUIZSCORES_ERROR:
+      return {
+        ...state,
+        loading: false,
+        graphqlError: action.payload.error,
+        // graphqlError: 'There was an error connecting to our servers to remove Student Module Quiz Scores. Please contact support.'
+        errorTitle: 'Error Removing Student Module Quiz Scores',
+      };
     case UPDATE_CLASSROOM_DATA_STATE:
         return {
           ...state,

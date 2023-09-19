@@ -9,6 +9,7 @@ import { CREATE_TEACHER_CLASSROOM_COURSE } from '../graphql/mutations/CreateTeac
 import { REMOVE_TEACHER_CLASSROOM_COURSE } from '../graphql/mutations/RemoveTeacherClassroomCourse';
 import { stringifyIntArray } from '../helper_functions/utilities';
 import { RESET_STUDENT_PASSWORD } from '../graphql/mutations/ResetStudentPassword';
+import { REMOVE_STUDENT_MODULE_QUIZSCORES } from '../graphql/mutations/RemoveStudentModuleQuizScores';
 
 export const CREATE_TEACHER_NO_CLASSROOMS = 'CREATE_TEACHER_NO_CLASSROOMS';
 export const UPDATE_ALL_CLASSROOMS = 'UPDATE_ALL_CLASSROOMS';
@@ -30,6 +31,10 @@ export const REMOVE_CLASSROOM_COURSE_BEGIN = 'REMOVE_CLASSROOM_COURSE_BEGIN';
 export const REMOVE_CLASSROOM_COURSE_SUCCESS = 'REMOVE_CLASSROOM_COURSE_SUCCESS';
 export const REMOVE_CLASSROOM_COURSE_FAILURE = 'REMOVE_CLASSROOM_COURSE_FAILURE';
 export const REMOVE_CLASSROOM_COURSE_ERROR = 'REMOVE_CLASSROOM_COURSE_ERROR';
+export const REMOVE_STUDENT_QUIZSCORES_BEGIN = 'REMOVE_STUDENT_QUIZSCORES_BEGIN';
+export const REMOVE_STUDENT_QUIZSCORES_SUCCESS = 'REMOVE_STUDENT_QUIZSCORES_SUCCESS';
+export const REMOVE_STUDENT_QUIZSCORES_FAILURE = 'REMOVE_STUDENT_QUIZSCORES_FAILURE';
+export const REMOVE_STUDENT_QUIZSCORES_ERROR = 'REMOVE_STUDENT_QUIZSCORES_ERROR';
 export const ADD_STUDENTS_BEGIN = 'ADD_STUDENTS_BEGIN';
 export const ADD_STUDENTS_SUCCESS = 'ADD_STUDENTS_SUCCESS';
 export const ADD_STUDENTS_FAILURE = 'ADD_STUDENTS_FAILURE';
@@ -119,6 +124,24 @@ export const removeClassroomFailure = error => ({
 });
 export const removeClassroomError = error => ({
   type: REMOVE_CLASSROOM_ERROR,
+  payload: { error },
+});
+
+// Remove a student's quiz scores for a module
+export const removeStudentModuleQuizScoresBegin = () => ({
+  type: REMOVE_STUDENT_QUIZSCORES_BEGIN,
+});
+// success when the teacher has removed the student's quiz scores for a module 
+export const removeStudentModuleQuizScoresSuccess = (studentUserId, moduleId) => ({
+  type: REMOVE_STUDENT_QUIZSCORES_SUCCESS,
+  payload: { studentUserId, moduleId },
+});
+export const removeStudentModuleQuizScoresError = error => ({
+  type: REMOVE_STUDENT_QUIZSCORES_ERROR,
+  payload: { error },
+});
+export const removeStudentModuleQuizScoresFailure = error => ({
+  type: REMOVE_STUDENT_QUIZSCORES_FAILURE,
   payload: { error },
 });
 
@@ -509,6 +532,31 @@ export function removeTeacherClassroomCourse(token, classroomCoursesToRemove) {
         }
       })
       .catch(error => dispatch(removeClassroomCourseFailure(error.message)));
+  };
+}
+
+export function removeStudentModuleQuizScores(token, studentUserId, moduleId) {
+  return function(dispatch){
+    dispatch(removeStudentModuleQuizScoresBegin());
+    return axios.post(GRAPHQL_URL, { query: REMOVE_STUDENT_MODULE_QUIZSCORES(studentUserId, moduleId) }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(removeStudentModuleQuizScoresError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else{
+          if (json.data.data.removeStudentmodulequizscores.success){
+            dispatch(removeStudentModuleQuizScoresSuccess(studentUserId, moduleId));
+          }
+          return json.data.data;
+        }
+      })
+      .catch(error => dispatch(removeStudentModuleQuizScoresFailure(error.message)));
   };
 }
 
