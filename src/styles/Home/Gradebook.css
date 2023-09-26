@@ -353,6 +353,22 @@ body {
     align-items: flex-end;
     padding-bottom: 5px;
 }
+.detailed-grades-reset-scores {
+    padding: 15px;
+    border: 1px solid red;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-size: 10px;
+    color: red;
+    border-radius: 6px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+.detailed-grades-reset-scores:hover {
+    background-color: #ffffff14;
+}
 .detailed-grades-title {
     font-size: 20px;
     font-weight: 200;

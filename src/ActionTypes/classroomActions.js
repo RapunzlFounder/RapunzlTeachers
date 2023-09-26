@@ -132,9 +132,9 @@ export const removeStudentModuleQuizScoresBegin = () => ({
   type: REMOVE_STUDENT_QUIZSCORES_BEGIN,
 });
 // success when the teacher has removed the student's quiz scores for a module 
-export const removeStudentModuleQuizScoresSuccess = (studentUserId, moduleId) => ({
+export const removeStudentModuleQuizScoresSuccess = (studentUserId, moduleId, classroomId) => ({
   type: REMOVE_STUDENT_QUIZSCORES_SUCCESS,
-  payload: { studentUserId, moduleId },
+  payload: { studentUserId, moduleId, classroomId },
 });
 export const removeStudentModuleQuizScoresError = error => ({
   type: REMOVE_STUDENT_QUIZSCORES_ERROR,
@@ -535,7 +535,7 @@ export function removeTeacherClassroomCourse(token, classroomCoursesToRemove) {
   };
 }
 
-export function removeStudentModuleQuizScores(token, studentUserId, moduleId) {
+export function removeStudentModuleQuizScores(token, studentUserId, moduleId, classroomId) {
   return function(dispatch){
     dispatch(removeStudentModuleQuizScoresBegin());
     return axios.post(GRAPHQL_URL, { query: REMOVE_STUDENT_MODULE_QUIZSCORES(studentUserId, moduleId) }, {
@@ -551,7 +551,7 @@ export function removeStudentModuleQuizScores(token, studentUserId, moduleId) {
         }
         else{
           if (json.data.data.removeStudentmodulequizscores.success){
-            dispatch(removeStudentModuleQuizScoresSuccess(studentUserId, moduleId));
+            dispatch(removeStudentModuleQuizScoresSuccess(parseInt(studentUserId), parseInt(moduleId), parseInt(classroomId)));
           }
           return json.data.data;
         }

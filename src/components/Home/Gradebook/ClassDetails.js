@@ -168,7 +168,7 @@ class ClassDetails extends Component {
               )}
               {this.state.gradesExpanded === student.userId && student.moduleAssessmentScores.length === 0 && (
                 <div className='student-grades-overview'>
-                  {[1,2,3,].map((item) => {
+                  {[1,2].map((item) => {
                     return (
                       <div key={item} className='overview-grade-container'>
                         <div className='overview-grade-circle' style={{ borderColor: '#6e6e6e', cursor: 'auto' }}>
@@ -182,7 +182,7 @@ class ClassDetails extends Component {
                   <div className='student-grades-empty-description'>
                     No Scores<br/>To Display
                   </div>
-                    {[4,5,6,].map((item) => {
+                    {[4,5].map((item) => {
                     return (
                       <div key={item} className='overview-grade-container'>
                         <div className='overview-grade-circle' style={{ borderColor: '#6e6e6e', cursor: 'auto' }}>
@@ -200,6 +200,8 @@ class ClassDetails extends Component {
                 questionScores={this._getQuestionScores(student)}
                 moduleId={this.state.moduleExpanded}
                 gradesExpanded={this.state.gradesExpanded}
+                studentUserId={student.userId}
+                classroomId={this.props.selectedClassroom}
               />
             </div>
           )
@@ -215,6 +217,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
+    selectedClassroom: state.dashboard.selectedClassroom,
   };
 };
 

@@ -551,7 +551,7 @@ const classroomReducer = (state = initialState, action) => {
     case REMOVE_STUDENT_QUIZSCORES_SUCCESS:
       let originalClassroomsObject7 = JSON.parse(JSON.stringify(state.classrooms));
       // remove the quizscores for the module from the student      
-      delete originalClassroomsObject7.studentList[action.payload.studentUserId].moduleAssessmentScores[action.payload.moduleId];
+      delete originalClassroomsObject7[action.payload.classroomId].studentList[action.payload.studentUserId].moduleAssessmentScores[action.payload.moduleId];
       return {
         ...state,
         loading: false,
