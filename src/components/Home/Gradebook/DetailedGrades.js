@@ -128,9 +128,11 @@ class DetailedGrades extends Component {
                 {this.props.questionScores.percentComplete.toFixed(0)}% Complete
               </div>
             </div>
-            <div className='detailed-grades-reset-scores' onClick={() => this._handleResetQuizScores()}>
-              Reset Quiz Scores
-            </div>
+            {this.props.isDemo !== true && (
+              <div className='detailed-grades-reset-scores' onClick={() => this._handleResetQuizScores()}>
+                Reset Quiz Scores
+              </div>
+            )}
           </div>
           <div className='quiz-questions' style={{ marginBottom: 20 }}>
             {this.props.questionScores.questionResults.map((item) => {

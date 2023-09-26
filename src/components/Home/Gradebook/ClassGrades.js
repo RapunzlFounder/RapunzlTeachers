@@ -161,6 +161,7 @@ class ClassGrades extends Component {
         <ClassDetails
           data={this._getStudentList()}
           numberOfModules={numberOfModules}
+          isDemo={this.props.selectedClassroom === true || this.props.isDemo === true}
         />
       )
     }

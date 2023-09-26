@@ -202,6 +202,7 @@ class ClassDetails extends Component {
                 gradesExpanded={this.state.gradesExpanded}
                 studentUserId={student.userId}
                 classroomId={this.props.selectedClassroom}
+                isDemo={this.props.isDemo}
               />
             </div>
           )
