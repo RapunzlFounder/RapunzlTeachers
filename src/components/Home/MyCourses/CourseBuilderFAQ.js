@@ -71,9 +71,9 @@ class CourseBuilderFAQ extends React.PureComponent {
               </div>
             </AccordionSummary>
             <AccordionDetails style={{ padding: '12px', borderTop: '1px solid rgba(0, 0, 0, .125)' }}>
-              {SupportText.buildingCourse.map((item) => {
+              {SupportText.buildingCourse.map((item, index) => {
                 return (
-                  <Accordion elevation={0} disableGutters expanded={this.state.expandedSubPanel === item.title} onChange={() => this.handleSubChange(item.title)} style={{ backgroundColor: 'transparent' }}>
+                  <Accordion key={index} elevation={0} disableGutters expanded={this.state.expandedSubPanel === item.title} onChange={() => this.handleSubChange(item.title)} style={{ backgroundColor: 'transparent' }}>
                     <AccordionSummary style={{ padding: '0px', margin: '0px' }}>
                       <div className='menu-text'>
                         {item.title}

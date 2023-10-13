@@ -4,7 +4,6 @@ export const UPDATE_TEACHER_CLASSROOM = (classroomID, classroomName, classYear) 
 	updateTeacherclassroom(
 		classroomId: ${classroomID}
 		classroomName: ${JSON.stringify(classroomName)},
-		classYear: ${classYear},
 	) {
 		classroom {
 			id

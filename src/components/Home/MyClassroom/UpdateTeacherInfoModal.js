@@ -37,6 +37,11 @@ class UpdateTeacherInfoModal extends Component {
         courseName: '',
         courseNameError: false,
         loading: false,
+        success: false,
+        isPrivate: this.props.courseData ? this.props.courseData.isPrivate : null,
+        alertVisible: false,
+        alertTitle: '',
+        alertMessage: ''
       })
     }
   }
@@ -64,7 +69,7 @@ class UpdateTeacherInfoModal extends Component {
       this.setState({ loading: true });
       let className = this.state.classroomName === '' ? null : this.state.classroomName;
       let classYear = this.state.classYear === '' ? null : this.state.classYear;
-      this.props.updateClassroom(this.props.jwtToken, this.props.classroomID, className, classYear).then((res) => {
+      this.props.updateClassroom(this.props.jwtToken, this.props.classData.id, className, classYear).then((res) => {
         // Handles If There Is An Error 
         if (!(res && !('errors' in res))) {
           this.setState({
@@ -143,18 +148,18 @@ class UpdateTeacherInfoModal extends Component {
             <div className='update-info-container'>
               <EditOutlinedIcon className='update-info-header-icon'/>
               <div className='update-info-h1'>
-                Update Classroom
+                Update Classroom<br/>Name
               </div>
               <div className='update-info-subtitle'>
                 Classroom Name
               </div>
               <input
                 className='update-info-input'
-                placeholder={this.props.className}
+                placeholder={this.props.classData.className}
                 value={this.state.classroomName}
                 onChange={(event) => this.changeClassName(event.target.value)}
               />
-              <div className='update-info-subtitle'>
+              {/* <div className='update-info-subtitle'>
                 Class Year
               </div>
               <input 
@@ -162,7 +167,7 @@ class UpdateTeacherInfoModal extends Component {
                 value={this.state.classroomYear}
                 onChange={(event) => this.changeClassYear(event.target.value)}
                 className='update-info-input' 
-              />
+              /> */}
               {this.state.loading && (
                 <div className='update-info-loading-container'>
                   <CircularProgress className='update-info-loading-icon'/>
@@ -291,7 +296,7 @@ class UpdateTeacherInfoModal extends Component {
 }
 
 // Map State To Props (Redux Store Passes State To Component)
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   // Redux Store --> Component
   return {
     // Used for authentication with various dispatches inlcuded below

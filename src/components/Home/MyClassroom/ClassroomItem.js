@@ -19,6 +19,7 @@ class ClassroomItem extends Component {
       alertOption: null,
       alertOptionText: '',
       alertOptionText2: '',
+      notifyAlertVisible: false,
     }
   }
 

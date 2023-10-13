@@ -386,35 +386,33 @@ export function updateTeacherClassroom(token, classroomID, classroomName, classY
           // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
           // convert the classroom array of students into an object of objects
           var mainReturnedObj = json.data.data.updateTeacherclassroom;
-          // convert the classrooms array of classrooms into an object of objects
-          const classroomsObject = arrayToObjectID(mainReturnedObj.classrooms);
-          mainReturnedObj.classrooms = classroomsObject; 
-          for (var property4 in mainReturnedObj.classrooms){
-            // convert the classroom array of students into an onbject of objects
-            const studentsObject = arrayToObjectUserID(mainReturnedObj.classrooms[property4].studentList);
-            mainReturnedObj.classrooms[property4].studentList = studentsObject; 
-            for (var key5 in mainReturnedObj.classrooms[property4].studentList){
-              // convert the classroom array of student stock competitions entered into an onbject of objects
-              const studentStockCompsEntered = arrayToObjectID(mainReturnedObj.classrooms[property4].studentList[key5].stockCompetitionsEntered);
-              mainReturnedObj.classrooms[property4].studentList[key5].stockCompetitionsEntered = studentStockCompsEntered;
-              // convert the classroom array of student crypto competitions entered into an onbject of objects
-              const studentCryptoCompsEntered = arrayToObjectID(mainReturnedObj.classrooms[property4].studentList[key5].cryptoCompetitionsEntered);
-              mainReturnedObj.classrooms[property4].studentList[key5].cryptoCompetitionsEntered = studentCryptoCompsEntered;
-              // convert the classroom array of student Module Assessment or Quiz Scores into an onbject of objects
-              const studentModuleAssessmentScores = arrayToObjectModuleID(mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores);
-              mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores = studentModuleAssessmentScores;
-              // convert the student list module assessment score question results into an object of objects
-              for (var key6 in mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores){
-                const studentModuleAssessmentScoreAnswers = arrayToObjectQuizQuestionID(mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores[key6].questionResults);
-                mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores[key6].questionResults = studentModuleAssessmentScoreAnswers;
-              }
+          // convert the classroom array of students into an onbject of objects
+          const studentsObject = arrayToObjectUserID(mainReturnedObj.classroom.studentList);
+          mainReturnedObj.classroom.studentList = studentsObject; 
+          for (var key5 in mainReturnedObj.classroom.studentList){
+            // convert the classroom array of student stock competitions entered into an onbject of objects
+            const studentStockCompsEntered = arrayToObjectID(mainReturnedObj.classroom.studentList[key5].stockCompetitionsEntered);
+            mainReturnedObj.classroom.studentList[key5].stockCompetitionsEntered = studentStockCompsEntered;
+            // convert the classroom array of student crypto competitions entered into an onbject of objects
+            const studentCryptoCompsEntered = arrayToObjectID(mainReturnedObj.classroom.studentList[key5].cryptoCompetitionsEntered);
+            mainReturnedObj.classroom.studentList[key5].cryptoCompetitionsEntered = studentCryptoCompsEntered;
+            // convert the classroom array of student Module Assessment or Quiz Scores into an onbject of objects
+            const studentModuleAssessmentScores = arrayToObjectModuleID(mainReturnedObj.classroom.studentList[key5].moduleAssessmentScores);
+            mainReturnedObj.classroom.studentList[key5].moduleAssessmentScores = studentModuleAssessmentScores;
+            // convert the student list module assessment score question results into an object of objects
+            for (var key6 in mainReturnedObj.classroom.studentList[key5].moduleAssessmentScores){
+              const studentModuleAssessmentScoreAnswers = arrayToObjectQuizQuestionID(mainReturnedObj.classroom.studentList[key5].moduleAssessmentScores[key6].questionResults);
+              mainReturnedObj.classroom.studentList[key5].moduleAssessmentScores[key6].questionResults = studentModuleAssessmentScoreAnswers;
             }
           }
-          dispatch(updateClassroomSuccess(mainReturnedObj.classrooms));
+          dispatch(updateClassroomSuccess(mainReturnedObj.classroom));
           return json.data.data;
         }
       })
-      .catch(error => dispatch(updateClassroomFailure(error.message)));
+      .catch(error => {
+        dispatch(updateClassroomFailure(error.message));
+        return { errors: [{ message: error.message }]};
+      });
   };
 }
 

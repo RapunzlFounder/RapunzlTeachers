@@ -21,9 +21,9 @@ class StandardsPopup extends React.PureComponent {
     if (list.length !== 0) {
       return (
         <div>
-          {list.map((item) => {
+          {list.map((item, index) => {
             return (
-            <div key={item} className='standards-item-flex'>
+            <div key={index} className='standards-item-flex'>
               <div className='standard-item-left'>
                 <div className='standard-item-title'>
                   {item.title} {item.mainStandard}
@@ -33,9 +33,9 @@ class StandardsPopup extends React.PureComponent {
                 </div>
               </div>
               <div className='standard-item-right'>
-                {item.subStandards.map((item) => {
+                {item.subStandards.map((item, index) => {
                   return (
-                    <div>
+                    <div key={index}>
                       <div className='standard-item-title' style={{ color: '#00ab7f' }}>
                         {item.standard}:
                       </div>

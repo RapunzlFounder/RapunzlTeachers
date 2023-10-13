@@ -218,15 +218,15 @@ export class WrappedSocketManager extends React.Component {
     }
     if (portArray.length > 0){
       this.socket.emit('add-symbol', portArray);
-      console.log("Websocket Student Portfolios subscription complete");
+      // console.log("Websocket Student Portfolios subscription complete");
     }
     if (compArray.length > 0){
       this.socket.emit('add-symbol', compArray);
-      console.log("Websocket Student Competitions subscription complete");
+      // console.log("Websocket Student Competitions subscription complete");
     }
     if (quizScoreArray.length > 0){
       this.socket.emit('add-symbol', quizScoreArray);
-      console.log("Websocket Student QuizScores subscription complete");
+      // console.log("Websocket Student QuizScores subscription complete");
     }
   }
 

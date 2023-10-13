@@ -33,6 +33,9 @@ class YourClassroomTile extends Component {
       removingArray: [],
       sortType: 0,
       editingClassroom: false,
+      alertVisible: false,
+      alertTitle: '',
+      alertMessage: ''
     }
   }
 
@@ -223,9 +226,9 @@ class YourClassroomTile extends Component {
           <div className='create-class-name-header'>
             Which Class Would You<br/>Like To View?
           </div>
-          {this.props.allClassrooms.map((item) => {
+          {this.props.allClassrooms.map((item, index) => {
             return (
-              <div title="View Classroom & Students" key={item.id} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
+              <div title="View Classroom & Students" key={index} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
                 <div>
                   <div className='select-classroom-title'>
                     {item.className}
@@ -241,9 +244,9 @@ class YourClassroomTile extends Component {
               </div>
             )
           })}
-          {this.props.demoClassrooms.map((item) => {
+          {this.props.demoClassrooms.map((item, index) => {
             return (
-              <div title="View Classroom & Students" key={item.id} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
+              <div title="View Classroom & Students" key={index} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
                 <div>
                   <div className='select-classroom-title'>
                     {item.className}
@@ -354,9 +357,10 @@ class YourClassroomTile extends Component {
                     sortType={this.state.sortType}
                   />
                 )}
-                {classList.length !== 0 && classList.map((item) => {
+                {classList.length !== 0 && classList.map((item, index) => {
                   return (
                     <ClassroomItem
+                      key={index}
                       item={item}
                       viewPortfolio={this.togglePortfolio}
                       removing={this.state.removeStudents}

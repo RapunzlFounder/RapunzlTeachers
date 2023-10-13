@@ -21,7 +21,8 @@ class SectionBuilderDialog extends React.PureComponent {
       pdfURL: false,
       googleURL: false,
       pdfName: '',
-      pdfOrientation: 'portrait'
+      pdfOrientation: 'portrait',
+      standardsVisible: false,
     }
   }
 
