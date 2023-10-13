@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { resetStudentPassword } from '../../../ActionTypes/classroomActions';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBox from '@mui/icons-material/CheckBox';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';

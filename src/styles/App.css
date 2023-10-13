@@ -5,3 +5,31 @@
   padding: 0px;
   list-style-type:none;
 }
+.general-edit-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-left: 9px;
+  margin-right: -5px;
+  margin-top: -20px;
+  transition: 0.2s all;
+  cursor: pointer;
+}
+.general-edit-mui-icon {
+  font-size: 16px !important;
+  fill: #ffffff99 !important;
+}
+.general-edit-button-text {
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 3px;
+  color: #ffffff99 !important;
+}
+.general-edit-button:hover .general-edit-mui-icon {
+  fill: #00febf !important;
+}
+.general-edit-button:hover .general-edit-button-text {
+  color: #00febf !important;
+  text-decoration: underline;
+}

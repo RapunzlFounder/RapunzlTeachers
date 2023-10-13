@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { GRAPHQL_URL } from "../constants";
 import { CREATE_TEACHER_COURSE } from '../graphql/mutations/CreateTeacherCourse';
+import { UPDATE_TEACHER_COURSE } from '../graphql/mutations/UpdateTeacherCourse';
 import { ADD_COURSE_MODULES } from '../graphql/mutations/AddCourseModules';
 import { REMOVE_COURSE_MODULES } from '../graphql/mutations/RemoveCourseModules';
 import { GET_FIN_LITERACY_STANDARDS } from '../graphql/queries/GetFinancialLiteracyStandards';
@@ -27,6 +28,10 @@ export const CREATE_COURSE_BEGIN = 'CREATE_COURSE_BEGIN';
 export const CREATE_COURSE_SUCCESS = 'CREATE_COURSE_SUCCESS';
 export const CREATE_COURSE_FAILURE = 'CREATE_COURSE_FAILURE';
 export const CREATE_COURSE_ERROR = 'CREATE_COURSE_ERROR';
+export const UPDATE_COURSE_BEGIN = 'UPDATE_COURSE_BEGIN';
+export const UPDATE_COURSE_SUCCESS = 'UPDATE_COURSE_SUCCESS';
+export const UPDATE_COURSE_FAILURE = 'UPDATE_COURSE_FAILURE';
+export const UPDATE_COURSE_ERROR = 'UPDATE_COURSE_ERROR';
 export const ADD_COURSE_MODULE_BEGIN = 'ADD_COURSE_MODULE_BEGIN';
 export const ADD_COURSE_MODULE_SUCCESS = 'ADD_COURSE_MODULE_SUCCESS';
 export const ADD_COURSE_MODULE_FAILURE = 'ADD_COURSE_MODULE_FAILURE';
@@ -124,6 +129,26 @@ export const createCourseFailure = error => ({
 });
 export const createCourseError = error => ({
   type: CREATE_COURSE_ERROR,
+  payload: { error },
+});
+
+// Actions to Update a Teacher Course 
+export const updateCourseBegin = () => ({
+  type: UPDATE_COURSE_BEGIN,
+});
+// success when the teacher has updated their course
+export const updateCourseSuccess = (courseId, courseObject) => ({
+  type: UPDATE_COURSE_SUCCESS,
+  payload: { courseId, courseObject },
+});
+// failure while updating teacher course
+export const updateCourseFailure = error => ({
+  type: UPDATE_COURSE_FAILURE,
+  payload: { error },
+});
+// Error while updating teacher course
+export const updateCourseError = error => ({
+  type: UPDATE_COURSE_ERROR,
   payload: { error },
 });
 
@@ -233,6 +258,51 @@ export function createTeacherCourse(token, courseName, isPrivate, modulesList) {
         }
       })
       .catch(error => dispatch(createCourseFailure(error.message)));
+  };
+}
+
+// Exclude any values by setting them to null and they will not be changed
+// the 'modulesList' input is an array of Module Id's that are to be included in the Teqcher Course
+// the 'isPrivate' input should initially be set to True so that the course can only be viewed and used by the Teacher who created it
+// the 'courseName' input is a descriptive name that the teacher wants to use for the course they are creating
+export function updateTeacherCourse(token, courseID, courseName, isPrivate, courseModulesArray) {
+  return function(dispatch){
+    let stringifyModulesList = null;
+    // convert the array of module Id's to a string 
+    if (courseModulesArray !== null) {
+      stringifyModulesList = stringifyIntArray(courseModulesArray)
+    }
+    // generate the graphql mutation syntax
+    const mutationText = UPDATE_TEACHER_COURSE(courseID, courseName, isPrivate, stringifyModulesList);
+    dispatch(updateCourseBegin());
+    return axios.post(GRAPHQL_URL, { query: mutationText }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(updateCourseError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else{
+          // Transform arrays in the Teacher course object to objects that further contain objects.
+          // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
+          var mainReturnedObj = json.data.data.updateTeachercourse.updatedCourse;
+          let courseModules = {};
+          if (mainReturnedObj.courseModules.length > 0){
+            courseModules = arrayToObjectID(mainReturnedObj.courseModules);
+          }
+          mainReturnedObj.courseModules = courseModules;
+          dispatch(updateCourseSuccess(mainReturnedObj.id, mainReturnedObj));
+          return json.data.data;
+        }
+      })
+      .catch(error => {
+        dispatch(updateCourseFailure(error.message));
+        return { errors: [{ message: error.message }]}
+      });
   };
 }
 

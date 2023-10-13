@@ -11,6 +11,10 @@ import {
   CREATE_CLASSROOM_SUCCESS,
   CREATE_CLASSROOM_FAILURE,
   CREATE_CLASSROOM_ERROR,
+  UPDATE_CLASSROOM_BEGIN,
+  UPDATE_CLASSROOM_SUCCESS,
+  UPDATE_CLASSROOM_FAILURE,
+  UPDATE_CLASSROOM_ERROR,
   REMOVE_CLASSROOM_BEGIN,
   REMOVE_CLASSROOM_SUCCESS,
   REMOVE_CLASSROOM_FAILURE,
@@ -324,6 +328,48 @@ const classroomReducer = (state = initialState, action) => {
         // graphqlError: 'There was an error connecting to our servers to create your Classroom. Please contact support.'
         errorTitle: 'Error Creating Teacher Classroom',
       };
+
+    // HANDLES UPDATING A TEACHER CLASSROOM
+    case UPDATE_CLASSROOM_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null
+      }
+    // HANDLES SUCCESS ON UPDATING TEACHER CLASSROOM
+    case UPDATE_CLASSROOM_SUCCESS:
+      let originalClassroomsObject8 = JSON.parse(JSON.stringify(state.classrooms));
+      originalClassroomsObject8[action.payload.classroomObject.id] = action.payload.classroomObject;
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+        classrooms: originalClassroomsObject8,
+      }
+    // HANDLES FAILURE TO UPDATE TEACHER CLASSROOM
+    case UPDATE_CLASSROOM_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        // graphqlError: 'There was a failure connecting to our servers to create your Classroom. Please contact support.'
+        errorTitle: 'Failure Creating Teacher Classroom',
+      };
+    // HANDLES ERROR UPDATING TEACHER CLASSROOM
+    case UPDATE_CLASSROOM_ERROR:
+      return {
+        ...state,
+        loading: false,
+        graphqlError: action.payload.error,
+        // graphqlError: 'There was an error connecting to our servers to create your Classroom. Please contact support.'
+        errorTitle: 'Error Creating Teacher Classroom',
+      };
+
+
     // HANDLES REMOVING A TEACHER CLASSROOM
     case REMOVE_CLASSROOM_BEGIN:
       return {
@@ -600,11 +646,11 @@ const classroomReducer = (state = initialState, action) => {
       for (const classId in originalClassroomsObject4){
         // next iterate through the studentList for the classroom
         for (const studentId in originalClassroomsObject4[classId].studentList){
-          if (action.portfolioType == SymbolType.US_Stock && action.portfolioID == originalClassroomsObject4[classId].studentList[studentId].defaultStockPortfolioID){
+          if (action.portfolioType === SymbolType.US_Stock && action.portfolioID === originalClassroomsObject4[classId].studentList[studentId].defaultStockPortfolioID){
             originalClassroomsObject4[classId].studentList[studentId].stockPortfolioPerformance = action.totalPercentChange;
             break perf_loops;
           }
-          else if (action.portfolioType == SymbolType.Crypto && action.portfolioID == originalClassroomsObject4[classId].studentList[studentId].defaultCryptoPortfolioID){
+          else if (action.portfolioType === SymbolType.Crypto && action.portfolioID === originalClassroomsObject4[classId].studentList[studentId].defaultCryptoPortfolioID){
             originalClassroomsObject4[classId].studentList[studentId].cryptoPortfolioPerformance = action.totalPercentChange;
             break perf_loops;
           }  
@@ -626,18 +672,18 @@ const classroomReducer = (state = initialState, action) => {
       for (const classId in originalClassroomsObject5){   
         // iterate through the students in the classroom 
         for (const studentId in originalClassroomsObject5[classId].studentList){
-          if (action.portfolioType == SymbolType.US_Stock){
+          if (action.portfolioType === SymbolType.US_Stock){
             for (const compId in originalClassroomsObject5[classId].studentList[studentId].stockCompetitionsEntered){
-              if (compId == action.participantInfo.competitionID){
+              if (compId === action.participantInfo.competitionID){
                 originalClassroomsObject5[classId].studentList[studentId].stockCompetitionsEntered[compId].compRank = action.participantInfo.myRank;
                 originalClassroomsObject5[classId].studentList[studentId].stockCompetitionsEntered[compId].compPerformance = action.participantInfo.myPerformance;
                 break comp_loops;
               }
             }
           }
-          if (action.portfolioType == SymbolType.Crypto){
+          if (action.portfolioType === SymbolType.Crypto){
             for (const compId in originalClassroomsObject5[classId].studentList[studentId].cryptoCompetitionsEntered){
-              if (compId == action.participantInfo.competitionID){
+              if (compId === action.participantInfo.competitionID){
                 originalClassroomsObject5[classId].studentList[studentId].cryptoCompetitionsEntered[compId].compRank = action.participantInfo.myRank;
                 originalClassroomsObject5[classId].studentList[studentId].cryptoCompetitionsEntered[compId].compPerformance = action.participantInfo.myPerformance;
                 break comp_loops;
@@ -662,13 +708,13 @@ const classroomReducer = (state = initialState, action) => {
       for (const classId in originalClassroomsObject6){   
         // iterate through the students in the classroom 
         for (const studentId in originalClassroomsObject6[classId].studentList){
-          if (action.studentUserID == studentId){
+          if (action.studentUserID === studentId){
             for (const moduleId in originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores){
-              if (action.moduleID == moduleId){
+              if (action.moduleID === moduleId){
                 originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].percentComplete = action.percentComplete;
                 originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].percentCorrect = action.percentCorrect;
                 for (const quizQuestionId in originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults){
-                  if (action.quizQuestionId == quizQuestionId){
+                  if (action.quizQuestionId === quizQuestionId){
                     originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].moduleQuestionNumber = action.moduleQuestionNumber;
                     originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].studentAnswer = action.studentAnswer;
                     originalClassroomsObject6[classId].studentList[studentId].moduleAssessmentScores[moduleId].questionResults[quizQuestionId].answerCorrect = action.answerCorrect;

@@ -13,8 +13,10 @@ import ClassroomOverview from '../Dashboard/ClassroomOverview';
 import PortfolioPreview from './PortfolioPreview';
 import EmptyGrades from '../Gradebook/EmptyGrades';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import Alert from '../../Admin/Alert';
 import SortByButton from './SortByButton';
+import UpdateTeacherInfoModal from './UpdateTeacherInfoModal';
 
 class YourClassroomTile extends Component {
   constructor(props) {
@@ -30,6 +32,7 @@ class YourClassroomTile extends Component {
       portfolioData: [],
       removingArray: [],
       sortType: 0,
+      editingClassroom: false,
     }
   }
 
@@ -132,14 +135,14 @@ class YourClassroomTile extends Component {
         }
       }
       if (isDemo) {
-        return this.props.getDemoClassroom;
+        return [this.props.getDemoClassroom, true];
       } else {
-        return classroomObject;
+        return [classroomObject, false];
       }
     }
     // Handles If Classroom Has Not Been Selected Yet And Returns Empty Array & Title To Avoid Error
     else {
-      return { className: '', classID: 0, noStudents: 0, studentList: [] };
+      return [{ className: '', classID: 0, noStudents: 0, studentList: [] }, false];
     }
   }
 
@@ -193,6 +196,12 @@ class YourClassroomTile extends Component {
     else {
       return [];
     }
+  }
+
+  // Handles when a user selects to edit their classroom by displaying a modal with inputs for the
+  // class name and the class year for the teacher to select
+  handleEditClassroom = () => {
+    this.setState({ editingClassroom: !this.state.editingClassroom });
   }
 
   render() {
@@ -261,7 +270,9 @@ class YourClassroomTile extends Component {
     }
     // Handles If User Only Has One Classroom Or User Has Selected The Classroom To View
     else {
-      const classInfo = this._getClassroomInfo();
+      const classInformation = this._getClassroomInfo();
+      const classInfo = classInformation[0];
+      const isDemo = classInformation[1];
       const classList = this.sortStudentList(classInfo.studentList);
       return (
         <div>
@@ -270,6 +281,12 @@ class YourClassroomTile extends Component {
             message={this.state.alertMessage}
             visible={this.state.alertVisible}
             dismiss={this.toggleAlert}
+          />
+          <UpdateTeacherInfoModal
+            type={'classroom'}
+            visible={this.state.editingClassroom}
+            dismiss={this.handleEditClassroom}
+            classData={classInfo}
           />
           {/* Handles If Portfolio Preview Is Selected From Classroom Item To View Student Portfolio */}
           <PortfolioPreview
@@ -289,13 +306,21 @@ class YourClassroomTile extends Component {
           {classList.length !== 0 && !this.state.viewPortfolio && (
             <div className='tile classroom-all-container'>
               <div className='your-classroom-tile-header'>
-                <div className='classroom-header-flex' style={{ paddingLeft: 12, paddingBottom: 5, paddingTop: this.state.removeStudents ? 12 : 0 }}>
+                <div className='classroom-header-flex' style={{ paddingLeft: 12, paddingBottom: 5, paddingTop: (this.state.removeStudents || isDemo) ? 12 : 0 }}>
                   <OtherHouses />
                   <div className='classroom-title' style={{ paddingLeft: 10 }}>
                     {classInfo.className}
                   </div>
+                  {!isDemo && (
+                    <div onClick={() => this.handleEditClassroom()} className='general-edit-button'>
+                      <EditOutlinedIcon className='general-edit-mui-icon' />
+                      <div className='general-edit-button-text'>
+                        Edit
+                      </div>
+                    </div>
+                  )}
                 </div>
-                {!this.state.removeStudents && (
+                {!this.state.removeStudents && !isDemo && (
                   <div className='classroom-button-flex'>
                     <div title="Add Students Manually Or By Uploading" onClick={() => this.props.toggleAddStudents()} className='button add-students-button'>
                       Add<br/>Students
@@ -372,12 +397,21 @@ const mapStateToProps = (state, ownProps) => {
   return {
     // Handles Colors Which Are Updated Throughout When MarketOpen Changes
     colors: state.userDetails.appColors,
+    // Selector that includes shallow level of all teacher classrooms
     allClassrooms: getAllTeacherClassrooms(state),
+    // Used for authentication with various dispatches inlcuded below
     jwtToken: state.userDetails.jwtToken,
+    // Redux navigation state to show if a teacher has selected a classroom, and if so, which classroom has been selected
+    // This is represented either with false or the classroomID
     selectedClassroom: state.dashboard.selectedClassroom,
+    // Redux navigation state to show when a user is creating a classroom
     creatingClassroom: state.dashboard.creatingClassroom,
+    // Selector which provides infomration for all demo classrooms stored in redux
     demoClassrooms: getAllDemoClassrooms(state),
+    // One of the selectors below will be undefined because a course is either demo or not
+    // Selector which provides informaiton for a specific teacher demo classroomID, provided in parent as prop
     getDemoClassroom: getDemoClassroom(state, ownProps),
+    // Selector which provies information for a specific teacher classroomID
     getTeacherClassroom: getTeacherClassroom(state, ownProps),
   };
 };
@@ -390,9 +424,12 @@ const mapDispatchToProps = (dispatch) => {
       fetchOtherUserDetails: (token, userName) => dispatch(FetchOtherUserDetails(token, userName)),
       // Dispatch To Remove Students From Classroom Which Takes An Array Of Student IDs In Student List And The Classroom ID
       removeStudents: (token, classroomId, studentsList) => dispatch(removeStudentsFromClassroom(token, classroomId, studentsList)),
+      // Toggles between adding students and view classrooms through redux to aid in navigation continuity
       toggleAddStudents: () => dispatch(toggleAddStudents()),
+      // Redux dispatch to handle navigation state and allow user to quickly go to add students
       quickAccessAddStudents: () => dispatch(quickAccessAddStudents()),
-      selectClassroom: (classID) => dispatch(selectClassroom(classID))
+      // Updates Redux With The Selected Classroom Which Is Used In Render Conditionals & Dispatches
+      selectClassroom: (classID) => dispatch(selectClassroom(classID)),
    };
 };
 

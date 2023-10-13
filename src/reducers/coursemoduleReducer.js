@@ -10,6 +10,10 @@ import {
   CREATE_COURSE_SUCCESS,
   CREATE_COURSE_FAILURE,
   CREATE_COURSE_ERROR,
+  UPDATE_COURSE_BEGIN,
+  UPDATE_COURSE_SUCCESS,
+  UPDATE_COURSE_FAILURE,
+  UPDATE_COURSE_ERROR,
   ADD_COURSE_MODULE_BEGIN,
   ADD_COURSE_MODULE_SUCCESS,
   ADD_COURSE_MODULE_FAILURE,
@@ -174,6 +178,53 @@ const coursemoduleReducer = (state = initialState, action) => {
         // graphqlError: 'There was an error connecting to our servers to create your New Course. Please contact support.'
         errorTitle: 'Error Creating New Course',
       };
+    
+    // HANDLES WHEN WE BEGIN UPDATING A TEACHER COURSE
+    case UPDATE_COURSE_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null
+      }
+    
+    // HANDLES SUCCESSFULLY UPDATING TEACHER COURSE
+    case UPDATE_COURSE_SUCCESS:
+      // create a new object for the teacherCourses state property.
+      // This must be a deep copy to preserve the immutability of state objects.
+      let originalCoursesObject2 = JSON.parse(JSON.stringify(state.teacherCourses));
+      // add the newly created Teacher Course
+      originalCoursesObject2[action.payload.courseId] = action.payload.courseObject;
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+        teacherCourses: originalCoursesObject2,
+      }
+
+    // HANDLES FAILURE IN UPDATING TEACHER COURSE
+    case UPDATE_COURSE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        // graphqlError: 'There was a failure connecting to our servers to update your course information. Please contact support.'
+        errorTitle: 'Failure Creating New Course',
+      };
+    
+    // HANDLES ERROR IN UPDATING TEACHER COURSE
+    case UPDATE_COURSE_ERROR:
+      return {
+        ...state,
+        loading: false,
+        graphqlError: action.payload.error,
+        // graphqlError: 'There was an error connecting to our servers to update your course information. Please contact support.'
+        errorTitle: 'Error Creating New Course',
+      };
+
     // HANDLES ADDING MODULES TO A TEACHER COURSE
     case ADD_COURSE_MODULE_BEGIN:
       return {

@@ -89,7 +89,7 @@ export class WrappedSocketManager extends React.Component {
       const resjson = typeof (res) == 'object' ? res : JSON.parse(res);
       // eslint-disable-next-line
       if (resjson != null) {
-        var timestamp = resjson.Date + " " + resjson.Time;
+        // var timestamp = resjson.Date + " " + resjson.Time;
         // update the portfolio state with the new portfolio performance information 
         this.props.updateStudentPortfolioPerformance(resjson.PortfolioId, resjson.Performance, SymbolType.US_Stock);
       }
@@ -101,7 +101,7 @@ export class WrappedSocketManager extends React.Component {
       const resjson = typeof (res) == 'object' ? res : JSON.parse(res);
       // eslint-disable-next-line
       if (resjson != null) {
-        var timestamp = resjson.Date + " " + resjson.Time;
+        // var timestamp = resjson.Date + " " + resjson.Time;
         // update the portfolio state with the new crypto portfolio performance information 
         this.props.updateStudentPortfolioPerformance(resjson.PortfolioId, resjson.CurrentValue, resjson.Performance, SymbolType.Crypto);
       }

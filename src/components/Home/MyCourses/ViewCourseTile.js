@@ -13,9 +13,11 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PublishedWithChanges from '@mui/icons-material/PublishedWithChanges';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import '../../../styles/Home/Courses.css'
 import AssessmentsDialog from '../../Admin/AssessmentsDialog';
+import UpdateTeacherInfoModal from '../MyClassroom/UpdateTeacherInfoModal';
+import '../../../styles/Home/Courses.css'
 
 class ViewCourseTile extends Component {
   constructor(props) {
@@ -31,6 +33,7 @@ class ViewCourseTile extends Component {
       pdfOrientation: 'landscape',
       navigateToClassroom: false,
       assessmentVisible: false,
+      editingClassroom: false,
     }
   }
 
@@ -416,11 +419,23 @@ class ViewCourseTile extends Component {
     }
   }
 
+  // Handles when a user selects to edit their course by displaying a modal with input for the
+  // course name. We do not currently allow the user to change privacy status or the modules in a course.
+  handleEditClassroom = () => {
+    this.setState({ editingClassroom: !this.state.editingClassroom });
+  }
+
   render() {
     let currentCourse = this.getCourse();
     let assignedArray = this._getAssignedClasses(currentCourse);
     return (
       <div className='tile current-course' style={{ paddingBottom: 20 }}>
+        <UpdateTeacherInfoModal
+          type={'course'}
+          visible={this.state.editingClassroom}
+          dismiss={this.handleEditClassroom}
+          courseData={currentCourse}
+        />
         <AssignCourseDialog
           course={currentCourse}
           visible={this.state.assigningCourse}
@@ -449,11 +464,19 @@ class ViewCourseTile extends Component {
         <div onClick={() => this.props.selectCourse(false)} className='back-to-all-courses-button'>
           Back To All Courses
         </div>
-        <div className='home-header-flex' style={{ justifyContent: 'center', padding: 0 }}>
+        <div className='home-header-flex' style={{ justifyContent: 'center', padding: 0, marginTop: 20, marginBottom: 10 }}>
           <PublishedWithChanges />
           <div className='home-header'>
             {currentCourse.courseName}
           </div>
+          {!this.props.isDemo && (
+            <div onClick={() => this.handleEditClassroom()} className='general-edit-button'>
+              <EditOutlinedIcon className='general-edit-mui-icon' />
+              <div className='general-edit-button-text'>
+                Edit
+              </div>
+            </div>
+          )}
         </div>
         <ProgressBar
           numberOfModules={currentCourse.courseModules.length}
