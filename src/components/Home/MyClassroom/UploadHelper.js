@@ -315,7 +315,7 @@ class UploadHelper extends React.PureComponent {
                 <div className='upload-columns-list-container'>
                   {isError && (
                     <div className='upload-columns-list-instructions'>
-                      Match or skip each column in the spreadsheet you uploaded so that Rapunzl has the correct information to create your students' accounts. Please note the uploaded file must have headers for this to work.
+                      Match or skip each column in the spreadsheet you uploaded so that Rapunzl has the correct information to create your students' accounts. Please note that the file you uploaded must have headers or the column cannot be matched.
                     </div>
                   )}
                   {this.props.data !== undefined && this.props.data[0] !== undefined && this.props.data[0].map((item, index) => {
@@ -337,6 +337,16 @@ class UploadHelper extends React.PureComponent {
                       />
                     )
                   })}
+                  {!isError && (
+                    <div
+                      title="Send List Of Students To Rapunzl To Add"
+                      className={isError ? 'upload-helper-confirm-button-disabled' : 'upload-helper-confirm-button'} 
+                      onClick={() => this.next()}
+                      style={{ width: 'fit-content', float: 'right', marginBottom: 45 }}
+                    >
+                      Add Students To Class
+                    </div>
+                  )}
                 </div>
               )}
               {this.state.status === 'confirm' && (
@@ -392,7 +402,7 @@ class UploadHelper extends React.PureComponent {
               )}
               {this.state.status === 'loading' && (
                 <div className='upload-columns-loading-container'>
-                  <CircularProgress />
+                  <CircularProgress className='upload-columns-loading-icon'/>
                   <div className='upload-preview-loading-text'>
                     Adding Students...
                   </div>

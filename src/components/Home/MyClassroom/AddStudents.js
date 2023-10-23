@@ -198,11 +198,19 @@ class AddStudents extends Component {
             uploadPreview: false,
           });
         }
+        // Handles Successful Creation of Classroom With No Students
+        else if (studentArray.length === 0) {
+          this.setState({
+            loading: false,
+            progress: "success-no-students",
+            uploadPreview: false,
+          });
+        }
         // Handles Successful Creation Of Classroom With Student List Provided
         else {
           this.setState({
             loading: false,
-            progress: "success",
+            progress: "success-with-students",
             uploadPreview: false,
           });
         }
@@ -223,11 +231,11 @@ class AddStudents extends Component {
             uploadPreview: false,
           });
         }
-        // Handles Successful Addition Of Students To Classroom
+        // Handles Successful Addition Of Students To Existing Classroom
         else {
           this.setState({
             loading: false,
-            progress: "success",
+            progress: "success-add",
             uploadPreview: false,
           });
         }
@@ -320,27 +328,21 @@ class AddStudents extends Component {
       );
     }
     // Handles If We Have Successfully Added Students To The Classroom
-    else if (this.state.progress === "success") {
+    else if (this.state.progress === "success-add" || this.state.progress === "success-no-students" || this.state.progress === "success-with-students") {
       return (
         <div className='tile create-class-name-container'>
-          <Alert
-            visible={this.state.alertVisible}
-            dismiss={this.toggleAlert}
-            title={this.state.alertTitle}
-            message={this.state.alertMessage}
-          />
           <img className='add-students-result-image' alt='' src={SuccessImage} />
           <div className='add-students-result-title'>
-            We've Added Your Students!
+            {this.state.progress === 'success-no-students' ? `We've Created Your Class` : `We've Added Your Students!`}
           </div>
           <div className='add-students-result-text'>
-            Rapunzl was able to add the students into your classroom. If students did not have an existing Rapunzl account, they should receive an email with instructions on how to login.
+            {this.state.progress === 'success-no-students' ? `We've successfully saved your new classroom with our system. The next step is to upload a roster of your classroom or manually enter their information.` : `Rapunzl was able to add the students into your classroom. If students did not have an existing Rapunzl account, they should receive an email with instructions on how to login.`}
           </div>
           <div title="View New Classroom You Created" onClick={() => this.props.toggleAddStudents()} className='add-students-result-button'>
-            View Classroom
+            Back To Class List
           </div>
           <div title="Add More Students To Your Classroom" onClick={() => this.props.toggleManualEntry()} className='add-students-result-button manual-add-result-button'>
-            Manually Add More Students
+            {this.state.progress === 'success-no-students' ? 'Add Students' : 'Add More Students'}
           </div>
         </div>
       );

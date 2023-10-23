@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { isUsernameUnique, isEmailUnique } from '../../../ActionTypes/loginActions';
-import { addStudentsToClassroom } from '../../../ActionTypes/classroomActions';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import '../../../styles/Home/HomeScreen.css';
@@ -405,11 +404,6 @@ const mapDispatchToProps = (dispatch) => {
       isUsernameUnique: (username) => dispatch(isUsernameUnique(username)),
       // checks to see if email and username is unique before allowing user to proceed
       isEmailUnique: (email) => dispatch(isEmailUnique(email)),
-      // Adds Students To An Existing Classroom
-      // NOTE:  make sure that the input parameter 'studentsList' is an array of one or more of the following object
-      // Make sure that double quotes are used for the string and date format input fileds in each object
-      // { email: "welshman@me.edu", firstname: "Chris", lastName: "Thomas", birthDate: "2008-06-06" }
-      addStudentsToClassroom: (token, classroomId, studentsList) => dispatch(addStudentsToClassroom(token, classroomId, studentsList)),
    };
 };
 

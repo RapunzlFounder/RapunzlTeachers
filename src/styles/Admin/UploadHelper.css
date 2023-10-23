@@ -247,3 +247,7 @@
     align-items: center;
     padding-top: 150px;
 }
+.upload-columns-loading-icon {
+    fill: #007154 !important;
+    color:#007154 !important;
+}

@@ -96,7 +96,7 @@ class YourCourses extends Component {
                   </div>
                 );
               })}
-              {this.props.demoCourses && this.props.demoCourses.length !== 0 && this.props.demoCourses.map((course) => {
+              {this.props.demoCourses && this.props.demoCourses.length !== 0 && this.props.teacherCourses && this.props.teacherCourses.length === 0 && this.props.demoCourses.map((course) => {
                 return (
                   <div title="View Individual Course Resources" key={course.id} onClick={() => this.selectDemoCourse(course)} className='prepared-course'>
                     <div className='prepared-course-time'>

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { updateTeacherClassroom } from '../../../ActionTypes/classroomActions';
 import { updateTeacherCourse } from '../../../ActionTypes/coursemoduleActions';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import TextField from '@mui/material/TextField';
 import Alert from '../../Admin/Alert';
 import '../../../styles/Home/UpdateTeacherInfoModal.css';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -65,7 +66,7 @@ class UpdateTeacherInfoModal extends Component {
   // Handles Saving A Teachers Changes To A Particular Classroom
   saveClassroomChanges() {
     // Checks If Values Have Actually Changed Before Handling Dispatch
-    if (this.state.classroomName !== this.props.className || this.state.classroomYear !== this.props.classYear) {
+    if ((this.state.classroomName !== this.props.className && this.state.classroomName.length !== 0) || (this.state.classroomYear !== this.props.classYear && this.state.classroomYear !== '')) {
       this.setState({ loading: true });
       let className = this.state.classroomName === '' ? null : this.state.classroomName;
       let classYear = this.state.classYear === '' ? null : this.state.classYear;
@@ -88,6 +89,16 @@ class UpdateTeacherInfoModal extends Component {
           });
         }
       })
+    } else if (this.state.classroomName === this.props.className && this.state.classroomName.length !== 0) {
+      this.setState({
+        loading: false,
+        success: true
+      });
+    } else if (this.state.classroomName.length === 0) {
+      this.setState({
+        loading: false,
+        classroomNameError: true,
+      })
     }
   }
 
@@ -96,7 +107,7 @@ class UpdateTeacherInfoModal extends Component {
     // Checks If Values Have Actually Changed Before Handling Dispatch
     // Does Not Support Changing the Actual Course Modules At This Time
     // Does Not Support Making The Course Private At This Time
-    if (this.state.courseName !== this.props.courseName || this.state.isPrivate !== this.props.isPrivate) {
+    if ((this.state.courseName !== this.props.courseName && this.state.courseName !== '') || this.state.isPrivate !== this.props.isPrivate) {
       this.setState({ loading: true });
       let courseName = this.state.courseName === '' ? null : this.state.courseName;
       let coursePrivate = this.state.isPrivate === this.props.isPrivate ? null : this.state.isPrivate;
@@ -118,6 +129,16 @@ class UpdateTeacherInfoModal extends Component {
             success: true,
           });
         }
+      })
+    } else if (this.state.courseName === this.props.courseName && this.state.courseName !== '') {
+      this.setState({
+        loading: false,
+        success: true,
+      });
+    } else if (this.state.courseName === '') {
+      this.setState({
+        loading: false,
+        courseNameError: true
       })
     }
   }
@@ -153,11 +174,15 @@ class UpdateTeacherInfoModal extends Component {
               <div className='update-info-subtitle'>
                 Classroom Name
               </div>
-              <input
-                className='update-info-input'
+              <TextField
+                id="classroom-name"
                 placeholder={this.props.classData.className}
+                type="text"
+                variant="outlined"
+                error={this.state.classroomNameError}
                 value={this.state.classroomName}
                 onChange={(event) => this.changeClassName(event.target.value)}
+                sx={{ backgroundColor: '#2e7361', marginBottom: '4px', marginTop: '4px', borderRadius: '7px', width: '100%' }}
               />
               {/* <div className='update-info-subtitle'>
                 Class Year
@@ -231,11 +256,15 @@ class UpdateTeacherInfoModal extends Component {
               <div className='update-info-subtitle'>
                 Course Name
               </div>
-              <input
-                className='update-info-input'
+              <TextField
+                id="course-name"
                 placeholder={this.props.courseData.courseName}
+                type="text"
+                variant="outlined"
+                error={this.state.courseNameError}
                 value={this.state.courseName}
                 onChange={(event) => this.changeCourseName(event.target.value)}
+                sx={{ backgroundColor: '#2e7361', marginBottom: '4px', marginTop: '4px', borderRadius: '7px', width: '100%' }}
               />
               <div className='update-info-subtitle'>
                 Course Privacy

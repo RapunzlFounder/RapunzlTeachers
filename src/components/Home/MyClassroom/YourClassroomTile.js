@@ -226,7 +226,7 @@ class YourClassroomTile extends Component {
           <div className='create-class-name-header'>
             Which Class Would You<br/>Like To View?
           </div>
-          {this.props.allClassrooms.map((item, index) => {
+          {this.props.allClassrooms.length !== 0 && this.props.allClassrooms.map((item, index) => {
             return (
               <div title="View Classroom & Students" key={index} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
                 <div>
@@ -244,7 +244,7 @@ class YourClassroomTile extends Component {
               </div>
             )
           })}
-          {this.props.demoClassrooms.map((item, index) => {
+          {this.props.allClassrooms.length === 0 && this.props.demoClassrooms.length !== 0 && this.props.demoClassrooms.map((item, index) => {
             return (
               <div title="View Classroom & Students" key={index} onClick={() => this.props.selectClassroom(item.id)} className='select-classroom-item'>
                 <div>
