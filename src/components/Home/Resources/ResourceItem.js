@@ -129,7 +129,7 @@ class ResourceItem extends Component {
                 {this.props.item.questions.length} {this.props.item.questions.length === 1 ? 'Question' : 'Questions'}
               </div>
               <div className='resource-quiz-text'>
-                {this.props.item.description.split('.')[0]}.
+                {this.props.item.description && this.props.item.description.split('.') !== null && this.props.item.description.split('.').length !== undefined ? this.props.item.description.split('.')[0] : this.props.item.description.length > 0 ? this.props.item.description : 'No description to display at this time.'}.
               </div>
             </div>
           </div>
