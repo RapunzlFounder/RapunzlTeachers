@@ -42,8 +42,15 @@ class UploadHelper extends React.PureComponent {
   // Retrieves First 4 Elements (Does Not Include First Row Which Are The Headings)
   _getDataPreview(int) {
     let previewArray = [];
-    for(let i = 1; i < 5; i++)  {
-      previewArray.push(this.props.data[i][int]);
+    // If this.props.data.length is undefined, we return an empty preview array to avoid a crash
+    if (this.props.data.length > 1 && this.props.data.length < 6) {
+      for(let i = 1; i < this.props.data.length; i++)  {
+        previewArray.push(this.props.data[i][int]);
+      }
+    } else if (this.props.data.length > 1 && this.props.data.length >= 6) {
+      for(let i = 1; i < 5; i++)  {
+        previewArray.push(this.props.data[i][int]);
+      }
     }
     return previewArray;
   }
@@ -266,6 +273,7 @@ class UploadHelper extends React.PureComponent {
         aria-describedby="alert-dialog-description"
         maxWidth="xl"
         fullWidth
+        style={{ backgroundColor: '#00120a00' }}
       >
           <div className='upload-container'>
             <div className='upload-helper-flex'>

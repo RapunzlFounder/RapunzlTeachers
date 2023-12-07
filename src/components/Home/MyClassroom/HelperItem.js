@@ -152,11 +152,13 @@ class HelperItem extends React.PureComponent {
                 </div>
               )
             })}
-            <div className='data-preview-item' style={{ borderBottomWidth: 0 }}>
-              <div className='data-preview-text'>
-                ...
+            {this.props.previewData && this.props.previewData.length && this.props.previewData.length > 1 && (
+              <div className='data-preview-item' style={{ borderBottomWidth: 0 }}>
+                <div className='data-preview-text'>
+                  ...
+                </div>
               </div>
-            </div>
+            )}
         </div>
       </div>
     )
