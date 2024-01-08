@@ -5,6 +5,9 @@ import { FetchOtherUserDetails } from '../../../ActionTypes/socialActions';
 import { resetStudentPassword } from '../../../ActionTypes/classroomActions';
 import ProfileIcon from '../../../assets/images/School/BlankProfile.png';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import TextField from '@mui/material/TextField';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { objectToArray } from '../../../helper_functions/utilities';
 import EmptyPositions from '../../../assets/images/Search/SearchEmpty.png';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -18,6 +21,13 @@ class PortfolioPreview extends Component {
     super(props);
     this.state = {
       portfolioSelected: 'stock',
+      resetPassword: false,
+      password1: '',
+      password2: '',
+      onErrorPassword: false,
+      passwordVisible: false,
+      resetSuccess: false,
+      newPassword: '',
       alertVisible: false,
       alertTitle: '',
       alertMessage: '',
@@ -32,7 +42,6 @@ class PortfolioPreview extends Component {
         stockTrades: 0,
         cryptoTrades: 0
       },
-      resetPassword: '',
     }
   }
 
@@ -66,7 +75,13 @@ class PortfolioPreview extends Component {
           stockTrades: 0,
           cryptoTrades: 0
         },
-        resetPassword: '',
+        resetPassword: false,
+        password1: '',
+        password2: '',
+        onErrorPassword: false,
+        passwordVisible: false,
+        resetSuccess: false,
+        newPassword: '',
       })
     }
   }
@@ -90,16 +105,19 @@ class PortfolioPreview extends Component {
       }
       // Handles Successful Fetch By Updating State Values & Setting Loading To False
       else { 
-        const stockPositions = objectToArray(res.stockPortfolios[Object.keys(res.stockPortfolios)].positions);
-        const cryptoPositions = objectToArray(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].positions);
+        // Handles Mapping Positions To Array And Saving Arrays To State
+        const stockPositions = res.stockPortfolios.positions !== undefined ? objectToArray(res.stockPortfolios[Object.keys(res.stockPortfolios)].positions) : [];
+        const cryptoPositions = res.cryptoPortfolios.positions !== undefined ? objectToArray(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].positions) : [];
+        const closedStockPositions = res.stockPortfolios.closedPositions !== undefined ? Object.keys(res.stockPortfolios[Object.keys(res.stockPortfolios)].closedPositions).length : 0;
+        const closedCryptoPositions = res.cryptoPortfolios.closedPositions !== undefined ? Object.keys(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].closedPositions).length : 0;
         this.setState({
           loading: false,
           error: false,
           userData: {
             stocks: stockPositions,
             crypto: cryptoPositions,
-            stockTrades: stockPositions.length + Object.keys(res.stockPortfolios[Object.keys(res.stockPortfolios)].closedPositions).length,
-            cryptoTrades: cryptoPositions.length + Object.keys(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].closedPositions).length,
+            stockTrades: stockPositions.length + closedStockPositions,
+            cryptoTrades: cryptoPositions.length + closedCryptoPositions,
           },
         })
       }
@@ -182,44 +200,108 @@ class PortfolioPreview extends Component {
 
   // This updates the Alert State To Display A Native Alert When User Selects To Reset A Students Password
   handleResetPassword() {
+    this.setState({ resetPassword: true });
+  }
+
+  // Handles Cancelling Reset Password If A User Decides They Do Not Want To Change A Student Password
+  cancelResetPassword() {
     this.setState({
-      alertTitle: 'Are You Sure?',
-      alertMessage: `Once you reset the student's password, Rapunzl will update the password for the student's account and show it to you so that you can help the student login.`,
-      alertOptionText: 'Reset Password',
-      alertVisible: true,
-      alertOption: this.resetPassword,
-      alertOptionText2: 'Nevermind'
-    })
+      resetPassword: false,
+      password1: '',
+      password2: '',
+      onErrorPassword: false,
+    });
+  }
+
+  // Handles Changing Initial Password Value In TextField and Setting Error To False
+  changePassword1(value) {
+    this.setState({ password1: value, onErrorPassword: false });
+  }
+
+  // Handles Changing Password Confirm Value In TextField and Setting Error To False
+  changePassword2(value) {
+    this.setState({ password2: value, onErrorPassword: false });
   }
 
   // Handles Dispatch To GraphQL To Reset Student Password
-  resetPassword = () => {
+  resetPassword() {
     this.setState({ loadingResetPassword: true })
-    this.props.resetStudentPassword(this.props.jwtToken, this.props.user.username).then((res) => {
-      if (!(res && !('errors' in res))) {
-        this.setState({
-          loadingResetPassword: false,
-          resetPassword: '',
-          alertOption: false,
-          alertOptionText: '',
-          alertTitle: 'Failed To Reset Password',
-          alertMessage: 'Something went wrong trying to connect to the server and reset the student account. ' + res.errors[0].message,
-          alertVisible: true,
-          alertOptionText2: false
-        });
-      } else {
-        this.setState({
-          loadingResetPassword: false,
-          resetPassword: res.studentlogin.password,
-          alertOption: false,
-          alertOptionText: '',
-          alertTitle: 'Reset Password Successful',
-          alertMessage: 'The new password for the student is: ' + res.studentlogin.password + `  Please note that the password is case-sensitive. If you continue experiencing issues, don't hestiate to contact support`,
-          alertVisible: true,
-          alertOptionText2: false
-        });
-      }
-    });
+    // Checks To Make Sure The 2 Passwords Match Before Submitting
+    if (this.state.password1 !== this.state.password2) {
+      this.setState({
+        onErrorPassword: true,
+        alertTitle: 'Passwords Do Not Match',
+        alertMessage: 'The passwords you entered do not match, so we are unable to reset the student account. Please try again.',
+        alertVisible: true,
+        alertOption: false,
+        alertOptionText: '',
+        alertOptionText2: false,
+        loadingResetPassword: false
+      })
+    }
+    // Checks To Ensure The Password Is At Least 8 Characters Long
+    else if (this.state.password1.length <8) {
+      this.setState({
+        onErrorPassword: true,
+        alertTitle: 'New Password Is Too Short',
+        alertMessage: 'All Rapunzl passwords must be at least 8 characters. Please ensure the password is at least 8 characters long and try again.',
+        alertVisible: true,
+        alertOption: false,
+        alertOptionText: '',
+        alertOptionText2: false,
+        loadingResetPassword: false
+      });
+    }
+    // Handles If Passwords Match By Dispatching To GraphQL
+    else {
+      this.props.resetStudentPassword(this.props.jwtToken, this.props.user.username, this.state.password1).then((res) => {
+        if (!(res && !('errors' in res))) {
+          this.setState({
+            // This part of state handles the native alert which is displayed to the teacher if the graphql dispatch fails
+            alertOption: false,
+            alertOptionText: '',
+            alertTitle: 'Failed To Reset Password',
+            alertMessage: 'Something went wrong trying to connect to the server and reset the student account. ' + res.errors[0].message,
+            alertVisible: true,
+            alertOptionText2: false,
+            // This part of state is used for the password reset functionality which is hidden on the event of an error
+            loadingResetPassword: false,
+            resetSuccess: false,
+            resetPassword: false,
+            password1: '',
+            password2: '',
+            onErrorPassword: false,
+            passwordVisible: false,
+            newPassword: '',
+          });
+        } else {
+          this.setState({
+            // This part of state handles displaying a native alert to the teacher with the new password
+            alertOption: false,
+            alertOptionText: '',
+            alertTitle: 'Reset Password Successful',
+            alertMessage: 'The new password for the student is: ' + res.studentlogin.password + `  Please note that the password is case-sensitive. If you continue experiencing issues, don't hestiate to contact support`,
+            alertVisible: true,
+            alertOptionText2: false,
+            // This hides the functionality for changing a user password since it is complete
+            loadingResetPassword: false,
+            resetPassword: false,
+            password1: '',
+            password2: '',
+            onErrorPassword: false,
+            passwordVisible: false,
+            // This part of state is updated to display the new password to the teacher
+            resetSuccess: true,
+            newPassword: this.state.password1,
+          });
+        }
+      });
+    }
+  }
+
+  // Handles Toggling Password Visibility When User Selects The Eye Icon
+  toggleVisibility() {
+    this.setState({ passwordVisible: !this.state.passwordVisible });
   }
 
   // Sets Visibility of Native Alert To True When User Selects To Reset A Students Account
@@ -257,24 +339,32 @@ class PortfolioPreview extends Component {
   handlePerformance() {
     // Handles If Stocks Are Selected By The User - Default
     if (this.state.portfolioSelected === 'stock') {
-      return intHandler(this.props.user.stockPortfolioPerformance - 100, 'percent', 2, true);
+      if (this.props.user.stockPortfolioPerformance === null || this.props.user.stockPortfolioPerformance === undefined || parseInt(this.props.user.stockPortfolioPerformance) === 0) {
+        return '0.00%';
+      } else {
+        return intHandler(this.props.user.stockPortfolioPerformance - 100, 'percent', 2, true);
+      }
     }
     // Handles If Crypto Is Selected By The User
     else {
-      return intHandler(this.props.user.cryptoPortfolioPerformance - 100, 'percent', 2, true);
+      if (this.props.user.cryptoPortfolioPerformance === null || this.props.user.cryptoPortfolioPerformance === undefined || parseInt(this.props.user.cryptoPortfolioPerformance) === 0) {
+        return '0.00%';
+      } else {
+        return intHandler(this.props.user.cryptoPortfolioPerformance - 100, 'percent', 2, true);
+      }
     }
   }
 
   // Handles Color Of Performance Thumbnail Background Between Green & Red
   handlePerformanceColor() {
     if (this.state.portfolioSelected === 'stock') {
-      if (parseFloat(this.props.user.stockPortfolioPerformance - 100) < 0) {
+      if (parseFloat(this.props.user.stockPortfolioPerformance - 100) <= 0) {
         return '#ed3232';
       } else {
         return '#00ffbe';
       }
     } else {
-      if (parseFloat(this.props.user.cryptoPortfolioPerformance - 100) < 0) {
+      if (parseFloat(this.props.user.cryptoPortfolioPerformance - 100) <= 0) {
         return '#ed3232';
       } else {
         return '#00ffbe';
@@ -341,26 +431,76 @@ class PortfolioPreview extends Component {
               </div>
             </div>
           </div>
-          {this.state.resetPassword.length !== 0 && (
-            <div className='student-updated-password'>
-              <span style={{ color: 'white', fontWeight: '300' }}>Student's updated password is: </span>{this.state.resetPassword}
-            </div>
-          )}
-          <div className='view-portfolio-options-flex'>
-            {this.state.resetPassword.length === 0 && (
+          {!this.state.resetPassword && (
+            <div className='view-portfolio-options-flex'>
               <div title="Resets Student Password" onClick={() => this.handleResetPassword()} className='classroom-item-button reset-account-button'>
                 Reset Password
               </div>
-            )}
-            <div
-              title="Resets Student Account To $10,000"
-              onClick={() => this.pressResetAccount()}
-              className='classroom-item-button reset-account-button'
-              style={{ color: '#ff3434', backgroundColor: '#012b22' }}
-            >
-              Reset Account
+              <div
+                title="Resets Student Account To $10,000"
+                onClick={() => this.pressResetAccount()}
+                className='classroom-item-button reset-account-button'
+                style={{ color: '#ff3434', backgroundColor: '#012b22' }}
+              >
+                Reset Account
+              </div>
             </div>
-          </div>
+          )}
+          {this.state.resetSuccess && (
+            <div className='student-updated-password'>
+              You have successfully reset the student's password to: <span style={{ color: 'white', fontWeight: '300' }}>{this.state.newPassword}</span>
+            </div>
+          )}
+          {this.state.resetPassword && (
+            <div>
+              <div className='view-portfolio-options-flex' style={{width: '70%', margin: 'auto', marginTop: 15 }}>
+                <TextField
+                  id="password"
+                  label="New Password"
+                  placeholder="New Password"
+                  type={this.state.passwordVisible ? "text" : "password"}
+                  variant="filled"
+                  style={{ width: '49%', marginRight: '2%'}}
+                  error={this.state.onErrorPassword}
+                  value={this.state.password1}
+                  onChange={(event) => this.changePassword1(event.target.value)}
+                  sx={{ backgroundColor: '#2e7361', marginBottom: '4px', marginTop: '4px', borderRadius: '7px' }}
+                />
+                <TextField
+                  id="passwordConfirm"
+                  label="Confirm Password"
+                  placeholder="Confirm Password"
+                  type={this.state.passwordVisible ? "text" : "password"}
+                  variant="filled"
+                  style={{ width: '49%' }}
+                  error={this.state.onErrorPassword}
+                  value={this.state.password2}
+                  onChange={(event) => this.changePassword2(event.target.value)}
+                  sx={{ backgroundColor: '#2e7361', marginBottom: '4px', marginTop: '4px', borderRadius: '7px' }}
+                />
+                {this.state.passwordVisible ? (
+                  <VisibilityOutlinedIcon onClick={() => this.toggleVisibility()} style={{ marginLeft: 10, cursor: 'pointer', fill: '#00ff78' }} />
+                ) : (
+                  <VisibilityOffOutlinedIcon onClick={() => this.toggleVisibility()} style={{ marginLeft: 10, cursor: 'pointer', fill: '#71b591' }} />
+                )}
+              </div>
+              {!this.state.loadingResetPassword && (
+                <div className='view-portfolio-options-flex' style={{ marginTop: 12 }}>
+                  <div onClick={() => this.cancelResetPassword()} className='classroom-item-button cancel-reset-password-button'>
+                    Cancel
+                  </div>
+                  <div onClick={() => this.resetPassword()} className='classroom-item-button reset-account-button'>
+                    Change Password
+                  </div>
+                </div>
+              )}
+              {this.state.loadingResetPassword && (
+                <div className='view-portfolio-options-flex' style={{ marginTop: 12 }}>
+                  <CircularProgress />
+                </div>
+              )}
+            </div>
+          )}
           <div className='view-portfolio-header'>
             <div className='view-portfolio-line' />
             <div className='view-portfolio-toggle-container'>
@@ -458,7 +598,7 @@ const mapDispatchToProps = (dispatch) => {
       // Dispatch To Fetch Portfolio Information For The Selected User. Result Is Not Stored In Redux.
       fetchOtherUserDetails: (token, userName) => dispatch(FetchOtherUserDetails(token, userName)),
       // Handles resetting a student's password by dispatching to GraphQL
-      resetStudentPassword: (token, username) => dispatch(resetStudentPassword(token, username)),
+      resetStudentPassword: (token, username, password) => dispatch(resetStudentPassword(token, username, password)),
    };
 };
 

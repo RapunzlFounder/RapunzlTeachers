@@ -557,10 +557,10 @@ export function createTeacherClassroomCourse(token, classroomId, courseId) {
 // This will allow teachers to handle students who are unable to login in real-time during class, rather
 // than relying upon Support to reset student passwords when students are unable to receive external emails.
 // The only required input is the student username and graphql returns the new password
-export function resetStudentPassword(token, username) {
+export function resetStudentPassword(token, username, password) {
   return function(dispatch){
     dispatch(resetStudentPasswordBegin());
-    return axios.post(GRAPHQL_URL, { query: RESET_STUDENT_PASSWORD(username) }, {
+    return axios.post(GRAPHQL_URL, { query: RESET_STUDENT_PASSWORD(username, password) }, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: token
