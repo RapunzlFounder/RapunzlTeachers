@@ -298,6 +298,7 @@ class YourClassroomTile extends Component {
             portfolioUsername={''}
             portfolioName={''}
             visible={this.state.viewPortfolio}
+            isDemo={isDemo}
           />
           {false && !this.props.addingStudents && classList.length !== 0 && !this.state.viewPortfolio && (
             <div className='tile classroom-overview'>
@@ -334,7 +335,7 @@ class YourClassroomTile extends Component {
                   </div>
                 )}
               </div>
-              <div onClick={() => this.props.selectClassroom(false)} className='view-all-classrooms-button' style={{ fontSize: 12 }}>
+              <div onClick={() => this.props.selectClassroom(false)} className='view-all-classrooms-button' style={{ fontSize: 12, marginTop: isDemo ? 0 : -20 }}>
                 Back To List of Classrooms
               </div>
               <div className='classroom-all-students'>

@@ -431,11 +431,13 @@ class PortfolioPreview extends Component {
               </div>
             </div>
           </div>
-          {!this.state.resetPassword && (
+          {!this.state.resetPassword && !this.props.isDemo && (
             <div className='view-portfolio-options-flex'>
-              <div title="Resets Student Password" onClick={() => this.handleResetPassword()} className='classroom-item-button reset-account-button'>
-                Reset Password
-              </div>
+              {!this.state.resetSuccess && (
+                <div title="Resets Student Password" onClick={() => this.handleResetPassword()} className='classroom-item-button reset-account-button'>
+                  Reset Password
+                </div>
+              )}
               <div
                 title="Resets Student Account To $10,000"
                 onClick={() => this.pressResetAccount()}
@@ -446,12 +448,12 @@ class PortfolioPreview extends Component {
               </div>
             </div>
           )}
-          {this.state.resetSuccess && (
+          {this.state.resetSuccess && !this.props.isDemo && (
             <div className='student-updated-password'>
               You have successfully reset the student's password to: <span style={{ color: 'white', fontWeight: '300' }}>{this.state.newPassword}</span>
             </div>
           )}
-          {this.state.resetPassword && (
+          {this.state.resetPassword && !this.props.isDemo && (
             <div>
               <div className='view-portfolio-options-flex' style={{width: '70%', margin: 'auto', marginTop: 15 }}>
                 <TextField
