@@ -318,7 +318,8 @@ class SectionBuilderDialog extends React.PureComponent {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         fullWidth={true}
-        maxWidth={this.state.status === 'confirm' ? 'sm' : 'md'}
+        maxWidth={this.state.status === 'confirm' ? 'sm' : 'lg'}
+        style={{ marginTop: this.state.status === 'confirm' ? 0 : 40 }}
       >
         <StandardsPopup
           visible={this.state.standardsVisible}

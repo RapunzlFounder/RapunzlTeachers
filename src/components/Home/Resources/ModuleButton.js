@@ -164,6 +164,30 @@ class ModuleButton extends Component {
               19. Business Of Buildings & Ownership
             </div>
           </div>
+          <div onClick={() => this.props.selectModule(20)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(20) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(20) ? '#00ffbe' : 'white' }}>
+              20. Financial Exponents
+            </div>
+          </div>
+          <div onClick={() => this.props.selectModule(21)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(21) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(21) ? '#00ffbe' : 'white' }}>
+              21. Financial Statistics
+            </div>
+          </div>
+          <div onClick={() => this.props.selectModule(22)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(22) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(22) ? '#00ffbe' : 'white' }}>
+              22. Financial Probabilities
+            </div>
+          </div>
+          <div onClick={() => this.props.selectModule(23)} className="resource-menu-item-flex">
+            {this.props.moduleSearchArray.includes(23) ? <CheckBox style={{ fill: '#00ffbe' }} fontSize='small' /> : <CheckBoxOutlineBlank fontSize='small' />}
+            <div className="resource-menu-item-text" style={{ color: this.props.moduleSearchArray.includes(23) ? '#00ffbe' : 'white' }}>
+              23. Basics Of Banking
+            </div>
+          </div>
           <div onClick={() => this.props.selectModule(null)} className="resource-menu-item-flex">
             <div className="resource-menu-item-text" style={{ color: '#ff5536', marginLeft: 2 }}>
               Reset Filter

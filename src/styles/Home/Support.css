@@ -47,6 +47,7 @@ path {
     justify-content: flex-start;
     align-items: center;
     padding-top: 7px;
+    cursor: pointer;
 }
 .support-issue-text {
     font-size: 14px;
