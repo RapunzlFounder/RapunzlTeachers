@@ -136,7 +136,7 @@ class HomeScreen extends Component {
     // if it has been 1 minute or more since the last time that the user retrieved the mini query data, retreive it sgsin.  DO NOT CHANGE THIS NUMBER 60!  
     if (secondsDiff >= 60){      
       this.setState({ gettingMiniQuery: true });
-      this.props.FetchMiniQuery(this.props.jwtToken).then((res) => {
+      this.props.FetchMiniQuery(this.props.jwtToken, this.props.lastPublicModuleId).then((res) => {
         // Handles If There's An Error With the Mini Query
         if (!(res && !('errors' in res))) {
           this.setState({
@@ -342,6 +342,8 @@ const mapStateToProps = (state) => {
     // Last Time Standards Were Retrieved To Avoid Hitting Server 
     standardsLastRetrieved: state.coursesmodules.standardsLastRetrieved,
     standards: state.coursesmodules.financialLiteracyStandards,
+    // the id of the last public teacher module that was retrieved from the server
+    lastPublicModuleId: state.coursesmodules.lastPublicModuleId,    
     // These Elements In Redux Handle Navigation Throughout The Dashboard To Avoid Unnecessary Passing Of Props
     visibleTab: state.dashboard.visibleTab,
     previousTab: state.dashboard.previousTab,
@@ -361,7 +363,7 @@ const mapDispatchToProps = (dispatch) => {
       // Get all of the user data
       fetchBigQuery: (token) => dispatch(fetchBigQuery(token)),
       // executes the Mini Query
-      FetchMiniQuery: (token) => dispatch(fetchMiniQuery(token)),
+      FetchMiniQuery: (token, lastPublicModuleId) => dispatch(fetchMiniQuery(token, lastPublicModuleId)),
       // Handles Retrieving Financial Literacy Standards Which Are Mapped To Various Resource
       getStandards: (token) => dispatch(getFinancialLiteracyStandards(token)),
       // Handles sending message to Database to email to support email address

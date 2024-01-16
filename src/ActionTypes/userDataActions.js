@@ -6,7 +6,7 @@ import { MINI_USER_DETAILS } from '../graphql/queries/MiniUserDetails';
 import { GET_SCHOOL_LIST } from '../graphql/queries/GetSchoolList';
 import { COMPLETE_QUIZ } from '../graphql/mutations/CompleteQuiz';
 // import the action to update all of the courses and modules
-import { updateAllCourses, updateAllPublicModules, updateAllTeacherModules } from './coursemoduleActions';
+import { updateAllCourses, updateAllPublicModules, updateMiniPublicModules, updateAllTeacherModules } from './coursemoduleActions';
 // import the action to update all of the classroom students
 import { updateAllClassrooms, updateMiniClassrooms } from './classroomActions';
 // import the action to update the notification state
@@ -27,6 +27,7 @@ export const FETCH_BIGQUERY_SUCCESS = 'FETCH_BIGQUERY_SUCCESS';
 export const FETCH_BIGQUERY_ERROR = 'FETCH_BIGQUERY_ERROR';
 export const FETCH_BIGQUERY_FAILURE = 'FETCH_BIGQUERY_FAILURE';
 export const FETCH_MINIQUERY_BEGIN = 'FETCH_BIGQUERY_BEGIN';
+export const FETCH_MINIQUERY_SUCCESS = 'FETCH_BIGQUERY_SUCCESS';
 export const FETCH_MINIQUERY_ERROR = 'FETCH_BIGQUERY_ERROR';
 export const FETCH_MINIQUERY_FAILURE = 'FETCH_BIGQUERY_FAILURE';
 export const UPDATE_USER_DATA_STATE = 'UPDATE_USER_DATA_STATE';
@@ -76,6 +77,12 @@ export const fetchBigQueryBegin = () => ({
 
 export const fetchMiniQueryBegin = () => ({
   type: FETCH_MINIQUERY_BEGIN,
+});
+
+export const fetchMiniQuerySuccess = logoutRequired => ({
+  type: FETCH_MINIQUERY_SUCCESS,
+  payload: { logoutRequired }
+
 });
 
 export const fetchBigQuerySuccess = userDetails => ({
@@ -222,7 +229,7 @@ export function fetchBigQuery(token) {
                   mainReturnedObj.teacherUserDetails.availablePublicModules[property2].videos = {};
                 }
               }
-              dispatch(updateAllPublicModules(mainReturnedObj.teacherUserDetails.availablePublicModules));
+              dispatch(updateAllPublicModules(mainReturnedObj.teacherUserDetails.availablePublicModules, mainReturnedObj.teacherUserDetails.lastPublicModuleId));
               // convert the teacher created modules array of objects into an objects of objects
               const teacherModules = arrayToObjectID(mainReturnedObj.teacherUserDetails.teacherCreatedModules);
               mainReturnedObj.teacherUserDetails.teacherCreatedModules = teacherModules;
@@ -265,7 +272,7 @@ export function fetchBigQuery(token) {
                   mainReturnedObj.teacherUserDetails.teacherCreatedModules[property3].videos = teacherModuleVideos;
                 }
               }              
-              dispatch(updateAllTeacherModules(mainReturnedObj.teacherUserDetails.teacherCreatedModules));
+              dispatch(updateAllTeacherModules(mainReturnedObj.teacherUserDetails.teacherCreatedModules ));
               // convert the classrooms array of classrooms into an object of objects
               const classroomsObject = arrayToObjectID(mainReturnedObj.teacherUserDetails.classrooms);
               mainReturnedObj.teacherUserDetails.classrooms = classroomsObject; 
@@ -311,10 +318,10 @@ export function fetchBigQuery(token) {
 }
 
 // function to dispatch redux actions to get a response from the graphql query miniTeacherUserDetails
-export function fetchMiniQuery(token) {
+export function fetchMiniQuery(token, lastPublicModuleID) {
   return function (dispatch) {
     dispatch(fetchMiniQueryBegin());
-    return axios.post(GRAPHQL_URL, { query: MINI_USER_DETAILS }, {
+    return axios.post(GRAPHQL_URL, { query: MINI_USER_DETAILS(lastPublicModuleID) }, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
@@ -329,32 +336,80 @@ export function fetchMiniQuery(token) {
             // Transform arrays in the miniTeaxcherUserDetails object to objects that further contain objects.
             // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
             var mainReturnedObj = json.data.data;
+            // convert the available public modules array of objects into an objects of objects
+            const publicModules = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails.availablePublicModules);
+            mainReturnedObj.miniTeacherUserDetails.availablePublicModules = publicModules;
+            for (var property2 in mainReturnedObj.miniTeacherUserDetails.availablePublicModules){
+              // convert the available public module teacher guides array of objects into an objects of objects
+              if (mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].teacherGuides && mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].teacherGuides != null){
+                const publicModuleGuides = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].teacherGuides);
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].teacherGuides = publicModuleGuides;
+              }
+              else{
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].teacherGuides = {};
+              }
+              // convert the available public module articles array of objects into an objects of objects
+              if (mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].articles && mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].articles != null){
+                const publicModuleArticles = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].articles);
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].articles = publicModuleArticles;
+              }
+              else{
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].articles = {};
+              }
+              // convert the available public module activities array of objects into an objects of objects
+              if (mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].activities && mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].activities != null){
+                const publicModuleActivities = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].activities);
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].activities = publicModuleActivities;
+              }
+              else{
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].activities = {};
+              }
+              // convert the available public module assessment questions into an object of objects
+              if (mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].assessments && mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].assessments.questions != null){
+                const publicModuleAssessmentQuestions = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].assessments.questions);
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].assessments.questions = publicModuleAssessmentQuestions;
+              }
+              else{
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].assessments = {};
+              }
+              // convert the available public module videos array of objects into an objects of objects
+              if (mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].videos && mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].videos != null){
+                const publicModuleVideos = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].videos);
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].videos = publicModuleVideos;
+              }
+              else{
+                mainReturnedObj.miniTeacherUserDetails.availablePublicModules[property2].videos = {};
+              }
+            }
+            dispatch(updateMiniPublicModules(mainReturnedObj.miniTeacherUserDetails.availablePublicModules, mainReturnedObj.miniTeacherUserDetails.lastPublicModuleId));
             // convert the classrooms array of classrooms into an object of objects
-            const classroomsObject = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails);
-            mainReturnedObj.miniTeacherUserDetails = classroomsObject; 
-            for (var property1 in mainReturnedObj.miniTeacherUserDetails){
+            const classroomsObject = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails.classrooms);
+            mainReturnedObj.miniTeacherUserDetails.classrooms = classroomsObject; 
+            for (var property1 in mainReturnedObj.miniTeacherUserDetails.classrooms){
               // convert the classroom array of students into an onbject of objects
-              const studentsObject = arrayToObjectUserID(mainReturnedObj.miniTeacherUserDetails[property1].studentList);
-              mainReturnedObj.miniTeacherUserDetails[property1].studentList = studentsObject; 
-              for (var key1 in mainReturnedObj.miniTeacherUserDetails[property1].studentList){
+              const studentsObject = arrayToObjectUserID(mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList);
+              mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList = studentsObject; 
+              for (var key1 in mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList){
                 // convert the classroom array of student stock competitions entered into an onbject of objects
-                const studentStockCompsEntered = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails[property1].studentList[key1].stockCompetitionsEntered);
-                mainReturnedObj.miniTeacherUserDetails[property1].studentList[key1].stockCompetitionsEntered = studentStockCompsEntered;
+                const studentStockCompsEntered = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList[key1].stockCompetitionsEntered);
+                mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList[key1].stockCompetitionsEntered = studentStockCompsEntered;
                 // convert the classroom array of student crypto competitions entered into an onbject of objects
-                const studentCryptoCompsEntered = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails[property1].studentList[key1].cryptoCompetitionsEntered);
-                mainReturnedObj.miniTeacherUserDetails[property1].studentList[key1].cryptoCompetitionsEntered = studentCryptoCompsEntered;
+                const studentCryptoCompsEntered = arrayToObjectID(mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList[key1].cryptoCompetitionsEntered);
+                mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList[key1].cryptoCompetitionsEntered = studentCryptoCompsEntered;
                 // convert the classroom array of student Module Assessment or Quiz Scores into an onbject of objects
-                const studentModuleAssessmentScores = arrayToObjectModuleID(mainReturnedObj.miniTeacherUserDetails[property1].studentList[key1].moduleAssessmentScores);
-                mainReturnedObj.miniTeacherUserDetails[property1].studentList[key1].moduleAssessmentScores = studentModuleAssessmentScores;
+                const studentModuleAssessmentScores = arrayToObjectModuleID(mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList[key1].moduleAssessmentScores);
+                mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList[key1].moduleAssessmentScores = studentModuleAssessmentScores;
                 // convert the student list module assessment score question results into an object of objects
-                for (var key2 in mainReturnedObj.miniTeacherUserDetails[property1].studentList[key1].moduleAssessmentScores){
-                  const studentModuleAssessmentScoreAnswers = arrayToObjectQuizQuestionID(mainReturnedObj.miniTeacherUserDetails[property1].studentList[key1].moduleAssessmentScores[key2].questionResults);
-                  mainReturnedObj.miniTeacherUserDetails[property1].studentList[key1].moduleAssessmentScores[key2].questionResults = studentModuleAssessmentScoreAnswers;
+                for (var key2 in mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList[key1].moduleAssessmentScores){
+                  const studentModuleAssessmentScoreAnswers = arrayToObjectQuizQuestionID(mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList[key1].moduleAssessmentScores[key2].questionResults);
+                  mainReturnedObj.miniTeacherUserDetails.classrooms[property1].studentList[key1].moduleAssessmentScores[key2].questionResults = studentModuleAssessmentScoreAnswers;
                 }
               }
             }
             // add all of the courses and modules to the redux state
-            dispatch(updateMiniClassrooms(mainReturnedObj.miniTeacherUserDetails));
+            dispatch(updateMiniClassrooms(mainReturnedObj.miniTeacherUserDetails.classrooms));
+            // update the teacher userDetails state
+            dispatch(fetchMiniQuerySuccess(mainReturnedObj.miniTeacherUserDetails.logoutRequired));
             // return true
             const returnVal = true;
             return returnVal;

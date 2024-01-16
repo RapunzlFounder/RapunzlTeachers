@@ -3,6 +3,7 @@ import {
   UPDATE_ALL_COURSES,
   UPDATE_DEMO_COURSES,
   UPDATE_PUBLIC_MODULES,
+  UPDATE_MINI_PUBLIC_MODULES,
   UPDATE_TEACHER_MODULES,
   CREATE_TEACHER_NO_COURSES_MODULES,
   // RESET_COURSEMODULE_STATE,
@@ -50,6 +51,7 @@ const initialState = {
   error: null,
   graphqlError: null,
   errorTitle: null,
+  lastPublicModuleId: 0,
   availablePublicModules: {},
   teacherCreatedModules: {},
   teacherCourses: {},
@@ -387,6 +389,7 @@ const coursemoduleReducer = (state = initialState, action) => {
         errorTitle: 'Error Retrieving Teacher Portal Modules'
       }
     // this updates availablePublicModules portion of the coursesmodules state and is called when a user creates a new account
+    // or the big query is called
     case UPDATE_PUBLIC_MODULES:
       // Mark the state as "loading" so we can show a spinner or something
       // Also, reset any errors.
@@ -397,8 +400,32 @@ const coursemoduleReducer = (state = initialState, action) => {
           error: null,
           graphqlError: null,
           errorTitle: null,
+          lastPublicModuleId: action.payload.lastPublicModuleId,
           availablePublicModules: action.payload.publicModulesObject, 
         };
+    // this updates availablePublicModules portion of the coursesmodules state and is called when the mini query is called
+    case UPDATE_MINI_PUBLIC_MODULES:
+      // Mark the state as "loading" so we can show a spinner or something
+      // Also, reset any errors.
+      // eslint-disable-next-line
+      var ogPublicModulesObject = JSON.parse(JSON.stringify(state.availablePublicModules));
+      // iterate over the module id keys in the modulesObject
+      for (var key in action.payload.publicModulesObject) {
+        // if the module is a Rapunzl created module add it  to the originaPublicModulesObject
+        ogPublicModulesObject[key] = action.payload.publicModulesObject[key];
+      }
+        
+        return {
+          ...state,
+          loading: false,
+          error: null,
+          graphqlError: null,
+          errorTitle: null,
+          lastPublicModuleId: action.payload.lastPublicModuleId,
+          availablePublicModules: ogPublicModulesObject, 
+        };
+
+
     case UPDATE_COURSEMODULE_DATA_STATE:
         // Update the state of one key in the coursesmodules of the overall state.
         return {

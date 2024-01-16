@@ -10,9 +10,11 @@ export const GET_MODULES = (getPublicModules, getTeacherModules, moduleIds) => `
       description
       imageUrl
       presentationUrl
+      presentationGoogleURL
       presentationStandards
       moduleLevel
       vocabUrl
+      vocabGoogleURL
       isPrivate
       isRapunzlModule
       teacherId
@@ -22,6 +24,7 @@ export const GET_MODULES = (getPublicModules, getTeacherModules, moduleIds) => `
         description
         imageUrl
         pdfUrl
+        googleURL
       }
       articles {
         id
@@ -30,6 +33,7 @@ export const GET_MODULES = (getPublicModules, getTeacherModules, moduleIds) => `
         imageUrl
         pdfUrl
         standards
+        googleURL
       }
       activities {
         id
@@ -38,6 +42,7 @@ export const GET_MODULES = (getPublicModules, getTeacherModules, moduleIds) => `
         imageUrl
         pdfUrl
         standards
+        googleURL
       }
       assessments {
         id

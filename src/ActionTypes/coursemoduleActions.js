@@ -11,6 +11,7 @@ import { arrayToObjectID, arrayToObjectStandardID, stringifyIntArray } from '../
 export const UPDATE_ALL_COURSES = 'UPDATE_ALL_COURSES';
 export const UPDATE_DEMO_COURSES = 'UPDATE_DEMO_COURSES';
 export const UPDATE_PUBLIC_MODULES = 'UPDATE_PUBLIC_MODULES';
+export const UPDATE_MINI_PUBLIC_MODULES = 'UPDATE_MINI_PUBLIC_MODULES';
 export const UPDATE_TEACHER_MODULES = 'UPDATE_TEACHER_MODULES';
 export const CREATE_MODULE_BEGIN = 'CREATE_MODULE_BEGIN';
 export const CREATE_MODULE_SUCCESS = 'CREATE_MODULE_SUCCESS';
@@ -109,11 +110,15 @@ export const updateAllTeacherModules = (teacherModulesObject) => ({
   payload: { teacherModulesObject },
 });
 // this updates all of the available public modules retrieved when a teacher user account is created or when the teacher logs in and the big query runs
-export const updateAllPublicModules = (publicModulesObject) => ({
+export const updateAllPublicModules = (publicModulesObject, lastPublicModuleId) => ({
   type: UPDATE_PUBLIC_MODULES,
-  payload: { publicModulesObject },
+  payload: { publicModulesObject, lastPublicModuleId },
 });
-
+// this updates the available public modules retrieved when the mini teacher query is run
+export const updateMiniPublicModules = (publicModulesObject, lastPublicModuleId) => ({
+  type: UPDATE_MINI_PUBLIC_MODULES,
+  payload: { publicModulesObject, lastPublicModuleId },
+});
 // Actions to Create a Teacher Course from a list of modules
 export const createCourseBegin = () => ({
   type: CREATE_COURSE_BEGIN,

@@ -44,6 +44,10 @@ import {
   FETCH_BIGQUERY_SUCCESS,
   FETCH_BIGQUERY_ERROR,
   FETCH_BIGQUERY_FAILURE,
+  FETCH_MINIQUERY_BEGIN,
+  FETCH_MINIQUERY_SUCCESS,
+  FETCH_MINIQUERY_ERROR,
+  FETCH_MINIQUERY_FAILURE,
   UPDATE_USER_DATA_STATE,
   // RESET_USERDATA_STATE,  
   RESET_USERDETAILS_ERRORS,
@@ -97,6 +101,7 @@ const initialState = {
   picture: null,
   phoneNumber: '',
   isTeacher: false,
+  isSuperintendent: false,
   birthDate: null,
   address1: null,
   address2: null,
@@ -106,6 +111,8 @@ const initialState = {
   lastUpdated: null,
   school: null,
   schoolId: null,
+  district: null,
+  districtId: null,
   dateJoined: null,
   marketOpen: false,
   quizCompleted: 0,
@@ -713,6 +720,7 @@ const userDataReducer = (state = initialState, action) => {
         picture: action.payload.userDetails.picture,
         phoneNumber: action.payload.userDetails.phoneNumber,
         isTeacher: action.payload.userDetails.isTeacher,
+        isSuperintendent: action.payload.userDetails.isSuperintendent,
         birthDate: action.payload.userDetails.birthDate,
         lastUpdated: action.payload.userDetails.lastUpdated,
         address1: action.payload.userDetails.address1,
@@ -722,6 +730,8 @@ const userDataReducer = (state = initialState, action) => {
         addressZipCode: action.payload.userDetails.addressZipCode,
         school: action.payload.userDetails.school,
         schoolId: action.payload.userDetails.schoolId,
+        district: action.payload.userDetails.district,
+        districtId: action.payload.userDetails.districtId,
         dateJoined: action.payload.userDetails.dateJoined,
         newLogin: false,
         bigQueryLoaded: true,
@@ -748,6 +758,46 @@ const userDataReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload.error,
         errorTitle: 'Fetch Main User Data Failure'
+      };
+
+    case FETCH_MINIQUERY_BEGIN:
+      // Mark the state as "loading" so we can show a spinner or something
+      // Also, reset any errors. We're starting fresh.
+      return {
+          ...state,
+          loading: true,
+          error: null,
+          graphqlError: null
+      };
+  
+    case FETCH_MINIQUERY_SUCCESS:
+      // All done: set loading "false".
+      return {
+          ...state,
+          loading: false,
+          logoutRequired: action.payload.logoutRequired,
+      };
+  
+    case FETCH_MINIQUERY_ERROR:
+      // The request failed. It's done. So set loading to "false".
+      // Save the error, so we can display it somewhere.
+      // Since it failed, we don't have the isMaintenance bool from the server set maintenance to false.
+      return {
+          ...state,
+          loading: false,
+          graphqlError: action.payload.error,
+          errorTitle: 'Fetch Mini User Data Error'
+      };
+  
+    case FETCH_MINIQUERY_FAILURE:
+      // The request failed. It's done. So set loading to "false".
+      // Save the error, so we can display it somewhere.
+      // Since it failed, we don't have the isMaintenance bool from the server set maintenance to false.
+      return {
+          ...state,
+          loading: false,
+          error: action.payload.error,
+          errorTitle: 'Fetch Mini User Data Failure'
       };
 
     case UPDATE_USER_LEVEL_INFO:

@@ -11,6 +11,7 @@ query{
 		allowNotifications
 		unreadNotifications
 		isTeacher
+		isSuperintendent
 		birthDate
 		dateJoined
 		logoutRequired
@@ -22,7 +23,9 @@ query{
 		phoneNumber
 		lastUpdated
     	school      
-    	schoolId 
+    	schoolId
+		district
+		districtId
 		courses {
 			id
 			courseName
@@ -37,6 +40,7 @@ query{
 				teacherId
 			}
 		}
+		lastPublicModuleId
 		availablePublicModules {
 			id
 			name
