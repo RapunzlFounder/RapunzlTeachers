@@ -42,7 +42,8 @@ class HelperItem extends React.PureComponent {
 
   // Updates The Value For Birthday Read From Excel, Which Is A Serial Number Representing The Number Of Days Since January 1, 1900
   handleExcelTimestamp(serialTime) {
-    if (serialTime !== undefined && serialTime !== null && !(typeof serialTime !== 'float' && typeof serialTime !== 'number')) {
+    // eslint-disable-next-line
+    if (serialTime !== undefined && serialTime !== null && typeof serialTime == 'number') {
       // Creates Initial Moment Instance For Starting Point, Defined By Excel Serialization Of Date
       let initialTime = moment("Jan 1, 1900");
       // Adds The Serial Time Value To The Initial Date, Specifying That We Are Adding Days

@@ -254,7 +254,7 @@ class PortfolioPreview extends Component {
     }
     // Handles If Passwords Match By Dispatching To GraphQL
     else {
-      this.props.resetStudentPassword(this.props.jwtToken, this.props.user.username, this.state.password1).then((res) => {
+      this.props.resetStudentPassword(this.props.jwtToken, JSON.stringify([this.props.user.username.toString()]), this.state.password1).then((res) => {
         if (!(res && !('errors' in res))) {
           this.setState({
             // This part of state handles the native alert which is displayed to the teacher if the graphql dispatch fails
@@ -280,7 +280,7 @@ class PortfolioPreview extends Component {
             alertOption: false,
             alertOptionText: '',
             alertTitle: 'Reset Password Successful',
-            alertMessage: 'The new password for the student is: ' + res.studentlogin.password + `  Please note that the password is case-sensitive. If you continue experiencing issues, don't hestiate to contact support`,
+            alertMessage: 'The new password for the student is: ' + res.studentlogin[0].password + `  Please note that the password is case-sensitive. If you continue experiencing issues, don't hestiate to contact support`,
             alertVisible: true,
             alertOptionText2: false,
             // This hides the functionality for changing a user password since it is complete
@@ -600,7 +600,7 @@ const mapDispatchToProps = (dispatch) => {
       // Dispatch To Fetch Portfolio Information For The Selected User. Result Is Not Stored In Redux.
       fetchOtherUserDetails: (token, userName) => dispatch(FetchOtherUserDetails(token, userName)),
       // Handles resetting a student's password by dispatching to GraphQL
-      resetStudentPassword: (token, username, password) => dispatch(resetStudentPassword(token, username, password)),
+      resetStudentPassword: (token, usernameArray, password) => dispatch(resetStudentPassword(token, usernameArray, password)),
    };
 };
 

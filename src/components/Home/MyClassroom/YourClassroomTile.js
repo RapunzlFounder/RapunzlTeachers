@@ -17,6 +17,14 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import Alert from '../../Admin/Alert';
 import SortByButton from './SortByButton';
 import UpdateTeacherInfoModal from './UpdateTeacherInfoModal';
+import PersonRemoveRoundedIcon from '@mui/icons-material/PersonRemoveRounded';
+import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded';
+import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import ResetPasswordModal from './ResetPasswordModal';
+import SearchIcon from '@mui/icons-material/Search';
+import CancelIcon from '@mui/icons-material/Cancel';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 
 class YourClassroomTile extends Component {
   constructor(props) {
@@ -35,7 +43,10 @@ class YourClassroomTile extends Component {
       editingClassroom: false,
       alertVisible: false,
       alertTitle: '',
-      alertMessage: ''
+      alertMessage: '',
+      resetPasswordModal: false,
+      searchingStudents: false,
+      searchValue: ''
     }
   }
 
@@ -49,6 +60,14 @@ class YourClassroomTile extends Component {
         portfolioID: 0,
         portfolioData: [],
         removingArray: [],
+        sortType: 0,
+        editingClassroom: false,
+        alertVisible: false,
+        alertTitle: '',
+        alertMessage: '',
+        resetPasswordModal: false,
+        searchingStudents: false,
+        searchValue: ''
       })
     }
   }
@@ -57,6 +76,15 @@ class YourClassroomTile extends Component {
   // From Their Classroom
   toggleRemoveStudents() {
     this.setState({ removeStudents: !this.state.removeStudents, removingArray: [] });
+  }
+
+  // Handles resetting all student passwords in a classroom
+  toggleResetPasswords = () => {
+    this.setState({ resetPasswordModal: !this.state.resetPasswordModal });
+  }
+
+  toggleSearchStudents = () => {
+    this.setState({ searchingStudents: !this.state.searchingStudents, searchValue: '' });
   }
 
   // Handles GrapqhQL Dispatch To Remove Students From User Classroom
@@ -162,7 +190,7 @@ class YourClassroomTile extends Component {
 
   sortStudentList(studentList) {
     let returnArray = [];
-    if (studentList !== undefined) {
+    if (studentList !== undefined && !this.state.searchingStudents) {
       for (var i in studentList) {
         returnArray.push(studentList[i]);
       }
@@ -194,6 +222,17 @@ class YourClassroomTile extends Component {
       else {
         return returnArray;
       }
+    }
+    // Handles If User Is Searching For A Student
+    else if (studentList !== undefined && this.state.searchingStudents) {
+      for (var i in studentList) {
+        let combinedName = studentList[i].firstName + ' ' + studentList[i].lastName;
+        combinedName = combinedName.toLowerCase();
+        if (combinedName.includes(this.state.searchValue.toLowerCase())) {
+          returnArray.push(studentList[i]);
+        }
+      }
+      return returnArray;
     }
     // Handles Error Cases Or Code Issue
     else {
@@ -278,7 +317,7 @@ class YourClassroomTile extends Component {
       const isDemo = classInformation[1];
       const classList = this.sortStudentList(classInfo.studentList);
       return (
-        <div>
+        <div style={{ backgroundColor: '#002b21' }}>
           <Alert
             title={this.state.alertTitle}
             message={this.state.alertMessage}
@@ -300,17 +339,15 @@ class YourClassroomTile extends Component {
             visible={this.state.viewPortfolio}
             isDemo={isDemo}
           />
-          {false && !this.props.addingStudents && classList.length !== 0 && !this.state.viewPortfolio && (
-            <div className='tile classroom-overview'>
-              <ClassroomOverview
-                classroom={classInfo}
-              />
-            </div>
-          )}
-          {classList.length !== 0 && !this.state.viewPortfolio && (
-            <div className='tile classroom-all-container'>
-              <div className='your-classroom-tile-header'>
-                <div className='classroom-header-flex' style={{ paddingLeft: 12, paddingBottom: 5, paddingTop: (this.state.removeStudents || isDemo) ? 12 : 0 }}>
+          <ResetPasswordModal
+            dismiss={this.toggleResetPasswords}
+            visible={this.state.resetPasswordModal}
+            classList={classList}
+          />
+          {((classList.length !== 0 && !this.state.viewPortfolio) || (this.state.searchingStudents)) && (
+            <div className='tile classroom-all-container your-classroom-tile-header'>
+              <div>
+                <div className='classroom-header-flex' style={{ paddingLeft: 12, paddingBottom: 5 }}>
                   <OtherHouses />
                   <div className='classroom-title' style={{ paddingLeft: 10 }}>
                     {classInfo.className}
@@ -324,57 +361,93 @@ class YourClassroomTile extends Component {
                     </div>
                   )}
                 </div>
-                {!this.state.removeStudents && !isDemo && (
-                  <div className='classroom-button-flex'>
-                    <div title="Add Students Manually Or By Uploading" onClick={() => this.props.toggleAddStudents()} className='button add-students-button'>
-                      Add<br/>Students
-                    </div>
-                    <div title="Remove Students From Classroom" onClick={() => this.toggleRemoveStudents()} className='button remove-students-button' style={{ width: '32%' }}>
-                      Remove<br/>Students
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div onClick={() => this.props.selectClassroom(false)} className='view-all-classrooms-button' style={{ fontSize: 12, marginTop: isDemo ? 0 : -20 }}>
-                Back To List of Classrooms
-              </div>
-              <div className='classroom-all-students'>
-                {this.state.removeStudents && (
-                  <div className='classroom-button-flex'>
-                    <div title="Removes Selected Students From Class" onClick={() => this.confirmRemoveStudents(classInfo)} className='button remove-button'>
-                      Confirm Remove
-                    </div>
-                    <div title="Select All Studnets To Remove" onClick={() => this.selectAllRemoving(classInfo)} className='button remove-all-button'>
-                      Select All
-                    </div>
-                    <div onClick={() => this.toggleRemoveStudents()} className='button remove-students-button'>
-                      Cancel
-                    </div>
-                  </div>
-                )}
-                {!this.state.removeStudents && (
+                <div onClick={() => this.props.selectClassroom(false)} className='view-all-classrooms-button' style={{ fontSize: 12 }}>
+                  Back To List of Classrooms
+                </div>
+                {!this.state.removeStudents && !this.state.searchingStudents && (
                   <SortByButton 
                     selectSearchOption={this.selectSort}
                     sortType={this.state.sortType}
                   />
                 )}
-                {classList.length !== 0 && classList.map((item, index) => {
-                  return (
-                    <ClassroomItem
-                      key={index}
-                      item={item}
-                      viewPortfolio={this.togglePortfolio}
-                      removing={this.state.removeStudents}
-                      select={this.selectRemoving}
-                      selected={this.state.removingArray.includes(parseInt(item.userId))}
-                      sortType={this.state.sortType}
-                    />
-                  )
-                })}
+              </div>
+              {!this.state.removeStudents && !this.state.searchingStudents && !isDemo && (
+                <div className='classroom-button-flex'>
+                  <div className='classroom-option-button' onClick={() => this.toggleSearchStudents()}>
+                    <PersonSearchIcon className='search-students-button-icon' />
+                    <div title="Add Students Manually Or By Uploading" className='search-students-text'>
+                      Search<br/>Students
+                    </div>
+                  </div>
+                  <div className='classroom-option-button' onClick={() => this.props.toggleAddStudents()}>
+                    <PersonAddAlt1RoundedIcon className='add-students-button-icon' />
+                    <div title="Add Students Manually Or By Uploading" className='add-students-text'>
+                      Add<br/>Students
+                    </div>
+                  </div>
+                  <div className='classroom-option-button' onClick={() => this.toggleRemoveStudents()}>
+                    <PersonRemoveRoundedIcon className='remove-students-button-icon' />
+                    <div title="Remove Students From Classroom" className='remove-students-text'>
+                      Remove<br/>Students
+                    </div>
+                  </div>
+                  <div className='classroom-option-button' onClick={() => this.toggleResetPasswords()}>
+                    <LockResetRoundedIcon className='reset-passwords-button-icon' />
+                    <div title='Reset Student Passwords' className='reset-passwords-text'>
+                      Reset<br/>Passwords
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          {this.state.removeStudents && (
+            <div className='classroom-button-flex'>
+              <div title="Removes Selected Students From Class" onClick={() => this.confirmRemoveStudents(classInfo)} className='button remove-button'>
+                Confirm Remove
+              </div>
+              <div title="Select All Studnets To Remove" onClick={() => this.selectAllRemoving(classInfo)} className='button remove-all-button'>
+                Select All
+              </div>
+              <div onClick={() => this.toggleRemoveStudents()} className='button remove-students-button'>
+                Cancel
               </div>
             </div>
           )}
-          {classList.length === 0 && !this.state.viewPortfolio && (
+          {this.state.searchingStudents && (
+            <div className='tile classroom-button-flex'>
+              <div title="Search Students In Class" className='search-classroom-bar'>
+                <div className='search-classroom-bar-left'>
+                  <SearchIcon className='search-classroom-bar-icon' />
+                  <input 
+                    className='search-classroom-bar-text'
+                    placeholder={'Search By Name'}
+                    value={this.state.searchValue}
+                    onChange={(event) => this.setState({ searchValue: event.target.value })}
+                  />
+                </div>
+                <CancelIcon onClick={() => this.toggleSearchStudents()} className='search-classroom-cancel-icon' />
+              </div>
+            </div>
+          )}
+          {((this.state.searchingStudents && classList.length !== 0) || (classList.length !== 0)) && (
+            <div className='tile' style={{ minHeight: 600, maxHeight: 900, overflowY: 'scroll' }}>
+              {classList.length !== 0 && classList.map((item, index) => {
+                return (
+                  <ClassroomItem
+                    key={index}
+                    item={item}
+                    viewPortfolio={this.togglePortfolio}
+                    removing={this.state.removeStudents}
+                    select={this.selectRemoving}
+                    selected={this.state.removingArray.includes(parseInt(item.userId))}
+                    sortType={this.state.sortType}
+                  />
+                )
+              })}
+            </div>
+          )}
+          {classList.length === 0 && !this.state.viewPortfolio && !this.state.searchingStudents && (
             <div className='tile classroom-all-container' style={{ paddingBottom: 350, paddingTop: 80 }}>
               <div className='create-class-name-subtext'>
                 No Students In This Class!
@@ -387,6 +460,17 @@ class YourClassroomTile extends Component {
               </div>
               <div title="Return To List Of Classrooms" onClick={() => this.props.selectClassroom(false)} className='back-to-class-list-button'>
                 Back To Class List
+              </div>
+            </div>
+          )}
+          {classList.length === 0 && !this.state.viewPortfolio && this.state.searchingStudents && (
+            <div className='tile classroom-all-container' style={{ paddingBottom: 350, paddingTop: 30 }}>
+              <SearchOffIcon className='empty-search-result-icon' />
+              <div className='create-class-name-header'>
+                No Search Results Found 
+              </div>
+              <div className='create-class-name-subtext'>
+                We were unable to find any students with the name you searched for. Please try again. If you cannot find a student, they may be in a different classroom.
               </div>
             </div>
           )}

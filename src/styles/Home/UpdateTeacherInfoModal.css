@@ -66,6 +66,61 @@
 .update-info-main-button:hover {
   background-color: #35b594;
 }
+.reset-password-modal {
+    background-color: #4e3e34;
+    padding: 30px;
+    padding-bottom: 20px;
+    max-width: 370px;
+}
+.show-password-icon {
+    margin-left: 10; 
+    cursor: pointer;
+    fill: #71b591;
+}
+.show-password-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin: auto;
+    margin-top: 10px;
+    cursor: pointer;
+    width: fit-content;
+}
+.show-password-container:hover .show-password-text {
+    color: #14e274;
+}
+
+.show-password-container:hover .show-password-icon {
+    fill: #14e274;
+}
+.show-password-text {
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 8px;
+    margin-bottom: 1px;
+    color: #71b591;
+}
+.reset-password-button {
+    width: fit-content;
+    cursor: pointer;
+    transition: 0.2s all;
+    margin: auto;
+    padding: 15px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 4px;
+    background-color: #ce542b;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+.reset-password-button:hover {
+    background-color: #ff4405;
+}
 .update-info-second-button {
     width: fit-content;
     margin: auto;

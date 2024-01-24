@@ -243,8 +243,7 @@ path {
     font-weight: 600;
     color: #3ac09d;
     padding-left: 15px;
-    margin-top: -20px;
-    padding-bottom: 15px;
+    padding-bottom: 5px;
     padding-right: 15px;
     cursor: pointer;
     transition: 0.2s all;
@@ -273,6 +272,140 @@ path {
 }
 .remove-button:hover {
     background-color: #c30d0d;
+}
+.search-classroom-bar {
+    width: 100%;
+    padding: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #044736;
+    background-color: #00000033;
+    margin-right: 5px;
+    color: white;
+    font-size: 11px;
+    font-weight: 300;
+    text-align: center;
+    border-radius: 5px;
+    transition: 0.2s all;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.search-classroom-bar-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 90%;
+}
+.search-classroom-bar-icon {
+    fill: #129c78 !important;
+}
+.search-classroom-bar-text {
+    border: none;
+    outline: none;
+    margin-left: 15px;
+    color: white;
+    background-color: transparent;
+    font-size: 17px;
+    font-weight: 300;
+    width: 400px;
+}
+.search-classroom-cancel-icon {
+    fill: #3b7667 !important;
+    padding: 8px;
+    cursor: pointer;
+}
+.classroom-option-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 9px;
+    padding-left: 7px;
+    padding-right: 7px;
+    margin-left: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.classroom-option-button:hover {
+    border-bottom: 2.5px solid;
+    padding-bottom: 10px;
+    padding-top: 0px;
+    margin-bottom: -15px;
+    transition: 0.2s all;
+}
+.search-students-button-icon {
+    font-size: 30px;
+    text-align: center;
+    margin: auto;
+    fill: #74508b !important;
+}
+.classroom-option-button:hover .search-students-button-icon {
+    fill: #b237ff !important;
+}
+.add-students-button-icon {
+    font-size: 30px;
+    text-align: center;
+    margin: auto;
+    fill: #3ac09d !important;
+}
+.classroom-option-button:hover .add-students-button-icon {
+    fill: #00eeae !important;
+}
+.remove-students-button-icon {
+    font-size: 30px;
+    text-align: center;
+    margin: auto;
+    fill: #f49732 !important;
+}
+.classroom-option-button:hover .remove-students-button-icon {
+    fill: #ff8400 !important;
+}
+.reset-passwords-button-icon {
+    font-size: 30px;
+    text-align: center;
+    margin: auto;
+    fill: #dc4444 !important;
+}
+.classroom-option-button:hover .reset-passwords-button-icon {
+    fill: #ff0000 !important;
+}
+.search-students-text {
+    font-size: 10px;
+    text-align: center;
+    padding-top: 3px;
+    color: #74508b;
+}
+.classroom-option-button:hover .search-students-text {
+    color: #b237ff !important;
+}
+.add-students-text {
+    font-size: 10px;
+    text-align: center;
+    padding-top: 3px;
+    color: #3ac09d;
+}
+.classroom-option-button:hover .add-students-text {
+    color: #00eeae !important;
+}
+.remove-students-text {
+    font-size: 10px;
+    text-align: center;
+    padding-top: 3px;
+    color: #f49732;
+}
+.classroom-option-button:hover .remove-students-text {
+    color: #ff8400 !important;
+}
+.reset-passwords-text {
+    font-size: 10px;
+    text-align: center;
+    padding-top: 3px;
+    color: #dc4444;
+}
+.classroom-option-button:hover .reset-passwords-text {
+    color: #ff0000 !important;
 }
 .add-students-button {
     width: 120px;
@@ -861,11 +994,12 @@ path {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
-    padding-top: 15px;
+    align-items: flex-start;
+    padding-top: 28px;
 }
 .classroom-all-students {
     padding-bottom: 30px;
+    padding-top: 10px;
     height: 650px;
     overflow-y: scroll;
     overflow-x: hidden; 
@@ -1156,6 +1290,22 @@ path {
     text-align: center;
     padding-top: 90px;
     padding-bottom: 2px;
+}
+.empty-search-result
+.empty-search-result-header {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #00ffbe;
+}
+.empty-search-result-text {
+    font-size: 16px;
+    font-weight: 200;
+    text-align: center;
+    padding-top: 5px;
+    width: 320px;
+    margin: auto;
+    color: #caf2e8;
 }
 .create-class-name-header {
     text-align: center;
