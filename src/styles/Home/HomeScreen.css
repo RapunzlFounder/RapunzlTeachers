@@ -1615,6 +1615,29 @@ path {
     font-size: 14px;
     font-weight: 400;
 }
+.empty-closed-positions-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 70px;
+}
+.empty-closed-positions-icon {
+    padding-top: 35px !important;
+    text-align: center !important;
+    margin: auto !important;
+    font-size: 62px !important;
+    fill:#e68a1a !important;
+    margin-bottom: -15px !important;
+}
+.view-portfolio-position-type-text {
+    text-align: center;
+    font-size: 13px;
+    color: #3ea58b;
+    padding-top: 13px;
+    padding-bottom: 9px;
+    font-weight: 500;
+}
 .view-portfolio-position-flex {
     display: flex;
     flex-direction: row;

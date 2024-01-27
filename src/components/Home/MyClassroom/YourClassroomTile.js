@@ -430,7 +430,7 @@ class YourClassroomTile extends Component {
               </div>
             </div>
           )}
-          {((this.state.searchingStudents && classList.length !== 0) || (classList.length !== 0)) && (
+          {((this.state.searchingStudents && classList.length !== 0) || (classList.length !== 0)) && !this.state.viewPortfolio && (
             <div className='tile' style={{ minHeight: 600, maxHeight: 900, overflowY: 'scroll' }}>
               {classList.length !== 0 && classList.map((item, index) => {
                 return (

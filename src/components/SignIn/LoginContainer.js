@@ -95,6 +95,7 @@ class LoginContainer extends React.PureComponent {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!re.test(this.state.username.toLowerCase())) {
       this.props.loginUser(loginCredentials).then(res2 => {
+        console.log('here', res2);
         if (!(res2 && !('errors' in res2))) {
           // set the loading state to false as the login attempt failed and the user needs to be able to retry the login
           this.setState({
@@ -108,6 +109,7 @@ class LoginContainer extends React.PureComponent {
         // eslint-disable-next-line
         else if (res2 && res2.token && res2.token.substring(0,4) == 'JWT ') {
           this.props.fetchBigQuery(res2.token).then(res => {
+            console.log('res', res);
             // Handles Error With Big Query
             if (res !== true && !(res && !('errors' in res))) {
               this.setState({

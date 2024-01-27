@@ -10,6 +10,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { objectToArray } from '../../../helper_functions/utilities';
 import EmptyPositions from '../../../assets/images/Search/SearchEmpty.png';
+import RuleIcon from '@mui/icons-material/Rule';
 import CircularProgress from '@mui/material/CircularProgress';
 import intHandler from '../../../helper_functions/intHelper';
 import Alert from '../../Admin/Alert';
@@ -39,6 +40,8 @@ class PortfolioPreview extends Component {
       userData: {
         stocks: [],
         crypto: [],
+        closedStocks: [],
+        closedCrypto: [],
         stockTrades: 0,
         cryptoTrades: 0
       },
@@ -106,18 +109,20 @@ class PortfolioPreview extends Component {
       // Handles Successful Fetch By Updating State Values & Setting Loading To False
       else { 
         // Handles Mapping Positions To Array And Saving Arrays To State
-        const stockPositions = res.stockPortfolios.positions !== undefined ? objectToArray(res.stockPortfolios[Object.keys(res.stockPortfolios)].positions) : [];
-        const cryptoPositions = res.cryptoPortfolios.positions !== undefined ? objectToArray(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].positions) : [];
-        const closedStockPositions = res.stockPortfolios.closedPositions !== undefined ? Object.keys(res.stockPortfolios[Object.keys(res.stockPortfolios)].closedPositions).length : 0;
-        const closedCryptoPositions = res.cryptoPortfolios.closedPositions !== undefined ? Object.keys(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].closedPositions).length : 0;
+        const stockPositions = res.stockPortfolios !== undefined ? objectToArray(res.stockPortfolios[Object.keys(res.stockPortfolios)].positions) : [];
+        const cryptoPositions = res.cryptoPortfolios !== undefined ? objectToArray(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].positions) : [];
+        const closedStockPositions = res.stockPortfolios !== undefined ? Object.keys(res.stockPortfolios[Object.keys(res.stockPortfolios)].closedPositions) : [];
+        const closedCryptoPositions = res.cryptoPortfolios !== undefined ? Object.keys(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].closedPositions) : [];
         this.setState({
           loading: false,
           error: false,
           userData: {
             stocks: stockPositions,
             crypto: cryptoPositions,
-            stockTrades: stockPositions.length + closedStockPositions,
-            cryptoTrades: cryptoPositions.length + closedCryptoPositions,
+            closedStocks: closedStockPositions,
+            closedCrypto: closedCryptoPositions,
+            stockTrades: stockPositions.length + closedStockPositions.length,
+            cryptoTrades: cryptoPositions.length + closedCryptoPositions.length,
           },
         })
       }
@@ -550,28 +555,79 @@ class PortfolioPreview extends Component {
           )}
           {// When There Are Positions Present For Selected Portfolio
           ((this.state.userData.stocks.length !== 0 && this.state.portfolioSelected === 'stock') || (this.state.userData.crypto.length !== 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && (
-            <div className='view-portfolio-position-flex'>
-              {this._getPortfolioData().map((item) => {
-                return (
-                  <div key={item.id} className='view-portfolio-position' style={{ backgroundColor: this.handleBackgroundColor(item.profitLoss)}}>
-                    <div className='portfolio-position-symbol'>
-                      {item.symbol}
+            <div>
+              <div className='view-portfolio-position-type-text'>
+                Current Open Positions
+              </div>
+              <div className='view-portfolio-position-flex'>
+                {this._getPortfolioData().map((item) => {
+                  return (
+                    <div key={item.id} className='view-portfolio-position' style={{ backgroundColor: this.handleBackgroundColor(item.profitLoss)}}>
+                      <div className='portfolio-position-symbol'>
+                        {item.symbol}
+                      </div>
+                      <div className='portfolio-position-name'>
+                        {item.symbolName}
+                      </div>
+                      <div className='portfolio-position-performance'>
+                        {intHandler(item.profitLoss / item.costBasis, 'percent', 2, true)}
+                      </div>
+                      <div className='portfolio-position-time'>
+                        Purchased<br/>{this.getDiff(moment(item.openedAt), moment(new Date()))} Ago
+                      </div>
+                      <div className='portfolio-position-side'>
+                        {item.side}
+                      </div>
                     </div>
-                    <div className='portfolio-position-name'>
-                      {item.symbolName}
+                  )
+                })}
+              </div>
+            </div>
+          )}
+          {// When There Are Closed Positions Present For Selected Portfolio
+          ((this.state.userData && this.state.userData.closedStocks && this.state.userData.closedStocks.length !== 0 && this.state.portfolioSelected === 'stock') || (this.state.userData && this.state.userData.closedCrypto && this.state.userData.closedCrypto.length !== 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && (
+            <div>
+              <div className='view-portfolio-position-type-text'>
+                Closed Positions
+              </div>
+              <div className='view-portfolio-position-flex'>
+                {this._getPortfolioData().map((item) => {
+                  return (
+                    <div key={item.id} className='view-portfolio-position' style={{ backgroundColor: this.handleBackgroundColor(item.profitLoss)}}>
+                      <div className='portfolio-position-symbol'>
+                        {item.symbol}
+                      </div>
+                      <div className='portfolio-position-name'>
+                        {item.symbolName}
+                      </div>
+                      <div className='portfolio-position-performance'>
+                        {intHandler(item.profitLoss / item.costBasis, 'percent', 2, true)}
+                      </div>
+                      <div className='portfolio-position-time'>
+                        Purchased<br/>{this.getDiff(moment(item.openedAt), moment(new Date()))} Ago
+                      </div>
+                      <div className='portfolio-position-side'>
+                        {item.side}
+                      </div>
                     </div>
-                    <div className='portfolio-position-performance'>
-                      {intHandler(item.profitLoss / item.costBasis, 'percent', 2, true)}
-                    </div>
-                    <div className='portfolio-position-time'>
-                      Purchased<br/>{this.getDiff(moment(item.openedAt), moment(new Date()))} Ago
-                    </div>
-                    <div className='portfolio-position-side'>
-                      {item.side}
-                    </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
+            </div>
+          )}
+          {// When There Are Closed Positions Present For Selected Portfolio
+          ((this.state.userData && this.state.userData.closedStocks && this.state.userData.closedStocks.length === 0 && this.state.portfolioSelected === 'stock') || (this.state.userData && this.state.userData.closedCrypto && this.state.userData.closedCrypto.length === 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && (
+            <div className='empty-closed-positions-container'>
+              <div className='view-portfolio-position-type-text'>
+                Closed Positions
+              </div>
+              <RuleIcon className='empty-closed-positions-icon' />
+              <div className='portfolio-positions-h1' style={{ color: '#e68a1a'}}>
+                No Closed Positions
+              </div>
+              <div className='portfolio-positions-text'>
+                {this.props.user.firstName} {this.props.user.lastName} ({this.props.user.username}) does not have any closed positions to display at this time. Closed positions will continue to update as the student places trades.
+              </div>
             </div>
           )}
         </div>
