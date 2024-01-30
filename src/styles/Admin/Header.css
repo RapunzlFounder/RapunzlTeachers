@@ -124,6 +124,7 @@ path {
     padding-bottom: 10px;
     width: 150px;
     padding-left: 15px;
+    cursor: pointer;
 }
 .css-1nvnyqx-MuiPaper-root-MuiDrawer-paper {
 	margin: auto !important;

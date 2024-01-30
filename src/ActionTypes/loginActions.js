@@ -423,10 +423,10 @@ export function forgotPassword(email, type) {
 }
 
 // Action Creator function to dispatch redux actions when an existing user wishes to change their password.
-export function changePassword(token, oldPass, newPass, confirmPass) {
+export function changePassword(token, newPass, confirmPass) {
   return function(dispatch){
     dispatch(changePasswordBegin());
-    return axios.post(GRAPHQL_URL, { query: CHANGE_PASSWORD(oldPass, newPass, confirmPass) }, {
+    return axios.post(GRAPHQL_URL, { query: CHANGE_PASSWORD(newPass, confirmPass) }, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: token

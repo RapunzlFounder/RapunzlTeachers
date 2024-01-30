@@ -38,7 +38,6 @@ class Settings extends Component {
       phoneNumber: this.props.phoneNumber || '',
       birthdate: this.props.birthDate || '',
       // Used When Changing Password To Ensure That New Password Matches When User Inputs It Twice
-      oldPassword: '',
       password: '',
       confirmPassword: '',
       // Handles Errors For Settings Inputs
@@ -272,7 +271,6 @@ class Settings extends Component {
   changeEmail(text) { this.setState({ email: text.replace(/\s/g, ''), onErrorEmail: false }); }
   changeBirthdate(text) { this.setState({ birthdate: text, onErrorBirthday: false }); }
   changePassword(text) { this.setState({ password: text, onErrorPassword: false }); }
-  changeOldPassword(text) { this.setState({ oldPassword: text }); }
   changeConfirm(text) { this.setState({ confirmPassword: text, onErrorPassword: false }); }
 
   // When User Selects Save Button, We Want To Determine Which Is The Appropriate Mutation To Call Since Change Password Is Different
@@ -310,7 +308,7 @@ class Settings extends Component {
         loading: false,
       });
     } else {
-      this.props.changePassword(this.props.jwtToken, this.state.oldPassword, this.state.password, this.state.confirmPassword).then((res) => {
+      this.props.changePassword(this.props.jwtToken, this.state.password, this.state.confirmPassword).then((res) => {
         this.setState({
           alertTitle: 'Success!',
           alertMessage: 'Your new password has been securely updated.',
@@ -497,43 +495,31 @@ class Settings extends Component {
                 {this.state.changingPassword && (
                   <div>
                     <TextField
-                      label="Old Password"
+                      label="New Password"
                       placeholder="••••••••"
                       type="password"
                       variant="filled"
-                      style={{ width: '100%'}}
-                      value={this.state.oldPassword}
-                      onChange={(event) => this.changeOldPassword(event.target.value)}
-                      sx={{ backgroundColor: '#2e7361', marginBottom: '4px', marginTop: '4px', borderRadius: '7px' }}
+                      style={{ width: '100%' }}
+                      error={this.state.onErrorPassword}
+                      value={this.state.password}
+                      onChange={(event) => this.changePassword(event.target.value)}
+                      sx={{ backgroundColor: '#012b22', marginBottom: '4px', marginTop: '4px', borderRadius: '7px' }}
                     />
-                    <div style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <TextField
-                        label="New Password"
-                        placeholder="••••••••"
-                        type="password"
-                        variant="filled"
-                        style={{ width: '49%', marginRight: '2%'}}
-                        error={this.state.onErrorPassword}
-                        value={this.state.password}
-                        onChange={(event) => this.changePassword(event.target.value)}
-                        sx={{ backgroundColor: '#2e7361', marginBottom: '4px', marginTop: '4px', borderRadius: '7px' }}
-                      />
-                      <TextField
-                        id="confirm"
-                        label="Confirm New"
-                        placeholder="••••••••"
-                        type="password"
-                        variant="filled"
-                        style={{ width: '49%' }}
-                        error={this.state.onErrorPassword}
-                        value={this.state.confirmPassword}
-                        onChange={(event) => this.changeConfirm(event.target.value)}
-                        sx={{ backgroundColor: '#2e7361', marginBottom: '4px', marginTop: '4px', borderRadius: '7px' }}
-                      />
-                    </div>
+                    <TextField
+                      id="confirm"
+                      label="Confirm New"
+                      placeholder="••••••••"
+                      type="password"
+                      variant="filled"
+                      style={{ width: '100%' }}
+                      error={this.state.onErrorPassword}
+                      value={this.state.confirmPassword}
+                      onChange={(event) => this.changeConfirm(event.target.value)}
+                      sx={{ backgroundColor: '#012b22', marginBottom: '4px', marginTop: '4px', borderRadius: '7px' }}
+                    />
                   </div>
                 )}
-                {!this.state.loading && (
+                {!this.state.loading && !this.state.changingPassword && (
                   <div>
                     {!this.state.refreshedContent && (
                       <div title="Resync Education Content With Rapunzl Servers" onClick={() => this._handleRefreshContent()} className='refresh-modules-button-flex'>
@@ -551,11 +537,25 @@ class Settings extends Component {
                         </div>
                       </div>
                     )}
+                  </div>
+                )}
+                {this.state.changingPassword && !this.state.loading && (
+                  <div>
+                    <button onClick={(e) => this.handleSaveButton(e)} className="change-password-button" style={{ width: '100%' }}>
+                      Update Password
+                    </button>
+                    <button className='main-button login-button' style={{ margin: 'auto', display: 'block', marginTop: '40px', marginBottom: '25px', width: '260px' }} onClick={(e) => this.toggleChangePassword(e)}>
+                      Go Back
+                    </button>
+                  </div>
+                )}
+                {!this.state.changingPassword && !this.state.loading && (
+                  <div>
                     <button onClick={(e) => this.toggleChangePassword(e)} className="change-password-button" style={{ width: '100%' }}>
-                      {this.state.changingPassword ? 'Go Back' : 'Change Password'}
+                      Change Password
                     </button>
                     <button className='main-button login-button' style={{ margin: 'auto', display: 'block', marginTop: '40px', marginBottom: '25px', width: '260px' }} onClick={(e) => this.handleSaveButton(e)}>
-                      {this.state.changingPassword ? 'Update Password' : 'Save Changes'}
+                      Save Changes
                     </button>
                   </div>
                 )}
@@ -612,7 +612,7 @@ const mapDispatchToProps = (dispatch) => {
     // checks to see if email and username is unique before allowing user to proceed
     isEmailUnique: (email) => dispatch(isEmailUnique(email)),
     // Allows User To Dispatch Action To Change Password Associated With Their Account
-    changePassword: (jwtToken, oldPass, newPass, confirmPass) => dispatch(changePassword(jwtToken, oldPass, newPass, confirmPass)),
+    changePassword: (jwtToken, newPass, confirmPass) => dispatch(changePassword(jwtToken, newPass, confirmPass)),
     // Allows User To Refresh Current Course Content & Retrieve The Most Up To Date Modules
     refreshModules: (token, getPublicModules, getTeacherModules, modulesList) => dispatch(getModules(token, getPublicModules, getTeacherModules, modulesList)),
   };
