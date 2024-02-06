@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { FetchOtherUserDetails } from '../../../ActionTypes/socialActions';
-import { resetStudentPassword } from '../../../ActionTypes/classroomActions';
+import { resetStudentPassword, resetStudentPortfolio } from '../../../ActionTypes/classroomActions';
 import ProfileIcon from '../../../assets/images/School/BlankProfile.png';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import TextField from '@mui/material/TextField';
@@ -14,6 +14,7 @@ import RuleIcon from '@mui/icons-material/Rule';
 import CircularProgress from '@mui/material/CircularProgress';
 import intHandler from '../../../helper_functions/intHelper';
 import Alert from '../../Admin/Alert';
+import SymbolTypes from '../../../graphql/enums/SymbolTypes';
 import '../../../styles/Home/HomeScreen.css';
 
 class PortfolioPreview extends Component {
@@ -76,7 +77,9 @@ class PortfolioPreview extends Component {
           stocks: [],
           crypto: [],
           stockTrades: 0,
-          cryptoTrades: 0
+          cryptoTrades: 0,
+          stocksID: '',
+          cryptoID: '',
         },
         resetPassword: false,
         password1: '',
@@ -108,11 +111,39 @@ class PortfolioPreview extends Component {
       }
       // Handles Successful Fetch By Updating State Values & Setting Loading To False
       else { 
+        let stockPositions = [];
+        let cryptoPositions = [];
+        let closedStockPositions = [];
+        let closedCryptoPositions = [];
+        let stockPortfolioID = '';
+        let cryptoPortfolioID = '';
         // Handles Mapping Positions To Array And Saving Arrays To State
-        const stockPositions = res.stockPortfolios !== undefined ? objectToArray(res.stockPortfolios[Object.keys(res.stockPortfolios)].positions) : [];
-        const cryptoPositions = res.cryptoPortfolios !== undefined ? objectToArray(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].positions) : [];
-        const closedStockPositions = res.stockPortfolios !== undefined ? Object.keys(res.stockPortfolios[Object.keys(res.stockPortfolios)].closedPositions) : [];
-        const closedCryptoPositions = res.cryptoPortfolios !== undefined ? Object.keys(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].closedPositions) : [];
+        // Error Checks That Stock Portfolio Exists
+        if (res.stockPortfolios !== undefined && res.stockPortfolios[Object.keys(res.stockPortfolios)] !== undefined) {
+          // Handles Stock Portfolio ID
+          stockPortfolioID = res.stockPortfolios[Object.keys(res.stockPortfolios)].id;
+          // Handles Error Checking For Stock Positions
+          if (res.stockPortfolios[Object.keys(res.stockPortfolios)].positions !== undefined) {
+            stockPositions = objectToArray(res.stockPortfolios[Object.keys(res.stockPortfolios)].positions);
+          }
+          // Handles Error Checking For Closed Stock Positions
+          if (res.stockPortfolios[Object.keys(res.stockPortfolios)].closedPositions !== undefined) {
+            closedStockPositions = Object.keys(res.stockPortfolios[Object.keys(res.stockPortfolios)].closedPositions);
+          }
+        }
+        // Error Checks That Crypto Portfolio Exists
+        if (res.cryptoPortfolios !== undefined && res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)] !== undefined) {
+          // Handles Crypto Portfolio ID
+          cryptoPortfolioID = res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].id;
+          // Handles Error Checking For Crypto Positions
+          if (res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].positions !== undefined) {
+            cryptoPositions = objectToArray(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].positions);
+          }
+          // Handles Error Checking For Closed Crypto Positions
+          if (res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].closedPositions !== undefined) {
+            closedCryptoPositions = Object.keys(res.cryptoPortfolios[Object.keys(res.cryptoPortfolios)].closedPositions);
+          }
+        }
         this.setState({
           loading: false,
           error: false,
@@ -123,8 +154,10 @@ class PortfolioPreview extends Component {
             closedCrypto: closedCryptoPositions,
             stockTrades: stockPositions.length + closedStockPositions.length,
             cryptoTrades: cryptoPositions.length + closedCryptoPositions.length,
+            stocksID: stockPortfolioID,
+            cryptoID: cryptoPortfolioID
           },
-        })
+        });
       }
     })
   }
@@ -164,6 +197,13 @@ class PortfolioPreview extends Component {
       const diffDuration = moment.duration(end.diff(start));
       const str = [];
       let plural = 's';
+      if (diffDuration.years() > 0) {
+        // eslint-disable-next-line
+        if ((diffDuration.years() * 12) + diffDuration.months() == 1) {
+          plural = '';
+        }
+        str.push(`${(diffDuration.years() * 12) + diffDuration.months()} month${plural}`);
+      }
       if (diffDuration.months() > 0) {
         // eslint-disable-next-line
         if (diffDuration.months() == 1) {
@@ -323,16 +363,44 @@ class PortfolioPreview extends Component {
 
   // Handles Dispatch To GraphQL To Reset Student Account. This Will Set Account As If It Was Just Created And Student Will Receive Email
   resetAccount = () => {
-    this.setState({
-      alertVisible: true,
-      alertTitle: 'Cannot Complete Request',
-      alertMessage: 'You are unable to reset a student account through Rapunzl For Teachers at this time. Please contact support for assistance in resetting a student portfolio. Please note this will make the student ineligible for any competitions they are currently in.',
-      alertOption: null,
-      alertOptionText: '',
-      alertOptionText2: '',
-      loading: false,
-      error: false,
+    let portfolioID = this.state.portfolioSelected === 'stock' ? this.state.userData.stocksID : this.state.userData.cryptoID;
+    let portfolioType = this.state.portfolioSelected === 'stock' ? SymbolTypes.US_Stock : SymbolTypes.Crypto;
+    this.props.resetPortfolio(this.props.jwtToken, portfolioID, portfolioType).then((res) => {
+      // Handles If There Is An Error With The Dispatch By Displaying Alert Modal & Setting Loading To False
+      if (!(res && !('errors' in res))) {
+        this.setState({
+          alertVisible: true,
+          alertTitle: 'Cannot Complete Request',
+          alertMessage: 'You are unable to reset a student account through Rapunzl For Teachers at this time. Please contact support for assistance in resetting a student portfolio. Please note this will make the student ineligible for any competitions they are currently in.',
+          alertOption: null,
+          alertOptionText: '',
+          alertOptionText2: '',
+          loading: false,
+          error: false,
+        });
+      } 
+      // Handles Successful Fetch By Updating State Values & Setting Loading To False
+      else {
+        // Handles Notifying The User That We Have Successfully Reset The Student Account
+        this.setState({
+          alertVisible: true,
+          alertTitle: 'Reset Complete!',
+          alertMessage: 'You have successfully reset the student account. The student will need to logout and log back in on their device for the change to take affect.',
+          alertOption: null,
+          alertOptionText: '',
+          alertOptionText2: '',
+          loading: false,
+          error: false,
+        });
+        // Updates State To Reflect Reset Account
+        if (this.state.portfolioSelected === 'stock') {
+          this.setState({ userData: { ...this.state.userData, stockTrades: 0, stocks: [], stocksID: '' } });
+        } else {
+          this.setState({ userData: { ...this.state.userData, cryptoTrades: 0, crypto: [], cryptoID: '' } });
+        }
+      }
     })
+    
   }
 
   // Hides Native Alert Which Is Used To Display Message Regarding Resetting Account
@@ -561,6 +629,7 @@ class PortfolioPreview extends Component {
               </div>
               <div className='view-portfolio-position-flex'>
                 {this._getPortfolioData().map((item) => {
+                  console.log(item);
                   return (
                     <div key={item.id} className='view-portfolio-position' style={{ backgroundColor: this.handleBackgroundColor(item.profitLoss)}}>
                       <div className='portfolio-position-symbol'>
@@ -570,7 +639,7 @@ class PortfolioPreview extends Component {
                         {item.symbolName}
                       </div>
                       <div className='portfolio-position-performance'>
-                        {intHandler(item.profitLoss / item.costBasis, 'percent', 2, true)}
+                        {intHandler(100 * item.profitLoss / item.costBasis, 'percent', 2, true)}
                       </div>
                       <div className='portfolio-position-time'>
                         Purchased<br/>{this.getDiff(moment(item.openedAt), moment(new Date()))} Ago
@@ -601,7 +670,7 @@ class PortfolioPreview extends Component {
                         {item.symbolName}
                       </div>
                       <div className='portfolio-position-performance'>
-                        {intHandler(item.profitLoss / item.costBasis, 'percent', 2, true)}
+                        {intHandler(100 * item.profitLoss / item.costBasis, 'percent', 2, true)}
                       </div>
                       <div className='portfolio-position-time'>
                         Purchased<br/>{this.getDiff(moment(item.openedAt), moment(new Date()))} Ago
@@ -618,9 +687,6 @@ class PortfolioPreview extends Component {
           {// When There Are Closed Positions Present For Selected Portfolio
           ((this.state.userData && this.state.userData.closedStocks && this.state.userData.closedStocks.length === 0 && this.state.portfolioSelected === 'stock') || (this.state.userData && this.state.userData.closedCrypto && this.state.userData.closedCrypto.length === 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && (
             <div className='empty-closed-positions-container'>
-              <div className='view-portfolio-position-type-text'>
-                Closed Positions
-              </div>
               <RuleIcon className='empty-closed-positions-icon' />
               <div className='portfolio-positions-h1' style={{ color: '#e68a1a'}}>
                 No Closed Positions
@@ -657,6 +723,7 @@ const mapDispatchToProps = (dispatch) => {
       fetchOtherUserDetails: (token, userName) => dispatch(FetchOtherUserDetails(token, userName)),
       // Handles resetting a student's password by dispatching to GraphQL
       resetStudentPassword: (token, usernameArray, password) => dispatch(resetStudentPassword(token, usernameArray, password)),
+      resetPortfolio: (token, portfolioID, portfolioType) => dispatch(resetStudentPortfolio(token, portfolioID, portfolioType)),
    };
 };
 

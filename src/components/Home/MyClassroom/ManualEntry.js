@@ -351,7 +351,7 @@ class ManualEntry extends Component {
             <TextField
               id="birthday"
               label="Birthday"
-              placeholder="Birthday"
+              placeholder="Birthday (Optional)"
               InputLabelProps={{ shrink: true }}
               type="date"
               fullWidth

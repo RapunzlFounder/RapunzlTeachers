@@ -11,6 +11,7 @@ import { REMOVE_TEACHER_CLASSROOM_COURSE } from '../graphql/mutations/RemoveTeac
 import { stringifyIntArray } from '../helper_functions/utilities';
 import { RESET_STUDENT_PASSWORD } from '../graphql/mutations/ResetStudentPassword';
 import { REMOVE_STUDENT_MODULE_QUIZSCORES } from '../graphql/mutations/RemoveStudentModuleQuizScores';
+import { RESET_PORTFOLIO } from '../graphql/mutations/ResetPortfolio';
 
 export const CREATE_TEACHER_NO_CLASSROOMS = 'CREATE_TEACHER_NO_CLASSROOMS';
 export const UPDATE_ALL_CLASSROOMS = 'UPDATE_ALL_CLASSROOMS';
@@ -56,6 +57,10 @@ export const REMOVE_STUDENTS_BEGIN = 'REMOVE_STUDENTS_BEGIN';
 export const REMOVE_STUDENTS_SUCCESS = 'REMOVE_STUDENTS_SUCCESS';
 export const REMOVE_STUDENTS_FAILURE = 'REMOVE_STUDENTS_FAILURE';
 export const REMOVE_STUDENTS_ERROR = 'REMOVE_STUDENTS_ERROR';
+export const RESET_PORTFOLIO_BEGIN = 'RESET_PORTFOLIO_BEGIN';
+export const RESET_PORTFOLIO_SUCCESS = 'RESET_PORTFOLIO_SUCCESS';
+export const RESET_PORTFOLIO_FAILURE = 'RESET_PORTFOLIO_FAILURE';
+export const RESET_PORTFOLIO_ERROR = 'RESET_PORTFOLIO_ERROR';
 export const RESET_CLASSROOM_STATE = 'RESET_CLASSROOM_STATE';
 export const RESET_CLASSROOM_ERRORS = 'RESET_CLASSROOM_ERRORS'
 export const LOGOUT_USER_CLASSROOM = 'LOGOUT_USER_CLASSROOM';
@@ -184,6 +189,22 @@ export const resetStudentPasswordFailure = error => ({
 });
 export const resetStudentPasswordError = error => ({
   type: RESET_STUDENT_PASSWORD_ERROR,
+  payload: { error },
+});
+
+// Handles Resetting A Student's Portfolio
+export const resetStudentPortfolioBegin = () => ({
+  type: RESET_PORTFOLIO_BEGIN,
+});
+export const resetStudentPortfolioSuccess = () => ({
+  type: RESET_PORTFOLIO_SUCCESS,
+});
+export const resetStudentPortfolioFailure = error => ({
+  type: RESET_PORTFOLIO_FAILURE,
+  payload: { error },
+});
+export const resetStudentPortfolioError = error => ({
+  type: RESET_PORTFOLIO_ERROR,
   payload: { error },
 });
 
@@ -578,6 +599,34 @@ export function resetStudentPassword(token, usernameArray, password) {
       })
       .catch(error => {
         dispatch(resetStudentPasswordFailure(error.message));
+        return { errors: [{ message: error.message }]};
+      });
+  };
+}
+
+// This allows a teacher to reset one of their students' portfolios.  
+// The required inputs are 'portfolioId' and 'portfolioType' which is one of the asset types
+export function resetStudentPortfolio(token, portfolioId, portfolioType) {
+  return function(dispatch){
+    dispatch(resetStudentPortfolioBegin());
+    return axios.post(GRAPHQL_URL, { query: RESET_PORTFOLIO(portfolioId, portfolioType) }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(resetStudentPortfolioError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else{
+          dispatch(resetStudentPortfolioSuccess());
+          return json.data.data.resetPortfolio;
+        }
+      })
+      .catch(error => {
+        dispatch(resetStudentPortfolioFailure(error.message));
         return { errors: [{ message: error.message }]};
       });
   };

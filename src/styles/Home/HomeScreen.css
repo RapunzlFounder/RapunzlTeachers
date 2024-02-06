@@ -1621,6 +1621,11 @@ path {
     justify-content: center;
     align-items: center;
     padding-bottom: 70px;
+    margin-left: 45px;
+    margin-right: 45px;
+    border-top: 2px solid #e68a1a;
+    padding-bottom: 110px;
+    padding-top: 40px;
 }
 .empty-closed-positions-icon {
     padding-top: 35px !important;
