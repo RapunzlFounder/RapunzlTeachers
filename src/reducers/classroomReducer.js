@@ -45,6 +45,14 @@ import {
   REMOVE_STUDENT_QUIZSCORES_SUCCESS,
   REMOVE_STUDENT_QUIZSCORES_FAILURE,
   REMOVE_STUDENT_QUIZSCORES_ERROR,
+  CHANGE_CLASSROOM_ACTIVE_STATUS_BEGIN,
+  CHANGE_CLASSROOM_ACTIVE_STATUS_SUCCESS,
+  CHANGE_CLASSROOM_ACTIVE_STATUS_FAILURE,
+  CHANGE_CLASSROOM_ACTIVE_STATUS_ERROR,
+  GET_TEACHER_CLASSROOMS_BEGIN,
+  GET_TEACHER_CLASSROOMS_SUCCESS,
+  GET_TEACHER_CLASSROOMS_FAILURE,
+  GET_TEACHER_CLASSROOMS_ERROR
 } from '../ActionTypes/classroomActions';
 
 import { WEBSOCKET_PORTFOLIO_UPDATE } from '../ActionTypes/portfolioActions';
@@ -611,7 +619,6 @@ const classroomReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.payload.error,
-        // graphqlError: 'There was a failure connecting to our servers to remove Student Module Quiz Scores. Please contact support.'
         errorTitle: 'Failure Removing Student Module Quiz Scores',
       };
     case REMOVE_STUDENT_QUIZSCORES_ERROR:
@@ -619,8 +626,67 @@ const classroomReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         graphqlError: action.payload.error,
-        // graphqlError: 'There was an error connecting to our servers to remove Student Module Quiz Scores. Please contact support.'
         errorTitle: 'Error Removing Student Module Quiz Scores',
+      };
+    case CHANGE_CLASSROOM_ACTIVE_STATUS_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null
+      };
+    case CHANGE_CLASSROOM_ACTIVE_STATUS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+      };
+    case CHANGE_CLASSROOM_ACTIVE_STATUS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        errorTitle: 'Failure To Change Classroom Status',
+      };
+    case CHANGE_CLASSROOM_ACTIVE_STATUS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        graphqlError: 'Error Changing Classroom Status',
+      };
+    case GET_TEACHER_CLASSROOMS_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null
+      };
+    case GET_TEACHER_CLASSROOMS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+      };
+    case GET_TEACHER_CLASSROOMS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        errorTitle: 'Failure To Get Teacher Classrooms',
+      };
+    case GET_TEACHER_CLASSROOMS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        graphqlError: 'Error Getting Teacher Classrooms',
       };
     case UPDATE_CLASSROOM_DATA_STATE:
         return {

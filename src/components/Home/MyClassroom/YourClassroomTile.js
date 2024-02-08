@@ -3,13 +3,12 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { getAllTeacherClassrooms, getDemoClassroom, getTeacherClassroom } from '../../../selectors/classroomSelectors';
 import { FetchOtherUserDetails } from '../../../ActionTypes/socialActions';
-import { removeStudentsFromClassroom } from '../../../ActionTypes/classroomActions';
+import { removeStudentsFromClassroom, changeClassroomActiveStatus, getTeacherClassrooms } from '../../../ActionTypes/classroomActions';
 import { toggleAddStudents, quickAccessAddStudents, selectClassroom } from '../../../ActionTypes/dashboardActions';
 import { getAllDemoClassrooms } from '../../../selectors/classroomSelectors';
 import OtherHouses from '@mui/icons-material/OtherHouses';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClassroomItem from './ClassroomItem';
-import ClassroomOverview from '../Dashboard/ClassroomOverview';
 import PortfolioPreview from './PortfolioPreview';
 import EmptyGrades from '../Gradebook/EmptyGrades';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
@@ -22,6 +21,9 @@ import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded';
 import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ResetPasswordModal from './ResetPasswordModal';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
+import CircleIcon from '@mui/icons-material/Circle';
 import SearchIcon from '@mui/icons-material/Search';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
@@ -39,8 +41,10 @@ class YourClassroomTile extends Component {
       portfolioID: 0,
       portfolioData: [],
       removingArray: [],
+      removingClassroomsArray: [],
       sortType: 0,
       editingClassroom: false,
+      editClassrooms: false,
       alertVisible: false,
       alertTitle: '',
       alertMessage: '',
@@ -60,6 +64,7 @@ class YourClassroomTile extends Component {
         portfolioID: 0,
         portfolioData: [],
         removingArray: [],
+        removingClassroomsArray: [],
         sortType: 0,
         editingClassroom: false,
         alertVisible: false,
@@ -154,6 +159,24 @@ class YourClassroomTile extends Component {
     }
   }
 
+  // Handles Building An Array of userIDs For Students To Remove From The User's Classroom
+  selectRemovingClassrooms = (int) => {
+    // Handles If The User Is Already In The Array To Remove
+    if (this.state.removingClassroomsArray.includes(parseInt(int))) {
+      const filteredArray = this.state.removingClassroomsArray.filter(function(value) {
+        // eslint-disable-next-line
+        return value != int;
+      });
+      this.setState({ removingClassroomsArray: filteredArray });
+    }
+    // Handles If The User Is Not In The Array To Remove
+    else {
+      const newArray = this.state.removingClassroomsArray;
+      newArray.push(parseInt(int));
+      this.setState({ removingClassroomsArray: newArray });
+    }
+  }
+
   // Once A User Selects A Classroom, We Are Able To Find That Class Using ID In State And Return To Map Students Into List
   _getClassroomInfo() {
     if (this.props.selectedClassroom !== false) {
@@ -225,11 +248,11 @@ class YourClassroomTile extends Component {
     }
     // Handles If User Is Searching For A Student
     else if (studentList !== undefined && this.state.searchingStudents) {
-      for (var i in studentList) {
-        let combinedName = studentList[i].firstName + ' ' + studentList[i].lastName;
+      for (var j in studentList) {
+        let combinedName = studentList[j].firstName + ' ' + studentList[j].lastName;
         combinedName = combinedName.toLowerCase();
         if (combinedName.includes(this.state.searchValue.toLowerCase())) {
-          returnArray.push(studentList[i]);
+          returnArray.push(studentList[j]);
         }
       }
       return returnArray;
@@ -240,10 +263,35 @@ class YourClassroomTile extends Component {
     }
   }
 
+  fetchArchivedClassrooms() {
+    this.props.getTeacherClassrooms(this.props.jwtToken, false).then((res) => {
+      console.log('get teacher classroom', res);
+      if (!(res && !('errors' in res))) {
+        this.setState({
+          loading: false,
+          alertVisible: true,
+          alertTitle: 'We Had A Problem Retreiving Your Classrooms',
+          alertMessage: res.errors[0].message,
+        });
+      }
+      else {
+        this.setState({ loading: false });
+      }
+    })
+  }
+
+  toggleClassroomSelection(index) {
+
+  }
+
   // Handles when a user selects to edit their classroom by displaying a modal with inputs for the
   // class name and the class year for the teacher to select
   handleEditClassroom = () => {
     this.setState({ editingClassroom: !this.state.editingClassroom });
+  }
+
+  toggleEditClassrooms() {
+    this.setState({ editClassrooms: !this.state.editClassrooms });
   }
 
   render() {
@@ -255,8 +303,70 @@ class YourClassroomTile extends Component {
         </div>
       );
     }
+    // Handles If User Is Editing Their List Of Classrooms
+    else if (!this.props.selectedClassroom && this.state.editClassrooms) {
+      return (
+        <div className='tile create-class-name-container' style={{ paddingBottom: this.props.allClassrooms.length > 3 ? 110 : 260 }}>
+          <div className='create-class-name-subtext'>
+            Edit Class List
+          </div>
+          <div className='create-class-name-header'>
+          Select Classrooms To<br/>Remove Or Recover
+          </div>
+          {this.props.allClassrooms.length !== 0 && this.props.allClassrooms.map((item, index) => {
+            return (
+              <div title="View Classroom & Students" key={index} onClick={() => this.selectRemovingClassrooms(item.id)} className='select-classroom-item'>
+                <div>
+                  <div className='select-classroom-title'>
+                    {item.className}
+                  </div>
+                  <div className='select-classroom-students-text'>
+                    {item.noStudents} {parseInt(item.noStudents) === 1 ? 'student' : 'students'}
+                  </div>
+                </div>
+                {this.state.removingClassroomsArray.includes(parseInt(item.id)) ? (
+                  <CircleIcon className='select-classroom-arrow-icon-2'/>
+                ) : (
+                  <CircleOutlinedIcon className='select-classroom-arrow-icon-3' />
+                )}
+              </div>
+            )
+          })}
+          {!this.state.loading && this.state.removingClassroomsArray.length === 0 && (
+            <div>
+              <div onClick={() => this.fetchArchivedClassrooms()} className='create-new-classroom-button fetch-archive-button' style={{ borderColor: '#00b082' }}>
+                <ArchiveOutlinedIcon className='fetch-archive-icon' />
+                <div className='fetch-archive-text'>
+                  Fetch Archived Classrooms
+                </div>
+              </div>
+              <div onClick={() => this.toggleEditClassrooms()} className='edit-classroom-button'>
+                <div className='edit-classroom-button-text'>
+                  Go Back
+                </div>
+              </div>
+            </div>
+          )}
+          {!this.state.loading && this.state.removingClassroomsArray.length !== 0 && (
+            <div>
+              <div onClick={() => this.fetchArchivedClassrooms()} className='archive-classrooms-button archive-classrooms-button'>
+                <ArchiveOutlinedIcon className='archive-icon' />
+                <div className='archive-text'>
+                  Archive Classrooms
+                </div>
+              </div>
+              <div onClick={() => this.toggleEditClassrooms()} className='edit-classroom-button'>
+                <div className='edit-classroom-button-text'>
+                  Go Back
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
     // Handles If User Has Multiple Classrooms By Prompting Them To Selected One
-    else if (!this.props.selectedClassroom) {
+    else if (!this.props.selectedClassroom && !this.state.editClassrooms) {
       return (
         <div className='tile create-class-name-container' style={{ paddingBottom: this.props.allClassrooms.length > 3 ? 110 : 260 }}>
           <div className='create-class-name-subtext'>
@@ -307,6 +417,13 @@ class YourClassroomTile extends Component {
               Create New Classroom
             </div>
           </div>
+          {this.props.allClassrooms.length !== 0 && (
+            <div onClick={() => this.toggleEditClassrooms()} className='edit-classroom-button'>
+              <div className='edit-classroom-button-text'>
+                Edit & Recover Classrooms
+              </div>
+            </div>
+          )}
         </div>
       );
     }
@@ -519,6 +636,10 @@ const mapDispatchToProps = (dispatch) => {
       quickAccessAddStudents: () => dispatch(quickAccessAddStudents()),
       // Updates Redux With The Selected Classroom Which Is Used In Render Conditionals & Dispatches
       selectClassroom: (classID) => dispatch(selectClassroom(classID)),
+      // Handles Redux Dispatch To Change Classroom Active Status From True Or False
+      changeClassroomActiveStatus: (token, classroomID, isActive) => dispatch(changeClassroomActiveStatus(token, classroomID, isActive)),
+      // Handles Redux Dispatch To Get Teacher Classrooms Based on Active Status - True Or False
+      getTeacherClassrooms: (token, isActive) => dispatch(getTeacherClassrooms(token, isActive)),
    };
 };
 

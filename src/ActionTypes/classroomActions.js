@@ -12,6 +12,8 @@ import { stringifyIntArray } from '../helper_functions/utilities';
 import { RESET_STUDENT_PASSWORD } from '../graphql/mutations/ResetStudentPassword';
 import { REMOVE_STUDENT_MODULE_QUIZSCORES } from '../graphql/mutations/RemoveStudentModuleQuizScores';
 import { RESET_PORTFOLIO } from '../graphql/mutations/ResetPortfolio';
+import { CHANGE_CLASSROOM_ACTIVE_STATUS } from '../graphql/mutations/ChangeClassroomActiveStatus';
+import { GET_TEACHER_CLASSROOMS } from '../graphql/queries/GetTeacherClassrooms';
 
 export const CREATE_TEACHER_NO_CLASSROOMS = 'CREATE_TEACHER_NO_CLASSROOMS';
 export const UPDATE_ALL_CLASSROOMS = 'UPDATE_ALL_CLASSROOMS';
@@ -61,6 +63,14 @@ export const RESET_PORTFOLIO_BEGIN = 'RESET_PORTFOLIO_BEGIN';
 export const RESET_PORTFOLIO_SUCCESS = 'RESET_PORTFOLIO_SUCCESS';
 export const RESET_PORTFOLIO_FAILURE = 'RESET_PORTFOLIO_FAILURE';
 export const RESET_PORTFOLIO_ERROR = 'RESET_PORTFOLIO_ERROR';
+export const CHANGE_CLASSROOM_ACTIVE_STATUS_BEGIN = 'CHANGE_CLASSROOM_ACTIVE_STATUS_BEGIN';
+export const CHANGE_CLASSROOM_ACTIVE_STATUS_SUCCESS = 'CHANGE_CLASSROOM_ACTIVE_STATUS_SUCCESS';
+export const CHANGE_CLASSROOM_ACTIVE_STATUS_FAILURE = 'CHANGE_CLASSROOM_ACTIVE_STATUS_FAILURE';
+export const CHANGE_CLASSROOM_ACTIVE_STATUS_ERROR = 'CHANGE_CLASSROOM_ACTIVE_STATUS_ERROR';
+export const GET_TEACHER_CLASSROOMS_BEGIN = 'GET_TEACHER_CLASSROOMS_BEGIN';
+export const GET_TEACHER_CLASSROOMS_SUCCESS = 'GET_TEACHER_CLASSROOMS_SUCCESS';
+export const GET_TEACHER_CLASSROOMS_FAILURE = 'GET_TEACHER_CLASSROOMS_FAILURE';
+export const GET_TEACHER_CLASSROOMS_ERROR = 'GET_TEACHER_CLASSROOMS_ERROR';
 export const RESET_CLASSROOM_STATE = 'RESET_CLASSROOM_STATE';
 export const RESET_CLASSROOM_ERRORS = 'RESET_CLASSROOM_ERRORS'
 export const LOGOUT_USER_CLASSROOM = 'LOGOUT_USER_CLASSROOM';
@@ -278,6 +288,40 @@ export const removeStudentsError = error => ({
 });
 export const logoutUserClassroom = () => ({
   type: LOGOUT_USER_CLASSROOM,
+});
+
+// Handles Changing Classroom Active Status
+export const changeClassroomActiveStatusBegin = () => ({
+  type: CHANGE_CLASSROOM_ACTIVE_STATUS_BEGIN,
+});
+export const changeClassroomActiveStatusSuccess = (classroomsObject) => ({
+  type: CHANGE_CLASSROOM_ACTIVE_STATUS_SUCCESS,
+  payload: { classroomsObject },
+});
+export const changeClassroomActiveStatusFailure = error => ({
+  type: CHANGE_CLASSROOM_ACTIVE_STATUS_FAILURE,
+  payload: { error },
+});
+export const changeClassroomActiveStatusError = error => ({
+  type: CHANGE_CLASSROOM_ACTIVE_STATUS_ERROR,
+  payload: { error },
+});
+
+// Handles Fetching Teacher Classrooms
+export const getTeacherClassroomsBegin = () => ({
+  type: GET_TEACHER_CLASSROOMS_BEGIN,
+});
+export const getTeacherClassroomsSuccess = classroomsObject => ({
+  type: GET_TEACHER_CLASSROOMS_SUCCESS,
+  payload: { classroomsObject },
+});
+export const getTeacherClassroomsFailure = error => ({
+  type: GET_TEACHER_CLASSROOMS_FAILURE,
+  payload: { error },
+});
+export const getTeacherClassroomsError = error => ({
+  type: GET_TEACHER_CLASSROOMS_ERROR,
+  payload: { error },
 });
 
 // NOTE:  make sure that the input parameter 'studentsList' is an array of one or more of the following object
@@ -685,4 +729,51 @@ export function removeStudentModuleQuizScores(token, studentUserId, moduleId, cl
   };
 }
 
+// Handles Changing Classroom Active Status
+export function changeClassroomActiveStatus(token, classroomId, activeStatus) {
+  return function(dispatch){
+    dispatch(changeClassroomActiveStatusBegin());
+    return axios.post(GRAPHQL_URL, { query: CHANGE_CLASSROOM_ACTIVE_STATUS(classroomId, activeStatus) }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(changeClassroomActiveStatusError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else{
+          dispatch(changeClassroomActiveStatusSuccess(json.data));
+          return json.data;
+        }
+      })
+      .catch(error => dispatch(changeClassroomActiveStatusFailure(error.message)));
+  };
+}
+
+// Handles Changing Classroom Active Status
+export function getTeacherClassrooms(token, activeStatus) {
+  return function(dispatch){
+    dispatch(getTeacherClassroomsBegin());
+    return axios.post(GRAPHQL_URL, { query: GET_TEACHER_CLASSROOMS(activeStatus) }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(getTeacherClassroomsError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else{
+          dispatch(getTeacherClassroomsSuccess(json.data));
+          return json.data;
+        }
+      })
+      .catch(error => dispatch(getTeacherClassroomsFailure(error.message)));
+  };
+}
 

@@ -1224,9 +1224,34 @@ path {
     transition: 0.2s all;
     margin-top: 40px;
 }
+.fetch-archive-button {
+    color: #00b082;
+}
 .create-new-classroom-button:hover {
     background-color:#00b082;
     border: 1.5px solid #00b082;
+}
+.archive-classrooms-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-left: 22px;
+    padding-right: 22px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: fit-content;
+    margin: auto;
+    border: 1.5px solid #ff2020;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: 0.2s all;
+    margin-top: 40px;
+}
+.archive-classrooms-button:hover {
+    background-color:#ff2020;
+    border: 1.5px solid #ff2020;
+    color: white;
 }
 .create-new-classroom-plus-icon {
     font-size: 14px !important;
@@ -1235,6 +1260,56 @@ path {
     font-size: 12px;
     font-weight: 500;
     margin-left: 5px;
+}
+.fetch-archive-icon {
+    font-size: 14px !important;
+    fill: #00b082 !important;
+}
+.fetch-archive-text {
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 5px;
+    color:#00b082;
+}
+.fetch-archive-button:hover .fetch-archive-icon {
+    fill: white !important;
+}
+.fetch-archive-button:hover .fetch-archive-text {
+    color: white;
+}
+.archive-icon {
+    font-size: 14px !important;
+    fill: #ff2020 !important;
+}
+.archive-text {
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 5px;
+    color:#ff2020;
+}
+.archive-classrooms-button:hover .archive-icon {
+    fill: white !important;
+}
+.archive-classrooms-button:hover .archive-text {
+    color: white;
+}
+.edit-classroom-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    margin: auto;
+    margin-top: 10px;
+    padding: 12px;
+    cursor: pointer;
+}
+.edit-classroom-button-text {
+    font-size: 12px;
+    font-weight: 400;
+}
+.edit-classroom-button:hover .edit-classroom-button-text {
+    color: #00eeae;
 }
 .add-students-result-image {
     display: block;
@@ -1401,8 +1476,11 @@ path {
     font-style: italic;
     color: #a4bbb5;
 }
-.select-classroom-arrow-icon {
-
+.select-classroom-arrow-icon-3 {
+    fill: #ff2020 !important;
+}
+.select-classroom-arrow-icon-2 {
+    fill: #ff2020 !important;
 }
 
 /* MY COURSES */

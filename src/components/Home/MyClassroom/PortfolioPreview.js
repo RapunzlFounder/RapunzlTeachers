@@ -629,7 +629,6 @@ class PortfolioPreview extends Component {
               </div>
               <div className='view-portfolio-position-flex'>
                 {this._getPortfolioData().map((item) => {
-                  console.log(item);
                   return (
                     <div key={item.id} className='view-portfolio-position' style={{ backgroundColor: this.handleBackgroundColor(item.profitLoss)}}>
                       <div className='portfolio-position-symbol'>

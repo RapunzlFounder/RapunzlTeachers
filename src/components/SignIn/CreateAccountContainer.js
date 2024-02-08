@@ -433,6 +433,10 @@ class CreateAccountContainer extends React.PureComponent {
             this.createAccount();
           }
         }
+        // Passed All Validation Checks
+        else {
+          this.createAccount();
+        }
       }}})}}}}})}
     }
   }
@@ -500,7 +504,7 @@ class CreateAccountContainer extends React.PureComponent {
               // Handles If There Is An Error Retrieving The Big Query
               else if (!(res && !('errors' in res))) {
                 this.setState({
-                  loginLoading: false,
+                  loading: false,
                   alertVisible: true,
                   alertTitle: 'Issue With Login',
                   alertMessage: res.errors[0].message !== undefined && res.errors[0].message.length > 0 ? res.errors[0].message : 'We were unable to retrieve your account information. The login information you provided was correct, however, something went wrong with our servers. Please contact support to resolve the issue.',
