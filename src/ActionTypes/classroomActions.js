@@ -297,6 +297,7 @@ export const changeClassroomActiveStatusBegin = () => ({
 export const changeClassroomActiveStatusSuccess = (classroomsObject) => ({
   type: CHANGE_CLASSROOM_ACTIVE_STATUS_SUCCESS,
   payload: { classroomsObject },
+
 });
 export const changeClassroomActiveStatusFailure = error => ({
   type: CHANGE_CLASSROOM_ACTIVE_STATUS_FAILURE,
@@ -747,8 +748,34 @@ export function changeClassroomActiveStatus(token, classroomIdArray, activeStatu
           return {errors: json.data.errors};
         }
         else{
-          dispatch(changeClassroomActiveStatusSuccess(json.data));
-          return json.data;
+          var mainReturnedObj = json.data.data.changeClassroomActiveStatus;
+          // convert the classrooms array of classroom objects into an object of objects
+          const classroomsObject = arrayT
+          oObjectID(mainReturnedObj.classrooms);
+          mainReturnedObj.classrooms = classroomsObject; 
+          for (var property4 in mainReturnedObj.classrooms){
+            // convert the classroom array of students into an onbject of objects
+            const studentsObject = arrayToObjectUserID(mainReturnedObj.classrooms[property4].studentList);
+            mainReturnedObj.classrooms[property4].studentList = studentsObject; 
+            for (var key5 in mainReturnedObj.classrooms[property4].studentList){
+              // convert the classroom array of student stock competitions entered into an onbject of objects
+              const studentStockCompsEntered = arrayToObjectID(mainReturnedObj.classrooms[property4].studentList[key5].stockCompetitionsEntered);
+              mainReturnedObj.classrooms[property4].studentList[key5].stockCompetitionsEntered = studentStockCompsEntered;
+              // convert the classroom array of student crypto competitions entered into an onbject of objects
+              const studentCryptoCompsEntered = arrayToObjectID(mainReturnedObj.classrooms[property4].studentList[key5].cryptoCompetitionsEntered);
+              mainReturnedObj.classrooms[property4].studentList[key5].cryptoCompetitionsEntered = studentCryptoCompsEntered;
+              // convert the classroom array of student Module Assessment or Quiz Scores into an onbject of objects
+              const studentModuleAssessmentScores = arrayToObjectModuleID(mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores);
+              mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores = studentModuleAssessmentScores;
+              // convert the student list module assessment score question results into an object of objects
+              for (var key6 in mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores){
+                const studentModuleAssessmentScoreAnswers = arrayToObjectQuizQuestionID(mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores[key6].questionResults);
+                mainReturnedObj.classrooms[property4].studentList[key5].moduleAssessmentScores[key6].questionResults = studentModuleAssessmentScoreAnswers;
+              }
+            }
+          }
+          dispatch(changeClassroomActiveStatusSuccess(mainReturnedObj.classrooms));
+          return json.data.data.changeClassroomActiveStatus;
         }
       })
       .catch(error => dispatch(changeClassroomActiveStatusFailure(error.message)));

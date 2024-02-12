@@ -297,6 +297,7 @@ export function fetchBigQuery(token) {
                   }
                 }
               }
+              
               // convert the classrooms array of classroom Courses into an object of objects
               const classroomCoursesObject = arrayToObjectID(mainReturnedObj.teacherUserDetails.classroomCourses);
               mainReturnedObj.teacherUserDetails.classroomCourses = classroomCoursesObject; 
