@@ -730,10 +730,12 @@ export function removeStudentModuleQuizScores(token, studentUserId, moduleId, cl
 }
 
 // Handles Changing Classroom Active Status
-export function changeClassroomActiveStatus(token, classroomId, activeStatus) {
+export function changeClassroomActiveStatus(token, classroomIdArray, activeStatus) {
   return function(dispatch){
     dispatch(changeClassroomActiveStatusBegin());
-    return axios.post(GRAPHQL_URL, { query: CHANGE_CLASSROOM_ACTIVE_STATUS(classroomId, activeStatus) }, {
+    // convert the array of student user Id's to a string 
+    const stringifyClassIdArray = stringifyIntArray(classroomIdArray)
+    return axios.post(GRAPHQL_URL, { query: CHANGE_CLASSROOM_ACTIVE_STATUS(stringifyClassIdArray, activeStatus) }, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: token

@@ -7,6 +7,7 @@ import { removeStudentsFromClassroom, changeClassroomActiveStatus, getTeacherCla
 import { toggleAddStudents, quickAccessAddStudents, selectClassroom } from '../../../ActionTypes/dashboardActions';
 import { getAllDemoClassrooms } from '../../../selectors/classroomSelectors';
 import OtherHouses from '@mui/icons-material/OtherHouses';
+import CircularProgress from '@mui/material/CircularProgress';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClassroomItem from './ClassroomItem';
 import PortfolioPreview from './PortfolioPreview';
@@ -50,7 +51,9 @@ class YourClassroomTile extends Component {
       alertMessage: '',
       resetPasswordModal: false,
       searchingStudents: false,
-      searchValue: ''
+      searchValue: '',
+      viewingArchived: false,
+      archivedArray: [],
     }
   }
 
@@ -264,8 +267,8 @@ class YourClassroomTile extends Component {
   }
 
   fetchArchivedClassrooms() {
+    this.setState({ loading: true });
     this.props.getTeacherClassrooms(this.props.jwtToken, false).then((res) => {
-      console.log('get teacher classroom', res);
       if (!(res && !('errors' in res))) {
         this.setState({
           loading: false,
@@ -280,8 +283,26 @@ class YourClassroomTile extends Component {
     })
   }
 
-  toggleClassroomSelection(index) {
-
+  archiveClassrooms() {
+    this.setState({ loading: true });
+    this.props.changeClassroomActiveStatus(this.props.jwtToken, this.state.removingClassroomsArray, false).then((res) => {
+      if (!(res && !('errors' in res))) {
+        this.setState({
+          loading: false,
+          alertVisible: true,
+          alertTitle: 'We Had A Problem Archiving Your Classrooms',
+          alertMessage: res.errors[0].message,
+        });
+      }
+      else {
+        this.setState({
+          loading: false,
+          alertVisible: true,
+          alertTitle: 'You Are All Set!',
+          alertMessage: 'We have successfully archived the classrooms you selected. You can recover these classrooms by viewing your archived classrooms.'
+        });
+      }
+    });
   }
 
   // Handles when a user selects to edit their classroom by displaying a modal with inputs for the
@@ -303,15 +324,18 @@ class YourClassroomTile extends Component {
         </div>
       );
     }
+    // Handles If User Is Viewing Archived Classrooms
+    // else if (!this.props.selectedClassroom && this.state.viewingArchived) {
+    // }
     // Handles If User Is Editing Their List Of Classrooms
-    else if (!this.props.selectedClassroom && this.state.editClassrooms) {
+    else if (!this.props.selectedClassroom && this.state.editClassrooms && !this.state.viewingArchived) {
       return (
         <div className='tile create-class-name-container' style={{ paddingBottom: this.props.allClassrooms.length > 3 ? 110 : 260 }}>
           <div className='create-class-name-subtext'>
             Edit Class List
           </div>
           <div className='create-class-name-header'>
-          Select Classrooms To<br/>Remove Or Recover
+          Select Classrooms To<br/>Archive
           </div>
           {this.props.allClassrooms.length !== 0 && this.props.allClassrooms.map((item, index) => {
             return (
@@ -337,7 +361,7 @@ class YourClassroomTile extends Component {
               <div onClick={() => this.fetchArchivedClassrooms()} className='create-new-classroom-button fetch-archive-button' style={{ borderColor: '#00b082' }}>
                 <ArchiveOutlinedIcon className='fetch-archive-icon' />
                 <div className='fetch-archive-text'>
-                  Fetch Archived Classrooms
+                  View Archived Classrooms
                 </div>
               </div>
               <div onClick={() => this.toggleEditClassrooms()} className='edit-classroom-button'>
@@ -349,7 +373,7 @@ class YourClassroomTile extends Component {
           )}
           {!this.state.loading && this.state.removingClassroomsArray.length !== 0 && (
             <div>
-              <div onClick={() => this.fetchArchivedClassrooms()} className='archive-classrooms-button archive-classrooms-button'>
+              <div onClick={() => this.archiveClassrooms()} className='archive-classrooms-button archive-classrooms-button'>
                 <ArchiveOutlinedIcon className='archive-icon' />
                 <div className='archive-text'>
                   Archive Classrooms
@@ -359,6 +383,14 @@ class YourClassroomTile extends Component {
                 <div className='edit-classroom-button-text'>
                   Go Back
                 </div>
+              </div>
+            </div>
+          )}
+          {this.state.loading && (
+            <div className='manual-entry-loading-container'>
+              <CircularProgress className='login-loading'/>
+              <div className='login-loading-text' style={{ fontSize: 13, paddingTop: 7, textAlign: 'center' }}>
+                Loading...
               </div>
             </div>
           )}
@@ -637,7 +669,7 @@ const mapDispatchToProps = (dispatch) => {
       // Updates Redux With The Selected Classroom Which Is Used In Render Conditionals & Dispatches
       selectClassroom: (classID) => dispatch(selectClassroom(classID)),
       // Handles Redux Dispatch To Change Classroom Active Status From True Or False
-      changeClassroomActiveStatus: (token, classroomID, isActive) => dispatch(changeClassroomActiveStatus(token, classroomID, isActive)),
+      changeClassroomActiveStatus: (token, classroomIDArray, isActive) => dispatch(changeClassroomActiveStatus(token, classroomIDArray, isActive)),
       // Handles Redux Dispatch To Get Teacher Classrooms Based on Active Status - True Or False
       getTeacherClassrooms: (token, isActive) => dispatch(getTeacherClassrooms(token, isActive)),
    };

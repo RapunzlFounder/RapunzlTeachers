@@ -1,6 +1,6 @@
-export const CHANGE_CLASSROOM_ACTIVE_STATUS = (classroomId, isActive) => `mutation {
+export const CHANGE_CLASSROOM_ACTIVE_STATUS = (classroomIdArray, isActive) => `mutation {
 	changeClassroomActiveStatus(
-		classroomId: ${classroomId}
+		classroomId: ${classroomIdArray}
 		isActive: ${isActive}
 	) {
 		classrooms {
