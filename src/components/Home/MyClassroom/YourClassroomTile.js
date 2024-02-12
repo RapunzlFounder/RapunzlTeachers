@@ -24,6 +24,7 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ResetPasswordModal from './ResetPasswordModal';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import CircleIcon from '@mui/icons-material/Circle';
 import SearchIcon from '@mui/icons-material/Search';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -53,7 +54,8 @@ class YourClassroomTile extends Component {
       searchingStudents: false,
       searchValue: '',
       viewingArchived: false,
-      archivedArray: [],
+      archivedClassrooms: [],
+      restoreArchivedClassrooms: []
     }
   }
 
@@ -180,6 +182,24 @@ class YourClassroomTile extends Component {
     }
   }
 
+  // Handles Building An Array of userIDs For Students To Remove From The User's Classroom
+  selectArchivedClassrooms = (int) => {
+    // Handles If The User Is Already In The Array To Remove
+    if (this.state.restoreArchivedClassrooms.includes(parseInt(int))) {
+      const filteredArray = this.state.restoreArchivedClassrooms.filter(function(value) {
+        // eslint-disable-next-line
+        return value != int;
+      });
+      this.setState({ restoreArchivedClassrooms: filteredArray });
+    }
+    // Handles If The User Is Not In The Array To Remove
+    else {
+      const newArray = this.state.restoreArchivedClassrooms;
+      newArray.push(parseInt(int));
+      this.setState({ restoreArchivedClassrooms: newArray });
+    }
+  }
+
   // Once A User Selects A Classroom, We Are Able To Find That Class Using ID In State And Return To Map Students Into List
   _getClassroomInfo() {
     if (this.props.selectedClassroom !== false) {
@@ -275,17 +295,23 @@ class YourClassroomTile extends Component {
           alertVisible: true,
           alertTitle: 'We Had A Problem Retreiving Your Classrooms',
           alertMessage: res.errors[0].message,
+          viewingArchived: false,
+          archivedClassrooms: []
         });
       }
       else {
-        this.setState({ loading: false });
+        this.setState({
+          loading: false,
+          viewingArchived: true,
+          archivedClassrooms: res.data.getTeacherClassrooms,
+        });
       }
     })
   }
 
-  archiveClassrooms() {
+  setClassroomsStatus(status, array) {
     this.setState({ loading: true });
-    this.props.changeClassroomActiveStatus(this.props.jwtToken, this.state.removingClassroomsArray, false).then((res) => {
+    this.props.changeClassroomActiveStatus(this.props.jwtToken, array, status).then((res) => {
       if (!(res && !('errors' in res))) {
         this.setState({
           loading: false,
@@ -315,6 +341,10 @@ class YourClassroomTile extends Component {
     this.setState({ editClassrooms: !this.state.editClassrooms });
   }
 
+  toggleArchivedClassrooms() {
+    this.setState({ viewingArchived: !this.state.viewingArchived });
+  }
+
   render() {
     // Handles If The Teacher User Has Not Created Any Classrooms Yet
     if (this.props.allClassrooms.length === 0 && this.props.demoClassrooms.length === 0 && !this.props.creatingClassroom) {
@@ -325,8 +355,80 @@ class YourClassroomTile extends Component {
       );
     }
     // Handles If User Is Viewing Archived Classrooms
-    // else if (!this.props.selectedClassroom && this.state.viewingArchived) {
-    // }
+    else if (!this.props.selectedClassroom && this.state.viewingArchived) {
+      return (
+        <div className='tile create-class-name-container' style={{ paddingBottom: 260 }}>
+          {this.state.archivedClassrooms.length !== 0 && (
+            <div>
+              <div className='create-class-name-subtext'>
+                Archived Classrooms
+              </div>
+              <div className='create-class-name-header'>
+              Select Classrooms To<br/>Make Active
+              </div>
+            </div>
+          )}
+          {this.state.archivedClassrooms.length === 0 && (
+            <div>
+              <SchoolOutlinedIcon className='no-archived-classes-icon'/>
+              <div className='create-class-name-subtext' style={{ paddingTop: 20 }}>
+                No Classrooms To Display
+              </div>
+              <div className='create-class-name-header' style={{ color: '#ffb200' }}>
+              No Archived<br/>Classrooms
+              </div>
+            </div>
+          )}
+          {this.state.archivedClassrooms.length !== 0 && this.state.archivedClassrooms.map((item, index) => {
+            return (
+              <div title="View Classroom & Students" key={index} onClick={() => this.selectArchivedClassrooms(item.id)} className='select-classroom-item'>
+                <div>
+                  <div className='select-classroom-title'>
+                    {item.className}
+                  </div>
+                  <div className='select-classroom-students-text'>
+                    {item.noStudents} {parseInt(item.noStudents) === 1 ? 'student' : 'students'}
+                  </div>
+                  <div className='select-classroom-created-text'>
+                    Last Modified: {moment(item.lastModifiedAt).format("l")}
+                  </div>
+                </div>
+                {this.state.restoreArchivedClassrooms.includes(parseInt(item.id)) ? (
+                  <CircleIcon className='select-classroom-arrow-icon-2' style={{ fill: '#ffb300' }} />
+                ) : (
+                  <CircleOutlinedIcon className='select-classroom-arrow-icon-3' style={{ fill: '#ffb300' }} />
+                )}
+              </div>
+            )
+          })}
+          {!this.state.loading && (
+            <div>
+              {this.state.archivedClassrooms.length !== 0 && this.state.restoreArchivedClassrooms.length !== 0 && (
+                <div onClick={() => this.setClassroomsStatus(true, this.state.restoreArchivedClassrooms)} className='archive-classrooms-button fetch-archive-button' style={{ borderColor: '#00b082' }}>
+                  <ArchiveOutlinedIcon className='fetch-archive-icon' />
+                  <div className='fetch-archive-text'>
+                    Restore Classrooms
+                  </div>
+                </div>
+              )}
+              <div onClick={() => this.toggleArchivedClassrooms()} className='edit-classroom-button'>
+                <div className='edit-classroom-button-text'>
+                  Go Back
+                </div>
+              </div>
+            </div>
+          )}
+          {this.state.loading && (
+            <div className='manual-entry-loading-container'>
+              <CircularProgress className='login-loading'/>
+              <div className='login-loading-text' style={{ fontSize: 13, paddingTop: 7, textAlign: 'center' }}>
+                Loading...
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
     // Handles If User Is Editing Their List Of Classrooms
     else if (!this.props.selectedClassroom && this.state.editClassrooms && !this.state.viewingArchived) {
       return (
@@ -373,7 +475,7 @@ class YourClassroomTile extends Component {
           )}
           {!this.state.loading && this.state.removingClassroomsArray.length !== 0 && (
             <div>
-              <div onClick={() => this.archiveClassrooms()} className='archive-classrooms-button archive-classrooms-button'>
+              <div onClick={() => this.setClassroomsStatus(false, this.state.removingClassroomsArray)} className='archive-classrooms-button archive-classrooms-button'>
                 <ArchiveOutlinedIcon className='archive-icon' />
                 <div className='archive-text'>
                   Archive Classrooms

@@ -1366,7 +1366,13 @@ path {
     padding-top: 90px;
     padding-bottom: 2px;
 }
-.empty-search-result
+.no-archived-classes-icon {
+    display: block !important;
+    margin: auto !important;
+    font-size: 110px !important;
+    margin-top: 105px !important;
+    fill: #ffb200 !important;
+}
 .empty-search-result-header {
     text-align: center;
     font-size: 16px;
