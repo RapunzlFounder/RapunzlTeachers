@@ -318,6 +318,8 @@ class YourClassroomTile extends Component {
           alertVisible: true,
           alertTitle: 'We Had A Problem Archiving Your Classrooms',
           alertMessage: res.errors[0].message,
+          restoreArchivedClassrooms: [],
+          removingClassroomsArray: []
         });
       }
       else {
@@ -325,7 +327,10 @@ class YourClassroomTile extends Component {
           loading: false,
           alertVisible: true,
           alertTitle: 'You Are All Set!',
-          alertMessage: 'We have successfully archived the classrooms you selected. You can recover these classrooms by viewing your archived classrooms.'
+          alertMessage: 'We have successfully archived the classrooms you selected. You can recover these classrooms by viewing your archived classrooms.',
+          removingClassroomsArray: [],
+          viewingArchived: false,
+          restoreArchivedClassrooms: [],
         });
       }
     });

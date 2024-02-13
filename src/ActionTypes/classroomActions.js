@@ -750,8 +750,7 @@ export function changeClassroomActiveStatus(token, classroomIdArray, activeStatu
         else{
           var mainReturnedObj = json.data.data.changeClassroomActiveStatus;
           // convert the classrooms array of classroom objects into an object of objects
-          const classroomsObject = arrayT
-          oObjectID(mainReturnedObj.classrooms);
+          const classroomsObject = arrayToObjectID(mainReturnedObj.classrooms);
           mainReturnedObj.classrooms = classroomsObject; 
           for (var property4 in mainReturnedObj.classrooms){
             // convert the classroom array of students into an onbject of objects
