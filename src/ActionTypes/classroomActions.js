@@ -294,9 +294,9 @@ export const logoutUserClassroom = () => ({
 export const changeClassroomActiveStatusBegin = () => ({
   type: CHANGE_CLASSROOM_ACTIVE_STATUS_BEGIN,
 });
-export const changeClassroomActiveStatusSuccess = (classroomsObject) => ({
+export const changeClassroomActiveStatusSuccess = (classroomsObject, classroomCoursesObject) => ({
   type: CHANGE_CLASSROOM_ACTIVE_STATUS_SUCCESS,
-  payload: { classroomsObject },
+  payload: { classroomsObject, classroomCoursesObject },
 
 });
 export const changeClassroomActiveStatusFailure = error => ({
@@ -748,7 +748,7 @@ export function changeClassroomActiveStatus(token, classroomIdArray, activeStatu
           return {errors: json.data.errors};
         }
         else{
-          var mainReturnedObj = json.data.data.changeClassroomActiveStatus;
+          var mainReturnedObj = json.data.data.changeClassroomActiveStatus.activeClassrooms;
           // convert the classrooms array of classroom objects into an object of objects
           const classroomsObject = arrayToObjectID(mainReturnedObj.classrooms);
           mainReturnedObj.classrooms = classroomsObject; 
@@ -773,7 +773,10 @@ export function changeClassroomActiveStatus(token, classroomIdArray, activeStatu
               }
             }
           }
-          dispatch(changeClassroomActiveStatusSuccess(mainReturnedObj.classrooms));
+          // convert the classrooms array of classroom Courses into an object of objects
+          const classroomCoursesObject = arrayToObjectID(mainReturnedObj.classroomCourses);
+          mainReturnedObj.classroomCourses = classroomCoursesObject; 
+          dispatch(changeClassroomActiveStatusSuccess(mainReturnedObj.classrooms, mainReturnedObj.classroomCourses));
           return json.data.data.changeClassroomActiveStatus;
         }
       })

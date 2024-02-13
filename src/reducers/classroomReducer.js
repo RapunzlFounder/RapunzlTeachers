@@ -644,7 +644,8 @@ const classroomReducer = (state = initialState, action) => {
         graphqlError: null,
         errorTitle: null,
         classroomLastRetrievedTime: new Date(),
-        classrooms: action.payload.classroomsObject, 
+        classrooms: action.payload.classroomsObject,
+        classroomCourses: action.payload.classroomCoursesObject, 
       };
     case CHANGE_CLASSROOM_ACTIVE_STATUS_FAILURE:
       return {
