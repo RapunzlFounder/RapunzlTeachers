@@ -90,26 +90,26 @@ class CourseBuilderDialog extends React.PureComponent {
           // Uses The Standard ID From Presentation Standards In PublicModules To Find Information About The Standard In StandardsTableArray
           // We Then Check what type the standard is to determine which array the standard should be considered for.
           // This Handles If The Standard Type Is Spending
-          if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Spending') {
+          if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic === 'Spending') {
             // This Is The Index Of The Main Standard Inside Of Spending Array, Which We Use To Determine If the Main Standard Has Already Been Added (Lines 110 - 123)
             // eslint-disable-next-line
-            let searchSpendingIndex = spendingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
+            let searchSpendingIndex = spendingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard);
             // Checks To See If Main Standard Is Already In The Array. This Handles If The Main Standard Is Already Present
             // eslint-disable-next-line
-            if (searchSpendingIndex !== -1 && spendingArray[searchSpendingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            if (searchSpendingIndex !== -1 && spendingArray[searchSpendingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) !== 1) {
               // Multiple Modules Satisfy The Same Standards So We Need To Check That The Substandard Is Not Already Included In the Resulting Array
               let duplicateSpendingSubstandard = false;
               // Loop Through The Substandards That Have Been Added. If The Substandard is Present, Set The Flag to True and we will not add a duplicate substandard
               for (var k in spendingArray[searchSpendingIndex].subStandards) {
-                if (spendingArray[searchSpendingIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
+                if (spendingArray[searchSpendingIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) {
                   duplicateSpendingSubstandard = true;
                 }
               }
               // If the substandard is unique and has not been added to the array, we push the substandard object into the array, which allows us to map one main standard to multiple substandards
               if (!duplicateSpendingSubstandard) {
                 spendingArray[searchSpendingIndex].subStandards.push({
-                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                 });
               }
             }
@@ -117,36 +117,36 @@ class CourseBuilderDialog extends React.PureComponent {
             else {
               spendingArray.push(
                 {
-                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic,
-                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
-                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic,
+                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard,
+                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subject,
                   subStandards: [{
-                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                   }], 
                 }
               );
             }
-            allStandardStrings.push('2.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+            allStandardStrings.push('2.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard + ', ');
           }
           // This Handles If The Standard Type Is Saving - Logic is similar to Lines 89-124.
-          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Saving') {
+          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic === 'Saving') {
             // eslint-disable-next-line
-            let searchSavingIndex = savingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
+            let searchSavingIndex = savingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard);
             // Main Standard Is Already In Saving Array
             // eslint-disable-next-line
-            if (searchSavingIndex !== -1 && savingArray[searchSavingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            if (searchSavingIndex !== -1 && savingArray[searchSavingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) !== 1) {
               let duplicateSavingSubstandard = false;
               // eslint-disable-next-line
               for (var k in savingArray[searchSavingIndex].subStandards) {
-                if (savingArray[searchSavingIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
+                if (savingArray[searchSavingIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) {
                   duplicateSavingSubstandard = true;
                 }
               }
               if (!duplicateSavingSubstandard) {
                 savingArray[searchSavingIndex].subStandards.push({
-                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                 });
               }
             }
@@ -154,36 +154,36 @@ class CourseBuilderDialog extends React.PureComponent {
             else {
               savingArray.push(
                 {
-                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic,
-                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
-                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic,
+                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard,
+                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subject,
                   subStandards: [{
-                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                   }], 
                 }
               );
             }
-            allStandardStrings.push('3.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+            allStandardStrings.push('3.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard + ', ');
           }
           // This Handles If The Standard Type Is Investing - Logic is similar to Lines 89-124.
-          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Investing') {
+          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic === 'Investing') {
             // eslint-disable-next-line
-            let searchInvestingIndex = investingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
+            let searchInvestingIndex = investingArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard);
             // Main Standard Is Already In Investing Array
             // eslint-disable-next-line
-            if (searchInvestingIndex !== -1 && investingArray[searchInvestingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            if (searchInvestingIndex !== -1 && investingArray[searchInvestingIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) !== 1) {
               let duplicateInvestingStandard = false;
               // eslint-disable-next-line
               for (var k in investingArray[searchInvestingIndex].subStandards) {
-                if (investingArray[searchInvestingIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
+                if (investingArray[searchInvestingIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) {
                   duplicateInvestingStandard = true;
                 }
               }
               if (!duplicateInvestingStandard) {
                 investingArray[searchInvestingIndex].subStandards.push({
-                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                 });
               }
             }
@@ -191,36 +191,36 @@ class CourseBuilderDialog extends React.PureComponent {
             else {
               investingArray.push(
                 {
-                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic,
-                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
-                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic,
+                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard,
+                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subject,
                   subStandards: [{
-                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                   }], 
                 }
               );
             }
-            allStandardStrings.push('4.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+            allStandardStrings.push('4.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard + ', ');
           }
           // This Handles If The Standard Type Is Earned Income - Logic is similar to Lines 89-124.
-          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Earning Income') {
+          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic === 'Earning Income') {
             // eslint-disable-next-line
-            let searchIncomeIndex = incomeArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
+            let searchIncomeIndex = incomeArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard);
             // Main Standard Is Already In Spending Array
             // eslint-disable-next-line
-            if (searchIncomeIndex !== -1 && incomeArray[searchIncomeIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            if (searchIncomeIndex !== -1 && incomeArray[searchIncomeIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) !== 1) {
               let duplicateIncomeStandard = false;
               // eslint-disable-next-line
               for (var k in incomeArray[searchIncomeIndex].subStandards) {
-                if (incomeArray[searchIncomeIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
+                if (incomeArray[searchIncomeIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) {
                   duplicateIncomeStandard = true;
                 }
               }
               if (!duplicateIncomeStandard) {
                 incomeArray[searchIncomeIndex].subStandards.push({
-                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                 });
               }
             }
@@ -228,36 +228,36 @@ class CourseBuilderDialog extends React.PureComponent {
             else {
               incomeArray.push(
                 {
-                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic,
-                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
-                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic,
+                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard,
+                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subject,
                   subStandards: [{
-                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                   }], 
                 }
               );
             }
-            allStandardStrings.push('1.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+            allStandardStrings.push('1.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard + ', ');
           }
           // This Handles If The Standard Type Is Risk - Logic is similar to Lines 89-124.
-          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Risk') {
+          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic === 'Risk') {
             // eslint-disable-next-line
-            let searchRiskIndex = riskArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
+            let searchRiskIndex = riskArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard);
             // Main Standard Is Already In Spending Array
             // eslint-disable-next-line
-            if (searchRiskIndex !== -1 && riskArray[searchRiskIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            if (searchRiskIndex !== -1 && riskArray[searchRiskIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) !== 1) {
               let duplicateRiskStandard = false;
               // eslint-disable-next-line
               for (var k in riskArray[searchRiskIndex].subStandards) {
-                if (riskArray[searchRiskIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
+                if (riskArray[searchRiskIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) {
                   duplicateRiskStandard = true;
                 }
               }
               if (!duplicateRiskStandard) {
                 riskArray[searchRiskIndex].subStandards.push({
-                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                 });
               }
             }
@@ -265,36 +265,36 @@ class CourseBuilderDialog extends React.PureComponent {
             else {
               riskArray.push(
                 {
-                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic,
-                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
-                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic,
+                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard,
+                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subject,
                   subStandards: [{
-                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                   }], 
                 }
               );
             }
-            allStandardStrings.push('6.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+            allStandardStrings.push('6.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard + ', ');
           }
           // This Handles If The Standard Type Is Credit - Logic is similar to Lines 89-124.
-          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic === 'Credit') {
+          else if (standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic === 'Credit') {
             // eslint-disable-next-line
-            let searchCreditIndex = creditArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard);
+            let searchCreditIndex = creditArray.findIndex(item => item.mainStandard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard);
             // Main Standard Is Already In Spending Array
             // eslint-disable-next-line
-            if (searchCreditIndex !== -1 && creditArray[searchCreditIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) !== 1) {
+            if (searchCreditIndex !== -1 && creditArray[searchCreditIndex].subStandards.findIndex(item => item === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) !== 1) {
               let duplicateCreditStandard = false;
               // eslint-disable-next-line
               for (var k in creditArray[searchCreditIndex].subStandards) {
-                if (creditArray[searchCreditIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard) {
+                if (creditArray[searchCreditIndex].subStandards[k].standard === standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard) {
                   duplicateCreditStandard = true;
                 }
               }
               if (!duplicateCreditStandard) {
                 creditArray[searchCreditIndex].subStandards.push({
-                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                  standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                  description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                 });
               }
             }
@@ -302,17 +302,17 @@ class CourseBuilderDialog extends React.PureComponent {
             else {
               creditArray.push(
                 {
-                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].topic,
-                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].mainStandard,
-                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subject,
+                  title: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].topic,
+                  mainStandard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].mainStandard,
+                  subject: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subject,
                   subStandards: [{
-                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard,
-                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].description,
+                    standard: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard,
+                    description: standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].description,
                   }], 
                 }
               );
             }
-            allStandardStrings.push('5.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j] - 1].subStandard + ', ');
+            allStandardStrings.push('5.' + standardsTableArray[this.props.publicModules[modulesArray[i] - 1].presentationStandards[j]].subStandard + ', ');
           }
         }
       }
@@ -381,12 +381,14 @@ class CourseBuilderDialog extends React.PureComponent {
             pdfName={this.state.pdfName}
             orientation={this.state.pdfOrientation}
           />
+          {/* 
+          TODO: Figure out standards presentation
           <StandardsPopup
             visible={this.state.standardsVisible}
             dismiss={this.toggleStandards}
             type='Course'
             data={this._getModuleStandards(modulesArray[0])}
-          />
+          /> */}
           <div className='container'>
             <div className='alert-title' style={{ fontWeight: '800' }}>
               {PrebuiltCourses[this.props.selectedCourse].title}
@@ -403,9 +405,9 @@ class CourseBuilderDialog extends React.PureComponent {
                   <div className='selected-education-confirm-title'>
                     {modulesArray[0]}
                   </div>
-                  <div onClick={this.toggleStandards} className='selected-education-confirm-text' style={{ marginTop: -10, paddingBottom: 25, cursor: 'pointer' }}>
+                  {/* <div onClick={this.toggleStandards} className='selected-education-confirm-text' style={{ marginTop: -10, paddingBottom: 25, cursor: 'pointer' }}>
                     View Standards Covered
-                  </div>
+                  </div> */}
                   <div className='selected-education-title'>
                     Esimated Class Time
                   </div>
@@ -458,15 +460,15 @@ class CourseBuilderDialog extends React.PureComponent {
                 <div className='confirm-section-right2'>
                   <Pie
                     color={'#007154'}
-                    pct={85}
+                    pct={75 + parseInt(this.props.selectedCourse) * 8}
                     inverted
                   />
                   <div className='confirm-section-title'>
-                    Coverage Of Core Investing Modules
+                    Coverage Of Core Personal Finance
                   </div>
                   <Pie
                     color={'#007154'}
-                    pct={45}
+                    pct={61 + parseInt(this.props.selectedCourse) * 12}
                     inverted
                   />
                   <div className='confirm-section-title'>

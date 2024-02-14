@@ -3,7 +3,6 @@ import Dialog from '@mui/material/Dialog';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import LockClockOutlinedIcon from '@mui/icons-material/LockClockOutlined';
 import '../../styles/Admin/Admin.css';
 import '../../styles/Admin/AssessmentsDialog.css';
 
@@ -33,7 +32,7 @@ class AssessmentsDialog extends React.PureComponent {
         maxWidth={'md'}
         fullWidth={true}
       >
-        <div className='container assessments-dialog-container' style={{ maxHeight: 800 }}>
+        <div className='container assessments-dialog-container' style={{ maxHeight: 690 }}>
           <div className='standards-header-flex'>
             <div className='alert-title' style={{ fontWeight: '800' }}>
               {!!this.props.data.assessments.assessmentName ? this.props.data.assessments.assessmentName : ''}
@@ -47,12 +46,11 @@ class AssessmentsDialog extends React.PureComponent {
           <div className='quiz-preview-text'>
             {this.props.data.assessments.description.split('.')[0]}. When you add this Module to your Course, this Assessment will be included and you can collect respones from students through the Rapunzl App.
           </div>
-          <div title="Feature Disabled On Demo Accounts" className='google-slides-button-flex'>
-            <LockClockOutlinedIcon className='google-slides-icon' />
+          {/* <div title="Feature Disabled On Demo Accounts" className='google-slides-button-flex google-slides-button-flex-2'>
             <div className='google-slides-button-text'>
               View In Google Slides
             </div>
-          </div>
+          </div> */}
           {this.props.data.assessments.questions && this.props.data.assessments.questions.length && this.props.data.assessments.questions.length > 0 && this.props.data.assessments.questions.map((item) => {
             return (
               <div key={item.questionNumber} className='quiz-preview-question-container' style={{ backgroundColor: this.state.viewMore === item.questionNumber ? '#a6f0df' : ''}}>

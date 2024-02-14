@@ -35,8 +35,8 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 15px;
-	padding-top: 20px;
-	padding-bottom: 20px;
+	padding-top: 18px;
+	padding-bottom: 18px;
 	cursor: pointer;
 	transition: 0.2s all;
 }
@@ -48,7 +48,7 @@
 }
 .quiz-preview-question-text {
 	color: #04251c;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 300;
 }
 .quiz-preview-expanded {
