@@ -363,6 +363,12 @@ class YourClassroomTile extends Component {
     else if (!this.props.selectedClassroom && this.state.viewingArchived) {
       return (
         <div className='tile create-class-name-container' style={{ paddingBottom: 260 }}>
+          <Alert
+            title={this.state.alertTitle}
+            message={this.state.alertMessage}
+            visible={this.state.alertVisible}
+            dismiss={this.toggleAlert}
+          />
           {this.state.archivedClassrooms.length !== 0 && (
             <div>
               <div className='create-class-name-subtext'>
@@ -438,6 +444,12 @@ class YourClassroomTile extends Component {
     else if (!this.props.selectedClassroom && this.state.editClassrooms && !this.state.viewingArchived) {
       return (
         <div className='tile create-class-name-container' style={{ paddingBottom: this.props.allClassrooms.length > 3 ? 110 : 260 }}>
+          <Alert
+            title={this.state.alertTitle}
+            message={this.state.alertMessage}
+            visible={this.state.alertVisible}
+            dismiss={this.toggleAlert}
+          />
           <div className='create-class-name-subtext'>
             Edit Class List
           </div>
@@ -508,6 +520,12 @@ class YourClassroomTile extends Component {
     else if (!this.props.selectedClassroom && !this.state.editClassrooms) {
       return (
         <div className='tile create-class-name-container' style={{ paddingBottom: this.props.allClassrooms.length > 3 ? 110 : 260 }}>
+          <Alert
+            title={this.state.alertTitle}
+            message={this.state.alertMessage}
+            visible={this.state.alertVisible}
+            dismiss={this.toggleAlert}
+          />
           <div className='create-class-name-subtext'>
             Select Your Classroom
           </div>

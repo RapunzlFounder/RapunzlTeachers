@@ -780,7 +780,10 @@ export function changeClassroomActiveStatus(token, classroomIdArray, activeStatu
           return json.data.data.changeClassroomActiveStatus;
         }
       })
-      .catch(error => dispatch(changeClassroomActiveStatusFailure(error.message)));
+      .catch(error => {
+        dispatch(changeClassroomActiveStatusFailure(error.message));
+        return { errors: [{ message: error.message }]};
+      });
   };
 }
 
