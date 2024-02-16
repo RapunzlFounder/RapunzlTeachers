@@ -4,7 +4,7 @@ import { viewAssignedClass, updateDashboard, selectCourse } from '../../../Actio
 import { getTeacherCourse, getDemoCourse } from '../../../selectors/coursemoduleSelectors';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import { getAllTeacherClassroomCourses, getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
-import StandardsPopup from '../../Admin/StandardsPopup';
+// import StandardsPopup from '../../Admin/StandardsPopup';
 import { objectToArray } from '../../../helper_functions/utilities';
 import ProgressBar from './ProgressBar';
 import AssignCourseDialog from './AssignCourseDialog';

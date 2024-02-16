@@ -121,6 +121,14 @@ class ClassSummary extends Component {
     }
   }
 
+  sortedLeaderboard(array, type) {
+    if (type === 'stocks') {
+      return array.sort((a, b) => { return b.stockPortfolioPerformance - a.stockPortfolioPerformance });
+    } else {
+      return array.sort((a, b) => { return b.cryptoPortfolioPerformance - a.cryptoPortfolioPerformance });
+    }
+  }
+
   render() {
     if (!this.props.isDemo) {
       return (
@@ -329,7 +337,7 @@ class ClassSummary extends Component {
                   </div>
                 </div>
               )}
-              {this.state.leaderboardState === 'Stocks' && studentLeaderboardArrays[1].length !== 0 && studentLeaderboardArrays[1].map((item, index) => {
+              {this.state.leaderboardState === 'Stocks' && studentLeaderboardArrays[1].length !== 0 && this.sortedLeaderboard(studentLeaderboardArrays[1], 'stocks').map((item, index) => {
                 return (
                   <div className='leaderboard-class-item'>
                     <div className='leaderboard-item-left'>
@@ -353,7 +361,7 @@ class ClassSummary extends Component {
                   </div>
                 )
               })}
-              {this.state.leaderboardState === 'Crypto' && studentLeaderboardArrays[0].length !== 0 && studentLeaderboardArrays[0].map((item, index) => {
+              {this.state.leaderboardState === 'Crypto' && studentLeaderboardArrays[0].length !== 0 && this.sortedLeaderboard(studentLeaderboardArrays[0], 'crypto').map((item, index) => {
                 return (
                   <div className='leaderboard-class-item'>
                     <div className='leaderboard-item-left'>

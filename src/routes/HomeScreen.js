@@ -66,7 +66,7 @@ class HomeScreen extends Component {
     this._handleUpdate();
     this._handleCheckForStandards();
     this._handleCheckForDemo();
-  }fetchDemoContent
+  }
 
   componentDidUpdate(prevProps) {
     // Handle Errors Related to Saving Notification Token & Update Notification Types

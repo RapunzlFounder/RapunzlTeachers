@@ -4,8 +4,8 @@ import '../../../styles/Admin/Admin.css';
 import { connect } from 'react-redux';
 import { updateDashboard } from '../../../ActionTypes/dashboardActions';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
-import StandardsPopup from '../../Admin/StandardsPopup';
-import { objectToArray } from '../../../helper_functions/utilities';
+// import StandardsPopup from '../../Admin/StandardsPopup';
+// import { objectToArray } from '../../../helper_functions/utilities';
 import PDFViewer from '../../Admin/PDFViewer';
 
 class SectionBuilderDialog extends React.PureComponent {

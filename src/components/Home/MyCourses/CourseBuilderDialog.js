@@ -8,7 +8,7 @@ import { updateDashboard } from '../../../ActionTypes/dashboardActions';
 import { getAllPublicModules } from '../../../selectors/coursemoduleSelectors';
 import PDFViewer from '../../Admin/PDFViewer';
 import { objectToArray } from '../../../helper_functions/utilities';
-import StandardsPopup from '../../Admin/StandardsPopup';
+// import StandardsPopup from '../../Admin/StandardsPopup';
 
 class CourseBuilderDialog extends React.PureComponent {
   // eslint-disable-next-line
