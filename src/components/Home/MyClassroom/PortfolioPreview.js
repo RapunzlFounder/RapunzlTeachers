@@ -38,6 +38,7 @@ class PortfolioPreview extends Component {
       alertOptionText2: '',
       loading: true,
       error: false,
+      viewingClosedPositions: false,
       userData: {
         stocks: [],
         crypto: [],
@@ -73,6 +74,7 @@ class PortfolioPreview extends Component {
         alertOptionText2: '',
         loading: true,
         error: false,
+        viewingClosedPositions: false,
         userData: {
           stocks: [],
           crypto: [],
@@ -147,6 +149,7 @@ class PortfolioPreview extends Component {
         this.setState({
           loading: false,
           error: false,
+          viewingClosedPositions: false,
           userData: {
             stocks: stockPositions,
             crypto: cryptoPositions,
@@ -445,10 +448,14 @@ class PortfolioPreview extends Component {
     }
   }
 
+  toggleClosedPositions() {
+    this.setState({ viewingClosedPositions: !this.state.viewingClosedPositions });
+  }
+
   render() {
     if (this.props.visible) {
       return (
-        <div className='tile classroom-overview' style={{ minHeight: 700 }}>
+        <div className='tile classroom-overview' style={{ minHeight: 700, paddingBottom: 30 }}>
           <Alert
             title={this.state.alertTitle}
             message={this.state.alertMessage}
@@ -652,8 +659,13 @@ class PortfolioPreview extends Component {
               </div>
             </div>
           )}
+          {!this.state.viewingClosedPositions && (
+            <div className='view-closed-positions-button' onClick={() => this.toggleClosedPositions()}>
+              View Closed Positions
+            </div>
+          )}
           {// When There Are Closed Positions Present For Selected Portfolio
-          ((this.state.userData && this.state.userData.closedStocks && this.state.userData.closedStocks.length !== 0 && this.state.portfolioSelected === 'stock') || (this.state.userData && this.state.userData.closedCrypto && this.state.userData.closedCrypto.length !== 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && (
+          ((this.state.userData && this.state.userData.closedStocks && this.state.userData.closedStocks.length !== 0 && this.state.portfolioSelected === 'stock') || (this.state.userData && this.state.userData.closedCrypto && this.state.userData.closedCrypto.length !== 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && this.state.viewingClosedPositions && (
             <div>
               <div className='view-portfolio-position-type-text'>
                 Closed Positions
@@ -684,7 +696,7 @@ class PortfolioPreview extends Component {
             </div>
           )}
           {// When There Are Closed Positions Present For Selected Portfolio
-          ((this.state.userData && this.state.userData.closedStocks && this.state.userData.closedStocks.length === 0 && this.state.portfolioSelected === 'stock') || (this.state.userData && this.state.userData.closedCrypto && this.state.userData.closedCrypto.length === 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && (
+          ((this.state.userData && this.state.userData.closedStocks && this.state.userData.closedStocks.length === 0 && this.state.portfolioSelected === 'stock') || (this.state.userData && this.state.userData.closedCrypto && this.state.userData.closedCrypto.length === 0 && this.state.portfolioSelected === 'crypto')) && !this.state.loading && !this.state.error && this.state.viewingClosedPositions && (
             <div className='empty-closed-positions-container'>
               <RuleIcon className='empty-closed-positions-icon' />
               <div className='portfolio-positions-h1' style={{ color: '#e68a1a'}}>

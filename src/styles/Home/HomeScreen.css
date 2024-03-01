@@ -1719,6 +1719,26 @@ path {
     fill:#e68a1a !important;
     margin-bottom: -15px !important;
 }
+.view-closed-positions-button {
+    text-align: center;
+    width: fit-content;
+    margin: auto;
+    padding: 15px;
+    border: 2px solid #e68a1a;
+    color: #e68a1a;
+    border-radius: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    transition: 0.2s all;
+    cursor: pointer;
+}
+.view-closed-positions-button:hover {
+    background-color: #e68a1a;
+    color: white;
+}
 .view-portfolio-position-type-text {
     text-align: center;
     font-size: 13px;
@@ -1733,7 +1753,7 @@ path {
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
-    padding-bottom: 55px;
+    padding-bottom: 25px;
 }
 .view-portfolio-position {
     width: 190px;
