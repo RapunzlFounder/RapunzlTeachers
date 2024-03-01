@@ -101,7 +101,7 @@ class LoginContainer extends React.PureComponent {
             loginLoading: false,
             alertVisible: true,
             alertTitle: 'Invalid Login',
-            alertMessage: 'We were unable to login to your account. We received the following error message from our server: ' + res2.errors[0].message
+            alertMessage: 'We were unable to login to your account. We received the following error message from our server: ' + res2.token.errors[0].message
           });
         }
         // execute the big query with the response as the jwt token input parameter if the token is a valid token

@@ -358,7 +358,7 @@ export function loginUser(userLogin) {
         if ('errors' in json.data) {
           dispatch(loginUserError(json.data.errors[0].message));
           dispatch(resetDashboard());
-          return { errors: [{ message: json.data.errors[0].message }]}
+          return false;
         }
         else{
           dispatch(loginUserSuccess('JWT ' + json.data.data.tokenAuth.token));
