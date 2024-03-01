@@ -94,7 +94,7 @@ class LoginContainer extends React.PureComponent {
     // eslint-disable-next-line
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!re.test(this.state.username.toLowerCase())) {
-      this.props.loginUser(cL).then(res2 => {
+      this.props.loginUser(loginCredentials).then(res2 => {
         if (!(res2 && !('errors' in res2))) {
           // set the loading state to false as the login attempt failed and the user needs to be able to retry the login
           this.setState({
