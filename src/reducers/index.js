@@ -14,6 +14,7 @@ import payoutReducer from './payoutReducer';
 import supportReducer from './supportReducer';
 import socialReducer from './socialReducer';
 import dashboardNavReducer from './dashboardNavReducer';
+import principalSuperintendentReducer from './principalSuperintendentReducer';
 
 // Redux: Root Reducer
 const rootReducer = combineReducers({
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   socialReducer: socialReducer,
   support: supportReducer,
   userDetails: userDataReducer,
+  principalSuperintendent: principalSuperintendentReducer,
 });
 
 // Exports

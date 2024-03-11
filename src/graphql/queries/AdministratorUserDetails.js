@@ -1,6 +1,6 @@
-export const USER_DETAILS = `
+export const ADMINISTRATOR_USER_DETAILS = `
 query{
-  teacherUserDetails {
+	administratorUserDetails {
 		id
 		username
 		email
@@ -11,6 +11,8 @@ query{
 		allowNotifications
 		unreadNotifications
 		isTeacher
+		isPrincipal
+    	isSuperintendent
 		birthDate
 		dateJoined
 		logoutRequired
@@ -22,24 +24,10 @@ query{
 		addressZipCode
 		phoneNumber
 		lastUpdated
-    	school      
-    	schoolId
+		school
+		schoolId
 		district
 		districtId
-		courses {
-			id
-			courseName
-			createdAt
-			lastModifiedAt
-			isPrivate
-			courseModules {
-				id
-				name
-				isPrivate
-				isRapunzlModule
-				teacherId
-			}
-		}
 		lastPublicModuleId
 		availablePublicModules {
 			id
@@ -60,26 +48,26 @@ query{
 				guideName
 				description
 				imageUrl
-				googleURL
 				pdfUrl
+				googleURL
 			}
 			articles {
 				id
 				articleName
 				description
 				imageUrl
-				googleURL
 				pdfUrl
 				standards
+				googleURL
 			}
 			activities {
 				id
 				activityName
 				description
 				imageUrl
-				googleURL
 				pdfUrl
 				standards
+				googleURL
 			}
 			assessments {
 				id
@@ -164,77 +152,50 @@ query{
 				videoUrl
 			}
 		}
-		classrooms {
-      		id
-			className
-			classYear
-			createdAt
-			lastModifiedAt
-			noStudents
-			studentList {
-				userId
-				firstName
-				lastName
-				username
-				numberOfFriends
-				lastUpdated
-				emailVerified
-				numberOfStockTrades
-				numberOfStockPositions
-				defaultStockPortfolioID	
-				stockPortfolioPerformance
-				stockCompetitionsEntered {
+    	schoolTeacherSummaries{
+			school
+			schoolId
+			teacherSummaries{
+				id
+    			username
+    			email
+    			firstName
+    			lastName
+    			picture
+    			courses{
 					id
-					title
-					status
-					startDate
-					startTime
-					endDate
-					endTime
-					competitorCount
-					compRank
-					compPerformance
-				}
-				numberOfCryptoTrades
-				numberOfCryptoPositions
-				cryptoPortfolioPerformance	
-				defaultCryptoPortfolioID
-				cryptoCompetitionsEntered {
-					id
-					title
-					status
-					startDate
-					startTime
-					endDate
-					endTime
-					competitorCount
-					compRank
-					compPerformance
-				}
-				moduleAssessmentScores{
-					moduleId
-					moduleName
-					percentComplete
-					percentCorrect
-					questionResults{
-						quizQuestionId
-						moduleQuestionNumber
-						studentAnswer
-						answerCorrect
-						noAttempts
-						lastAttemptAt
+					courseName
+					createdAt
+					lastModifiedAt
+					isPrivate
+					courseModules {
+						id
+						name
+						isPrivate
+						isRapunzlModule
+						teacherId
 					}
 				}
+    			dateJoined
+    			lastUpdated
+    			classrooms{
+					id
+					className
+					classYear
+					createdAt
+					lastModifiedAt
+					noStudents
+				}
+    			classroomCourses{
+					id
+					classId
+					className
+					courseId
+					courseName
+					createdAt
+					isActive
+				} 
 			}
-		}
-    	classroomCourses {
-			id
-			classId
-			className
-			courseId
-			courseName
-			createdAt
-			isActive
 		}
 	}
 }`;

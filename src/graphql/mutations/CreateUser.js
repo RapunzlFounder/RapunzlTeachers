@@ -8,16 +8,12 @@ export const CREATE_USER = (username, firstName, lastName, email, password, birt
       email
       isActive
       isTeacher
+      isSuperintendent
+      isPrincipal
       username
       firstName
       lastName
       birthDate
-      possibleSchools {
-        id
-        schoolName
-        schoolType
-        schoolDomain
-      }
 		  availablePublicModules {
         id
         name

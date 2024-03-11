@@ -68,6 +68,13 @@ array.reduce((obj, item) => {
   return obj
 }, {})
 
+// function to transform an array of schoolTeacherSummary objects into an object of objects using the "school"
+export const arrayToObjectSchoolName = (array) =>
+array.reduce((obj, item) => {
+  obj[item.school] = item
+  return obj
+}, {})
+
 // function to transform an array of objects into an object of objects using the "standardId"
 export const arrayToObjectStandardID = (array) =>
 array.reduce((obj, item) => {

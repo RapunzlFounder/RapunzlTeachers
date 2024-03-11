@@ -2,6 +2,7 @@ import axios from 'axios';
 import { GRAPHQL_URL } from "../constants";
 // import the GraphQL query text needed to retrieve the user big query data
 import { USER_DETAILS } from '../graphql/queries/UserDetails';
+import { ADMINISTRATOR_USER_DETAILS } from '../graphql/queries/AdministratorUserDetails';
 import { MINI_USER_DETAILS } from '../graphql/queries/MiniUserDetails';
 import { GET_SCHOOL_LIST } from '../graphql/queries/GetSchoolList';
 import { COMPLETE_QUIZ } from '../graphql/mutations/CompleteQuiz';
@@ -13,7 +14,7 @@ import { updateAllClassrooms, updateMiniClassrooms } from './classroomActions';
 import { updateAllNotifications } from './notificationActions';
 //import the actions to update the available prodcts and coin packages
 // import the utility functions to convert arrays in objects
-import { arrayToObjectID, arrayToObjectUserID, arrayToObjectModuleID, arrayToObjectQuizQuestionID } from '../helper_functions/utilities';
+import { arrayToObjectID, arrayToObjectUserID, arrayToObjectModuleID, arrayToObjectQuizQuestionID, arrayToObjectSchoolName } from '../helper_functions/utilities';
 export const COMPLETE_QUIZ_BEGIN = 'COMPLETE_QUIZ_BEGIN';
 export const COMPLETE_QUIZ_SUCCESS = 'COMPLETE_QUIZ_SUCCESS';
 export const COMPLETE_QUIZ_ERROR = 'COMPLETE_QUIZ_ERROR';
@@ -26,6 +27,10 @@ export const FETCH_BIGQUERY_BEGIN = 'FETCH_BIGQUERY_BEGIN';
 export const FETCH_BIGQUERY_SUCCESS = 'FETCH_BIGQUERY_SUCCESS';
 export const FETCH_BIGQUERY_ERROR = 'FETCH_BIGQUERY_ERROR';
 export const FETCH_BIGQUERY_FAILURE = 'FETCH_BIGQUERY_FAILURE';
+export const FETCH_ADMIN_BIGQUERY_BEGIN = 'FETCH_ADMIN_BIGQUERY_BEGIN';
+export const FETCH_ADMIN_BIGQUERY_SUCCESS = 'FETCH_ADMIN_BIGQUERY_SUCCESS';
+export const FETCH_ADMIN_BIGQUERY_ERROR = 'FETCH_ADMIN_BIGQUERY_ERROR';
+export const FETCH_ADMIN_BIGQUERY_FAILURE = 'FETCH_ADMIN_BIGQUERY_FAILURE';
 export const FETCH_MINIQUERY_BEGIN = 'FETCH_BIGQUERY_BEGIN';
 export const FETCH_MINIQUERY_SUCCESS = 'FETCH_BIGQUERY_SUCCESS';
 export const FETCH_MINIQUERY_ERROR = 'FETCH_BIGQUERY_ERROR';
@@ -38,6 +43,7 @@ export const SET_DAY_COLORS = 'SET_DAY_COLORS';
 export const SET_NIGHT_COLORS = 'SET_NIGHT_COLORS';
 export const SET_CRYPTO_COLORS = 'SET_CRYPTO_COLORS';
 export const UPDATE_ADDRESS = 'UPDATE_ADDRESS';
+export const UPDATE_SCHOOL_TEACHER_SUMMARIES = 'UPDATE_SCHOOL_TEACHER_SUMMARIES';
 
 export const completeQuizBegin = () => ({
   type: COMPLETE_QUIZ_BEGIN,
@@ -108,6 +114,30 @@ export const fetchBigQueryFailure = error => ({
 export const fetchMiniQueryFailure = error => ({
   type: FETCH_MINIQUERY_FAILURE,
   payload: { error }
+});
+
+export const fetchAdminBigQueryBegin = () => ({
+  type: FETCH_ADMIN_BIGQUERY_BEGIN,
+});
+
+export const fetchAdminBigQuerySuccess = userDetails => ({
+  type: FETCH_ADMIN_BIGQUERY_SUCCESS,
+  payload: { userDetails }
+});
+
+export const fetchAdminBigQueryError = error => ({
+  type: FETCH_ADMIN_BIGQUERY_ERROR,
+  payload: { error }
+});
+
+export const fetchAdminBigQueryFailure = error => ({
+  type: FETCH_ADMIN_BIGQUERY_FAILURE,
+  payload: { error }
+});
+
+export const UpdateSchoolTeacherSummaries = schoolTeacherSummaries => ({
+  type: UPDATE_SCHOOL_TEACHER_SUMMARIES,
+  payload: { schoolTeacherSummaries }
 });
 
 // this updates an individual property of the userDetails state. eg to change the state property 
@@ -259,7 +289,7 @@ export function fetchBigQuery(token) {
                   mainReturnedObj.teacherUserDetails.teacherCreatedModules[property3].activities = {};
                 }
                 // convert the teacher created module assessment questions into an object of objects
-                if (mainReturnedObj.teacherUserDetails.teacherCreatedModules[property3].assessments && mainReturnedObj.teacherCreatedModules[property3].assessments.questions != null){
+                if (mainReturnedObj.teacherUserDetails.teacherCreatedModules[property3].assessments && mainReturnedObj.teacherUserDetails.teacherCreatedModules[property3].assessments.questions != null){
                   const teacherModuleAssessmentQuestions = arrayToObjectID(mainReturnedObj.teacherUserDetails.teacherCreatedModules[property3].assessments.questions);
                   mainReturnedObj.teacherUserDetails.teacherCreatedModules[property3].assessments.questions = teacherModuleAssessmentQuestions;
                 }
@@ -316,6 +346,156 @@ export function fetchBigQuery(token) {
             return { errors: [{ message: error.message }]};
           });
   };
+}
+
+// function to dispatch redux actions to get a response from the graphql query administratorUserDetails
+export function fetchAdministratorBigQuery(token) {
+  return function (dispatch) {
+    dispatch(fetchAdminBigQueryBegin());
+    return axios.post(GRAPHQL_URL, { query: ADMINISTRATOR_USER_DETAILS }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    })
+        .then((json) => {
+          if ("errors" in json.data){
+            dispatch(fetchAdminBigQueryError(json.data.errors[0].message));
+            return { errors: json.data.errors };
+          }
+          else{
+            // Transform arrays in the UserDetails object to objects that further contain objects.
+            // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
+            var mainReturnedObj = json.data.data.administratorUserDetails;
+            
+            // convert the available public modules array of objects into an objects of objects
+            const publicModules = arrayToObjectID(mainReturnedObj.availablePublicModules);
+            mainReturnedObj.availablePublicModules = publicModules;
+            for (var property2 in mainReturnedObj.availablePublicModules){
+              // convert the available public module teacher guides array of objects into an objects of objects
+              if (mainReturnedObj.availablePublicModules[property2].teacherGuides && mainReturnedObj.availablePublicModules[property2].teacherGuides != null){
+                const publicModuleGuides = arrayToObjectID(mainReturnedObj.availablePublicModules[property2].teacherGuides);
+                mainReturnedObj.availablePublicModules[property2].teacherGuides = publicModuleGuides;
+              }
+              else{
+                mainReturnedObj.availablePublicModules[property2].teacherGuides = {};
+              }
+              // convert the available public module articles array of objects into an objects of objects
+              if (mainReturnedObj.availablePublicModules[property2].articles && mainReturnedObj.availablePublicModules[property2].articles != null){
+                const publicModuleArticles = arrayToObjectID(mainReturnedObj.availablePublicModules[property2].articles);
+                mainReturnedObj.availablePublicModules[property2].articles = publicModuleArticles;
+              }
+              else{
+                mainReturnedObj.availablePublicModules[property2].articles = {};
+              }
+              // convert the available public module activities array of objects into an objects of objects
+              if (mainReturnedObj.availablePublicModules[property2].activities && mainReturnedObj.availablePublicModules[property2].activities != null){
+                const publicModuleActivities = arrayToObjectID(mainReturnedObj.availablePublicModules[property2].activities);
+                mainReturnedObj.availablePublicModules[property2].activities = publicModuleActivities;
+              }
+              else{
+                mainReturnedObj.availablePublicModules[property2].activities = {};
+              }
+              // convert the available public module assessment questions into an object of objects
+              if (mainReturnedObj.availablePublicModules[property2].assessments && mainReturnedObj.availablePublicModules[property2].assessments.questions != null){
+                const publicModuleAssessmentQuestions = arrayToObjectID(mainReturnedObj.availablePublicModules[property2].assessments.questions);
+                mainReturnedObj.availablePublicModules[property2].assessments.questions = publicModuleAssessmentQuestions;
+              }
+              else{
+                mainReturnedObj.availablePublicModules[property2].assessments = {};
+              }
+              // convert the available public module videos array of objects into an objects of objects
+              if (mainReturnedObj.availablePublicModules[property2].videos && mainReturnedObj.availablePublicModules[property2].videos != null){
+                const publicModuleVideos = arrayToObjectID(mainReturnedObj.availablePublicModules[property2].videos);
+                mainReturnedObj.availablePublicModules[property2].videos = publicModuleVideos;
+              }
+              else{
+                mainReturnedObj.availablePublicModules[property2].videos = {};
+              }
+            }
+            dispatch(updateAllPublicModules(mainReturnedObj.availablePublicModules, mainReturnedObj.lastPublicModuleId));
+            // convert the teacher created modules array of objects into an objects of objects
+            const teacherModules = arrayToObjectID(mainReturnedObj.teacherCreatedModules);
+            mainReturnedObj.teacherCreatedModules = teacherModules;
+            for (var property3 in mainReturnedObj.teacherCreatedModules){
+              // convert the teacher created module teacher guides array of objects into an objects of objects
+              if (mainReturnedObj.teacherCreatedModules[property3].teacherGuides && mainReturnedObj.teacherCreatedModules[property3].teacherGuides != null){
+                const teacherModuleGuides = arrayToObjectID(mainReturnedObj.teacherCreatedModules[property3].teacherGuides);
+                mainReturnedObj.teacherCreatedModules[property3].teacherGuides = teacherModuleGuides;
+              }
+              else{
+                mainReturnedObj.teacherCreatedModules[property3].teacherGuides = {};
+              }
+              // convert the teacher created module articles array of objects into an objects of objects
+              if (mainReturnedObj.teacherCreatedModules[property3].articles && mainReturnedObj.teacherCreatedModules[property3].articles != null){
+                const teacherModuleArticles = arrayToObjectID(mainReturnedObj.teacherCreatedModules[property3].articles);
+                mainReturnedObj.teacherCreatedModules[property3].articles = teacherModuleArticles;
+              }
+              else{
+                mainReturnedObj.teacherCreatedModules[property3].articles = {};
+              }
+              // convert the teacher created module activities array of objects into an objects of objects
+              if (mainReturnedObj.teacherCreatedModules[property3].activities && mainReturnedObj.teacherCreatedModules[property3].activities != null){
+                const teacherModuleActivities = arrayToObjectID(mainReturnedObj.teacherCreatedModules[property3].activities);
+                mainReturnedObj.teacherCreatedModules[property3].activities = teacherModuleActivities;
+              }
+              else{
+                mainReturnedObj.teacherCreatedModules[property3].activities = {};
+              }
+              // convert the teacher created module assessment questions into an object of objects
+              if (mainReturnedObj.teacherCreatedModules[property3].assessments && mainReturnedObj.teacherCreatedModules[property3].assessments.questions != null){
+                const teacherModuleAssessmentQuestions = arrayToObjectID(mainReturnedObj.teacherCreatedModules[property3].assessments.questions);
+                mainReturnedObj.teacherCreatedModules[property3].assessments.questions = teacherModuleAssessmentQuestions;
+              }
+              else{
+                mainReturnedObj.teacherCreatedModules[property3].assessments = {};
+              }
+              // convert the teacher created module videos array of objects into an objects of objects
+              if (mainReturnedObj.teacherCreatedModules[property3].videos && mainReturnedObj.teacherCreatedModules[property3].videos != null){
+                const teacherModuleVideos = arrayToObjectID(mainReturnedObj.teacherCreatedModules[property3].videos);
+                mainReturnedObj.teacherCreatedModules[property3].videos = teacherModuleVideos;
+              }
+            }              
+            dispatch(updateAllTeacherModules(mainReturnedObj.teacherCreatedModules ));
+            // convert the array of School Teacher Summaries into an object of objects.  The main key is the name of the school
+            const schoolTeacherSummariesObject = arrayToObjectSchoolName(mainReturnedObj.schoolTeacherSummaries);
+            mainReturnedObj.schoolTeacherSummaries = schoolTeacherSummariesObject;
+            for (var property5 in mainReturnedObj.schoolTeacherSummaries){
+              // convert the Teacher Summaries array into an object of objects
+              const teacherSummariesObject = arrayToObjectID(mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries);
+              mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries = teacherSummariesObject;
+              // convert the teacher courses array of objects into an objects of objects
+              const coursesObject = arrayToObjectID(mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses);
+              mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses = coursesObject;
+              for (var property1 in mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses){
+                let courseModules = {};
+                // convert the course modules array of objects into an objects of objects
+                if (mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses[property1].courseModules.length > 0){
+                  courseModules = arrayToObjectID(mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses[property1].courseModules);
+                }
+                mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses[property1].courseModules = courseModules;
+              }
+              // convert the teacher classrooms array of classrooms into an object of objects
+              const classroomsObject = arrayToObjectID(mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.classrooms);
+              mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.classrooms = classroomsObject; 
+              // convert the array of classroom Courses into an object of objects
+              const classroomCoursesObject = arrayToObjectID(mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.classroomCourses);
+              mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.classroomCourses = classroomCoursesObject; 
+            }  
+            // add all of the School Teacher Summaries to the redux state
+            dispatch(UpdateSchoolTeacherSummaries(mainReturnedObj.schoolTeacherSummaries));
+            // update the school administrative userDetails state
+            dispatch(fetchAdminBigQuerySuccess(mainReturnedObj));
+            // return true
+            const returnVal = true;
+            return returnVal;
+          }
+        })
+        .catch(error => {
+          dispatch(fetchBigQueryFailure(error.message));
+          return { errors: [{ message: error.message }]};
+        });
+};
 }
 
 // function to dispatch redux actions to get a response from the graphql query miniTeacherUserDetails

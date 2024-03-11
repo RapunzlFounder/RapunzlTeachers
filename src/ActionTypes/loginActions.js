@@ -14,7 +14,8 @@ import { FORGOT_USERNAME } from '../graphql/mutations/ForgotUsername';
 import { FORGOT_PASSWORD } from '../graphql/mutations/ForgotPassword';
 // import the GraphQL mutation text needed for when a user wishes to change their password
 import { CHANGE_PASSWORD } from '../graphql/mutations/ChangePassword';
-
+// import the GraphQL query to get the type of portal user after the user has logged in
+import { GET_PORTAL_USER_TYPE } from '../graphql/queries/GetPortalUserType';
 import { logoutUserEducation } from './educationActions';
 import { logoutUserSettings } from './gameSettingsActions';
 import { logoutUserNotifications } from './notificationActions';
@@ -45,6 +46,10 @@ export const LOGIN_USER_BEGIN = 'LOGIN_USER_BEGIN';
 export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS';
 export const LOGIN_USER_ERROR = 'LOGIN_USER_ERROR';
 export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE';
+export const GET_PORTAL_USER_TYPE_BEGIN = 'GET_PORTAL_USER_TYPE_BEGIN';
+export const GET_PORTAL_USER_TYPE_SUCCESS = 'GET_PORTAL_USER_TYPE_SUCCESS';
+export const GET_PORTAL_USER_TYPE_ERROR = 'GET_PORTAL_USER_TYPE_ERROR';
+export const GET_PORTAL_USER_TYPE_FAILURE = 'GET_PORTAL_USER_TYPE_FAILURE';
 export const FORGOT_USERNAME_BEGIN = 'FORGOT_USERNAME_BEGIN';
 export const FORGOT_USERNAME_SUCCESS = 'FORGOT_USERNAME_SUCCESS';
 export const FORGOT_USERNAME_ERROR = 'FORGOT_USERNAME_ERROR';
@@ -58,6 +63,7 @@ export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS';
 export const CHANGE_PASSWORD_ERROR = 'CHANGE_PASSWORD_ERROR';
 export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE';
 export const LOGOUT_USER_DETAILS = 'LOGOUT_USER_DETAILS';
+export const LOGOUT_PRINCIPAL_SUPERINTENDENT = 'LOGOUT_PRINCIPAL_SUPERINTENDENT';
 //export const HTTP_ERROR = 'HTTP_ERROR';
 
 export const IsUsernameUniqueBegin = () => ({
@@ -136,6 +142,24 @@ export const loginUserFailure = error => ({
   payload: { error },
 });
 
+export const getPortalUserTypeBegin = () => ({
+  type: GET_PORTAL_USER_TYPE_BEGIN,
+});
+
+export const getPortalUserTypeSuccess = () => ({
+  type: GET_PORTAL_USER_TYPE_SUCCESS,
+});
+
+export const getPortalUserTypeError = error => ({
+  type: GET_PORTAL_USER_TYPE_ERROR,
+  payload: { error },
+});
+
+export const getPortalUserTypeFailure = error => ({
+  type: GET_PORTAL_USER_TYPE_FAILURE,
+  payload: { error },
+});
+
 export const forgotUsernameBegin = () => ({
   type: FORGOT_USERNAME_BEGIN,
 });
@@ -200,6 +224,10 @@ export const updateLoginState = (name, status)=> ({
 export const logoutUserDetails = () => ({
   type: LOGOUT_USER_DETAILS,
 });
+
+export const logoutPrincipalSuperintendent = () => ({
+  type: LOGOUT_PRINCIPAL_SUPERINTENDENT,
+});
 //export const httpError = (errorText) => ({
 //  type: HTTP_ERROR,
 //  errorText
@@ -208,6 +236,7 @@ export const logoutUserDetails = () => ({
 export function logoutUser() {
   return function(dispatch){
     dispatch(logoutUserDetails());
+    dispatch(logoutPrincipalSuperintendent());
     dispatch(logoutUserCourseModule());
     dispatch(logoutUserClassroom());
     dispatch(logoutUserEducation());
@@ -284,8 +313,6 @@ export function createUser(userDetail, invitationCode) {
         }
         else{
           var mainReturnedObj = json.data.data;
-          const possibleSchoolsObject= arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.possibleSchools);
-          mainReturnedObj.createTeacheruser.newUser.possibleSchools = possibleSchoolsObject;
           // convert the available public modules array of objects into an objects of objects
           const publicModules = arrayToObjectID(mainReturnedObj.createTeacheruser.newUser.availablePublicModules);
           mainReturnedObj.createTeacheruser.newUser.availablePublicModules = publicModules;
@@ -370,6 +397,35 @@ export function loginUser(userLogin) {
       .catch(error => {
         return { errors: [{ message: error.message }]}
       });
+  };
+}
+
+// Action Creator function to dispatch redux actions to determine the type of Teacher Portal after the used has logged in but before either 
+// the BigQuery or the Administrator BigQuery has been retrieved.  If the user is just a Teacher, then the Big Query is retrieved.  If the 
+// user is a School Principal then either the BigQuery can be retireved if the principal also teaches and they want to see their regular Teaching portal,
+// or the Administrator Big Query can be retrieved if they want to view the Teacher Summaries for the teachers at the school.  if the user
+// is a School District Superintendent then the Administrator Big Query shou;d be retrieved to allow them to view the Teacher Summaries for all of 
+// the teachers at the schools in their district. 
+export function gertPortalUserType(token) {
+  return function(dispatch) {
+    dispatch(getPortalUserTypeBegin());
+    return axios.post(GRAPHQL_URL, { query: GET_PORTAL_USER_TYPE() }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(getPortalUserTypeError(json.data.errors[0].message));
+          return { errors: [{ message: json.data.errors[0].message }]}
+        }
+        else{
+          dispatch(getPortalUserTypeSuccess());
+          return json.data.data.getPortalUserType;
+        }
+      })
+      .catch(error => dispatch(getPortalUserTypeFailure(error.message)));
   };
 }
 

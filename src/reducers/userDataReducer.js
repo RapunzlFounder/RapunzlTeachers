@@ -44,6 +44,10 @@ import {
   FETCH_BIGQUERY_SUCCESS,
   FETCH_BIGQUERY_ERROR,
   FETCH_BIGQUERY_FAILURE,
+  FETCH_ADMIN_BIGQUERY_BEGIN,
+  FETCH_ADMIN_BIGQUERY_SUCCESS,
+  FETCH_ADMIN_BIGQUERY_ERROR,
+  FETCH_ADMIN_BIGQUERY_FAILURE,
   FETCH_MINIQUERY_BEGIN,
   FETCH_MINIQUERY_SUCCESS,
   FETCH_MINIQUERY_ERROR,
@@ -94,7 +98,6 @@ const initialState = {
   username: '',
   firstName: '',
   lastName: '',
-  possibleSchools: null,
   error: null,
   graphqlError: null,
   errorTitle: null,
@@ -102,6 +105,7 @@ const initialState = {
   phoneNumber: '',
   isTeacher: false,
   isSuperintendent: false,
+  isPrincipal: false,
   birthDate: null,
   address1: null,
   address2: null,
@@ -120,6 +124,7 @@ const initialState = {
   lastGetUsername: null,
   lastResetPassword: null,
   logoutRequired: false,
+  changePasswordRequired: false,
   appColors: {
     // GENERAL COLORS
     blue: '#3ac7ff',
@@ -391,12 +396,13 @@ const userDataReducer = (state = initialState, action) => {
         id: action.newUser.id,
         isActive: action.newUser.isActive,
         isTeacher: action.newUser.isTeacher,
+        isSuperintendent: action.newUser.isSuperintendent,
+        isPrincipal: action.newUser.isPrincipal,
         email: action.newUser.email,
         username: action.newUser.username,
         firstName: action.newUser.firstName,
         lastName: action.newUser.lastName,
         birthDate: action.newUser.birthDate,
-        possibleSchools: action.newUser.possibleSchools,
         didWalk: false,
         
       };
@@ -720,7 +726,6 @@ const userDataReducer = (state = initialState, action) => {
         picture: action.payload.userDetails.picture,
         phoneNumber: action.payload.userDetails.phoneNumber,
         isTeacher: action.payload.userDetails.isTeacher,
-        isSuperintendent: action.payload.userDetails.isSuperintendent,
         birthDate: action.payload.userDetails.birthDate,
         lastUpdated: action.payload.userDetails.lastUpdated,
         address1: action.payload.userDetails.address1,
@@ -736,6 +741,7 @@ const userDataReducer = (state = initialState, action) => {
         newLogin: false,
         bigQueryLoaded: true,
         logoutRequired: action.payload.userDetails.logoutRequired,
+        changePasswordRequired: action.payload.userDetails.changePasswordRequired,
       };
 
     case FETCH_BIGQUERY_ERROR:
@@ -759,6 +765,73 @@ const userDataReducer = (state = initialState, action) => {
         error: action.payload.error,
         errorTitle: 'Fetch Main User Data Failure'
       };
+
+      case FETCH_ADMIN_BIGQUERY_BEGIN:
+        // Mark the state as "loading" so we can show a spinner or something
+        // Also, reset any errors. We're starting fresh.
+        return {
+          ...state,
+          loading: true,
+          error: null,
+          graphqlError: null
+        };
+  
+      case FETCH_ADMIN_BIGQUERY_SUCCESS:
+        // All done: set loading "false".
+        // Also, replace the maintenance bool with the one from the server
+        return {
+          ...state,
+          loading: false,
+          id: action.payload.userDetails.id,
+          email: action.payload.userDetails.email,
+          emailVerified: action.payload.userDetails.emailVerified,
+          firstName: action.payload.userDetails.firstName,
+          lastName: action.payload.userDetails.lastName,
+          username: action.payload.userDetails.username,
+          picture: action.payload.userDetails.picture,
+          phoneNumber: action.payload.userDetails.phoneNumber,
+          isTeacher: action.payload.userDetails.isTeacher,
+          isPrincipal: action.payload.userDetails.isPrincipal,
+          isSuperintendent: action.payload.userDetails.isSuperintendent,
+          birthDate: action.payload.userDetails.birthDate,
+          lastUpdated: action.payload.userDetails.lastUpdated,
+          address1: action.payload.userDetails.address1,
+          address2: action.payload.userDetails.address2,
+          addressCity: action.payload.userDetails.addressCity,
+          addressState: action.payload.userDetails.addressState,
+          addressZipCode: action.payload.userDetails.addressZipCode,
+          school: action.payload.userDetails.school,
+          schoolId: action.payload.userDetails.schoolId,
+          district: action.payload.userDetails.district,
+          districtId: action.payload.userDetails.districtId,
+          dateJoined: action.payload.userDetails.dateJoined,
+          newLogin: false,
+          bigQueryLoaded: true,
+          logoutRequired: action.payload.userDetails.logoutRequired,
+          changePasswordRequired: action.payload.userDetails.changePasswordRequired,
+        };
+  
+      case FETCH_ADMIN_BIGQUERY_ERROR:
+        // The request failed. It's done. So set loading to "false".
+        // Save the error, so we can display it somewhere.
+        // Since it failed, we don't have the isMaintenance bool from the server set maintenance to false.
+        return {
+          ...state,
+          loading: false,
+          graphqlError: action.payload.error,
+          errorTitle: 'Fetch Administrative User Data Error'
+        };
+  
+      case FETCH_ADMIN_BIGQUERY_FAILURE:
+        // The request failed. It's done. So set loading to "false".
+        // Save the error, so we can display it somewhere.
+        // Since it failed, we don't have the isMaintenance bool from the server set maintenance to false.
+        return {
+          ...state,
+          loading: false,
+          error: action.payload.error,
+          errorTitle: 'Fetch Administrative User Data Failure'
+        };
 
     case FETCH_MINIQUERY_BEGIN:
       // Mark the state as "loading" so we can show a spinner or something

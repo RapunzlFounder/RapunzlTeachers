@@ -14,6 +14,7 @@ import { REMOVE_STUDENT_MODULE_QUIZSCORES } from '../graphql/mutations/RemoveStu
 import { RESET_PORTFOLIO } from '../graphql/mutations/ResetPortfolio';
 import { CHANGE_CLASSROOM_ACTIVE_STATUS } from '../graphql/mutations/ChangeClassroomActiveStatus';
 import { GET_TEACHER_CLASSROOMS } from '../graphql/queries/GetTeacherClassrooms';
+import { GET_TEACHER_CLASSROOM } from '../graphql/queries/GetTeacherClassroom';
 
 export const CREATE_TEACHER_NO_CLASSROOMS = 'CREATE_TEACHER_NO_CLASSROOMS';
 export const UPDATE_ALL_CLASSROOMS = 'UPDATE_ALL_CLASSROOMS';
@@ -71,6 +72,10 @@ export const GET_TEACHER_CLASSROOMS_BEGIN = 'GET_TEACHER_CLASSROOMS_BEGIN';
 export const GET_TEACHER_CLASSROOMS_SUCCESS = 'GET_TEACHER_CLASSROOMS_SUCCESS';
 export const GET_TEACHER_CLASSROOMS_FAILURE = 'GET_TEACHER_CLASSROOMS_FAILURE';
 export const GET_TEACHER_CLASSROOMS_ERROR = 'GET_TEACHER_CLASSROOMS_ERROR';
+export const GET_TEACHER_CLASSROOM_BEGIN = 'GET_TEACHER_CLASSROOM_BEGIN';
+export const GET_TEACHER_CLASSROOM_SUCCESS = 'GET_TEACHER_CLASSROOM_SUCCESS';
+export const GET_TEACHER_CLASSROOM_FAILURE = 'GET_TEACHER_CLASSROOM_FAILURE';
+export const GET_TEACHER_CLASSROOM_ERROR = 'GET_TEACHER_CLASSROOM_ERROR';
 export const RESET_CLASSROOM_STATE = 'RESET_CLASSROOM_STATE';
 export const RESET_CLASSROOM_ERRORS = 'RESET_CLASSROOM_ERRORS'
 export const LOGOUT_USER_CLASSROOM = 'LOGOUT_USER_CLASSROOM';
@@ -312,9 +317,8 @@ export const changeClassroomActiveStatusError = error => ({
 export const getTeacherClassroomsBegin = () => ({
   type: GET_TEACHER_CLASSROOMS_BEGIN,
 });
-export const getTeacherClassroomsSuccess = classroomsObject => ({
+export const getTeacherClassroomsSuccess = () => ({
   type: GET_TEACHER_CLASSROOMS_SUCCESS,
-  payload: { classroomsObject },
 });
 export const getTeacherClassroomsFailure = error => ({
   type: GET_TEACHER_CLASSROOMS_FAILURE,
@@ -322,6 +326,22 @@ export const getTeacherClassroomsFailure = error => ({
 });
 export const getTeacherClassroomsError = error => ({
   type: GET_TEACHER_CLASSROOMS_ERROR,
+  payload: { error },
+});
+
+// Handles Fetching a specific Teacher Classroom
+export const getTeacherClassroomBegin = () => ({
+  type: GET_TEACHER_CLASSROOM_BEGIN,
+});
+export const getTeacherClassroomSuccess = () => ({
+  type: GET_TEACHER_CLASSROOM_SUCCESS,
+});
+export const getTeacherClassroomFailure = error => ({
+  type: GET_TEACHER_CLASSROOM_FAILURE,
+  payload: { error },
+});
+export const getTeacherClassroomError = error => ({
+  type: GET_TEACHER_CLASSROOM_ERROR,
   payload: { error },
 });
 
@@ -803,11 +823,35 @@ export function getTeacherClassrooms(token, activeStatus) {
           return {errors: json.data.errors};
         }
         else{
-          dispatch(getTeacherClassroomsSuccess(json.data));
+          dispatch(getTeacherClassroomsSuccess());
           return json.data;
         }
       })
       .catch(error => dispatch(getTeacherClassroomsFailure(error.message)));
+  };
+}
+
+// Handles retrieving a specific Classroom detail for a Principal or Superintendent user.  This is not stored in Redux
+export function getTeacherClassroom(token, classroomId) {
+  return function(dispatch){
+    dispatch(getTeacherClassroomBegin());
+    return axios.post(GRAPHQL_URL, { query: GET_TEACHER_CLASSROOM(classroomId) }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token
+      },
+    })
+      .then((json) => {
+        if ('errors' in json.data) {
+          dispatch(getTeacherClassroomError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else{
+          dispatch(getTeacherClassroomSuccess());
+          return json.data.data.getTeacherclassroom;
+        }
+      })
+      .catch(error => dispatch(getTeacherClassroomFailure(error.message)));
   };
 }
 
