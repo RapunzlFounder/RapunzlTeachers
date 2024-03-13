@@ -12,6 +12,8 @@ import { updateAllCourses, updateAllPublicModules, updateMiniPublicModules, upda
 import { updateAllClassrooms, updateMiniClassrooms } from './classroomActions';
 // import the action to update the notification state
 import { updateAllNotifications } from './notificationActions';
+// import the action to update whether or not the Admin GUI is to be used
+import { updateUseAdminGui } from './gameSettingsActions';
 //import the actions to update the available prodcts and coin packages
 // import the utility functions to convert arrays in objects
 import { arrayToObjectID, arrayToObjectUserID, arrayToObjectModuleID, arrayToObjectQuizQuestionID, arrayToObjectSchoolName } from '../helper_functions/utilities';
@@ -336,6 +338,8 @@ export function fetchBigQuery(token) {
               dispatch(updateAllNotifications(mainReturnedObj.teacherUserDetails.allowNotifications, mainReturnedObj.teacherUserDetails.unreadNotifications));
               // update the teacher userDetails state
               dispatch(fetchBigQuerySuccess(mainReturnedObj.teacherUserDetails));
+              // update that the regular Teacher GUI is to be used and not the Admin GUI
+              dispatch(updateUseAdminGui(false));
               // return true
               const returnVal = true;
               return returnVal;
@@ -486,6 +490,8 @@ export function fetchAdministratorBigQuery(token) {
             dispatch(UpdateSchoolTeacherSummaries(mainReturnedObj.schoolTeacherSummaries));
             // update the school administrative userDetails state
             dispatch(fetchAdminBigQuerySuccess(mainReturnedObj));
+            // update that the Admin GUI is to be used and not the regular Teacher GUI
+            dispatch(updateUseAdminGui(true));
             // return true
             const returnVal = true;
             return returnVal;

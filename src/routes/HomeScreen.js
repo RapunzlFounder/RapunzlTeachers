@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Outlet, Navigate } from "react-router-dom";
 import { connect } from 'react-redux';
-import { fetchBigQuery, fetchMiniQuery } from '../ActionTypes/userDataActions';
+import { fetchBigQuery, fetchMiniQuery, fetchAdministratorBigQuery } from '../ActionTypes/userDataActions';
 import { resetNotificationErrors } from '../ActionTypes/notificationActions';
 import { getFinancialLiteracyStandards } from '../ActionTypes/coursemoduleActions';
 import { fetchDemoContent } from '../ActionTypes/demoDataActions';
@@ -38,6 +38,7 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       gettingMiniQuery: false,
+      gettingAdminBigQuery: false,
       alertVisible: false,
       visibleTab: 1,
       previousTab: 1,
@@ -130,28 +131,56 @@ class HomeScreen extends Component {
   _getUpdatedUserDetails = () => {
     const localTime = new Date();
     const currentTime = moment(localTime); 
-    // calculate the time difference in seconds between the current time and the last time that the teacher's classrooms details were retrieved from the server
-    const classroomRetrievedTime= moment(this.props.classroomLastRetrievedTime);
-    const secondsDiff = currentTime.diff(classroomRetrievedTime, 'seconds');
-    // if it has been 1 minute or more since the last time that the user retrieved the mini query data, retreive it sgsin.  DO NOT CHANGE THIS NUMBER 60!  
-    if (secondsDiff >= 60){      
-      this.setState({ gettingMiniQuery: true });
-      this.props.FetchMiniQuery(this.props.jwtToken, this.props.lastPublicModuleId).then((res) => {
-        // Handles If There's An Error With the Mini Query
-        if (!(res && !('errors' in res))) {
-          this.setState({
-            gettingMiniQuery: false,
-            handleLogout: true,
-          });
-        }
-        // Handles If The Mini Query Is Successful
-        else {
-          this.setState({
-            gettingMiniQuery: false,
-            alertVisible: false
-          });
-        }
-      });
+    
+    // for an admin user (Principal or Supervisor) there is no mini query, we just retreive the administrator big query.  DO NOT CHANGE THIS NUMBER 180!  
+    if (this.props.useAdminGUI){
+      const adminRetrievedTime= moment(this.props.lastRetrievedTime);
+      const adminSecondsDiff = currentTime.diff(adminRetrievedTime, 'seconds');
+      // check if has been greater than 3 minutes since the last time the administrator big query was retrieved
+      if (adminSecondsDiff >= 180){      
+        this.setState({ gettingAdminBigQuery: true });
+        this.props.fetchAdministratorBigQuery(this.props.jwtToken).then((res) => {
+          // Handles If There's An Error With the Administraor Big Query
+          if (!(res && !('errors' in res))) {
+            this.setState({
+              gettingAdminBigQuery: false,
+              handleLogout: true,
+            });
+          }
+          // Handles If The Administrator Big Query Is Successful
+          else {
+            this.setState({
+              gettingAdminBigQuery: false,
+              alertVisible: false
+            });
+          }
+        });
+      }
+    }
+    else {
+      // calculate the time difference in seconds between the current time and the last time that the teacher's classrooms details were retrieved from the server
+      const classroomRetrievedTime= moment(this.props.classroomLastRetrievedTime);
+      const secondsDiff = currentTime.diff(classroomRetrievedTime, 'seconds');
+      if (secondsDiff >= 60){      
+        this.setState({ gettingMiniQuery: true });
+        // Get the regular Mini Query for a Teacher 
+        this.props.FetchMiniQuery(this.props.jwtToken, this.props.lastPublicModuleId).then((res) => {
+          // Handles If There's An Error With the Mini Query
+          if (!(res && !('errors' in res))) {
+            this.setState({
+              gettingMiniQuery: false,
+              handleLogout: true,
+            });
+          }
+          // Handles If The Mini Query Is Successful
+          else {
+            this.setState({
+              gettingMiniQuery: false,
+              alertVisible: false
+            });
+          }
+        });
+      }
     }
   }
 
@@ -351,6 +380,11 @@ const mapStateToProps = (state) => {
     creatingClassroom: state.dashboard.creatingClassroom,
     selectedClassroom: state.dashboard.selectedClassroom,
     expandedLibrary: state.dashboard.expandedLibrary,
+    // redux state for if the AdminGUI is to be used or not
+    useAdminGUI: state.gamesettings.useAdminGUI,
+    // redux state for the last time that the school teacher summaries were retrieved 
+    lastRetrievedTime: state.principalSuperintendent.lastRetrievedTime,
+    
   };
 };
 
@@ -360,8 +394,10 @@ const mapDispatchToProps = (dispatch) => {
     return {
       // reset errors related to notifications
       resetNotificationErrors: () => dispatch(resetNotificationErrors()),
-      // Get all of the user data
+      // Get all of the user data for a regular Teacher user
       fetchBigQuery: (token) => dispatch(fetchBigQuery(token)),
+      // Get all of the user data for a Principal or Superintendent user
+      fetchAdministratorBigQuery: (token) => dispatch(fetchAdministratorBigQuery(token)),
       // executes the Mini Query
       FetchMiniQuery: (token, lastPublicModuleId) => dispatch(fetchMiniQuery(token, lastPublicModuleId)),
       // Handles Retrieving Financial Literacy Standards Which Are Mapped To Various Resource
