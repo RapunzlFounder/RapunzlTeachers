@@ -82,6 +82,7 @@ import {
 } from '../ActionTypes/payoutActions';
 
 import { persistReducer } from 'redux-persist';
+import { current } from '@reduxjs/toolkit';
 
 const initialState = {
   loading: false,
@@ -125,6 +126,36 @@ const initialState = {
   lastResetPassword: null,
   logoutRequired: false,
   changePasswordRequired: false,
+  currentProduct:{
+    id: 0,
+    name: '',
+    description: '',
+    monthlyCost: 0,
+    annualCost: 0,
+    expiresAt: null,
+    isActive: true,
+    productSubject: '',
+  },
+  productFeatures:{
+    id: 0,
+    createClassroom: false,
+    removeClassroom: false,
+    addClassroomStudents: false,
+    removeClassroomStudents: false,
+    createCourse: false,
+    removeCourse: false,
+    createClassroomCourse: false,
+    removeClassroomCourse: false,  
+    viewClassrooms: false,  
+    viewCourses: false,
+    viewClassroomCourses: false,
+    addAssignments: false,
+    removeAssignments: false,
+    viewAssignments: false,
+    viewStudentPortfolios: false,
+    viewRapunzlCurriculums: false,
+    createPrivateCurriculums: false,
+  },
   appColors: {
     // GENERAL COLORS
     blue: '#3ac7ff',
@@ -403,6 +434,8 @@ const userDataReducer = (state = initialState, action) => {
         firstName: action.newUser.firstName,
         lastName: action.newUser.lastName,
         birthDate: action.newUser.birthDate,
+        currentProduct: action.newUser.currentProduct,
+        productFeatures: action.newUser.productFeatures,
         didWalk: false,
         
       };
@@ -738,6 +771,8 @@ const userDataReducer = (state = initialState, action) => {
         district: action.payload.userDetails.district,
         districtId: action.payload.userDetails.districtId,
         dateJoined: action.payload.userDetails.dateJoined,
+        currentProduct: action.payload.userDetails.currentProduct,
+        productFeatures: action.payload.userDetails.productFeatures,
         newLogin: false,
         bigQueryLoaded: true,
         logoutRequired: action.payload.userDetails.logoutRequired,
@@ -805,6 +840,8 @@ const userDataReducer = (state = initialState, action) => {
           district: action.payload.userDetails.district,
           districtId: action.payload.userDetails.districtId,
           dateJoined: action.payload.userDetails.dateJoined,
+          currentProduct: action.payload.userDetails.currentProduct,
+          productFeatures: action.payload.userDetails.productFeatures,
           newLogin: false,
           bigQueryLoaded: true,
           logoutRequired: action.payload.userDetails.logoutRequired,
@@ -849,6 +886,8 @@ const userDataReducer = (state = initialState, action) => {
           ...state,
           loading: false,
           logoutRequired: action.payload.logoutRequired,
+          currentProduct: action.payload.product,
+          productFeatures: action.payload.productFeatures,
       };
   
     case FETCH_MINIQUERY_ERROR:

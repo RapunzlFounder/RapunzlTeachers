@@ -17,7 +17,8 @@ const persistConfig = {
   stateReconciler: autoMergeLevel2,
   // Whitelist (Save Specific Reducers)
   whitelist: [
-    'userDataReducer', 'notificationReducer', 'productReducer', 'coursemoduleReducer', 'classroomReducer', 'firstVisitReducer', 'gameSettingsReducer', 'educationReducer', 
+    'userDataReducer', 'notificationReducer', 'productReducer', 'coursemoduleReducer', 'classroomReducer', 'firstVisitReducer', 
+    'gameSettingsReducer', 'educationReducer', 'principalSuperintendentReducer', 
   ],
   // Blacklist (Don't Save Specific Reducers)
   blacklist: [

@@ -12,6 +12,13 @@ export const UPDATE_CHART_LOADED_STATE = 'UPDATE_CHART_LOADED_STATE';
 export const LOGOUT_USER_SETTINGS = 'LOGOUT_USER_SETTINGS';
 export const UPDATE_APP_VISIBLE = 'UPDATE_APP_VISIBLE';
 export const UPDATE_WEBSOCKET_CONNECTED = 'UPDATE_WEBSOCKET_CONNECTED';
+export const UPDATE_USE_ADMIN_GUI = 'UPDATE_USE_ADMIN_GUI';
+
+// this updates Whether or not the regular Teacher Gui or the Administrator (Principal or Superintendent) Gui is being used
+export const updateUseAdminGui = (useAdminGUI) => ({
+    type: UPDATE_USE_ADMIN_GUI,
+    payload: { useAdminGUI },
+});
 
 // this updates Whether or not the Websocket is connected
 export const updateWebsocketConnected = (websocketConnected) => ({

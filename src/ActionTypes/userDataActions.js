@@ -87,9 +87,9 @@ export const fetchMiniQueryBegin = () => ({
   type: FETCH_MINIQUERY_BEGIN,
 });
 
-export const fetchMiniQuerySuccess = logoutRequired => ({
+export const fetchMiniQuerySuccess = (logoutRequired, product, productFeatures) => ({
   type: FETCH_MINIQUERY_SUCCESS,
-  payload: { logoutRequired }
+  payload: { logoutRequired, product, productFeatures }
 
 });
 
@@ -596,7 +596,8 @@ export function fetchMiniQuery(token, lastPublicModuleID) {
             // add all of the courses and modules to the redux state
             dispatch(updateMiniClassrooms(mainReturnedObj.miniTeacherUserDetails.classrooms));
             // update the teacher userDetails state
-            dispatch(fetchMiniQuerySuccess(mainReturnedObj.miniTeacherUserDetails.logoutRequired));
+            dispatch(fetchMiniQuerySuccess(mainReturnedObj.miniTeacherUserDetails.logoutRequired, 
+              mainReturnedObj.miniTeacherUserDetails.currentProduct, mainReturnedObj.miniTeacherUserDetails.productFeatures));
             // return true
             const returnVal = true;
             return returnVal;

@@ -16,6 +16,7 @@ import {
   LOGOUT_USER_SETTINGS,
   UPDATE_APP_VISIBLE,
   UPDATE_WEBSOCKET_CONNECTED,
+  UPDATE_USE_ADMIN_GUI
 } from '../ActionTypes/gameSettingsActions';
 
 const initialState = {
@@ -36,10 +37,17 @@ const initialState = {
   theme: 'Light',
   appVisible: true,
   websocketConnected: false,
+  useAdminGUI: false,
 };
 
 const gameSettingsReducer = (state = initialState, action) => {
   switch(action.type) {
+    case UPDATE_USE_ADMIN_GUI:
+      // Update the state to indicate if the Admin Gui is to be used or not
+      return {
+        ...state,
+        useAdminGUI: action.payload.useAdminGUI,
+      }
     case UPDATE_WEBSOCKET_CONNECTED:
       // Update the state to indicate if the Websocket is connected to the server or not
       return {
