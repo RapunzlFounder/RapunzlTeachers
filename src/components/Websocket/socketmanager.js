@@ -137,13 +137,11 @@ export class WrappedSocketManager extends React.Component {
         // Update the Redux store that the page is visible.  This Redux state can be subscribed to by any page to determine if anything needs 
         // to be updated now that the WebApp is visible
         // Connects the Web Socket
-        if (!this.socket.connected){
-          try {
-            this.socket.connect();
-          } catch (e) {
+        try {
+          this.socket.connect();
+        } catch (e) {
             //console.log("Websocket connect error when page made visible");
             //console.error(e);
-          }
         }
       }
      // the WebApp is not visible, but it was previousy visible 
@@ -151,14 +149,12 @@ export class WrappedSocketManager extends React.Component {
         // Update the Redux store that the page is not visible.  This Redux state can be subscribed to by any page to determine if anything needs 
         // to be updated now that the WebApp is not visible
         // unsubscribe all symbols from the Web Socket
-        if (this.socket.connected){
-          try {
-            this.socket.disconnect();
-            this.props.updateWebsocketConnected(false);
-          } catch (e) {
+        try {
+          this.socket.disconnect();
+          this.props.updateWebsocketConnected(false);
+        } catch (e) {
             //console.log("Websocket disconnect error");
             //console.error(e);
-          }
         }
       }
       // update the Redux store with the current WebApp visibility.  This visibility is passed into SocketManager as a prop fromPageVisibility in idex.js
