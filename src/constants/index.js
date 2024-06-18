@@ -1,7 +1,7 @@
 
-const WS_URL = "https://rapunzlstaging.com";
+const WS_URL = "https://rapunzled.org";
 //const WS_URL = "https://rapunzl.org:8030";
-const GRAPHQL_URL = "https://rapunzlstaging.com/graphql/";
+const GRAPHQL_URL = "https://rapunzled.org/graphql/";
 //const GRAPHQL_URL = "https://rapunzl.org:8443/graphql/";
 const IEX_TOKEN = "pk_3bdc58358977408881c5bc0b7859cfb1";
 const APP_VERSION = "1.0.2";
