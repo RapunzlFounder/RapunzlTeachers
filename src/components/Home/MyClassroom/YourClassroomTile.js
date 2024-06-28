@@ -113,6 +113,8 @@ class YourClassroomTile extends Component {
       // Handles If Dispatch Is Successful & We Have Removed The Students
       else {
         this.setState({
+          removeStudents: false,
+          removingArray: [],
           loading: false,
           alertVisible: true,
           alertTitle: 'You Are All Set!',
