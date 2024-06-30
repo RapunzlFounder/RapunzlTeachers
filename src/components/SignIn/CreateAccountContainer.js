@@ -499,7 +499,7 @@ class CreateAccountContainer extends React.PureComponent {
             this.props.fetchBigQuery(jwttoken.token).then((res) => {
                // Handles If The Big Query Is Successfully Fetched
               if (res === true) {
-                this.setState({ success: true, loading: false });
+                this.setState({ success: true });
               }
               // Handles If There Is An Error Retrieving The Big Query
               else if (!(res && !('errors' in res))) {
@@ -556,7 +556,7 @@ class CreateAccountContainer extends React.PureComponent {
   }
 
   render() {
-    if (this.state.success) {
+    if (this.state.success && this.props.bigQueryLoaded) {
       return (
         <Navigate to="/dashboard" replace={true}/>
       )
@@ -709,6 +709,7 @@ const mapStateToProps = (state) => {
     notificationGraphqlError: state.notification.graphqlError,
     notificationError: state.notification.error,
     notificationErrorTitle: state.notification.errorTitle,
+    bigQueryLoaded: state.userDetails.bigQueryLoaded,
   };
 };
 

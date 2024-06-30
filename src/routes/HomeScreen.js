@@ -344,6 +344,8 @@ const mapStateToProps = (state) => {
     loggedIn: state.userDetails.loggedIn,
     // Necessary for nearly all dispatches
     jwtToken: state.userDetails.jwtToken,
+    // Handles If Big Query Has completed Loading
+    bigQueryLoaded: state.userDetails.bigQueryLoaded,
     // Notification token which maps on expo servers to user's OS specific notification certificates
     notificationToken: state.notification.notificationToken,
     // Handles if this is the first time user logged in

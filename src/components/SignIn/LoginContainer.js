@@ -121,7 +121,6 @@ class LoginContainer extends React.PureComponent {
             else {
               this.setState({
                 success: true,
-                loginLoading: false,
                 alertVisible: false,
               });
             }
@@ -162,7 +161,7 @@ class LoginContainer extends React.PureComponent {
   }
 
   render() {
-    if (this.state.success) {
+    if (this.state.success && this.props.bigQueryLoaded) {
       return (
         <Navigate to="/dashboard" replace={true}/>
       )
@@ -243,6 +242,8 @@ const mapStateToProps = (state) => {
     error: state.userDetails.error,
     errorTitle: state.userDetails.errorTitle,
     userId: state.userDetails.id,
+    // Handles If Big Query Has completed Loading
+    bigQueryLoaded: state.userDetails.bigQueryLoaded,
   };
 };
 
