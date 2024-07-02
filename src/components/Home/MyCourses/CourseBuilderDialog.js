@@ -403,7 +403,7 @@ class CourseBuilderDialog extends React.PureComponent {
                     Modules Included
                   </div>
                   <div className='selected-education-confirm-title'>
-                    {modulesArray[0]}
+                    {modulesArray[0].slice(0,-2)}
                   </div>
                   {/* <div onClick={this.toggleStandards} className='selected-education-confirm-text' style={{ marginTop: -10, paddingBottom: 25, cursor: 'pointer' }}>
                     View Standards Covered
