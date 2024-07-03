@@ -59,15 +59,15 @@ export class WrappedSocketManager extends React.Component {
         //console.log('Websocket disconnection was initiated by the server.  Trying again....')
         this.socket.connect();
       }
-      else if (reason === "ping timeout") {
+      //else if (reason === "ping timeout") {
         //console.log('Websocket disconnected. The server did not send a PING within the pingInterval pingTimeout range. Trying again....')
-      }
-      else if (reason === "transport close") {
+      //}
+      //else if (reason === "transport close") {
         //console.log('Websocket disconnected. The connection was closed. Trying again....')
-      }
-      else if (reason === "transport error") {
+      //}
+      //else if (reason === "transport error") {
         //console.log('Websocket disconnected. The connection has encountered an error. Trying again....')
-      }
+      //}
       // else the socket will automatically try to reconnect
     });
       // this is for processing classroom student assessment quiz score updates

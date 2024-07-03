@@ -29,36 +29,6 @@ query{
 		district
 		districtId
 		lastPublicModuleId
-		currentProduct{
-			id
-			name
-			description
-			monthlyCost
-			annualCost
-			expiresAt
-			isActive
-			productSubject
-		}
-		productFeatures{
-			id
-			createClassroom
-			removeClassroom
-			addClassroomStudents
-			removeClassroomStudents
-			createCourse
-			removeCourse
-			createClassroomCourse
-			removeClassroomCourse
-			viewClassrooms
-			viewCourses
-			viewClassroomCourses
-			addAssignments
-			removeAssignments
-			viewAssignments
-			viewStudentPortfolios
-			viewRapunzlCurriculums
-			createPrivateCurriculums
-		}
 		availablePublicModules {
 			id
 			name
