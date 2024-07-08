@@ -1,7 +1,7 @@
 "use client";
 import React, { Component, Suspense, lazy } from "react";
 import AuthLoadingScreen from './routes/AuthLoadingScreen';
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import { HashRouter,BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import ScrollToTop from './helper_functions/ScrollToTop';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import LoadingPage from "./components/Admin/LoadingPage";
@@ -67,7 +67,7 @@ const theme = createTheme({
 class App extends Component {
   render() {
     return(
-      <BrowserRouter>
+      <HashRouter>
       <ScrollToTop />
         <ThemeProvider theme={theme}>
             <Routes>
@@ -114,7 +114,7 @@ class App extends Component {
               />
             </Routes>
         </ThemeProvider>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 }
