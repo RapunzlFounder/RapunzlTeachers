@@ -11,7 +11,6 @@ query{
 		allowNotifications
 		unreadNotifications
 		isTeacher
-		isSuperintendent
 		birthDate
 		dateJoined
 		logoutRequired
@@ -27,6 +26,36 @@ query{
     	schoolId
 		district
 		districtId
+		currentProduct{
+			id
+			name
+			description
+			monthlyCost
+			annualCost
+			expiresAt
+			isActive
+			productSubject
+		}
+		productFeatures{
+			id
+			createClassroom
+			removeClassroom
+			addClassroomStudents
+			removeClassroomStudents
+			createCourse
+			removeCourse
+			createClassroomCourse
+			removeClassroomCourse
+			viewClassrooms
+			viewCourses
+			viewClassroomCourses
+			addAssignments
+			removeAssignments
+			viewAssignments
+			viewStudentPortfolios
+			viewRapunzlCurriculums
+			createPrivateCurriculums
+		}
 		courses {
 			id
 			courseName

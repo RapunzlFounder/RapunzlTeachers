@@ -427,11 +427,15 @@ const userDataReducer = (state = initialState, action) => {
         id: action.newUser.id,
         isActive: action.newUser.isActive,
         isTeacher: action.newUser.isTeacher,
+        isSuperintendent: action.newUser.isSuperintendent,
+        isPrincipal: action.newUser.isPrincipal,
         email: action.newUser.email,
         username: action.newUser.username,
         firstName: action.newUser.firstName,
         lastName: action.newUser.lastName,
         birthDate: action.newUser.birthDate,
+        currentProduct: action.newUser.currentProduct,
+        productFeatures: action.newUser.productFeatures,
         didWalk: false,
         
       };
@@ -767,6 +771,8 @@ const userDataReducer = (state = initialState, action) => {
         district: action.payload.userDetails.district,
         districtId: action.payload.userDetails.districtId,
         dateJoined: action.payload.userDetails.dateJoined,
+        currentProduct: action.payload.userDetails.currentProduct,
+        productFeatures: action.payload.userDetails.productFeatures,
         newLogin: false,
         bigQueryLoaded: true,
         logoutRequired: action.payload.userDetails.logoutRequired,
@@ -820,6 +826,7 @@ const userDataReducer = (state = initialState, action) => {
           picture: action.payload.userDetails.picture,
           phoneNumber: action.payload.userDetails.phoneNumber,
           isTeacher: action.payload.userDetails.isTeacher,
+          isPrincipal: action.payload.userDetails.isPrincipal,
           isSuperintendent: action.payload.userDetails.isSuperintendent,
           birthDate: action.payload.userDetails.birthDate,
           lastUpdated: action.payload.userDetails.lastUpdated,
@@ -833,6 +840,8 @@ const userDataReducer = (state = initialState, action) => {
           district: action.payload.userDetails.district,
           districtId: action.payload.userDetails.districtId,
           dateJoined: action.payload.userDetails.dateJoined,
+          currentProduct: action.payload.userDetails.currentProduct,
+          productFeatures: action.payload.userDetails.productFeatures,
           newLogin: false,
           bigQueryLoaded: true,
           logoutRequired: action.payload.userDetails.logoutRequired,
@@ -877,6 +886,8 @@ const userDataReducer = (state = initialState, action) => {
           ...state,
           loading: false,
           logoutRequired: action.payload.logoutRequired,
+          currentProduct: action.payload.product,
+          productFeatures: action.payload.productFeatures,
       };
   
     case FETCH_MINIQUERY_ERROR:

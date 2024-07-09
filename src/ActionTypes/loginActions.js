@@ -295,12 +295,17 @@ export function isEmailUnique(email) {
 // Action Creator function to dispatch redux actions & get response from graphql mutation createUser.
 // userDetail input object looks like the following:
 // userDetails { username: "asd", lastName: "afaf", email: "abc@ert.com", password: "asfaf2525", birthDate: "YYYY-MM-DD"}
-// invitationCode is an integer
-export function createUser(userDetail, invitationCode) {
+//Note that the input parameters invitationCode, demoProductID, and schoolID are optional.
+//  If they are not provided, they will be set as null, but all three cannot be null or an error will be generated. Provide the invitationCode if an invitation code is used to create the teacher, otherwise do not 
+//provide it as its default value will be sent with the mutation.  Provide the demoProductID parameter if the user is requesting a specific demo.  
+// The value 1 is used for the demoProductID if the user is requesting a demo of the full Teacher Portal product with the curriculum and the simulator, 
+// the value 3 is used if the user is requesting a demo of the teacher portal with no curriculum, just the classroom and simulator.
+// Provide the schoolID parameter if the user has NOT provided an invitationCode.
+export function createUser(userDetail, invitationCode=null, demoProductID=null, schoolID=null) {
   return function(dispatch){
     dispatch(createUserBegin());
-    const mutationText = CREATE_USER(userDetail.username, userDetail.firstName, userDetail.lastName, userDetail.email, userDetail.password,
-      userDetail.birthDate, invitationCode);
+    const mutationText = CREATE_USER(userDetail.username, userDetail.firstName, userDetail.lastName, userDetail.email, 
+      userDetail.password, userDetail.birthDate, invitationCode, demoProductID, schoolID);
     return axios.post(GRAPHQL_URL, { query: mutationText }, {
       headers: {
         'Content-Type': 'application/json',

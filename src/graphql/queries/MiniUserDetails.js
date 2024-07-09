@@ -3,6 +3,36 @@ export const MINI_USER_DETAILS  = (lastModuleID) => `query {
   miniTeacherUserDetails(lastPublicModuleID: ${lastModuleID}) {
 		logoutRequired
 		lastPublicModuleId
+		currentProduct{
+			id
+			name
+			description
+			monthlyCost
+			annualCost
+			expiresAt
+			isActive
+			productSubject
+		}
+		productFeatures{
+			id
+			createClassroom
+			removeClassroom
+			addClassroomStudents
+			removeClassroomStudents
+			createCourse
+			removeCourse
+			createClassroomCourse
+			removeClassroomCourse
+			viewClassrooms
+			viewCourses
+			viewClassroomCourses
+			addAssignments
+			removeAssignments
+			viewAssignments
+			viewStudentPortfolios
+			viewRapunzlCurriculums
+			createPrivateCurriculums
+		}
 		classrooms {
 			id
 			className
