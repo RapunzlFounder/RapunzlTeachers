@@ -109,7 +109,9 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
-            <div title="View All Your Courses" onClick={() => this.props.setMenuTab(2)} className={`profile-menu-item ${this.props.tab === 2 ? 'selected-menu-item' : ''}`}>
+            {/* TODO: Remove For Principal & Super */}
+            {/* TODO: PRODUCTS - Check if user is allowed to view classroom feature viewCourses */}
+            {true && (<div title="View All Your Courses" onClick={() => this.props.setMenuTab(2)} className={`profile-menu-item ${this.props.tab === 2 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
                   <LibraryBooks fontSize="small" />
@@ -119,7 +121,8 @@ class LeftHomeMenu extends Component {
                 </div>
                 <ArrowForward fontSize="small" />
               </div>
-            </div>
+            </div>)}
+            {/* TODO: Remove For Super. Conditional Click & Text For Principal. PRODUCT Check if this allowed viewClassrooms */}
             <div title="View All Your Classrooms" onClick={() => this.props.setMenuTab(3)} className={`profile-menu-item ${this.props.tab === 3 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
@@ -131,6 +134,30 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
+            {/* TODO: Below Only For Super. PRODUCT Check if this allowed viewClassrooms */}
+            {false && (<div title="View All Your Classrooms" onClick={() => this.props.setMenuTab(11)} className={`profile-menu-item ${this.props.tab === 3 ? 'selected-menu-item' : ''}`}>
+              <div className='menu-flex'>
+                <div className='menu-left'>
+                  <Class fontSize="small" />
+                  <div className='menu-text'>
+                    My Schools
+                  </div>
+                </div>
+                <ArrowForward fontSize="small" />
+              </div>
+            </div>)}
+            {/* TODO: Below Only For Super. Should provide an admin view of districts. */}
+            {false && (<div title="View All Your Classrooms" onClick={() => this.props.setMenuTab(10)} className={`profile-menu-item ${this.props.tab === 3 ? 'selected-menu-item' : ''}`}>
+              <div className='menu-flex'>
+                <div className='menu-left'>
+                  <Class fontSize="small" />
+                  <div className='menu-text'>
+                    Manage District
+                  </div>
+                </div>
+                <ArrowForward fontSize="small" />
+              </div>
+            </div>)}
             <div title="Discover Financial Literacy Resources" onClick={() => this.props.setMenuTab(4)} className={`profile-menu-item ${this.props.tab === 4 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
@@ -142,12 +169,25 @@ class LeftHomeMenu extends Component {
                 <ArrowForward fontSize="small" />
               </div>
             </div>
+            {/* TODO: Remove For Admin */}
             <div title="View Your Classroom Grades" onClick={() => this.props.setMenuTab(5)} className={`profile-menu-item ${this.props.tab === 5 ? 'selected-menu-item' : ''}`}>
               <div className='menu-flex'>
                 <div className='menu-left'>
                   <AutoGraphIcon fontSize="small" />
                   <div className='menu-text'>
                     Gradebook
+                  </div>
+                </div>
+                <ArrowForward fontSize="small" />
+              </div>
+            </div>
+            {/* TODO: Only For Superintendent and directs to pricing from Teacher View */}
+            <div title="Adjust Your Account Settings" onClick={() => this.props.setMenuTab(6)} className={`profile-menu-item ${this.props.tab === 6 ? 'selected-menu-item' : ''}`}>
+              <div className='menu-flex'>
+                <div className='menu-left'>
+                  <Settings fontSize="small" />
+                  <div className='menu-text'>
+                    Current Billing Plan
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />

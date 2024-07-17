@@ -144,6 +144,8 @@ class ResourceLibrary extends Component {
   }
 
 
+  /* TODO: PRODUCTS - Check if user is allowed to view resources feature viewRapunzlCurriculums
+  and if they are not, this should show a sample resource and an upgrade with link to contact similar to DowngradePopup */
   render() {
     if (this.props.visible) {
       return (

@@ -185,6 +185,7 @@ class AddStudents extends Component {
     const studentArray = this._handleStudentListData(studentList);
     this.setState({ loading: true });
     // Checks If This Is A New Class Or An Existing Class & Handles New Class To Create Classroom With Students
+    // TODO: PRODUCTS - Check that the user is allowed to use this feature createClassroom
     if (!!this.props.newClassName) {
       this.props.createTeacherClassroom(this.props.jwtToken, this.props.newClassName, studentArray, currentYear).then((res) => {
         // Handles Error With Creating Teacher Classroom
@@ -219,6 +220,7 @@ class AddStudents extends Component {
     // If This Is Not A New Classroom, We Handle If This Is An Existing Class & Add Students To The Class
     else {
       // Adds Students To Existing Class Using ClassID Which Is The Selected Class Passed As Props
+      // TODO: PRODUCTS - Check that the user is allowed to use this feature addClassroomStudents
       this.props.addStudentsToClassroom(this.props.jwtToken, this.props.selectedClassroom, studentArray).then((res) => {
         // Handles Error With Add Students To Classroom
         if (!(res && !('errors' in res))) {

@@ -24,7 +24,7 @@ import MyCourse from '../components/Home/MyCourses/MyCourse';
 import ResourceLibrary from '../components/Home/Resources/ResourceLibrary';
 import QuickAccess from '../components/Home/RightMenu/QuickAccess';
 import MyClassroom from '../components/Home/MyClassroom/MyClassroom';
-import TrendingCourses from '../components/Home/RightMenu/TrendingCourses';
+import PlugAndPlayCourses from '../components/Home/RightMenu/PlugAndPlayCourses';
 import Support from '../components/Home/Support';
 import Settings from '../components/Home/Settings';
 import YourPlan from '../components/Home/YourPlan';
@@ -32,6 +32,8 @@ import FAQ from '../components/Home/FAQ';
 import TooNarrowIcon from '../assets/images/Admin/TooNarrow.png';
 import '../styles/Home/HomeScreen.css';
 import YourGrades from '../components/Home/Gradebook/YourGrades';
+import DistrictManager from '../components/PrincipalSuper/DistrictManager';
+import SchoolList from '../components/PrincipalSuper/SchoolList';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -316,11 +318,18 @@ class HomeScreen extends Component {
               <FAQ
                 visible={this.props.visibleTab === 9}
               />
+              <DistrictManager
+                visible={this.props.visibleTab === 10}
+              />
+              <SchoolList
+                visible={this.props.visibleTab === 11}
+              />
             </div>
             {!this.props.expandedLibrary && (
+              // TODO: Remove this for Admin Accounts
               <div className='tile right-section'>
                 <QuickAccess />
-                <TrendingCourses />
+                <PlugAndPlayCourses />
               </div>
             )}
           </div>

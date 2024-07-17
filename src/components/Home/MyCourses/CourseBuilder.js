@@ -93,6 +93,7 @@ class CourseBuilder extends Component {
       }
       // If There Is No Error, Proceed With Creating Teacher Course
       if (!error) {
+        // TODO: PRODUCTS - Check that the user is allowed to use this feature createCourse
         this.props.createTeacherCourse(this.props.jwtToken, this.state.courseName.toString(), true, modulesArray).then((res) => {
           // Handles Error With Creating Teacher Course By Displaying Alert Error To Use
           if (!(res && !('errors' in res))) {

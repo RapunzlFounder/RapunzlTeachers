@@ -11,6 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import RecoverAccountContainer from './RecoverAccountContainer';
+import SelectAccountView from './SelectAccountView';
 import { CircularProgress } from '@mui/material';
 
 class LoginContainer extends React.PureComponent {
@@ -29,6 +30,7 @@ class LoginContainer extends React.PureComponent {
       alertTitle: 'Invalid Login',
       alertMessage: '',
       success: false,
+      selectingAccountView: true,
     };
   }
 
@@ -107,24 +109,16 @@ class LoginContainer extends React.PureComponent {
         // execute the big query with the response as the jwt token input parameter if the token is a valid token
         // eslint-disable-next-line
         else if (res2 && res2.token && res2.token.substring(0,4) == 'JWT ') {
-          this.props.fetchBigQuery(res2.token).then(res => {
-            // Handles Error With Big Query
-            if (res !== true && !(res && !('errors' in res))) {
-              this.setState({
-                loginLoading: false,
-                alertVisible: true,
-                alertTitle: 'Issue With Login',
-                alertMessage: res.errors[0].message !== undefined && res.errors[0].message.length > 0 ? res.errors[0].message : 'We had trouble logging in and retreiving your account information. Please contact support at hello@rapunzl.org so we can help resolve the issue.',
-              })
-            }
-            // Handles Successful Login And Fetching Of The Big Query
-            else {
-              this.setState({
-                success: true,
-                alertVisible: false,
-              });
-            }
-          });
+          // TODO: PRODUCTS Use JWT Token to call getPortalUserType from LoginActions to determine which accounts user has access to.
+          // Returns an object with 'isTeacher', 'isPrincipal', or 'isSuperintendent' as keys and true or false as values.
+          // TODO: PRODUCTS If user has access to multiple accounts, set the state so that we navigate to the Admin Options
+          if (true) {
+            this.setState({ selectingAccountView: true, loginLoading: false });
+          }
+          // If only teacher is true call big query
+          else {
+            this._handleBigQuery(res2.token);
+          } 
         }
         else {
           // set the loading state to false as the login attempt failed and the user needs to be able to retry the login
@@ -145,6 +139,27 @@ class LoginContainer extends React.PureComponent {
         alertMessage: 'Please use your username when attempting to login, instead of your email address, and try again.',
       });
     }
+  }
+
+  _handleBigQuery = (token) => {
+    this.props.fetchBigQuery(token).then(res => {
+      // Handles Error With Big Query
+      if (res !== true && !(res && !('errors' in res))) {
+        this.setState({
+          loginLoading: false,
+          alertVisible: true,
+          alertTitle: 'Issue With Login',
+          alertMessage: res.errors[0].message !== undefined && res.errors[0].message.length > 0 ? res.errors[0].message : 'We had trouble logging in and retreiving your account information. Please contact support at hello@rapunzl.org so we can help resolve the issue.',
+        })
+      }
+      // Handles Successful Login And Fetching Of The Big Query
+      else {
+        this.setState({
+          success: true,
+          alertVisible: false,
+        });
+      }
+    });
   }
 
   _toggleRecoverAccount = () => {
@@ -170,6 +185,10 @@ class LoginContainer extends React.PureComponent {
         <RecoverAccountContainer
           dismiss={this._toggleRecoverAccount}
         />
+      );
+    } else if (this.state.selectingAccountView === true) {
+      return (
+        <SelectAccountView />
       );
     } else {
       // Renders Container For Login User

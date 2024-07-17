@@ -14,6 +14,10 @@ class YourPlan extends Component {
     }
   }
 
+  // TODO: PRODUCTS 
+  // Update Pricing placeholder to show current product tier 
+  // and features with 3 columns based on productFeatures object
+  
   render() {
     if (this.props.visible) {
       return (

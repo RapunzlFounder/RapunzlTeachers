@@ -7,7 +7,7 @@ import CourseBuilderDialog from '../MyCourses/CourseBuilderDialog';
 import PrebuiltCourses from '../../../constants/PrebuiltCourses';
 import '../../../styles/Home/HomeScreen.css';
 
-class TrendingCourses extends Component {
+class PlugAndPlayCourses extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,6 +32,7 @@ class TrendingCourses extends Component {
   // Pass through function that handles saving the course to the account
   saveCourse = () => {
     this.setState({ loading: true });
+    // TODO: PRODUCTS - Check that the user is allowed to use this feature createCourse
     this.props.createTeacherCourse(this.props.jwtToken, PrebuiltCourses[this.state.selectedCourse].title, false, PrebuiltCourses[this.state.selectedCourse].moduleIDList).then((res) => {
       // Handles If There Was An Error When Trying To Save Teacher Course
       if (!(res && !('errors' in res))) {
@@ -76,7 +77,7 @@ class TrendingCourses extends Component {
         <div className='classroom-header-flex'>
           <Bolt fontSize="small" />
           <div className='classroom-header'>
-            Trending Courses
+            Plug & Play Courses
           </div>
         </div>
         {PrebuiltCourses.map((item) => {
@@ -116,4 +117,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TrendingCourses);
+export default connect(mapStateToProps, mapDispatchToProps)(PlugAndPlayCourses);

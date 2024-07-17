@@ -605,6 +605,8 @@ class ViewCourseTile extends Component {
           ) : (
             <div className='assigned-class-container'>
               {assignedArray[1].map((classItem) => {
+                // TODO: PRODUCTS 1: Check if user is allowed to viewClassrooms on click
+                // TODO: PRODUCTS 2: Create opportunity to remove class from a course. removeClassroomCourse Discuss with Chris what happens to data/access/etc.
                 return (
                   <div key={classItem.id} onClick={() => this.props.viewAssignedClass(classItem.classId)} className='assigned-class-item'>
                     <div className='assigned-class-left'>

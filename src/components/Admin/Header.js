@@ -4,6 +4,7 @@ import Logo from '../../assets/images/Admin/Logo.png';
 import '../../styles/Admin/Header.css';
 import HeaderMenu from './HeaderMenu';
 import ToggleExpandButton from './ToggleExpandButton';
+import ExpiringProductHeader from './ExpiringProductHeader';
 
 class Header extends React.PureComponent {
   constructor(props) {
@@ -39,10 +40,15 @@ class Header extends React.PureComponent {
     this.setState({ searchDrawerVisible: true });
   }
   
+  // TODO: PRODUCTS - Check Current Product expiresAt in currentProduct and run a time check
+  // to determine if the product is 90 days from expiration, 30 days from expiration, 14 days, 7 days
+  // and color should increase in severity
   render() {
     if (!this.props.pdfVisible) {
       return (
-        <div className='header-container'>
+        <div>
+          <ExpiringProductHeader />
+          <div className='header-container'>
             <div className='header-flex'>
               <div className='company-logo-container'>
                 <img alt="Rapunzl Company Logo" src={Logo} className="company-logo" />
@@ -53,6 +59,7 @@ class Header extends React.PureComponent {
               </div>
             </div>
           </div>
+        </div>
       );
     } else {
       return (

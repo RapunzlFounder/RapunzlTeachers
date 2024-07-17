@@ -46,6 +46,8 @@ class YourCourses extends Component {
     this.props.selectCourse(course.id);
   }
 
+  // TODO: PRODUCTS - Add Ability To Archive/Delete Courses & Check if products allow removeCourse
+
   render() {
     if (this.props.selectedCourse === false) {
       return (  

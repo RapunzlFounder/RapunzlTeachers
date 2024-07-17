@@ -100,6 +100,7 @@ class YourClassroomTile extends Component {
   // Handles GrapqhQL Dispatch To Remove Students From User Classroom
   confirmRemoveStudents(classInfo) {
     // Uses The Array Of Student IDs to Remove All Students From The Classroom By Providing Class ID
+    // TODO: PRODUCTS - Check that the user is allowed to use this feature
     this.props.removeStudents(this.props.jwtToken, classInfo.id, this.state.removingArray).then((res) => {
       // Handles If There Is An Error With The Remove Students Dispatch
       if (!(res && !('errors' in res))) {
@@ -127,6 +128,7 @@ class YourClassroomTile extends Component {
   // Handles toggling portfolio visibility when user selects a student's portfolio to view
   togglePortfolio = (user) => {
     // If Portfolio Is Not Visible, We Set To Visible And Update SelectedPortfolioID In State
+    // TODO: PRODUCTS - Check that user is allowed to access this feature viewStudentPortfolios
     if (!this.state.viewPortfolio) {
       this.setState({ viewPortfolio: true, selectedUser: user });
     }
@@ -311,6 +313,7 @@ class YourClassroomTile extends Component {
     })
   }
 
+  // TODO: PRODUCTS - Check that the user is allowed to use this feature - RemoveClassroom
   setClassroomsStatus(status, array) {
     this.setState({ loading: true });
     this.props.changeClassroomActiveStatus(this.props.jwtToken, array, status).then((res) => {

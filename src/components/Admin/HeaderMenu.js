@@ -44,6 +44,8 @@ class HeaderMenu extends Component {
     this.setState({ anchor: null, open: false });
   }
 
+  // TODO: PRODUCTS - Update These Options To Reflect Admin Options In Left Menu
+
   render() {
     // Handles Navigation After User Decides To Logout
     if (this.state.navigateToLogin) {
@@ -79,12 +81,14 @@ class HeaderMenu extends Component {
                 Dashboard
               </div>
             </div>
+            {/* TODO: PRODUCTS - Check if user is allowed to view classroom feature viewCourses */}
             <div onClick={() => this.props.setMenuTab(2)} className="menu-item-flex">
               <LibraryBooks fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
                 My Courses
               </div>
             </div>
+            {/* TODO: PRODUCTS - Check if user is allowed to view classroom feature viewClassrooms */}
             <div onClick={() => this.props.setMenuTab(3)} className="menu-item-flex">
               <Class fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">

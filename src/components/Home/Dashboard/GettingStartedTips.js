@@ -18,6 +18,9 @@ import '../../../styles/Home/Dashboard.css';
 import { getAllTeacherClassrooms } from '../../../selectors/classroomSelectors';
 import { getAllTeacherCourses } from '../../../selectors/coursemoduleSelectors';
 
+// TODO: PRODUCTS Create Versions of the graphics that have locks and then check product features
+// in userDataReducer if possible for each
+
 class GettingStartedTips extends Component {
   // eslint-disable-next-line
   constructor(props) {
@@ -84,6 +87,7 @@ class GettingStartedTips extends Component {
   // Function To Handle Clicking The Second Getting Started Tip - Only Active If Progress Matches
   handleAddStudents() {
     if (this.getProgress() === 2) {
+      // TODO: PRODUCTS - Check if products allow viewClassrooms
       this.props.setMenuTab(3);
     }
   }

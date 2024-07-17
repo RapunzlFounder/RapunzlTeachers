@@ -53,6 +53,7 @@ class AssignCourseDialog extends React.PureComponent {
 
   // Handles Assigning The Selected Course With The Selected Classroom - Button Appears Unresponsive If User Has Not Selected Course To Assign
   _handleAssignCourse() {
+    // TODO: PRODUCTS - Check that the user is allowed to use this feature createClassroomCourse
     if (this.state.selectedClassroom) {
       this.setState({ loading: true });
       this.props.assignCourse(this.props.jwtToken, this.state.selectedClassroom, this.props.course.id).then((res) => {
