@@ -1,0 +1,19 @@
+{
+    "_comment": "This is the English language translation file for the 'LeftHomeMenu' component on the HomeScreen.js screen or route only.",
+    "LogoutTitle": "Are you sure?",
+    "LogoutMessage": "You will need to login again in order to view information about your classroom, courses, and grades that we have collected.",
+    "Students": "Students",
+    "Class": "Class",
+    "Dashboard": "Dashboard",
+    "MyCourses": "My Courses",
+    "MyClassroom": "My Classroom",
+    "MySchools": "My Schools",
+    "ManageDistrict": "Manage District",
+    "Resources": "Resources",
+    "Gradebook": "Gradebook",
+    "BillingPlan": "Current Billing Plan",
+    "Settings": "Settings",
+    "FAQ": "FAQ",
+    "Logout": "Logout",
+    "Nevermind": "Nevermind"
+}

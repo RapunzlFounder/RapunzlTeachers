@@ -13,7 +13,13 @@ export const LOGOUT_USER_SETTINGS = 'LOGOUT_USER_SETTINGS';
 export const UPDATE_APP_VISIBLE = 'UPDATE_APP_VISIBLE';
 export const UPDATE_WEBSOCKET_CONNECTED = 'UPDATE_WEBSOCKET_CONNECTED';
 export const UPDATE_USE_ADMIN_GUI = 'UPDATE_USE_ADMIN_GUI';
+export const SET_LANGUAGE = 'SET_LANGUAGE';
 
+// this updates the language property of the gamesettings state.
+export const setLanguage = (language) => ({
+    type: SET_LANGUAGE,
+    payload: language,
+});
 // this updates Whether or not the regular Teacher Gui or the Administrator (Principal or Superintendent) Gui is being used
 export const updateUseAdminGui = (useAdminGUI) => ({
     type: UPDATE_USE_ADMIN_GUI,

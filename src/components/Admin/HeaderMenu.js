@@ -13,6 +13,7 @@ import MenuBook from '@mui/icons-material/MenuBook';
 import Settings from '@mui/icons-material/Settings';
 import QuizIcon from '@mui/icons-material/Quiz';
 import Logout from '@mui/icons-material/Logout';
+import { withTranslation } from 'react-i18next';
 
 class HeaderMenu extends Component {
   constructor(props) {
@@ -25,6 +26,11 @@ class HeaderMenu extends Component {
     }
   }
 
+ componentDidMount() {
+   // Ensures that the i18n languge translation resources are loaded
+   const { i18n } = this.props;
+   i18n.loadNamespaces('HeaderMenu');
+ }
   handleMenuButtonClick = (e) => {
     if (this.state.open) {
       this.setState({ anchor: null, open: false });
@@ -47,6 +53,8 @@ class HeaderMenu extends Component {
   // TODO: PRODUCTS - Update These Options To Reflect Admin Options In Left Menu
 
   render() {
+    // Translation Function
+    const { t } = this.props;
     // Handles Navigation After User Decides To Logout
     if (this.state.navigateToLogin) {
       return (
@@ -78,45 +86,45 @@ class HeaderMenu extends Component {
             <div onClick={() => this.props.setMenuTab(1)} className="menu-item-flex">
               <House fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
-                Dashboard
+               {t('HeaderMenu:Dashboard')}
               </div>
             </div>
             {/* TODO: PRODUCTS - Check if user is allowed to view classroom feature viewCourses */}
             <div onClick={() => this.props.setMenuTab(2)} className="menu-item-flex">
               <LibraryBooks fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
-                My Courses
+                {t('HeaderMenu:MyCourses')}
               </div>
             </div>
             {/* TODO: PRODUCTS - Check if user is allowed to view classroom feature viewClassrooms */}
             <div onClick={() => this.props.setMenuTab(3)} className="menu-item-flex">
               <Class fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
-                My Classroom
+                {t('HeaderMenu:MyClassroom')}
               </div>
             </div>
             <div onClick={() => this.props.setMenuTab(4)} className="menu-item-flex">
               <MenuBook fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
-                Resources
+                {t('HeaderMenu:Resources')}
               </div>
             </div>
             <div onClick={() => this.props.setMenuTab(6)} className="menu-item-flex">
               <Settings fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
-                Settings
+                {t('HeaderMenu:Settings')}
               </div>
             </div>
             <div onClick={() => this.props.setMenuTab(9)} className="menu-item-flex">
               <QuizIcon fontSize="small" style={{ fill: '#cefff4 '}} />
               <div className="menu-item-text">
-                FAQ
+                {t('HeaderMenu:FAQ')}
               </div>
             </div>
             <div onClick={() => this.handleLogout()} className="menu-item-flex">
               <Logout fontSize="small" style={{ fill: this.props.colors.perfDown }} />
               <div className="menu-item-text" style={{ color: this.props.colors.perfDown }}>
-                Logout
+                {t('HeaderMenu:Logout')}
               </div>
             </div>
           </Menu>
@@ -146,4 +154,4 @@ const mapDispatchToProps = (dispatch) => {
    };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderMenu);
+export default withTranslation('HeaderMenu')(connect(mapStateToProps, mapDispatchToProps)(HeaderMenu));

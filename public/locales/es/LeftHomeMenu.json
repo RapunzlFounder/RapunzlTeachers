@@ -1,0 +1,19 @@
+{
+    "_comment": "This is the Spanish language translation file for the 'LeftHomeMenu' component on the HomeScreen.js screen or route only.",
+    "LogoutTitle": "Estas segura?",
+    "LogoutMessage": "Necesitará iniciar sesión nuevamente para poder ver la información sobre su aula, cursos y calificaciones que hemos recopilado.",
+    "Students": "Estudiantes",
+    "Class": "Clasista",
+    "Dashboard": "Panel de control",
+    "MyCourses": "Mis Cursos",
+    "MyClassroom": "Mi Aula",
+    "MySchools": "Mis Escuelas",
+    "ManageDistrict": "Administrar Distrito",
+    "Resources": "Recursos",
+    "Gradebook": "Libro de Calificaciones",
+    "BillingPlan": "Plan de Facturación Actual",
+    "Settings": "Configuraciones",
+    "FAQ": "Preguntas Frecuentes",
+    "Logout": "Cerrar Sesión",
+    "Nevermind": "No importa"
+}

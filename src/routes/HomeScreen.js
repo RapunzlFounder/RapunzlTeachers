@@ -14,6 +14,7 @@ import {
   toggleAddStudents,
   toggleCourseBuilder,
 } from '../ActionTypes/dashboardActions';
+import { setLanguage } from '../ActionTypes/gameSettingsActions';  
 import { objectToArray } from '../helper_functions/utilities';
 import Container from '@mui/material/Container';
 import Header from '../components/Admin/Header';
@@ -34,6 +35,7 @@ import '../styles/Home/HomeScreen.css';
 import YourGrades from '../components/Home/Gradebook/YourGrades';
 import DistrictManager from '../components/PrincipalSuper/DistrictManager';
 import SchoolList from '../components/PrincipalSuper/SchoolList';
+import { withTranslation } from 'react-i18next';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -56,6 +58,10 @@ class HomeScreen extends Component {
   
 
   async componentDidMount() {
+    // Ensures that the i18n languge translation resources are loaded
+    const { i18n } = this.props;
+    i18n.loadNamespaces('HomeScreen');
+
     // eslint-disable-next-line
     if (!this.props.didWalk) {
       this.setState({ welcomeBackVisible: true });
@@ -94,6 +100,11 @@ class HomeScreen extends Component {
       this._notificationSubscription.remove();
     }
   }
+
+  // Handles an event to change the Language of the Teacher Portal
+  _handleLanguageChange = (event) => {
+    this.props.setLanguage(event.target.value);
+  };
 
   getUsedLocalStorageSpace(){
     var allStrings = '';
@@ -258,6 +269,8 @@ class HomeScreen extends Component {
   }
 
   render() {
+    // Translation Function
+    const { t } = this.props;
     // eslint-disable-next-line
     if (this.props.jwtToken == null || this.props.jwtToken == undefined || this.state.handleLogout) {
       return(
@@ -280,10 +293,10 @@ class HomeScreen extends Component {
             <div className='not-available-container'>
               <img alt='' className='not-available-image' src={TooNarrowIcon} />
               <div className='not-available-title'>
-                Your Browser Is Too Narrow
+                {t('HomeScreen:not-available-title')}
               </div>
               <div className='not-available-text'>
-                At this point in time, Rapunzl's teacher portal is designed for PC's, Laptops, and Tablets. We do not provide a mobile version of our teacher portal.
+                {t('HomeScreen:not-available-text')}
               </div>
             </div>
             {!this.props.expandedLibrary && ( 
@@ -420,7 +433,9 @@ const mapDispatchToProps = (dispatch) => {
       toggleAddStudents: () => dispatch(toggleAddStudents()),
       toggleCourseBuilder: () => dispatch(toggleCourseBuilder()),
       fetchDemoContent: (token) => dispatch(fetchDemoContent(token)),
+      // this sets the language for the Teacher Portal - English is the default and is 'es-US', Spanish is 'es'
+      setLanguage: (language) => dispatch(setLanguage(language)),
    };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+export default withTranslation('HomeScreen')(connect(mapStateToProps, mapDispatchToProps)(HomeScreen));

@@ -16,6 +16,7 @@ import Logout from '@mui/icons-material/Logout';
 import ProfileIcon from '../../../assets/images/Admin/Profile.png';
 import '../../../styles/Home/HomeScreen.css';
 import Alert from '../../Admin/Alert';
+import { withTranslation } from 'react-i18next';
 
 class LeftHomeMenu extends Component {
   constructor(props) {
@@ -26,6 +27,11 @@ class LeftHomeMenu extends Component {
     }
   }
 
+  componentDidMount() {
+    // Ensures that the i18n languge translation resources are loaded
+    const { i18n } = this.props;
+    i18n.loadNamespaces('LeftHomeMenu');
+  }
   // Handles Logout & Navigation When Selected In Menu By Updating State & Calling Navigate Component
   handleLogout = () => {
     // Handles Logging Out User & Routing To AuthLoadingScreen
@@ -52,6 +58,8 @@ class LeftHomeMenu extends Component {
   }
 
   render() {
+    // Translation Function
+    const { t } = this.props;
     // Handles Navigation After User Decides To Logout
     if (this.state.navigateToLogin) {
       return (
@@ -63,11 +71,11 @@ class LeftHomeMenu extends Component {
           <Alert
             visible={this.state.alertVisible}
             dismiss={this.toggleAlert}
-            title={'Are You Sure?'}
-            message={'You will need to login again in order to view information about your classroom, courses, and grades that we have collected.'}
+            title={t('LeftHomeMenu:LogoutTitle')}
+            message={t('LeftHomeMenu:LogoutMessage')}
             option={this.handleLogout}
-            optionText={'Logout'}
-            option2Text={'Nevermind'}
+            optionText={t('LeftHomeMenu:Logout')}
+            option2Text={t('LeftHomeMenu:Nevermind')}
           />
           <img alt='' className='profile-picture' src={ProfileIcon} />
           <div className='profile-name'>
@@ -77,7 +85,7 @@ class LeftHomeMenu extends Component {
             @{this.props.username}
           </div>
           <div title="Get In Touch With Us If You Have Issues" onClick={() => this.props.setMenuTab(7)} className='profile-contact-button'>
-            Get Support
+            {t('LeftHomeMenu:GetSupport')}
           </div>
           <div className='profile-flex'>
             <div className='profile-flex-item'>
@@ -85,7 +93,7 @@ class LeftHomeMenu extends Component {
                 {this.handleNumberOfStudents()}
               </div>
               <div className='profile-flex-subtext'>
-                Students
+                {t('LeftHomeMenu:Students')}
               </div>
             </div>
             <div className='profile-flex-item'>
@@ -93,7 +101,7 @@ class LeftHomeMenu extends Component {
                 {this.props.allTeacherClassrooms.length}
               </div>
               <div className='profile-flex-subtext'>
-                Class{this.props.allTeacherClassrooms.length === 1 ? '' : 'es'}
+                {t('LeftHomeMenu:Class')}{this.props.allTeacherClassrooms.length === 1 ? '' : 'es'}
               </div>
             </div>
           </div>
@@ -103,7 +111,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <House fontSize="small" />
                   <div className='menu-text'>
-                    Dashboard
+                    {t('LeftHomeMenu:Dashboard')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -116,7 +124,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <LibraryBooks fontSize="small" />
                   <div className='menu-text'>
-                    My Courses
+                    {t('LeftHomeMenu:MyCourses')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -128,7 +136,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <Class fontSize="small" />
                   <div className='menu-text'>
-                    My Classroom
+                    {t('LeftHomeMenu:MyClassroom')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -140,7 +148,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <Class fontSize="small" />
                   <div className='menu-text'>
-                    My Schools
+                    {t('LeftHomeMenu:MySchools')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -152,7 +160,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <Class fontSize="small" />
                   <div className='menu-text'>
-                    Manage District
+                    {t('LeftHomeMenu:MyDistrict')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -163,7 +171,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <MenuBook fontSize="small" />
                   <div className='menu-text'>
-                    Resources
+                    {t('LeftHomeMenu:Resources')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -175,7 +183,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <AutoGraphIcon fontSize="small" />
                   <div className='menu-text'>
-                    Gradebook
+                    {t('LeftHomeMenu:Gradebook')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -187,7 +195,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <Settings fontSize="small" />
                   <div className='menu-text'>
-                    Current Billing Plan
+                    {t('LeftHomeMenu:BillingPlan')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -198,7 +206,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <Settings fontSize="small" />
                   <div className='menu-text'>
-                    Settings
+                    {t('LeftHomeMenu:Settings')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -209,7 +217,7 @@ class LeftHomeMenu extends Component {
                 <div className='menu-left'>
                   <QuizIcon fontSize="small" />
                   <div className='menu-text'>
-                    FAQ
+                    {t('LeftHomeMenu:FAQ')}
                   </div>
                 </div>
                 <ArrowForward fontSize="small" />
@@ -219,7 +227,7 @@ class LeftHomeMenu extends Component {
               <div className='menu-left'>
                 <Logout fontSize="small" style={{ fill: this.props.colors.perfDown }} />
                 <div className='menu-text' style={{ color: this.props.colors.perfDown }}>
-                  Logout
+                  {t('LeftHomeMenu:Logout')}
                 </div>
               </div>
             </div>
@@ -254,4 +262,4 @@ const mapDispatchToProps = (dispatch) => {
    };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LeftHomeMenu);
+export default withTranslation('LeftHomeMenu')(connect(mapStateToProps, mapDispatchToProps)(LeftHomeMenu));

@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import RecoverAccountContainer from './RecoverAccountContainer';
 import SelectAccountView from './SelectAccountView';
 import { CircularProgress } from '@mui/material';
+import { withTranslation } from 'react-i18next';
 
 class LoginContainer extends React.PureComponent {
   constructor(props) {
@@ -34,7 +35,14 @@ class LoginContainer extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    // Ensures that the i18n languge translation resources are loaded
+    const { i18n } = this.props;
+    i18n.loadNamespaces('LoginContainer');
+  }
+
   componentDidUpdate(prevProps) {
+
     // eslint-disable-next-line
     if ((prevProps.graphqlError == null || prevProps.error == null) && prevProps.errorTitle == null &&
       (this.props.graphqlError !== null || this.props.error !== null) && this.props.errorTitle !== null){
@@ -176,6 +184,8 @@ class LoginContainer extends React.PureComponent {
   }
 
   render() {
+    // Translation Function
+    const { t } = this.props;
     if (this.state.success && this.props.bigQueryLoaded) {
       return (
         <Navigate to="/dashboard" replace={true}/>
@@ -205,8 +215,8 @@ class LoginContainer extends React.PureComponent {
               <FormControl style={{ width: '100%' }} variant="standard">
                 <TextField
                   id="username"
-                  label="username"
-                  placeholder="username"
+                  label={t('LoginContainer:username')}
+                  placeholder={t('LoginContainer:username')}
                   type="text"
                   variant="filled"
                   fullWidth
@@ -217,8 +227,8 @@ class LoginContainer extends React.PureComponent {
                 />
                 <TextField
                   id="password"
-                  label="password"
-                  placeholder="password"
+                  label={t('LoginContainer:password')}
+                  placeholder={t('LoginContainer:password')}
                   type="password"
                   variant="filled"
                   fullWidth
@@ -228,10 +238,10 @@ class LoginContainer extends React.PureComponent {
                   sx={{ marginBottom: '35px' }}
                 />
                   <button title="Login To Access Your Account" className='main-button login-button' onClick={(e) => {e.preventDefault();this._handleLogin();}}>
-                    Login
+                    {t('LoginContainer:Login')}
                   </button>
                   <button title="Get Help Logging Into Your Account" className='main-button help-button' onClick={() => this._toggleRecoverAccount()}>
-                    Need Help?
+                    {t('LoginContainer:Help')}
                   </button>
               </FormControl>
             )}
@@ -281,4 +291,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
+export default withTranslation('LoginContainer')(connect(mapStateToProps, mapDispatchToProps)(LoginContainer));

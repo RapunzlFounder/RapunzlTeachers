@@ -16,7 +16,8 @@ import {
   LOGOUT_USER_SETTINGS,
   UPDATE_APP_VISIBLE,
   UPDATE_WEBSOCKET_CONNECTED,
-  UPDATE_USE_ADMIN_GUI
+  UPDATE_USE_ADMIN_GUI,
+  SET_LANGUAGE
 } from '../ActionTypes/gameSettingsActions';
 
 const initialState = {
@@ -38,10 +39,17 @@ const initialState = {
   appVisible: true,
   websocketConnected: false,
   useAdminGUI: false,
+  language: localStorage.getItem('i18nextLng') || 'en-US'
 };
 
 const gameSettingsReducer = (state = initialState, action) => {
   switch(action.type) {
+    case SET_LANGUAGE:
+      localStorage.setItem('i18nextLng', action.payload); // Persist the language in local storage
+      return {
+        ...state,
+        language: action.payload,
+      }
     case UPDATE_USE_ADMIN_GUI:
       // Update the state to indicate if the Admin Gui is to be used or not
       return {
