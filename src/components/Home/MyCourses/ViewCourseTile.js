@@ -71,8 +71,8 @@ class ViewCourseTile extends Component {
     this.props.updateDashboard('pdfVisible', true);
     this.setState({
       PDFVisible: true,
-      pdfOrientation: 'portrait',
-      googleURL: currentCourse.courseModules[this.state.currentSection - 1].googleURL,
+      pdfOrientation: 'landscape',
+      googleURL: currentCourse.courseModules[this.state.currentSection - 1].teacherGuides[0].googleURL,
       pdfURL: currentCourse.courseModules[this.state.currentSection - 1].teacherGuides[0].pdfUrl,
       pdfName: 'Teacher Guide'
     })
