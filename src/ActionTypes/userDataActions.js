@@ -207,14 +207,15 @@ export function fetchBigQuery(token) {
               // convert the courses array of objects into an objects of objects
               const coursesObject = arrayToObjectID(mainReturnedObj.teacherUserDetails.courses);
               mainReturnedObj.teacherUserDetails.courses = coursesObject;
-              for (var property1 in mainReturnedObj.teacherUserDetails.courses){
-                let courseModules = {};
+              // the following is no longer used as the teacher course modules are now stored as an array of objects to preserve the order of the objects
+              //for (var property1 in mainReturnedObj.teacherUserDetails.courses){
+              //  let courseModules = {};
                 // convert the course modules array of objects into an objects of objects
-                if (mainReturnedObj.teacherUserDetails.courses[property1].courseModules.length > 0){
-                  courseModules = arrayToObjectID(mainReturnedObj.teacherUserDetails.courses[property1].courseModules);
-                }
-                mainReturnedObj.teacherUserDetails.courses[property1].courseModules = courseModules;
-              }
+              //  if (mainReturnedObj.teacherUserDetails.courses[property1].courseModules.length > 0){
+              //    courseModules = arrayToObjectID(mainReturnedObj.teacherUserDetails.courses[property1].courseModules);
+              //  }
+              //  mainReturnedObj.teacherUserDetails.courses[property1].courseModules = courseModules;
+              //}
               dispatch(updateAllCourses(mainReturnedObj.teacherUserDetails.courses));
               // convert the available public modules array of objects into an objects of objects
               const publicModules = arrayToObjectID(mainReturnedObj.teacherUserDetails.availablePublicModules);
@@ -471,14 +472,14 @@ export function fetchAdministratorBigQuery(token) {
               // convert the teacher courses array of objects into an objects of objects
               const coursesObject = arrayToObjectID(mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses);
               mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses = coursesObject;
-              for (var property1 in mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses){
-                let courseModules = {};
+              //for (var property1 in mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses){
+              //  let courseModules = {};
                 // convert the course modules array of objects into an objects of objects
-                if (mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses[property1].courseModules.length > 0){
-                  courseModules = arrayToObjectID(mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses[property1].courseModules);
-                }
-                mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses[property1].courseModules = courseModules;
-              }
+              //  if (mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses[property1].courseModules.length > 0){
+              //    courseModules = arrayToObjectID(mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses[property1].courseModules);
+              //  }
+              //  mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.courses[property1].courseModules = courseModules;
+              //}
               // convert the teacher classrooms array of classrooms into an object of objects
               const classroomsObject = arrayToObjectID(mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.classrooms);
               mainReturnedObj.schoolTeacherSummaries[property5].teacherSummaries.classrooms = classroomsObject; 

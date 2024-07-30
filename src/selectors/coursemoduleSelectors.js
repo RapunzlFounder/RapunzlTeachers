@@ -24,7 +24,7 @@ export const getAllTeacherCourses = createSelector(
         let courseArrayCopy = JSON.parse(JSON.stringify(teacherCourseArray));
         let returnArray = [];
         for (var i in courseArrayCopy){
-            courseArrayCopy[i].courseModules = objectToArray(courseArrayCopy[i].courseModules);
+            //courseArrayCopy[i].courseModules = objectToArray(courseArrayCopy[i].courseModules);
             const newCourseObject = {id: courseArrayCopy[i].id, courseName: courseArrayCopy[i].courseName, numberModules: courseArrayCopy[i].courseModules.length};
             returnArray.push(newCourseObject);
         }
@@ -46,7 +46,7 @@ export const getAllDemoCourses = createSelector(
         let courseArrayCopy = JSON.parse(JSON.stringify(demoCourseArray));
         let returnArray = [];
         for (var i in courseArrayCopy){
-            courseArrayCopy[i].courseModules = objectToArray(courseArrayCopy[i].courseModules);
+            //courseArrayCopy[i].courseModules = objectToArray(courseArrayCopy[i].courseModules);
             const newCourseObject = {id: courseArrayCopy[i].id, courseName: courseArrayCopy[i].courseName, numberModules: courseArrayCopy[i].courseModules.length};
             returnArray.push(newCourseObject);
         }
@@ -64,7 +64,7 @@ export const getAllDemoCourses = createSelector(
 export const getTeacherCourse = createSelector(
     [teacherCourseSelector, rapunzlPublicModulesObjectSelector, teacherCreatedModulesObjectSelector],
     (teacherCourse, rapunzlModules, teacherModules) => {
-      if (teacherCourse && teacherCourse != null) {
+      if (teacherCourse && teacherCourse != null && Object.keys(teacherCourse).length !== 0) {
         let rapunzlModulesCopy = JSON.parse(JSON.stringify(rapunzlModules));
         let teacherModulesCopy = JSON.parse(JSON.stringify(teacherModules));
           // create a new object for the teacher course that will be returned
@@ -76,14 +76,14 @@ export const getTeacherCourse = createSelector(
             isPrivate: teacherCourse.isPrivate,
             courseModules: [],
           };
-          for (var id in teacherCourse.courseModules){
+          for (const courseModule of teacherCourse.courseModules){
             // first check if the module id is a rapunzl public module
-            if (id in rapunzlModulesCopy){
-              let newModuleObject = populateTeacherModule(rapunzlModulesCopy[id]);
+            if (courseModule.id in rapunzlModulesCopy){
+              let newModuleObject = populateTeacherModule(rapunzlModulesCopy[courseModule.id]);
               newCourseObject.courseModules.push(newModuleObject);
             }
-            else if (id in teacherModulesCopy){
-              let newModuleObject = populateTeacherModule(teacherModulesCopy[id]);
+            else if (courseModule.id in teacherModulesCopy){
+              let newModuleObject = populateTeacherModule(teacherModulesCopy[courseModule.id]);
               newCourseObject.courseModules.push(newModuleObject);
             }
           }
@@ -99,7 +99,7 @@ export const getTeacherCourse = createSelector(
 export const getDemoCourse = createSelector(
   [demoCourseSelector, rapunzlPublicModulesObjectSelector, teacherCreatedModulesObjectSelector],
   (demoCourse, rapunzlModules, teacherModules) => {
-    if (demoCourse && demoCourse != null) {
+    if (demoCourse && demoCourse != null && Object.keys(demoCourse).length !== 0) {
       let rapunzlModulesCopy = JSON.parse(JSON.stringify(rapunzlModules));
       let teacherModulesCopy = JSON.parse(JSON.stringify(teacherModules));
         // create a new object for the demo course that will be returned
@@ -111,14 +111,14 @@ export const getDemoCourse = createSelector(
           isPrivate: demoCourse.isPrivate,
           courseModules: []
         };
-        for (var id in demoCourse.courseModules){
+        for (const courseModule of demoCourse.courseModules){
           // first check if the module id is a rapunzl public module
-          if (id in rapunzlModulesCopy){
-            let newModuleObject = populateTeacherModule(rapunzlModulesCopy[id]);
+          if (courseModule.id in rapunzlModulesCopy){
+            let newModuleObject = populateTeacherModule(rapunzlModulesCopy[courseModule.id]);
             newCourseObject.courseModules.push(newModuleObject);
           }
-          else if (id in teacherModulesCopy){
-            let newModuleObject = populateTeacherModule(teacherModulesCopy[id]);
+          else if (courseModule.id in teacherModulesCopy){
+            let newModuleObject = populateTeacherModule(teacherModulesCopy[courseModule.id]);
             newCourseObject.courseModules.push(newModuleObject);
           }
         }

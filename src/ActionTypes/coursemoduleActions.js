@@ -250,14 +250,12 @@ export function createTeacherCourse(token, courseName, isPrivate, modulesList) {
           return {errors: json.data.errors};
         }
         else{
-          // Transform arrays in the Teacher course object to objects that further contain objects.
-          // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
           var mainReturnedObj = json.data.data.createTeachercourse.newCourse;
-          let courseModules = {};
-          if (mainReturnedObj.courseModules.length > 0){
-            courseModules = arrayToObjectID(mainReturnedObj.courseModules);
-          }
-          mainReturnedObj.courseModules = courseModules;
+          //let courseModules = {};
+          //if (mainReturnedObj.courseModules.length > 0){
+          //  courseModules = arrayToObjectID(mainReturnedObj.courseModules);
+          //}
+          //mainReturnedObj.courseModules = courseModules;
           dispatch(createCourseSuccess(mainReturnedObj.id, mainReturnedObj));
           return json.data.data;
         }
@@ -292,14 +290,12 @@ export function updateTeacherCourse(token, courseID, courseName, isPrivate, cour
           return {errors: json.data.errors};
         }
         else{
-          // Transform arrays in the Teacher course object to objects that further contain objects.
-          // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
           var mainReturnedObj = json.data.data.updateTeachercourse.updatedCourse;
-          let courseModules = {};
-          if (mainReturnedObj.courseModules.length > 0){
-            courseModules = arrayToObjectID(mainReturnedObj.courseModules);
-          }
-          mainReturnedObj.courseModules = courseModules;
+          //let courseModules = {};
+          //if (mainReturnedObj.courseModules.length > 0){
+          //  courseModules = arrayToObjectID(mainReturnedObj.courseModules);
+          //}
+          //mainReturnedObj.courseModules = courseModules;
           dispatch(updateCourseSuccess(mainReturnedObj.id, mainReturnedObj));
           return json.data.data;
         }
@@ -331,14 +327,12 @@ export function addModuletoCourse(token, courseId, modulesList) {
           return {errors: json.data.errors};
         }
         else{
-          // Transform arrays in the Teacher course object to objects that further contain objects.
-          // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
           var mainReturnedObj = json.data.data.addCoursemodules.updatedCourse;
-          let courseModules = {};
-          if (mainReturnedObj.courseModules.length > 0){
-            courseModules = arrayToObjectID(mainReturnedObj.courseModules);
-          }
-          mainReturnedObj.courseModules = courseModules;
+          //let courseModules = {};
+          //if (mainReturnedObj.courseModules.length > 0){
+          //  courseModules = arrayToObjectID(mainReturnedObj.courseModules);
+          //}
+          //mainReturnedObj.courseModules = courseModules;
           dispatch(addCourseModulesSuccess(mainReturnedObj.id, mainReturnedObj));
           return json.data.data;
         }
@@ -370,11 +364,11 @@ export function removeCourseModules(token, courseId, modulesList) {
           // Transform arrays in the Teacher course object to objects that further contain objects.
           // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
           var mainReturnedObj = json.data.data.removeCoursemodules.updatedCourse;
-          let courseModules = {};
-          if (mainReturnedObj.courseModules.length > 0){
-            courseModules = arrayToObjectID(mainReturnedObj.courseModules);
-          }
-          mainReturnedObj.courseModules = courseModules;
+          //let courseModules = {};
+          //if (mainReturnedObj.courseModules.length > 0){
+          //  courseModules = arrayToObjectID(mainReturnedObj.courseModules);
+          //}
+          //mainReturnedObj.courseModules = courseModules;
           dispatch(removeCourseModulesSuccess(mainReturnedObj.id, mainReturnedObj));
           return json.data.data;
         }
