@@ -82,7 +82,7 @@ class ClassSummary extends Component {
     if (this.props.isDemo) {
       return (this.props.demoCourse.courseModules);
     } else {
-      return (this.props.teacherCourse.courseModules);
+      return (this.props.teacherCourses.courseModules);
     }
   }
 
