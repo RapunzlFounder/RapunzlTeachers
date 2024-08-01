@@ -15,7 +15,7 @@ const PrebuiltCourses = [
 		timeEstimate: '15-22 Hours',
 		description: 'Gain insights into educational and career planning, understanding the financial aspects of higher education, career choices, and long-term financial goals.',
 		numberOfModules: 6,
-		moduleIDList: [9, 12, 15, 18, 19],
+		moduleIDList: [9, 12, 15, 18, 19, 25],
 	},
 	{
 		courseID: 2,
@@ -24,7 +24,7 @@ const PrebuiltCourses = [
 		timeEstimate: '75-95 Hours',
 		description: 'Learn fundamental principles of personal finance, including saving, investing, credit management, and financial decision-making, to build a strong financial foundation.',
 		numberOfModules: 12,
-		moduleIDList: [1, 2, 3, 4, 5, 7, 8, 9, 10, 18, 23],
+		moduleIDList: [1, 23, 2, 3, 4, 5, 7, 8, 9, 10, 18, 25],
 	},
 	{
 		courseID: 3,
@@ -32,8 +32,26 @@ const PrebuiltCourses = [
 		duration: '6-8 WEEKS',
 		timeEstimate: '30-40 Hours',
 		description: 'Delve into sophisticated investment strategies, portfolio management, and risk assessment to enhance your understanding of the financial markets and maximize investment returns.',
-		numberOfModules: 12,
-		moduleIDList: [1,5,6,10,11,16,17,24],
+		numberOfModules: 9,
+		moduleIDList: [1,24,5,6,10,11,16,17, 25],
+	},
+	{
+		courseID: 4,
+		title: 'Dollars & Cents',
+		duration: '7-9 WEEKS',
+		timeEstimate: '35-45 Hours',
+		description: 'This course provides students with a foundational understanding of the core personal finance concepts that are essential for making informed financial decisions.',
+		numberOfModules: 10,
+		moduleIDList: [23, 1, 5, 2, 3, 4, 9, 15, 18, 12],
+	},
+	{
+		courseID: 5,
+		title: 'After-School Investing Club',
+		duration: '8-10 WEEKS',
+		timeEstimate: '35-45 Hours',
+		description: 'Offer students the opportunity to dive deeper into the world of investing through an after-school program that focuses on more complex investing concepts beyond graduation requirements.',
+		numberOfModules: 10,
+		moduleIDList: [1, 24, 5, 6, 16, 7, 10, 11, 17, 25]
 	}
 ];
 
