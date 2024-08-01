@@ -381,14 +381,6 @@ class CourseBuilderDialog extends React.PureComponent {
             pdfName={this.state.pdfName}
             orientation={this.state.pdfOrientation}
           />
-          {/* 
-          TODO: Figure out standards presentation
-          <StandardsPopup
-            visible={this.state.standardsVisible}
-            dismiss={this.toggleStandards}
-            type='Course'
-            data={this._getModuleStandards(modulesArray[0])}
-          /> */}
           <div className='container'>
             <div className='alert-title' style={{ fontWeight: '800' }}>
               {PrebuiltCourses[this.props.selectedCourse].title}

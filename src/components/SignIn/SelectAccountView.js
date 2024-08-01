@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { isEmailUnique, logoutUser } from '../../ActionTypes/loginActions';
-import { updateUser } from '../../ActionTypes/updateUserDataActions';
-import { FetchVerificationStatus, ResendVerification } from '../../ActionTypes/verificationActions';
+import { logoutUser } from '../../ActionTypes/loginActions';
+import { fetchBigQuery } from '../../ActionTypes/userDataActions';
 import { Navigate } from 'react-router-dom';
 import Alert from '../Admin/Alert';
 import Box from '@mui/material/Box';
@@ -121,7 +120,7 @@ class SelectAccountView extends React.PureComponent {
           <div className='verification-header'>
             We emailed you a link to verify your account. If you can't find the email, check your spam and junk folders before resending the link.
           </div>
-          <button className='verification-logout-button' title="Logout & Return To Login Screen" onClick={() => this.handleLogout()}>
+          <button className='verification-logout-button' title="Logout & Return To Login Screen" onClick={() => this._handleLogout()}>
             Logout
           </button>
           {this.state.loading && (

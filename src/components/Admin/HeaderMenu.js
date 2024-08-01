@@ -50,7 +50,7 @@ class HeaderMenu extends Component {
     this.setState({ anchor: null, open: false });
   }
 
-  // TODO: PRODUCTS - Update These Options To Reflect Admin Options In Left Menu
+  // TODO: ADMIN - Update These Options To Reflect Admin Options In Left Menu
 
   render() {
     // Translation Function

@@ -407,7 +407,7 @@ class AddStudents extends Component {
             </div>
             {/* 
             
-            TO DO
+            TODO
             This will allow teachers to find previous students and add them to their class.
             They can also use this to search students who may have already created an account and would like to use that account.
 

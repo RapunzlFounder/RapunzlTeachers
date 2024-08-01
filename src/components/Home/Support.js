@@ -234,6 +234,7 @@ class Support extends Component {
                   onChange={(event) => this.changeMessage(event.target.value)}
                   className='support-message-input'
                 />
+                {/* TODO: PRODUCTS - Add Button Linking To Schedule A Call */}
                 {!this.state.loading && (
                   <div title="Send Message To Rapunzl Support Team" onClick={() => this.contactSupport()} className='support-submit-button'>
                     Submit Message

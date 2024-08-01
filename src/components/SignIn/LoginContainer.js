@@ -31,7 +31,7 @@ class LoginContainer extends React.PureComponent {
       alertTitle: 'Invalid Login',
       alertMessage: '',
       success: false,
-      selectingAccountView: true,
+      selectingAccountView: false,
     };
   }
 
