@@ -457,24 +457,6 @@ class CourseBuilderDialog extends React.PureComponent {
                   })}
                   
                 </div>
-                <div className='confirm-section-right2'>
-                  <Pie
-                    color={'#007154'}
-                    pct={75 + parseInt(this.props.selectedCourse) * 8}
-                    inverted
-                  />
-                  <div className='confirm-section-title'>
-                    Coverage Of Core Personal Finance
-                  </div>
-                  <Pie
-                    color={'#007154'}
-                    pct={61 + parseInt(this.props.selectedCourse) * 12}
-                    inverted
-                  />
-                  <div className='confirm-section-title'>
-                    Coverage Of National Financial Literacy Standards
-                  </div>
-                </div>
               </div>
             </div>
             <div className='module-builder-flex'>
