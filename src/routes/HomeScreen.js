@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Outlet, Navigate } from "react-router-dom";
 import { connect } from 'react-redux';
-import { fetchBigQuery, fetchMiniQuery, fetchAdministratorBigQuery } from '../ActionTypes/userDataActions';
+import { fetchBigQuery, fetchMiniQuery, fetchAdministratorBigQuery, isLogoutRequired } from '../ActionTypes/userDataActions';
 import { resetNotificationErrors } from '../ActionTypes/notificationActions';
 import { getFinancialLiteracyStandards } from '../ActionTypes/coursemoduleActions';
 import { fetchDemoContent } from '../ActionTypes/demoDataActions';
+import { logoutUser } from '../ActionTypes/loginActions';
 import {
   setMenuTab,
   quickAccessAddStudents,
@@ -70,6 +71,11 @@ class HomeScreen extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // checks if the user needs to logout
+    if (this.props.logoutRequired !== prevProps.logoutRequired && this.props.logoutRequired === true){
+      this._handleLogout();
+
+    }
     // Handle Errors Related to Saving Notification Token & Update Notification Types
     // This Error Does Not Impede UI So We Just Send Message to Analytics for debugging
     // eslint-disable-next-line
@@ -92,6 +98,13 @@ class HomeScreen extends Component {
       this._notificationSubscription.remove();
     }
   }
+
+  // Handles Logout & Navigation When Selected In Menu By Updating State & Calling Navigate Component
+  _handleLogout = () => {
+    // Handles Logging Out User & Routing To AuthLoadingScreen
+    this.props.logout();
+    this.setState({ handleLogout: true});
+  };
 
   getUsedLocalStorageSpace(){
     var allStrings = '';
@@ -129,6 +142,8 @@ class HomeScreen extends Component {
 
   // update the user details if needed (Mini Query)
   _getUpdatedUserDetails = () => {
+    // check if the user needs to logout for a server upgrade etc.
+    this.props.isLogoutRequired(this.props.jwtToken);
     const localTime = new Date();
     const currentTime = moment(localTime); 
     
@@ -386,7 +401,8 @@ const mapStateToProps = (state) => {
     useAdminGUI: state.gamesettings.useAdminGUI,
     // redux state for the last time that the school teacher summaries were retrieved 
     lastRetrievedTime: state.principalSuperintendent.lastRetrievedTime,
-    
+    // indictes if the user needs to logout or not
+    logoutRequired: state.userDetails.logoutRequired,
   };
 };
 
@@ -411,6 +427,10 @@ const mapDispatchToProps = (dispatch) => {
       toggleAddStudents: () => dispatch(toggleAddStudents()),
       toggleCourseBuilder: () => dispatch(toggleCourseBuilder()),
       fetchDemoContent: (token) => dispatch(fetchDemoContent(token)),
+      // log the user out of the App by resetting the Redux store to its default values
+      logout: () => dispatch(logoutUser()),
+      // check if the user needs to logout for a server upgrade etc.
+      isLogoutRequired: (token) => dispatch(isLogoutRequired(token)),
    };
 };
 

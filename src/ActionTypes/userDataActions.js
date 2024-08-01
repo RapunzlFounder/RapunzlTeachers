@@ -6,6 +6,7 @@ import { ADMINISTRATOR_USER_DETAILS } from '../graphql/queries/AdministratorUser
 import { MINI_USER_DETAILS } from '../graphql/queries/MiniUserDetails';
 import { GET_SCHOOL_LIST } from '../graphql/queries/GetSchoolList';
 import { COMPLETE_QUIZ } from '../graphql/mutations/CompleteQuiz';
+import { IS_LOGOUT_REQUIRED } from '../graphql/queries/isLogoutRequired';
 // import the action to update all of the courses and modules
 import { updateAllCourses, updateAllPublicModules, updateMiniPublicModules, updateAllTeacherModules } from './coursemoduleActions';
 // import the action to update all of the classroom students
@@ -46,6 +47,29 @@ export const SET_NIGHT_COLORS = 'SET_NIGHT_COLORS';
 export const SET_CRYPTO_COLORS = 'SET_CRYPTO_COLORS';
 export const UPDATE_ADDRESS = 'UPDATE_ADDRESS';
 export const UPDATE_SCHOOL_TEACHER_SUMMARIES = 'UPDATE_SCHOOL_TEACHER_SUMMARIES';
+export const IS_LOGOUT_REQUIRED_BEGIN = 'IS_LOGOUT_REQUIRED_BEGIN';
+export const IS_LOGOUT_REQUIRED_SUCCESS = 'IS_LOGOUT_REQUIRED_SUCCESS';
+export const IS_LOGOUT_REQUIRED_ERROR = 'IS_LOGOUT_REQUIRED_ERROR';
+export const IS_LOGOUT_REQUIRED_FAILURE = 'IS_LOGOUT_REQUIRED_FAILURE';
+
+export const isLogoutRequiredBegin = () => ({
+  type: IS_LOGOUT_REQUIRED_BEGIN,
+});
+
+export const isLogoutRequiredSuccess = (logoutRequired) => ({
+  type: IS_LOGOUT_REQUIRED_SUCCESS,
+  payload: { logoutRequired }
+});
+
+export const isLogoutRequiredError = error => ({
+  type: IS_LOGOUT_REQUIRED_ERROR,
+  payload: { error }
+});
+
+export const isLogoutRequiredFailure = error => ({
+  type: IS_LOGOUT_REQUIRED_FAILURE,
+  payload: { error }
+});
 
 export const completeQuizBegin = () => ({
   type: COMPLETE_QUIZ_BEGIN,
@@ -648,10 +672,34 @@ export function completeQuiz(token, quizCompleted, accountBalance) {
         else
         {
           dispatch(completeQuizSuccess(quizCompleted, accountBalance));
-          return json.data.completeQuiz;
+          return json.data.data.completeQuiz;
         }
       })
       .catch(error => dispatch(completeQuizFailure(error.message)));
+  };
+}
+
+export function isLogoutRequired(token) {
+  return function(dispatch){
+    dispatch(isLogoutRequiredBegin());
+    return axios.post(GRAPHQL_URL, { query: IS_LOGOUT_REQUIRED }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    })
+      .then((json) => {
+        if ('errors' in json) {
+          dispatch(isLogoutRequiredError(json.data.errors[0].message));
+          return {errors: json.data.errors};
+        }
+        else
+        {
+          dispatch(isLogoutRequiredSuccess(json.data.data.isLogoutRequired));
+          return json.data.data.isLogoutRequired;
+        }
+      })
+      .catch(error => dispatch(isLogoutRequiredFailure(error.message)));
   };
 }
 

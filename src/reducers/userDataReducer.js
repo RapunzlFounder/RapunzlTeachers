@@ -58,7 +58,11 @@ import {
   SET_DAY_COLORS,
   SET_NIGHT_COLORS,
   SET_CRYPTO_COLORS,
-  UPDATE_ADDRESS
+  UPDATE_ADDRESS,
+  IS_LOGOUT_REQUIRED_BEGIN,
+  IS_LOGOUT_REQUIRED_SUCCESS,
+  IS_LOGOUT_REQUIRED_ERROR,
+  IS_LOGOUT_REQUIRED_FAILURE,
 } from '../ActionTypes/userDataActions';
 import {
   UPDATE_COIN_BALANCE_INFO,
@@ -233,6 +237,35 @@ const initialState = {
 
 const userDataReducer = (state = initialState, action) => {
   switch(action.type) {
+    // the following 4 actions determine if the user is required to logout or not
+    case IS_LOGOUT_REQUIRED_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        graphqlError: null,
+        errorTitle: null,
+      };
+    case IS_LOGOUT_REQUIRED_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        logoutRequired: action.payload.logoutRequired,
+      };
+    case IS_LOGOUT_REQUIRED_ERROR:
+      return {
+        ...state,
+        loading: false,
+        graphqlError: action.payload.error,
+        errorTitle: 'Logout Required Error'
+      };
+    case IS_LOGOUT_REQUIRED_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        errorTitle: 'Logout Required Failure'
+      };
     // the following 4 action types handle the verification of whether or not a username is unique
     case IS_USERNAME_UNIQUE_BEGIN:
       // Mark the state as "loading" so we can show a spinner or something
