@@ -76,7 +76,7 @@ class TrendingCourses extends Component {
         <div className='classroom-header-flex'>
           <Bolt fontSize="small" />
           <div className='classroom-header'>
-            Trending Courses
+            Prebuilt Courses
           </div>
         </div>
         {PrebuiltCourses.map((item) => {

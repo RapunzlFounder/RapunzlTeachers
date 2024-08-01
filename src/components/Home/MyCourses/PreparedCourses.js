@@ -76,7 +76,7 @@ class PreparedCourses extends Component {
           <div className='home-header-flex'>
             <LibraryBooks />
             <div className='home-header'>
-              Prepared Courses
+              Prebuilt Courses
             </div>
           </div>
           <div className='prepared-courses-flex'>
