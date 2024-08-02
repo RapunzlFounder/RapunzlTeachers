@@ -60,7 +60,7 @@ class HomeScreen extends Component {
       this.setState({ welcomeBackVisible: true });
     }
     // if the data from the big query has previously been loaded then retrieve the following mini updates
-    if (this.props.bigQueryLoaded) {
+    if (!this.state.logoutInitiated && this.props.bigQueryLoaded) {
       // call the mini query
       this._getUpdatedUserDetails();
     }
@@ -71,11 +71,6 @@ class HomeScreen extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // checks if the user needs to logout
-    if (this.props.logoutRequired !== prevProps.logoutRequired && this.props.logoutRequired === true){
-      this._handleLogout();
-
-    }
     // Handle Errors Related to Saving Notification Token & Update Notification Types
     // This Error Does Not Impede UI So We Just Send Message to Analytics for debugging
     // eslint-disable-next-line
@@ -87,8 +82,17 @@ class HomeScreen extends Component {
     }
     // Checks if the WebApp visibility has changed
     if (this.props.appVisible && prevProps.appVisible !== this.props.appVisible){
-      // call the mini query
-      this._getUpdatedUserDetails();
+      // check if the user needs to logout for a server upgrade etc.
+      this.props.isLogoutRequired(this.props.jwtToken).then(res => {
+        // logout the user if it is required
+        if (res === true) {
+          this._handleLogout();
+        }
+        else {
+          // call the mini query if logout is not required
+          this._getUpdatedUserDetails();
+        }
+      });  
     }
   }
 
@@ -99,11 +103,14 @@ class HomeScreen extends Component {
     }
   }
 
-  // Handles Logout & Navigation When Selected In Menu By Updating State & Calling Navigate Component
+  // Handles Logout & Navigation to the logout screen when logout is required by resetting the Redux States 
   _handleLogout = () => {
     // Handles Logging Out User & Routing To AuthLoadingScreen
-    this.props.logout();
-    this.setState({ handleLogout: true});
+    // We must wait for the logout dispatch to complete before we can navigate to the login screen as the logout process now returns a promise
+    this.props.logout().then(() => {
+      // this state change will trigger the Navigate component to redirect to the login screen
+      this.setState({ handleLogout: true});
+    });
   };
 
   getUsedLocalStorageSpace(){
@@ -142,8 +149,6 @@ class HomeScreen extends Component {
 
   // update the user details if needed (Mini Query)
   _getUpdatedUserDetails = () => {
-    // check if the user needs to logout for a server upgrade etc.
-    this.props.isLogoutRequired(this.props.jwtToken);
     const localTime = new Date();
     const currentTime = moment(localTime); 
     
@@ -381,8 +386,6 @@ const mapStateToProps = (state) => {
     asset: state.gamesettings.asset,
     // determines if the WebApp is visible or not
     appVisible: state.gamesettings.appVisible,
-    // Handles if we should call big query because there has been a breaking change to the data structure
-    logoutRequired: state.userDetails.logoutRequired,
     // gets the timestamp for when the teacher's classrooms were last retrieved from the server, ie mini query
     classroomLastRetrievedTime: state.classroom.classroomLastRetrievedTime,
     // Last Time Standards Were Retrieved To Avoid Hitting Server 
