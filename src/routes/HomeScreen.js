@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Outlet, Navigate } from "react-router-dom";
 import { connect } from 'react-redux';
-import { fetchBigQuery, fetchMiniQuery, fetchAdministratorBigQuery } from '../ActionTypes/userDataActions';
+import { fetchBigQuery, fetchMiniQuery, fetchAdministratorBigQuery, isLogoutRequired } from '../ActionTypes/userDataActions';
 import { resetNotificationErrors } from '../ActionTypes/notificationActions';
 import { getFinancialLiteracyStandards } from '../ActionTypes/coursemoduleActions';
 import { fetchDemoContent } from '../ActionTypes/demoDataActions';
+import { logoutUser } from '../ActionTypes/loginActions';
 import {
   setMenuTab,
   quickAccessAddStudents,
@@ -67,7 +68,7 @@ class HomeScreen extends Component {
       this.setState({ welcomeBackVisible: true });
     }
     // if the data from the big query has previously been loaded then retrieve the following mini updates
-    if (this.props.bigQueryLoaded) {
+    if (!this.state.logoutInitiated && this.props.bigQueryLoaded) {
       // call the mini query
       this._getUpdatedUserDetails();
     }
@@ -89,8 +90,17 @@ class HomeScreen extends Component {
     }
     // Checks if the WebApp visibility has changed
     if (this.props.appVisible && prevProps.appVisible !== this.props.appVisible){
-      // call the mini query
-      this._getUpdatedUserDetails();
+      // check if the user needs to logout for a server upgrade etc.
+      this.props.isLogoutRequired(this.props.jwtToken).then(res => {
+        // logout the user if it is required
+        if (res === true) {
+          this._handleLogout();
+        }
+        else {
+          // call the mini query if logout is not required
+          this._getUpdatedUserDetails();
+        }
+      });  
     }
   }
 
@@ -104,6 +114,16 @@ class HomeScreen extends Component {
   // Handles an event to change the Language of the Teacher Portal
   _handleLanguageChange = (event) => {
     this.props.setLanguage(event.target.value);
+  };
+
+  // Handles Logout & Navigation to the logout screen when logout is required by resetting the Redux States 
+  _handleLogout = () => {
+    // Handles Logging Out User & Routing To AuthLoadingScreen
+    // We must wait for the logout dispatch to complete before we can navigate to the login screen as the logout process now returns a promise
+    this.props.logout().then(() => {
+      // this state change will trigger the Navigate component to redirect to the login screen
+      this.setState({ handleLogout: true});
+    });
   };
 
   getUsedLocalStorageSpace(){
@@ -388,8 +408,6 @@ const mapStateToProps = (state) => {
     asset: state.gamesettings.asset,
     // determines if the WebApp is visible or not
     appVisible: state.gamesettings.appVisible,
-    // Handles if we should call big query because there has been a breaking change to the data structure
-    logoutRequired: state.userDetails.logoutRequired,
     // gets the timestamp for when the teacher's classrooms were last retrieved from the server, ie mini query
     classroomLastRetrievedTime: state.classroom.classroomLastRetrievedTime,
     // Last Time Standards Were Retrieved To Avoid Hitting Server 
@@ -408,7 +426,8 @@ const mapStateToProps = (state) => {
     useAdminGUI: state.gamesettings.useAdminGUI,
     // redux state for the last time that the school teacher summaries were retrieved 
     lastRetrievedTime: state.principalSuperintendent.lastRetrievedTime,
-    
+    // indictes if the user needs to logout or not
+    logoutRequired: state.userDetails.logoutRequired,
   };
 };
 
@@ -435,6 +454,10 @@ const mapDispatchToProps = (dispatch) => {
       fetchDemoContent: (token) => dispatch(fetchDemoContent(token)),
       // this sets the language for the Teacher Portal - English is the default and is 'es-US', Spanish is 'es'
       setLanguage: (language) => dispatch(setLanguage(language)),
+      // log the user out of the App by resetting the Redux store to its default values
+      logout: () => dispatch(logoutUser()),
+      // check if the user needs to logout for a server upgrade etc.
+      isLogoutRequired: (token) => dispatch(isLogoutRequired(token)),
    };
 };
 

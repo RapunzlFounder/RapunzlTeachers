@@ -235,15 +235,17 @@ export const logoutPrincipalSuperintendent = () => ({
 
 export function logoutUser() {
   return function(dispatch){
-    dispatch(logoutUserDetails());
-    dispatch(logoutPrincipalSuperintendent());
-    dispatch(logoutUserCourseModule());
-    dispatch(logoutUserClassroom());
-    dispatch(logoutUserEducation());
-    dispatch(logoutUserSettings());
-    dispatch(logoutUserNotifications());
-    dispatch(logoutUserProducts());
-    dispatch(resetDashboard());
+    return Promise.all([
+    dispatch(logoutUserDetails()),
+    dispatch(logoutPrincipalSuperintendent()),
+    dispatch(logoutUserCourseModule()),
+    dispatch(logoutUserClassroom()),
+    dispatch(logoutUserEducation()),
+    dispatch(logoutUserSettings()),
+    dispatch(logoutUserNotifications()),
+    dispatch(logoutUserProducts()),
+    dispatch(resetDashboard()),
+    ]);
   };
 }
 // Action Creator function to dispatch redux actions to determine if an username is unique or not in the user database table.

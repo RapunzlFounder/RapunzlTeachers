@@ -35,8 +35,10 @@ class LeftHomeMenu extends Component {
   // Handles Logout & Navigation When Selected In Menu By Updating State & Calling Navigate Component
   handleLogout = () => {
     // Handles Logging Out User & Routing To AuthLoadingScreen
-    this.props.logout();
-    this.setState({ navigateToLogin: true, alertVisible: false });
+    this.props.logout().then(() => {
+      // this state change will trigger the Navigate component to redirect to the login screen
+      this.setState({ navigateToLogin: true, alertVisible: false });
+    });
   };
 
   // Handles The Number Of Students Assigned To Any Classroom Of The Current Teacher User

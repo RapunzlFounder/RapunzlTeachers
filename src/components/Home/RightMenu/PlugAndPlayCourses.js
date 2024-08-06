@@ -77,7 +77,7 @@ class PlugAndPlayCourses extends Component {
         <div className='classroom-header-flex'>
           <Bolt fontSize="small" />
           <div className='classroom-header'>
-            Plug & Play Courses
+            Prebuilt Courses
           </div>
         </div>
         {PrebuiltCourses.map((item) => {

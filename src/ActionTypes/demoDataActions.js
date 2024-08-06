@@ -45,20 +45,18 @@ export function fetchDemoContent(token) {
               return { errors: json.data.errors };
             }
             else{
-              // Transform arrays in the getDemoContent object to objects that further contain objects.
-              // This ensures that the when state is updated in the Redux store there is no need to iterate over the arrays.
               var mainReturnedObj = json.data.data;
               // convert the courses array of objects into an objects of objects
               const coursesObject = arrayToObjectID(mainReturnedObj.getDemoContent.courses);
               mainReturnedObj.getDemoContent.courses = coursesObject;
-              for (var property1 in mainReturnedObj.getDemoContent.courses){
-                let courseModules = {};
+              //for (var property1 in mainReturnedObj.getDemoContent.courses){
+              //  let courseModules = {};
                 // convert the course modules array of objects into an objects of objects
-                if (mainReturnedObj.getDemoContent.courses[property1].courseModules.length > 0){
-                  courseModules = arrayToObjectID(mainReturnedObj.getDemoContent.courses[property1].courseModules);
-                }
-                mainReturnedObj.getDemoContent.courses[property1].courseModules = courseModules;
-              }
+              //  if (mainReturnedObj.getDemoContent.courses[property1].courseModules.length > 0){
+              //    courseModules = arrayToObjectID(mainReturnedObj.getDemoContent.courses[property1].courseModules);
+              //  }
+              //  mainReturnedObj.getDemoContent.courses[property1].courseModules = courseModules;
+              //}
               dispatch(updateDemoCourses(mainReturnedObj.getDemoContent.courses));
               // convert the classrooms array of classrooms into an object of objects
               const classroomsObject = arrayToObjectID(mainReturnedObj.getDemoContent.classrooms);

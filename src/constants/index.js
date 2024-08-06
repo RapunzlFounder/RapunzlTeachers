@@ -1,4 +1,3 @@
-
 // Development Websocket URL
 const WS_URL = "https://rapunzled.org";
 // Production Websocket URL
