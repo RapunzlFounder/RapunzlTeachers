@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../ActionTypes/loginActions';
-import { fetchBigQuery } from '../../ActionTypes/userDataActions';
+import { fetchAdministratorBigQuery, fetchBigQuery } from '../../ActionTypes/userDataActions';
 import { Navigate } from 'react-router-dom';
 import Alert from '../Admin/Alert';
-import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
-import VerificationLetter from '../../assets/images/NotSignedIn/VerificationLetter.png';
-import '../../styles/SignIn/VerifyAccountContainer.css';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import CastForEducationOutlinedIcon from '@mui/icons-material/CastForEducationOutlined';
+import DynamicFormOutlinedIcon from '@mui/icons-material/DynamicFormOutlined';
+import '../../styles/SignIn/SelectAccountView.css';
 
 class SelectAccountView extends React.PureComponent {
   constructor(props) {
@@ -31,6 +32,8 @@ class SelectAccountView extends React.PureComponent {
   // Handles Dispatch To Clear Redux And Updates State So That User Is Navigated To Home Screen
   _handleLogout() {
     this.props.logout();
+    this.props.toggleSelectingAccountView();
+    this.props.toggleLoginTabs();
     this.setState({ handleLogout: true });
   }
 
@@ -42,15 +45,11 @@ class SelectAccountView extends React.PureComponent {
   // Handles If User Confirms Selection Of Admin
   // TODO: PRODUCTS Calls ' fetchAdministratorBigQuery' in userDataActions and go to Modified Dashboard fetchAdministratorBigQuery
   _handleAdminBigQuery() {
-    
-  }
-
-  _handleTeacherBigQuery = (token) => {
-    this.props.fetchBigQuery(token).then(res => {
+    this.props.fetchAdministratorBigQuery(this.props.jwtToken).then((res) => {
       // Handles Error With Big Query
       if (res !== true && !(res && !('errors' in res))) {
         this.setState({
-          loginLoading: false,
+          loading: false,
           alertVisible: true,
           alertTitle: 'Issue With Login',
           alertMessage: res.errors[0].message !== undefined && res.errors[0].message.length > 0 ? res.errors[0].message : 'We had trouble logging in and retreiving your account information. Please contact support at hello@rapunzl.org so we can help resolve the issue.',
@@ -60,6 +59,31 @@ class SelectAccountView extends React.PureComponent {
       else {
         this.setState({
           success: true,
+          handleAdminLogin: true,
+          loading: false,
+          alertVisible: false,
+        });
+      }
+    })
+  }
+
+  _handleTeacherBigQuery() {
+    this.props.fetchBigQuery(this.props.jwtToken).then(res => {
+      // Handles Error With Big Query
+      if (res !== true && !(res && !('errors' in res))) {
+        this.setState({
+          loading: false,
+          alertVisible: true,
+          alertTitle: 'Issue With Login',
+          alertMessage: res.errors[0].message !== undefined && res.errors[0].message.length > 0 ? res.errors[0].message : 'We had trouble logging in and retreiving your account information. Please contact support at hello@rapunzl.org so we can help resolve the issue.',
+        })
+      }
+      // Handles Successful Login And Fetching Of The Big Query
+      else {
+        this.setState({
+          success: true,
+          handleTeacherLogin: true,
+          loading: false,
           alertVisible: false,
         });
       }
@@ -67,23 +91,26 @@ class SelectAccountView extends React.PureComponent {
   }
 
   _handleSubmitButton = () => {
-    this.setState({ loading: true });
-    if (this.state.selectedLogin === 'teacher') {
-      this._handleTeacherBigQuery(this.props.jwtToken);
-    } else if (this.state.selectedLogin === 'principal' || this.state.selectedLogin === 'admin') {
-      this._handleAdminBigQuery();
-    } else {
-      this.setState({
-        alertVisible: true,
-        alertTitle: 'Select Account Type',
-        alertMessage: 'Please select an account. Would you like to view your Rapunzl teacher account, or a summary of teachers at your school/district?',
-        loading: false,
-      })
+    if (this.state.selectedLogin !== '') {
+      this.setState({ loading: true });
+      if (this.state.selectedLogin === 'teacher') {
+        this._handleTeacherBigQuery();
+      } else if (this.state.selectedLogin === 'principal' || this.state.selectedLogin === 'super') {
+        this._handleAdminBigQuery();
+      } else {
+        this.setState({
+          alertVisible: true,
+          alertTitle: 'Select Account Type',
+          alertMessage: 'Please select an account. Would you like to view your Rapunzl teacher account, or a summary of teachers at your school/district?',
+          loading: false,
+        })
+      }
     }
   }
 
-  // TODO: PRODUCTS Update this view to allow for the teacher to select between two options and then confirm with a button.
-  // Also need to accomodate Logout option for the educator.
+  _selectLoginOption(value) {
+    this.setState({ selectedLogin: value });
+  }
 
   render() {
     if (this.state.handleLogout) {
@@ -112,22 +139,48 @@ class SelectAccountView extends React.PureComponent {
             visible={this.state.alertVisible}
             dismiss={this.toggleAlert}
           />
-          <img
-            alt="Verify Account Header"
-            className='verification-image'
-            src={VerificationLetter}
-          />
-          <div className='verification-header'>
-            We emailed you a link to verify your account. If you can't find the email, check your spam and junk folders before resending the link.
-          </div>
-          <button className='verification-logout-button' title="Logout & Return To Login Screen" onClick={() => this._handleLogout()}>
-            Logout
-          </button>
+          {!this.state.loading && (
+            <div>
+              <div className='select-account-header'>
+                Please select which account<br/>you are trying to view.
+              </div>
+              {this.props.isTeacher && (
+                <div onClick={() => this._selectLoginOption('teacher')} className={`select-account-item ${this.state.selectedLogin === 'teacher' ? 'select-account-item-selected' : ''}`}>
+                  <SchoolOutlinedIcon className='select-account-icon' />
+                  <div className='select-account-text'>
+                    Teacher
+                  </div>
+                </div>
+              )}
+              {this.props.isPrincipal && (
+                <div onClick={() => this._selectLoginOption('principal')} className={`select-account-item ${this.state.selectedLogin === 'principal' ? 'select-account-item-selected' : ''}`}>
+                  <CastForEducationOutlinedIcon className='select-account-icon' />
+                  <div className='select-account-text'>
+                    Principal - Admin
+                  </div>
+                </div>
+              )}
+              {this.props.isSuperintendent && (
+                <div onClick={() => this._selectLoginOption('super')} className={`select-account-item ${this.state.selectedLogin === 'super' ? 'select-account-item-selected' : ''}`}>
+                  <DynamicFormOutlinedIcon className='select-account-icon' />
+                  <div className='select-account-text'>
+                    Superintendent - Admin
+                  </div>
+                </div>
+              )}
+              <div onClick={() => this._handleSubmitButton()} title="Login To Your Account" className={`select-account-login-button ${this.state.selectedLogin === '' ? 'select-account-login-disabled' : 'select-account-login-enabled'}`}>
+                Login
+              </div>
+              <button className='select-account-logout-button' title="Logout & Return To Login Screen" onClick={() => this._handleLogout()}>
+                Logout
+              </button>
+            </div>
+          )}
           {this.state.loading && (
-            <div className='verify-loading-container'>
+            <div className='select-account-loading-container'>
               <CircularProgress />
-              <div className='verify-loading-text'>
-                Refreshing Verification<br/>Status...
+              <div className='select-account-loading-text'>
+                Logging Into<br/>Rapunzl...
               </div>
             </div>
           )}
@@ -159,6 +212,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchBigQuery: (token) => dispatch(fetchBigQuery(token)),
     // log the user out of the App
     logout: () => dispatch(logoutUser()),
+    fetchAdministratorBigQuery: (token) => dispatch(fetchAdministratorBigQuery(token)),
   };
 };
 

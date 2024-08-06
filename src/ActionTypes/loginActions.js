@@ -413,10 +413,10 @@ export function loginUser(userLogin) {
 // or the Administrator Big Query can be retrieved if they want to view the Teacher Summaries for the teachers at the school.  if the user
 // is a School District Superintendent then the Administrator Big Query shou;d be retrieved to allow them to view the Teacher Summaries for all of 
 // the teachers at the schools in their district. 
-export function gertPortalUserType(token) {
+export function getPortalUserType(token) {
   return function(dispatch) {
     dispatch(getPortalUserTypeBegin());
-    return axios.post(GRAPHQL_URL, { query: GET_PORTAL_USER_TYPE() }, {
+    return axios.post(GRAPHQL_URL, { query: GET_PORTAL_USER_TYPE }, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: token

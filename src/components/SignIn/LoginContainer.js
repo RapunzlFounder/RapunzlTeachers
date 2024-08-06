@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateLoginState, loginUser } from '../../ActionTypes/loginActions';
+import { updateLoginState, loginUser, getPortalUserType } from '../../ActionTypes/loginActions';
 import { fetchBigQuery, resetUserDetailsErrors } from '../../ActionTypes/userDataActions';
 import { updateFirstVisitState } from '../../ActionTypes/firstVisitActions';
 import { Navigate } from "react-router-dom";
-import '../../styles/SignIn/LoginContainer.css';
 import Alert from '../Admin/Alert';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
@@ -14,6 +13,7 @@ import RecoverAccountContainer from './RecoverAccountContainer';
 import SelectAccountView from './SelectAccountView';
 import { CircularProgress } from '@mui/material';
 import { withTranslation } from 'react-i18next';
+import '../../styles/SignIn/LoginContainer.css';
 
 class LoginContainer extends React.PureComponent {
   constructor(props) {
@@ -32,6 +32,9 @@ class LoginContainer extends React.PureComponent {
       alertMessage: '',
       success: false,
       selectingAccountView: false,
+      isTeacher: false,
+      isPrincipal: false,
+      isSuperintendent: false
     };
   }
 
@@ -117,16 +120,34 @@ class LoginContainer extends React.PureComponent {
         // execute the big query with the response as the jwt token input parameter if the token is a valid token
         // eslint-disable-next-line
         else if (res2 && res2.token && res2.token.substring(0,4) == 'JWT ') {
-          // TODO: PRODUCTS Use JWT Token to call getPortalUserType from LoginActions to determine which accounts user has access to.
+          // Use JWT Token to call getPortalUserType from LoginActions to determine which accounts user has access to.
           // Returns an object with 'isTeacher', 'isPrincipal', or 'isSuperintendent' as keys and true or false as values.
-          // TODO: PRODUCTS If user has access to multiple accounts, set the state so that we navigate to the Admin Options
-          if (true) {
-            this.setState({ selectingAccountView: true, loginLoading: false });
-          }
-          // If only teacher is true call big query
-          else {
-            this._handleBigQuery(res2.token);
-          } 
+          this.props.getPortalUserType(res2.token).then((res3) => {
+            // If User Is Only A Teacher, Call Big Query Since They Have No Options and _handleBigQuery handles updating state for navigation
+            if (res3.isTeacher && !res3.isPrincipal && !res3.isSuperintendent) {
+              this._handleBigQuery(res2.token);
+            }
+            // If user has access to a teacher account and either a principal or superintendent account, set the state so that we display the Admin Options
+            else if (res3.isTeacher && (res3.isPrincipal || res3.isSuperintendent)) {
+              this.props.toggleLoginTabs();
+              this.setState({
+                selectingAccountView: true, 
+                loginLoading: false,
+                isTeacher: res3.isTeacher,
+                isPrincipal: res3.isPrincipal,
+                isSuperintendent: res3.isSuperintendent,
+              });
+            }
+            // If user is not a teacher, then they do not have access to any accounts and we need to display an error message
+            else {
+              this.setState({
+                loginLoading: false,
+                alertVisible: true,
+                alertTitle: 'Invalid Login',
+                alertMessage: 'We were unable to login to your account at this time and are having issues identifying your district. Please contact support to resolve the issue.'
+              });
+            }
+          })
         }
         else {
           // set the loading state to false as the login attempt failed and the user needs to be able to retry the login
@@ -183,6 +204,10 @@ class LoginContainer extends React.PureComponent {
     this.setState({ alertVisible: !this.state.alertVisible });
   }
 
+  closeSelectingAccountView = () => {
+    this.setState({ selectingAccountView: false });
+  }
+
   render() {
     // Translation Function
     const { t } = this.props;
@@ -196,9 +221,15 @@ class LoginContainer extends React.PureComponent {
           dismiss={this._toggleRecoverAccount}
         />
       );
-    } else if (this.state.selectingAccountView === true) {
+    } else if (this.state.selectingAccountView) {
       return (
-        <SelectAccountView />
+        <SelectAccountView
+          toggleSelectingAccountView={this.closeSelectingAccountView}
+          toggleLoginTabs={this.props.toggleLoginTabs}
+          isTeacher={this.state.isTeacher}
+          isPrincipal={this.state.isPrincipal}
+          isSuperintendent={this.state.isSuperintendent}
+        />
       );
     } else {
       // Renders Container For Login User
@@ -288,6 +319,8 @@ const mapDispatchToProps = (dispatch) => {
     fetchBigQuery: (token) => dispatch(fetchBigQuery(token)),
     // reset any graphql error messages so the error popup only displays once
     resetUserDetailsErrors: () => dispatch(resetUserDetailsErrors()), 
+    // Handles Retrieving What Types Of Accounts This User Has Access To (Teacher, Principal, Superintendent)
+    getPortalUserType: (token) => dispatch(getPortalUserType(token)),
   };
 };
 

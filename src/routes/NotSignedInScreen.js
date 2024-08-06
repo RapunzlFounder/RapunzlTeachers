@@ -21,6 +21,7 @@ class NotSignedInScreen extends Component {
     this.state = {
       loading: false,
 	    tab: 1,
+      loginTabsVisible: true,
     };
   }
 
@@ -34,6 +35,10 @@ class NotSignedInScreen extends Component {
       }
     }
   };
+
+  toggleLoginTabs = () => {
+    this.setState({ loginTabsVisible: !this.state.loginTabsVisible });
+  }
 
   render() {
      return(
@@ -64,10 +69,12 @@ class NotSignedInScreen extends Component {
                 <div className="sign-up-subtext">
                   Educator Portal
                 </div>
-                <Tabs value={this.state.tab} onChange={() => this.handleChange()} aria-label="toggles create account and login" centered>
-                  <Tab label="Login" />
-                  <Tab label="Join" />
-                </Tabs>
+                {this.state.loginTabsVisible && (
+                  <Tabs value={this.state.tab} onChange={() => this.handleChange()} aria-label="toggles create account and login" centered>
+                    <Tab label="Login" />
+                    <Tab label="Join" />
+                  </Tabs>
+                )}
                 <div className="sign-in-container" style={{ justifyContent: 'column', paddingTop: 25 }}>
                   {// eslint-disable-next-line
                   this.state.tab == 1 && (
@@ -75,7 +82,9 @@ class NotSignedInScreen extends Component {
                   )}
                   {// eslint-disable-next-line
                   this.state.tab == 0 && (
-                    <LoginContainer />
+                    <LoginContainer
+                      toggleLoginTabs={this.toggleLoginTabs}
+                    />
                   )}
                 </div>
               </div>

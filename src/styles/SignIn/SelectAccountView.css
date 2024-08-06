@@ -1,0 +1,112 @@
+.select-account-header {
+    font-size: 18px;
+    font-weight: 200;
+    text-align: center;
+    border-bottom: 2px dotted #25c199;
+    width: 90%;
+    margin: auto;
+    padding-bottom: 14px;
+    margin-bottom: 25px;
+    margin-top: -20px;
+}
+.select-account-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #054a38;
+    border: 2px solid #054a38;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+.select-account-item:hover {
+    background-color: #08624a;
+    border: 2px solid #08624a;
+}
+.select-account-item-selected {
+    background-color: #177f63;
+    border: 2px solid #ffb200;
+}
+.select-account-item-selected:hover {
+    background-color: #177f63;
+    border: 2px solid #ffb200;
+}
+.select-account-icon {
+
+}
+.select-account-text {
+    font-size: 16px;
+    margin-left: 10px;
+}
+.select-account-login-button {
+    width: 65%;
+    margin: auto;
+    text-align: center;
+    margin-top: 55px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid #cbcbcb;
+    border-radius: 10px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    margin-bottom: 15px;
+    transition: 0.2s all;
+    font-size: 15px;
+    color: #cbcbcb;
+}
+.select-account-login-enabled {
+    border: 1px solid #20a583;
+    background-color: #20a583;
+    color: white;
+    cursor: pointer;
+}
+.select-account-login-enabled:hover {
+    border: 1px solid #61c3aa;
+    background-color: #61c3aa;
+    color: white;
+}
+.select-account-login-disabled {
+    border: 1px solid #cbcbcb;
+    color: #cbcbcb;
+    background-color: #103a30;
+    cursor: not-allowed;
+}
+.select-account-logout-button {
+    border: none;
+    outline: none;
+    background: none;
+    color: #ff5d1f;
+    text-align: center;
+    margin: auto;
+    display: block;
+    margin-top: 30px;
+    padding: 15px;
+    cursor: pointer;
+    transition: 0.2s all;
+    font-size: 14px;
+    font-weight: 300;
+}
+.select-account-logout-button:hover {
+    color: #ff4700;
+    font-weight: 600;
+}
+.select-account-loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 45px;
+}
+.select-account-loading-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #28b390;
+    text-align: center;
+    padding-top: 12px;
+}
